@@ -40,6 +40,16 @@ namespace Assets.Scripts.Entity
             SpriteInstance = instance;
         }
 
+        public void SetSpritePosition(Vector3 newPosition)
+        {
+            //todo
+        }
+
+        public bool IsPlayer()
+        {
+            return _aiController == null;
+        }
+
         public bool IsDead()
         {
             return _stats.CurrentHealth <= 0;
@@ -47,12 +57,17 @@ namespace Assets.Scripts.Entity
 
         public bool IsDerpus()
         {
-            return _entityClass == EntityClass.Derpus;
+            return _entityClass == EntityClass.Derpus || _race == Race.Derpus;
         }
 
         public bool MovedLastTurn(int currentTurn)
         {
             return currentTurn - _lastTurnMoved <= 1;
+        }
+
+        public void GenerateStartingEquipment()
+        {
+            //todo
         }
 
         public void EquipWeapon(Weapon newWeapon)
@@ -73,6 +88,107 @@ namespace Assets.Scripts.Entity
         public void UnEquipArmor()
         {
             //todo
+        }
+
+        public void MeleeAttack()
+        {
+
+        }
+
+        public void RangedAttack()
+        {
+
+        }
+
+        public bool HasMissileWeaponEquipped()
+        {
+            //todo
+            return true;
+        }
+
+        public bool TargetInRange(Entity target)
+        {
+            //todo
+            return true;
+        }
+
+        public int CalculateChanceToHit(Entity target)
+        {
+            //todo
+            return -1;
+        }
+
+        public int CalculateBaseChanceToHit(Entity target)
+        {
+            //todo
+            return -1;
+        }
+
+        public bool AttackHit(int chanceToHit)
+        {
+            //todo
+            return true;
+        }
+
+        public void AddHp(int amount)
+        {
+            _stats.CurrentHealth += amount;
+        }
+
+        public void SubtractHp(int amount)
+        {
+            _stats.CurrentHealth -= amount;
+        }
+
+        public void AddEnergy(int amount)
+        {
+            _stats.CurrentEnergy += amount;
+        }
+
+        public void SubtractEnergy(int amount)
+        {
+            _stats.CurrentEnergy -= amount;
+        }
+
+        public void AddMorale(int amount)
+        {
+            _stats.CurrentMorale += amount;
+        }
+
+        public void SubtractMorale(int amount)
+        {
+            _stats.CurrentMorale -= amount;
+        }
+
+        public void AddAp(int amount)
+        {
+            _stats.CurrentActionPoints += amount;
+        }
+
+        public void SubtractAp(int amount)
+        {
+            _stats.CurrentActionPoints -= amount;
+        }
+
+        public void UseHealthPotion()
+        {
+            //todo
+        }
+
+        public void ApplyEffect(Effect effect)
+        {
+            //todo
+        }
+
+        public void RemoveEffect(Effect effect)
+        {
+            //todo
+        }
+
+        public int RollForInitiative()
+        {
+            //todo
+            return -1;
         }
     }
 }
