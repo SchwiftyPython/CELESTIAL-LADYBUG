@@ -7,6 +7,7 @@ namespace Assets.Scripts
     public class Party
     {
         private const int MaxSize = 10;
+        private const int StartSize = 6;
 
         private Dictionary<string, Entity> _companions;
         private Entity _derpus;
@@ -17,7 +18,11 @@ namespace Assets.Scripts
 
         public Party()
         {
-            //todo gen a starting party of 2 companions
+            GenerateStartingParty();
+
+            _food = 50;
+            _healthPotions = 40;
+            _gold = 550;
         }
 
         public void AddCompanion(Entity companion)
@@ -34,7 +39,7 @@ namespace Assets.Scripts
 
             if (_companions.ContainsKey(companion.Name))
             {
-                //todo append "jr" to end of name
+                companion.Name += ", Jr";
             }
 
             _companions.Add(companion.Name, companion);
@@ -130,7 +135,16 @@ namespace Assets.Scripts
 
         private void GenerateStartingParty()
         {
+            _derpus = new Entity(true);
 
+            _companions = new Dictionary<string, Entity>();
+
+            for (var i = 0; i < StartSize; i++)
+            {
+                var companion = new Entity();
+
+                AddCompanion(companion);
+            }
         }
     }
 }

@@ -6,6 +6,8 @@ namespace Assets.Scripts.Travel
     {
         public Party Party { get; private set; }
 
+        public TravelNode CurrentNode { get; private set; }
+
         public static TravelManager Instance;
 
         private void Awake()
@@ -19,6 +21,11 @@ namespace Assets.Scripts.Travel
                 Destroy(gameObject);
             }
             DontDestroyOnLoad(gameObject);
+        }
+
+        public void NewParty()
+        {
+            Party = new Party();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Assets.Scripts.Entities
         
         private int _lastTurnMoved;
 
-        public string Name { get; }
+        public string Name { get; set; }
         public Sex Sex { get; }
         public Stats Stats { get; }
         public Sprite Portrait { get; private set; }
@@ -32,12 +32,25 @@ namespace Assets.Scripts.Entities
         public UnityEngine.GameObject SpritePrefab { get; private set; }
         public UnityEngine.GameObject SpriteInstance { get; private set; }
 
-        public Entity() : base((-1, -1), 1, null, false, false, true)
+        public Entity(bool isDerpus = false) : base((-1, -1), 1, null, false, false, true)
         {
-            //todo pick race
-            //todo pick class
-            Sex = PickSex();
-            Name = GenerateName(null, Sex);
+            if (isDerpus)
+            {
+                _race = Race.Derpus;
+                _entityClass = EntityClass.Derpus;
+                Sex = Sex.Male;
+                Name = "Derpus";
+            }
+            else
+            {
+                _race = PickRace();
+                _entityClass = PickEntityClass();
+                Sex = PickSex();
+                Name = GenerateName(null, Sex);
+            }
+
+            _level = 1;
+            _xp = 0;
         }
 
         public void SetSpriteInstance(UnityEngine.GameObject instance)
@@ -47,7 +60,12 @@ namespace Assets.Scripts.Entities
 
         public void SetSpritePosition(Vector3 newPosition)
         {
-            //todo
+            if (SpriteInstance == null)
+            {
+                return;
+            }
+
+            SpriteInstance.transform.position = newPosition;
         }
 
         public bool IsPlayer()
@@ -209,6 +227,16 @@ namespace Assets.Scripts.Entities
         private Sex PickSex()
         {
             return GlobalHelper.GetRandomEnumValue<Sex>();
+        }
+
+        private Race PickRace()
+        {
+            return GlobalHelper.GetRandomEnumValue<Race>();
+        }
+
+        private EntityClass PickEntityClass()
+        {
+            return GlobalHelper.GetRandomEnumValue<EntityClass>();
         }
     }
 }
