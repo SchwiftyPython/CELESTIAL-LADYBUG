@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Entity
+namespace Assets.Scripts.Entities
 {
     public class Stats
     {

@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
-using GoRogue;
+using Assets.Scripts.Entities.Names;
 using UnityEngine;
 using GameObject = GoRogue.GameFramework.GameObject;
 
-namespace Assets.Scripts.Entity
+namespace Assets.Scripts.Entities
 {
     public class Entity : GameObject
     {
-        private string _name;
         private Attributes _attributes;
-        private Stats _stats;
         private Race _race;
         private EntityClass _entityClass;
         private int _level;
@@ -26,13 +24,20 @@ namespace Assets.Scripts.Entity
         
         private int _lastTurnMoved;
 
+        public string Name { get; }
+        public Sex Sex { get; }
+        public Stats Stats { get; }
         public Sprite Portrait { get; private set; }
 
         public UnityEngine.GameObject SpritePrefab { get; private set; }
         public UnityEngine.GameObject SpriteInstance { get; private set; }
 
-        public Entity(string name) : base((-1, -1), 1, null, false, false, true)
+        public Entity() : base((-1, -1), 1, null, false, false, true)
         {
+            //todo pick race
+            //todo pick class
+            Sex = PickSex();
+            Name = GenerateName(null, Sex);
         }
 
         public void SetSpriteInstance(UnityEngine.GameObject instance)
@@ -52,7 +57,7 @@ namespace Assets.Scripts.Entity
 
         public bool IsDead()
         {
-            return _stats.CurrentHealth <= 0;
+            return Stats.CurrentHealth <= 0;
         }
 
         public bool IsDerpus()
@@ -130,49 +135,49 @@ namespace Assets.Scripts.Entity
             return true;
         }
 
-        public void AddHp(int amount)
+        public void AddHealth(int amount)
         {
-            _stats.CurrentHealth += amount;
+            Stats.CurrentHealth += amount;
         }
 
-        public void SubtractHp(int amount)
+        public void SubtractHealth(int amount)
         {
-            _stats.CurrentHealth -= amount;
+            Stats.CurrentHealth -= amount;
         }
 
         public void AddEnergy(int amount)
         {
-            _stats.CurrentEnergy += amount;
+            Stats.CurrentEnergy += amount;
         }
 
         public void SubtractEnergy(int amount)
         {
-            _stats.CurrentEnergy -= amount;
+            Stats.CurrentEnergy -= amount;
         }
 
         public void AddMorale(int amount)
         {
-            _stats.CurrentMorale += amount;
+            Stats.CurrentMorale += amount;
         }
 
         public void SubtractMorale(int amount)
         {
-            _stats.CurrentMorale -= amount;
+            Stats.CurrentMorale -= amount;
         }
 
-        public void AddAp(int amount)
+        public void AddActionPoints(int amount)
         {
-            _stats.CurrentActionPoints += amount;
+            Stats.CurrentActionPoints += amount;
         }
 
-        public void SubtractAp(int amount)
+        public void SubtractActionPoints(int amount)
         {
-            _stats.CurrentActionPoints -= amount;
+            Stats.CurrentActionPoints -= amount;
         }
 
         public void UseHealthPotion()
         {
-            //todo
+            AddHealth(40);
         }
 
         public void ApplyEffect(Effect effect)
@@ -189,6 +194,21 @@ namespace Assets.Scripts.Entity
         {
             //todo
             return -1;
+        }
+
+        public void Rest()
+        {
+            AddEnergy(45);
+        }
+
+        private string GenerateName(List<string> possibleNameFiles, Sex sex)
+        {
+            return NameStore.Instance.GenerateFullName(possibleNameFiles, sex);
+        }
+
+        private Sex PickSex()
+        {
+            return GlobalHelper.GetRandomEnumValue<Sex>();
         }
     }
 }
