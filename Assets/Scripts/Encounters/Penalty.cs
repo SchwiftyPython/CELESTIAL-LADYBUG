@@ -1,18 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
+using Assets.Scripts.Entities;
 
-public class Penalty : MonoBehaviour
+namespace Assets.Scripts.Encounters
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Penalty
     {
-        
-    }
+        public Dictionary<Entity, KeyValuePair<object, int>> EntityLosses;
+        public Dictionary<object, int> PartyLosses;
+        public List<Effect> Effects;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public Penalty(Dictionary<Entity, KeyValuePair<object, int>> entityLosses, Dictionary<object, int> partyLosses, List<Effect> effects)
+        {
+            EntityLosses = entityLosses;
+            PartyLosses = partyLosses;
+            Effects = effects;
+        }
+
+        public Penalty(Dictionary<Entity, KeyValuePair<object, int>> entityLosses)
+        {
+            EntityLosses = entityLosses;
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace Assets.Scripts
         private const int StartSize = 6;
 
         private Dictionary<string, Entity> _companions;
-        private Entity _derpus;
+        public  Entity Derpus { get; set; }
 
         private int _food;
         private int _healthPotions;

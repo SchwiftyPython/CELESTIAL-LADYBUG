@@ -1,18 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Option : MonoBehaviour
+﻿namespace Assets.Scripts.Encounters
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Option
     {
-        
-    }
+        public string Name { get; set; }
+        public string ResultText { get; set; }
+        public Reward Reward { get; set; }
+        public Penalty Penalty { get; set; }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public Option(string name, string resultText, Reward reward, Penalty penalty)
+        {
+            Name = name;
+            ResultText = resultText;
+            Reward = reward;
+            Penalty = penalty;
+        }
     }
 }
