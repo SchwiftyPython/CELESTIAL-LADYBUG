@@ -14,6 +14,8 @@ namespace Assets.Scripts
 
         #region EventNames
 
+        public const string EncounterOptionSelected = "EncounterOptionSelected";
+
         #endregion EventNames
 
         public static void DestroyAllChildren(GameObject parent)

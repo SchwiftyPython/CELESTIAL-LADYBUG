@@ -14,5 +14,21 @@
             Reward = reward;
             Penalty = penalty;
         }
+
+        public Option(string optionTitle, string optionResultText)
+        {
+            Name = optionTitle;
+            ResultText = optionResultText;
+        }
+
+        public bool HasReward()
+        {
+            return Reward != null;
+        }
+
+        public bool HasPenalty()
+        {
+            return Penalty != null;
+        }
     }
 }

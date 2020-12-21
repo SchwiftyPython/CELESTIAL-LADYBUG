@@ -12,17 +12,18 @@ namespace Assets.Scripts
         private Dictionary<string, Entity> _companions;
         public  Entity Derpus { get; set; }
 
-        private int _food;
-        private int _healthPotions;
-        private int _gold;
+        //todo need enums for these
+        public int Food { get; set; }
+        public int HealthPotions { get; set; }
+        public int Gold { get; set; }
 
         public Party()
         {
             GenerateStartingParty();
 
-            _food = 50;
-            _healthPotions = 40;
-            _gold = 550;
+            Food = 50;
+            HealthPotions = 40;
+            Gold = 550;
         }
 
         public void AddCompanion(Entity companion)
@@ -60,6 +61,16 @@ namespace Assets.Scripts
             _companions.Remove(companion.Name);
         }
 
+        public Entity GetCompanion(string companionName)
+        {
+            if (!_companions.ContainsKey(companionName))
+            {
+                return null;
+            }
+
+            return _companions[companionName];
+        }
+
         public void Eat()
         {
             if (_companions == null)
@@ -69,9 +80,9 @@ namespace Assets.Scripts
 
             //todo choose random order to feed companions. This allows for some to eat and not others when food is low. Then subtract morale for the hungry.
 
-            if (_food < _companions.Count)
+            if (Food < _companions.Count)
             {
-                _food = 0;
+                Food = 0;
 
                 foreach (var companion in _companions.Values)
                 {
@@ -82,7 +93,7 @@ namespace Assets.Scripts
             }
             else
             {
-                _food -= _companions.Count;
+                Food -= _companions.Count;
 
                 Debug.Log($"Party ate {_companions.Count} food!"); //todo message
             }
@@ -97,14 +108,14 @@ namespace Assets.Scripts
                 return;
             }
 
-            if (_healthPotions <= 0)
+            if (HealthPotions <= 0)
             {
                 Debug.Log("No health potions! Can't heal!");
             }
 
             foreach (var companion in _companions.Values)
             {
-                if (_healthPotions <= 0)
+                if (HealthPotions <= 0)
                 {
                     return;
                 }
@@ -113,14 +124,14 @@ namespace Assets.Scripts
                 {
                     companion.UseHealthPotion();
 
-                    _healthPotions--;
+                    HealthPotions--;
                 }
             }
         }
 
         public void Rest()
         {
-            _derpus.Rest();
+            Derpus.Rest();
 
             if (_companions == null)
             {
@@ -135,7 +146,7 @@ namespace Assets.Scripts
 
         private void GenerateStartingParty()
         {
-            _derpus = new Entity(true);
+            Derpus = new Entity(true);
 
             _companions = new Dictionary<string, Entity>();
 
