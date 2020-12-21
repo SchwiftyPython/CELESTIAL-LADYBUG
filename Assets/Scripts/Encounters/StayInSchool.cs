@@ -56,19 +56,34 @@ namespace Assets.Scripts.Encounters
             if (selectedOption == null)
             {
                 Debug.Log("No option selected for Stay In School Encounter!");
+
                 throw new ArgumentNullException(nameof(selectedOption));
             }
 
+            List<string> rewardsText = null; //pass to ui for formatting
             if (selectedOption.HasReward())
             {
-                TravelManager.Instance.ApplyEncounterReward(selectedOption.Reward);
+                rewardsText = TravelManager.Instance.ApplyEncounterReward(selectedOption.Reward);
             }
 
+            List<string> penaltiesText = null; //pass to ui for formatting
+            if (selectedOption.HasPenalty())
+            {
+                penaltiesText = TravelManager.Instance.ApplyEncounterPenalty(selectedOption.Penalty);
+            }
 
-            //todo apply rewards
-            //todo append rewards to description
-            //todo apply penalties
-            //todo append penalties to description
+            var fullResultDescription = new List<string>();
+
+            fullResultDescription.Add(selectedOption.ResultText);
+            if (rewardsText != null)
+            {
+                fullResultDescription.AddRange(rewardsText);
+            }
+
+            if (penaltiesText != null)
+            {
+                fullResultDescription.AddRange(penaltiesText);
+            }
 
             //todo display result description
         }

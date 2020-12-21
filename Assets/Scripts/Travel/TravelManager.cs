@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Encounters;
+﻿using System.Collections.Generic;
+using Assets.Scripts.Encounters;
 using Assets.Scripts.Entities;
 using UnityEngine;
 
@@ -30,9 +31,31 @@ namespace Assets.Scripts.Travel
             Party = new Party();
         }
 
-        //todo refactor
-        public void ApplyEncounterReward(Reward reward)
+        public string BuildPartyRewardTextItem(int value, string gainType)
         {
+            return $"Gained {value} {gainType}!";
+        }
+
+        public string BuildPartyLossTextItem(int value, string lossType)
+        {
+            return $"Lost {value} {lossType}!";
+        }
+
+        public string BuildCompanionRewardTextItem(Entity companion, int value, string gainType)
+        {
+            return $"{companion.Name} gained {value} {gainType}!";
+        }
+
+        public string BuildCompanionLossTextItem(Entity companion, int value, string lossType)
+        {
+            return $"{companion.Name} lost {value} {lossType}!";
+        }
+
+        //todo refactor
+        public List<string> ApplyEncounterReward(Reward reward)
+        {
+            var rewardsText = new List<string>(); //todo add each reward text to this list then return. UI can handle formatting.
+
             if (reward.Effects != null && reward.Effects.Count > 0)
             {
                 //todo apply effects
@@ -59,6 +82,8 @@ namespace Assets.Scripts.Travel
                             Debug.Log($"Invalid gain type! {gainType}");
                             break;
                     }
+
+                    rewardsText.Add(BuildPartyRewardTextItem(partyGain.Value, gainType));
                 }
             }
 
@@ -99,9 +124,95 @@ namespace Assets.Scripts.Travel
                                 Debug.Log($"Invalid gain type! {gainType}");
                                 break;
                         }
+
+                        rewardsText.Add(BuildCompanionRewardTextItem(companion, entityGain.Value.Value, gainType));
                     }
                 }
             }
+
+            return rewardsText;
+        }
+
+        //todo refactor
+        public List<string> ApplyEncounterPenalty(Penalty penalty)
+        {
+            var penaltiesText = new List<string>();
+
+            if (penalty.Effects != null && penalty.Effects.Count > 0)
+            {
+                //todo apply effects
+            }
+
+            if (penalty.PartyLosses != null && penalty.PartyLosses.Count > 0)
+            {
+                foreach (var partyLoss in penalty.PartyLosses)
+                {
+                    var lossType = partyLoss.Key.ToString();
+
+                    switch (lossType)
+                    {
+                        case "food":
+                            Party.Food -= partyLoss.Value;
+                            break;
+                        case "potions":
+                            Party.HealthPotions -= partyLoss.Value;
+                            break;
+                        case "gold":
+                            Party.Gold -= partyLoss.Value;
+                            break;
+                        default:
+                            Debug.Log($"Invalid loss type! {lossType}");
+                            break;
+                    }
+
+                    penaltiesText.Add(BuildPartyLossTextItem(partyLoss.Value, lossType));
+                }
+            }
+
+            if (penalty.EntityLosses != null && penalty.EntityLosses.Count > 0)
+            {
+                foreach (var entityLoss in penalty.EntityLosses)
+                {
+                    var targetEntity = entityLoss.Key;
+
+                    Entity companion;
+
+                    if (targetEntity.IsDerpus())
+                    {
+                        companion = Party.Derpus;
+                    }
+                    else
+                    {
+                        //it's possible the entity isn't in the party anymore so this is how we check off the top of my head
+                        companion = Party.GetCompanion(targetEntity.Name);
+                    }
+
+                    if (companion != null)
+                    {
+                        var lossType = entityLoss.Value.Key.ToString();
+
+                        switch (lossType)
+                        {
+                            case "morale":
+                                companion.SubtractMorale(entityLoss.Value.Value);
+                                break;
+                            case "health":
+                                companion.SubtractHealth(entityLoss.Value.Value);
+                                break;
+                            case "energy":
+                                companion.SubtractEnergy((entityLoss.Value.Value));
+                                break;
+                            default:
+                                Debug.Log($"Invalid gain type! {lossType}");
+                                break;
+                        }
+
+                        penaltiesText.Add(BuildCompanionLossTextItem(companion, entityLoss.Value.Value, lossType));
+                    }
+                }
+            }
+
+            return penaltiesText;
         }
     }
 }
