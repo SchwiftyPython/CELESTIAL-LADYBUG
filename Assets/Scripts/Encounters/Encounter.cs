@@ -8,7 +8,7 @@ namespace Assets.Scripts.Encounters
 
         public Rarity Rarity;
 
-        public EncounterType EncounterType;
+        public static EncounterType EncounterType;
 
         public string Title;
 

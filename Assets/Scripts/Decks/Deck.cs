@@ -7,11 +7,17 @@ namespace Assets.Scripts.Decks
     {
         public int Size;
 
+        public int CardIndex;
+
         public abstract List<T> Cards { get; set; }
 
-        public abstract void Build();
-
         public abstract T Draw();
+
+        public void Build(List<T> cards)
+        {
+            Cards = new List<T>(cards);
+            Size = Cards.Count;
+        }
 
         public void Shuffle()
         {
