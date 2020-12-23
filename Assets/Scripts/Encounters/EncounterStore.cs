@@ -15,14 +15,36 @@ namespace Assets.Scripts.Encounters
             {"stay in school", () => new StayInSchool()}
         };
 
+        private Dictionary<string, Func<Encounter>> _triggeredEncounters = new Dictionary<string, Func<Encounter>>
+        {
+            
+        };
+
+        public static EncounterStore Instance;
+
         private void Start()
         {
-        
-        }
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else if (Instance != this)
+            {
+                Destroy(gameObject);
+            }
+            DontDestroyOnLoad(gameObject);
 
-        private void Update()
-        {
-        
+            _allEncounters = new Dictionary<string, Func<Encounter>>();
+
+            foreach (var encounter in _nonTriggeredEncounters)
+            {
+                _allEncounters.Add(encounter.Key, encounter.Value);
+            }
+
+            foreach (var encounter in _triggeredEncounters)
+            {
+                _allEncounters.Add(encounter.Key, encounter.Value);
+            }
         }
 
         public List<Encounter> GetAllNonTriggeredEncounters()

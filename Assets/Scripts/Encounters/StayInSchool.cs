@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Travel;
-using UnityEngine;
 
 //todo refactor
 namespace Assets.Scripts.Encounters
@@ -47,45 +45,13 @@ namespace Assets.Scripts.Encounters
             var optionTwo = new Option(optionTitle, optionResultText);
 
             Options.Add(optionTitle, optionTwo);
-
-            SubscribeToOptionSelectedEvent();
         }
 
-        public override void Run(Option selectedOption)
+        public override void Run()
         {
-            if (selectedOption == null)
-            {
-                Debug.Log("No option selected for Stay In School Encounter!");
+            SubscribeToOptionSelectedEvent();
 
-                throw new ArgumentNullException(nameof(selectedOption));
-            }
-
-            List<string> rewardsText = null; //pass to ui for formatting
-            if (selectedOption.HasReward())
-            {
-                rewardsText = TravelManager.Instance.ApplyEncounterReward(selectedOption.Reward);
-            }
-
-            List<string> penaltiesText = null; //pass to ui for formatting
-            if (selectedOption.HasPenalty())
-            {
-                penaltiesText = TravelManager.Instance.ApplyEncounterPenalty(selectedOption.Penalty);
-            }
-
-            var fullResultDescription = new List<string>();
-
-            fullResultDescription.Add(selectedOption.ResultText);
-            if (rewardsText != null)
-            {
-                fullResultDescription.AddRange(rewardsText);
-            }
-
-            if (penaltiesText != null)
-            {
-                fullResultDescription.AddRange(penaltiesText);
-            }
-
-            //todo display result description
+            //todo send to ui
         }
     }
 }

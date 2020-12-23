@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Assets.Scripts.Travel;
+using UnityEngine;
 
 namespace Assets.Scripts.Encounters
 {
@@ -8,7 +11,7 @@ namespace Assets.Scripts.Encounters
 
         public Rarity Rarity;
 
-        public static EncounterType EncounterType;
+        public EncounterType EncounterType;
 
         public string Title;
 
@@ -16,10 +19,44 @@ namespace Assets.Scripts.Encounters
 
         public Dictionary<string, Option> Options;
 
-        //public abstract void Run();
+        public abstract void Run();
 
-        //todo figure out optional params in abstract methods so resharper fucks off
-        public abstract void Run(Option selectedOption = null);
+        public void OptionSelected(Option selectedOption)
+        {
+            if (selectedOption == null)
+            {
+                Debug.Log("No option selected for Stay In School Encounter!");
+
+                throw new ArgumentNullException(nameof(selectedOption));
+            }
+
+            List<string> rewardsText = null; 
+            if (selectedOption.HasReward())
+            {
+                rewardsText = TravelManager.Instance.ApplyEncounterReward(selectedOption.Reward);
+            }
+
+            List<string> penaltiesText = null; 
+            if (selectedOption.HasPenalty())
+            {
+                penaltiesText = TravelManager.Instance.ApplyEncounterPenalty(selectedOption.Penalty);
+            }
+
+            var fullResultDescription = new List<string>(); //pass to ui for formatting
+
+            fullResultDescription.Add(selectedOption.ResultText);
+            if (rewardsText != null)
+            {
+                fullResultDescription.AddRange(rewardsText);
+            }
+
+            if (penaltiesText != null)
+            {
+                fullResultDescription.AddRange(penaltiesText);
+            }
+
+            //todo display result description
+        }
 
         public bool HasOptions()
         {
@@ -53,7 +90,9 @@ namespace Assets.Scripts.Encounters
                     return;
                 }
 
-                Run(Options[optionName]);
+                OptionSelected(Options[optionName]);
+
+                UnsubscribeFromOptionSelectedEvent();
             }
         }
     }

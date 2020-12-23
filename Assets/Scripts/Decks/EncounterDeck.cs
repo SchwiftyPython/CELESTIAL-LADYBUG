@@ -24,7 +24,7 @@ namespace Assets.Scripts.Decks
         public EncounterDeck()
         {
             CardIndex = 0;
-            Build(); //todo get from EncounterStore
+            Build(EncounterStore.Instance.GetAllNonTriggeredEncounters()); 
             Shuffle();
             _rarityCapper = new RarityCapper(CommonCap, UncommonCap, RareCap);
             _encounterTypeCapper = new EncounterTypeCapper(NormalCap, CrossroadsCap, TradingCap, CampingCap, CombatCap, ContinuityCap);
@@ -32,7 +32,41 @@ namespace Assets.Scripts.Decks
 
         public override Encounter Draw()
         {
-            throw new System.NotImplementedException();
+            var maxTries = 8;
+            var validCard = false;
+            var numTries = 0;
+
+            Encounter card = null;
+            while (!validCard && numTries < maxTries)
+            {
+                numTries++;
+
+                card = Cards[CardIndex];
+
+                if (!_rarityCapper.IsCapped(card.Rarity) && !_encounterTypeCapper.IsCapped(card.EncounterType))
+                {
+                    validCard = true;
+                }
+
+                if (CardIndex >= Size - 1)
+                {
+                    Shuffle();
+                    CardIndex = 0;
+                }
+                else
+                {
+                    CardIndex++;
+                }
+            }
+
+            if (card != null)
+            {
+                _rarityCapper.RecordCard(card.Rarity);
+                _encounterTypeCapper.RecordCard(card.EncounterType);
+                return card;
+            }
+
+            return null;
         }
     }
 }
