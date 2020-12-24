@@ -83,7 +83,7 @@ namespace Assets.Scripts.Entities.Names
         
             foreach (var nameFile in nameFiles)
             {
-                if (nameFile.Contains(sex.ToString()))
+                if (nameFile.Contains(sex.ToString().ToLower()))
                 {
                     _firstNames.AddRange(_nameFiles[nameFile].text.Split("\r\n"[0]).ToList());
                 }

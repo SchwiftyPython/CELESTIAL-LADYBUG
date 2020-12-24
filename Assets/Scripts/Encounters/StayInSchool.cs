@@ -51,7 +51,7 @@ namespace Assets.Scripts.Encounters
         {
             SubscribeToOptionSelectedEvent();
 
-            //todo send to ui
+            EventMediator.Instance.Broadcast(GlobalHelper.FourOptionEncounter, this);
         }
     }
 }

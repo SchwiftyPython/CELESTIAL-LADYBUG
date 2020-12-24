@@ -110,11 +110,11 @@ namespace Assets.Scripts
 
         private void SubscribeToEvents()
         {
-            foreach (var eventName in _subscribedEventNames)
-            {
-                //todo
-                //EventMediator.Instance.SubscribeToEvent(eventName, this);
-            }
+            // foreach (var eventName in _subscribedEventNames)
+            // {
+            //     //todo
+            //     //EventMediator.Instance.SubscribeToEvent(eventName, this);
+            // }
         }
 
         private void UnsubscribeFromEvents()

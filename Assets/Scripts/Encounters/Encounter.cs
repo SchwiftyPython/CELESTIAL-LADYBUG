@@ -55,7 +55,7 @@ namespace Assets.Scripts.Encounters
                 fullResultDescription.AddRange(penaltiesText);
             }
 
-            //todo display result description
+            EventMediator.Instance.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
         }
 
         public bool HasOptions()

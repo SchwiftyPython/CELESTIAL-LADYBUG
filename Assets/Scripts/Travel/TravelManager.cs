@@ -24,6 +24,10 @@ namespace Assets.Scripts.Travel
                 Destroy(gameObject);
             }
             DontDestroyOnLoad(gameObject);
+
+            //TESTING//////////////////////////////////////
+            NewParty();
+            //END TESTING/////////////////////////////////
         }
 
         public void NewParty()

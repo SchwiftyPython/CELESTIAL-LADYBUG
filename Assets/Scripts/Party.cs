@@ -26,6 +26,7 @@ namespace Assets.Scripts
             Gold = 550;
         }
 
+        //todo refactor
         public void AddCompanion(Entity companion)
         {
             if (_companions == null)
@@ -41,6 +42,13 @@ namespace Assets.Scripts
             if (_companions.ContainsKey(companion.Name))
             {
                 companion.Name += ", Jr";
+
+                if (_companions.ContainsKey(companion.Name))
+                {
+                    //todo just generate a different name at this point or something
+                    Debug.Log($"{companion.Name} already exists in party!");
+                    return;
+                }
             }
 
             _companions.Add(companion.Name, companion);
