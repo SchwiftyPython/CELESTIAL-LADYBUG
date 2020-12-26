@@ -19,6 +19,7 @@ namespace Assets.Scripts
         public const string TwoOptionEncounter = "TwoOptionEncounter";
         public const string NoOptionEncounter = "NoOptionEncounter";
         public const string EncounterResult = "EncounterResult";
+        public const string EncounterFinished = "EncounterFinished";
 
         #endregion EventNames
 

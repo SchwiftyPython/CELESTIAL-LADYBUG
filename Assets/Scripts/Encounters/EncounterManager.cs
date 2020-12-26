@@ -5,6 +5,8 @@ namespace Assets.Scripts.Encounters
 {
     public class EncounterManager : MonoBehaviour, ISubscriber
     {
+        private const string EncounterFinished = GlobalHelper.EncounterFinished;
+
         private bool _timerPaused;
 
         private EncounterDeck _deck;
@@ -44,6 +46,8 @@ namespace Assets.Scripts.Encounters
             var encounter = _deck.Draw();
 
             encounter.Run();
+
+            EventMediator.Instance.SubscribeToEvent(EncounterFinished, this);
         }
 
         private void PauseTimer()
@@ -64,6 +68,13 @@ namespace Assets.Scripts.Encounters
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
         {
+            if (eventName.Equals(EncounterFinished))
+            {
+                ResetTimer();
+
+                EventMediator.Instance.UnsubscribeFromEvent(EncounterFinished, this);
+            }
+
             //todo events for pause timer, resume timer, reset timer, draw trigger encounter
         }
     }

@@ -42,9 +42,9 @@ namespace Assets.Scripts.Encounters
                 penaltiesText = TravelManager.Instance.ApplyEncounterPenalty(selectedOption.Penalty);
             }
 
-            var fullResultDescription = new List<string>(); //pass to ui for formatting
+            var fullResultDescription = new List<string>(); 
 
-            fullResultDescription.Add(selectedOption.ResultText);
+            fullResultDescription.Add(selectedOption.ResultText + "\n");
             if (rewardsText != null)
             {
                 fullResultDescription.AddRange(rewardsText);

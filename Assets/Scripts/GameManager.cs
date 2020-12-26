@@ -103,6 +103,11 @@ namespace Assets.Scripts
             return _activeWindows.Any();
         }
 
+        public void LoadTravelScene()
+        {
+            SceneManager.LoadScene(TravelSceneName);
+        }
+
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
         {
 

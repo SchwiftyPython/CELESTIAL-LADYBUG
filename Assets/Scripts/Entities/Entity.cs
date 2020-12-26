@@ -49,6 +49,9 @@ namespace Assets.Scripts.Entities
                 Name = GenerateName(null, Sex);
             }
 
+            _attributes = new Attributes();
+            Stats = new Stats(_attributes);
+
             _level = 1;
             _xp = 0;
         }

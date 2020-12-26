@@ -72,7 +72,7 @@ namespace Assets.Scripts.UI
             GameManager.Instance.AddActiveWindow(gameObject);
         }
 
-        private void Hide()
+        public void Hide()
         {
             gameObject.SetActive(false);
             GameManager.Instance.RemoveActiveWindow(gameObject);
