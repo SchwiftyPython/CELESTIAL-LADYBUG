@@ -7,7 +7,6 @@ namespace Assets.Scripts.Entities
 {
     public class Entity : GameObject
     {
-        private Attributes _attributes;
         private Race _race;
         private EntityClass _entityClass;
         private int _level;
@@ -26,6 +25,7 @@ namespace Assets.Scripts.Entities
 
         public string Name { get; set; }
         public Sex Sex { get; }
+        public Attributes Attributes { get; }
         public Stats Stats { get; }
         public Sprite Portrait { get; private set; }
 
@@ -44,13 +44,25 @@ namespace Assets.Scripts.Entities
             else
             {
                 _race = PickRace();
+
+                while (_race == Race.Derpus)
+                {
+                    _race = PickRace();
+                }
+
                 _entityClass = PickEntityClass();
+
+                while (_entityClass == EntityClass.Derpus)
+                {
+                    _entityClass = PickEntityClass();
+                }
+
                 Sex = PickSex();
                 Name = GenerateName(null, Sex);
             }
 
-            _attributes = new Attributes();
-            Stats = new Stats(_attributes);
+            Attributes = new Attributes();
+            Stats = new Stats(Attributes);
 
             _level = 1;
             _xp = 0;

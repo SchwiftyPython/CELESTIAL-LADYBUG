@@ -20,5 +20,10 @@ namespace Assets.Scripts.Encounters
         {
             PartyGains = partyGains;
         }
+
+        public Reward(Dictionary<Entity, KeyValuePair<object, int>> entityGains)
+        {
+            EntityGains = entityGains;
+        }
     }
 }

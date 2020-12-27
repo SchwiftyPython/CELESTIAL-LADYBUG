@@ -19,6 +19,10 @@ namespace Assets.Scripts.Encounters
 
         public Dictionary<string, Option> Options;
 
+        public Reward Reward;
+
+        public Penalty Penalty;
+
         public abstract void Run();
 
         public void OptionSelected(Option selectedOption)

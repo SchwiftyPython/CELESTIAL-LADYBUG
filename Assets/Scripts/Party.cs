@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Assets.Scripts.Entities;
 using UnityEngine;
 
@@ -79,6 +81,11 @@ namespace Assets.Scripts
             return _companions[companionName];
         }
 
+        public List<Entity> GetCompanions()
+        {
+            return new List<Entity>(_companions.Values);
+        }
+
         public void Eat()
         {
             if (_companions == null)
@@ -150,6 +157,18 @@ namespace Assets.Scripts
             {
                 companion.Rest();
             }
+        }
+
+        public Entity GetRandomCompanion()
+        {
+            if (_companions == null || _companions.Count < 1)
+            {
+                return Derpus;
+            }
+
+            var index = Random.Range(0, _companions.Count);
+
+            return _companions.ElementAt(index).Value;
         }
 
         private void GenerateStartingParty()
