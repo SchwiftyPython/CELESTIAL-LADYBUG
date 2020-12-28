@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Assets.Scripts.Entities.Names;
 using UnityEngine;
 using GameObject = GoRogue.GameFramework.GameObject;
@@ -96,6 +97,11 @@ namespace Assets.Scripts.Entities
         public bool IsDerpus()
         {
             return _entityClass == EntityClass.Derpus || _race == Race.Derpus;
+        }
+
+        public string FirstName()
+        {
+            return Regex.Replace(Name.Split()[0], @"[^0-9a-zA-Z\ ]+", "");
         }
 
         public bool MovedLastTurn(int currentTurn)
