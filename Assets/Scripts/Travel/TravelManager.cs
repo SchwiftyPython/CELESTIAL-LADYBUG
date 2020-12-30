@@ -207,7 +207,7 @@ namespace Assets.Scripts.Travel
                                 companion.SubtractEnergy((entityLoss.Value.Value));
                                 break;
                             default:
-                                Debug.Log($"Invalid gain type! {lossType}");
+                                Debug.Log($"Invalid loss type! {lossType}");
                                 break;
                         }
 

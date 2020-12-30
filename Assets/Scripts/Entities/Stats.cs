@@ -4,6 +4,11 @@ namespace Assets.Scripts.Entities
 {
     public class Stats
     {
+        //todo just temp til we replace the text version of the stats in ui
+        private const int PrototypeStatsCap = 99;
+
+        private const int CurrentStatsMin = 0; //todo custom setters for all stats to enforce mins and maxes
+
         public int MaxHealth { get; set; }
         public int CurrentHealth { get; set; }
         public int MaxEnergy { get; set; }
@@ -29,12 +34,15 @@ namespace Assets.Scripts.Entities
             //todo these are arbitrary numbers - need to tweak
 
             MaxHealth = (int) (attributes.Might * 3.1f + RollD20());
+            EnforceStatCap(MaxHealth);
             CurrentHealth = MaxHealth;
 
             MaxEnergy = (int) (attributes.Might * 3.6f + RollD20());
+            EnforceStatCap(MaxEnergy);
             CurrentEnergy = MaxEnergy;
 
-            MaxMorale = (int) (RollD20() * 3.9f) + 30;
+            MaxMorale = (int) (RollD20() * 2.3f) + 30;
+            EnforceStatCap(MaxMorale);
             CurrentMorale = MaxMorale;
 
             Initiative = (int) (attributes.Speed * 2.1 + attributes.Intellect * 2.1 + RollD20());
@@ -51,6 +59,14 @@ namespace Assets.Scripts.Entities
 
             MaxActionPoints = 10 - RollD20() / 5;
             CurrentActionPoints = MaxActionPoints;
+        }
+
+        private void EnforceStatCap(int stat)
+        {
+            if (stat > PrototypeStatsCap)
+            {
+                stat = PrototypeStatsCap;
+            }
         }
 
         private int RollD20()
