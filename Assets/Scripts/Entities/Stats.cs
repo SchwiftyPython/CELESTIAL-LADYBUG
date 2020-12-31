@@ -7,22 +7,166 @@ namespace Assets.Scripts.Entities
         //todo just temp til we replace the text version of the stats in ui
         private const int PrototypeStatsCap = 99;
 
-        private const int CurrentStatsMin = 0; //todo custom setters for all stats to enforce mins and maxes
+        private const int CurrentStatsMin = 0; 
 
-        public int MaxHealth { get; set; }
-        public int CurrentHealth { get; set; }
-        public int MaxEnergy { get; set; }
-        public int CurrentEnergy { get; set; }
-        public int MaxMorale { get; set; }
-        public int CurrentMorale { get; set; }
+        private int _maxHealth;
+        public int MaxHealth
+        {
+            get => _maxHealth;
+            set
+            {
+                if (value > PrototypeStatsCap)
+                {
+                    _maxHealth = PrototypeStatsCap;
+                }
+                else
+                {
+                    _maxHealth = value;
+                }
+            } }
+
+        private int _currentHealth;
+        public int CurrentHealth
+        {
+            get => _currentHealth;
+            set
+            {
+                if (value < CurrentStatsMin)
+                {
+                    _currentHealth = CurrentStatsMin;
+                }
+                else if(value > MaxHealth)
+                {
+                    _currentHealth = MaxHealth;
+                }
+                else
+                {
+                    _currentHealth = value;
+                }
+            }
+        }
+
+        private int _maxEnergy;
+        public int MaxEnergy
+        {
+            get => _maxEnergy;
+            set
+            {
+                if (value > PrototypeStatsCap)
+                {
+                    _maxEnergy = PrototypeStatsCap;
+                }
+                else
+                {
+                    _maxEnergy = value;
+                }
+            }
+        }
+
+        private int _currentEnergy;
+        public int CurrentEnergy
+        {
+            get => _currentEnergy;
+            set
+            {
+                if (value < CurrentStatsMin)
+                {
+                    _currentEnergy = CurrentStatsMin;
+                }
+                else if (value > MaxEnergy)
+                {
+                    _currentEnergy = MaxEnergy;
+                }
+                else
+                {
+                    _currentEnergy = value;
+                }
+            }
+        }
+
+        private int _maxMorale;
+        public int MaxMorale
+        {
+            get => _maxMorale;
+            set
+            {
+                if (value > PrototypeStatsCap)
+                {
+                    _maxMorale = PrototypeStatsCap;
+                }
+                else
+                {
+                    _maxMorale = value;
+                }
+            }
+        }
+
+        private int _currentMorale;
+        public int CurrentMorale
+        {
+            get => _currentMorale;
+            set
+            {
+                if (value < CurrentStatsMin)
+                {
+                    _currentMorale = CurrentStatsMin;
+                }
+                else if (value > MaxMorale)
+                {
+                    _currentMorale = MaxMorale;
+                }
+                else
+                {
+                    _currentMorale = value;
+                }
+            }
+        }
+
+        private int _maxActionPoints;
+        public int MaxActionPoints
+        {
+            get => _maxActionPoints;
+            set
+            {
+                if (value > PrototypeStatsCap)
+                {
+                    _maxActionPoints = PrototypeStatsCap;
+                }
+                else
+                {
+                    _maxActionPoints = value;
+                }
+            }
+        }
+
+        private int _currentActionPoints;
+        public int CurrentActionPoints
+        {
+            get => _currentActionPoints;
+            set
+            {
+                if (value < CurrentStatsMin)
+                {
+                    _currentActionPoints = CurrentStatsMin;
+                }
+                else if (value > MaxActionPoints)
+                {
+                    _currentActionPoints = MaxActionPoints;
+                }
+                else
+                {
+                    _currentActionPoints = value;
+                }
+            }
+        }
+
         public int Initiative { get; set; }
         public int Attack { get; set; }
         public int MeleeSkill { get; set; }
         public int RangedSkill { get; set; }
         public int Armor { get; set; }
         public int Critical { get; set; }
-        public int MaxActionPoints { get; set; }
-        public int CurrentActionPoints { get; set; }
+        
 
         public Stats(Attributes attributes)
         {
