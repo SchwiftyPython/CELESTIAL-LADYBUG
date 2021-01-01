@@ -178,15 +178,12 @@ namespace Assets.Scripts.Entities
             //todo these are arbitrary numbers - need to tweak
 
             MaxHealth = (int) (attributes.Might * 3.1f + RollD20());
-            EnforceStatCap(MaxHealth);
             CurrentHealth = MaxHealth;
 
             MaxEnergy = (int) (attributes.Might * 3.6f + RollD20());
-            EnforceStatCap(MaxEnergy);
             CurrentEnergy = MaxEnergy;
 
             MaxMorale = (int) (RollD20() * 2.3f) + 30;
-            EnforceStatCap(MaxMorale);
             CurrentMorale = MaxMorale;
 
             Initiative = (int) (attributes.Speed * 2.1 + attributes.Intellect * 2.1 + RollD20());

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Assets.Scripts.Entities;
 using UnityEngine;
 
@@ -10,11 +9,14 @@ namespace Assets.Scripts
     {
         private const int MaxSize = 10;
         private const int StartSize = 6;
+        private const int MoraleFoodModifier = 25;
+
+        public const int FoodConsumedPerCompanion = 1;
 
         private Dictionary<string, Entity> _companions;
+
         public  Entity Derpus { get; set; }
 
-        //todo need enums for these
         public int Food { get; set; }
         public int HealthPotions { get; set; }
         public int Gold { get; set; }
@@ -101,19 +103,32 @@ namespace Assets.Scripts
 
                 foreach (var companion in _companions.Values)
                 {
-                    companion.SubtractMorale(25);
+                    companion.SubtractMorale(MoraleFoodModifier);
                 }
 
                 Debug.Log("Not enough food! Party morale drops!"); //todo message
             }
             else
             {
-                Food -= _companions.Count;
+                Food -= _companions.Count * FoodConsumedPerCompanion;
 
-                Debug.Log($"Party ate {_companions.Count} food!"); //todo message
+                Debug.Log($"Party ate {_companions.Count * FoodConsumedPerCompanion} food!"); //todo message
             }
 
             //todo food amount changed event to update party status bar
+        }
+
+        public void EatForFree()
+        {
+            if (_companions == null)
+            {
+                return;
+            }
+
+            foreach (var companion in _companions.Values)
+            {
+                companion.AddMorale(MoraleFoodModifier);
+            }
         }
 
         public void Heal()

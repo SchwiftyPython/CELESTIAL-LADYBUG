@@ -26,13 +26,8 @@ namespace Assets.Scripts.Encounters
             };
             var reward = new Reward(partyGains);
 
-            //todo refactor encapsulate this in the Penalty class -- AddEntityLosses(List<Entity> companions, string targetStat, int value)
-            var entityLosses = new Dictionary<Entity, KeyValuePair<object, int>>
-            {
-                {TravelManager.Instance.Party.Derpus, new KeyValuePair<object, int>("morale", 10)}
-            };
-
-            var penalty = new Penalty(entityLosses);
+            var penalty = new Penalty();
+            penalty.AddEntityLoss(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentMorale, 10);
 
             var optionOne = new Option(optionTitle, optionResultText, reward, penalty);
 

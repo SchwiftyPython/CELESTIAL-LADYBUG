@@ -25,6 +25,7 @@ namespace Assets.Scripts.Travel
             }
             DontDestroyOnLoad(gameObject);
 
+            //todo testing
             //TESTING//////////////////////////////////////
             NewParty();
             //END TESTING/////////////////////////////////
@@ -35,24 +36,24 @@ namespace Assets.Scripts.Travel
             Party = new Party();
         }
 
-        public string BuildPartyRewardTextItem(int value, string gainType)
+        public string BuildPartyRewardTextItem(int value, PartySupplyTypes gainType)
         {
-            return $"Gained {value} {gainType}!";
+            return $"Gained {value} {GlobalHelper.GetEnumDescription(gainType)}!";
         }
 
-        public string BuildPartyLossTextItem(int value, string lossType)
+        public string BuildPartyLossTextItem(int value, PartySupplyTypes lossType)
         {
-            return $"Lost {value} {lossType}!";
+            return $"Lost {value} {GlobalHelper.GetEnumDescription(lossType)}!";
         }
 
-        public string BuildCompanionRewardTextItem(Entity companion, int value, string gainType)
+        public string BuildCompanionRewardTextItem(Entity companion, int value, EntityStatTypes gainType)
         {
-            return $"{companion.Name} gained {value} {gainType}!";
+            return $"{companion.Name} gained {value} {GlobalHelper.GetEnumDescription(gainType)}!";
         }
 
-        public string BuildCompanionLossTextItem(Entity companion, int value, string lossType)
+        public string BuildCompanionLossTextItem(Entity companion, int value, EntityStatTypes lossType)
         {
-            return $"{companion.Name} lost {value} {lossType}!";
+            return $"{companion.Name} lost {value} {GlobalHelper.GetEnumDescription(lossType)}!";
         }
 
         //todo refactor
@@ -151,17 +152,17 @@ namespace Assets.Scripts.Travel
             {
                 foreach (var partyLoss in penalty.PartyLosses)
                 {
-                    var lossType = partyLoss.Key.ToString();
+                    var lossType = partyLoss.Key;
 
                     switch (lossType)
                     {
-                        case "food":
+                        case PartySupplyTypes.Food:
                             Party.Food -= partyLoss.Value;
                             break;
-                        case "potions":
+                        case PartySupplyTypes.HealthPotions:
                             Party.HealthPotions -= partyLoss.Value;
                             break;
-                        case "gold":
+                        case PartySupplyTypes.Gold:
                             Party.Gold -= partyLoss.Value;
                             break;
                         default:
@@ -193,25 +194,28 @@ namespace Assets.Scripts.Travel
 
                     if (companion != null)
                     {
-                        var lossType = entityLoss.Value.Key.ToString();
-
-                        switch (lossType)
+                        foreach (var statLoss in entityLoss.Value)
                         {
-                            case "morale":
-                                companion.SubtractMorale(entityLoss.Value.Value);
-                                break;
-                            case "health":
-                                companion.SubtractHealth(entityLoss.Value.Value);
-                                break;
-                            case "energy":
-                                companion.SubtractEnergy((entityLoss.Value.Value));
-                                break;
-                            default:
-                                Debug.Log($"Invalid loss type! {lossType}");
-                                break;
-                        }
+                            var lossType = statLoss.Key;
 
-                        penaltiesText.Add(BuildCompanionLossTextItem(companion, entityLoss.Value.Value, lossType));
+                            switch (lossType)
+                            {
+                                case EntityStatTypes.CurrentMorale:
+                                    companion.SubtractMorale(statLoss.Value);
+                                    break;
+                                case EntityStatTypes.CurrentHealth:
+                                    companion.SubtractHealth(statLoss.Value);
+                                    break;
+                                case EntityStatTypes.CurrentEnergy:
+                                    companion.SubtractEnergy(statLoss.Value);
+                                    break;
+                                default:
+                                    Debug.Log($"Invalid loss type! {lossType}");
+                                    break;
+                            }
+
+                            penaltiesText.Add(BuildCompanionLossTextItem(companion, statLoss.Value, lossType));
+                        }
                     }
                 }
             }

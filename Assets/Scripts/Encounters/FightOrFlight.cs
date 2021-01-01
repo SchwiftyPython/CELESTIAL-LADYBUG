@@ -60,12 +60,8 @@ namespace Assets.Scripts.Encounters
                 optionResultText =
                     $"{chosenCompanion.FirstName()} struggles to climb the fence. One of the guards deals a blow to his leg before he makes it over!";
 
-                var entityLosses = new Dictionary<Entity, KeyValuePair<object, int>>
-                {
-                    {chosenCompanion, new KeyValuePair<object, int>("health", 15)}
-                };
-
-                optionOnePenalty = new Penalty(entityLosses);
+                optionOnePenalty = new Penalty();
+                optionOnePenalty.AddEntityLoss(chosenCompanion, EntityStatTypes.CurrentHealth, 15);
             }
 
             var optionOne = new Option(optionTitle, optionResultText, optionOneReward, optionOnePenalty);
@@ -103,12 +99,8 @@ namespace Assets.Scripts.Encounters
                 optionResultText =
                     $"{chosenCompanion.FirstName()} manages to hit a guard or two with the crates, but has to fight off the rest!";
 
-                var entityLosses = new Dictionary<Entity, KeyValuePair<object, int>>
-                {
-                    {chosenCompanion, new KeyValuePair<object, int>("health", 30)}
-                };
-
-                optionTwoPenalty = new Penalty(entityLosses);
+                optionTwoPenalty = new Penalty();
+                optionTwoPenalty.AddEntityLoss(chosenCompanion, EntityStatTypes.CurrentHealth, 30);
             }
 
             var optionTwo = new Option(optionTitle, optionResultText, optionTwoReward, optionTwoPenalty);

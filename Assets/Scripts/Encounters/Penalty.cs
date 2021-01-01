@@ -5,20 +5,44 @@ namespace Assets.Scripts.Encounters
 {
     public class Penalty
     {
-        public Dictionary<Entity, KeyValuePair<object, int>> EntityLosses;
-        public Dictionary<object, int> PartyLosses;
+        public Dictionary<Entity, List<KeyValuePair<EntityStatTypes, int>>> EntityLosses;
+        public Dictionary<PartySupplyTypes, int> PartyLosses;
         public List<Effect> Effects;
 
-        public Penalty(Dictionary<Entity, KeyValuePair<object, int>> entityLosses, Dictionary<object, int> partyLosses, List<Effect> effects)
+        public void AddPartyLoss(PartySupplyTypes supplyType, int amountLost)
         {
-            EntityLosses = entityLosses;
-            PartyLosses = partyLosses;
-            Effects = effects;
+            if (PartyLosses == null)
+            {
+                PartyLosses = new Dictionary<PartySupplyTypes, int>();
+            }
+
+            if (!PartyLosses.ContainsKey(supplyType))
+            {
+                PartyLosses.Add(supplyType, amountLost);
+            }
+            else
+            {
+                PartyLosses[supplyType] += amountLost;
+            }
         }
 
-        public Penalty(Dictionary<Entity, KeyValuePair<object, int>> entityLosses)
+        public void AddEntityLoss(Entity targetEntity, EntityStatTypes statType, int amountLost)
         {
-            EntityLosses = entityLosses;
+            if (EntityLosses == null)
+            {
+                EntityLosses = new Dictionary<Entity, List<KeyValuePair<EntityStatTypes, int>>>();
+            }
+
+            var loss = new KeyValuePair<EntityStatTypes, int>(statType, amountLost);
+
+            if (!EntityLosses.ContainsKey(targetEntity))
+            {
+                EntityLosses.Add(targetEntity, new List<KeyValuePair<EntityStatTypes, int>>{loss});
+            }
+            else
+            {
+                EntityLosses[targetEntity].Add(loss);
+            }
         }
     }
 }

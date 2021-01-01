@@ -13,17 +13,13 @@ namespace Assets.Scripts.Encounters
             Title = "Camp Mosquito";
             Description = "The group happens upon an old campsite. During the night, they are attacked by swarms of thirsty mosquitoes and must leave before shutting an eye!";
 
-            var entityLosses = new Dictionary<Entity, KeyValuePair<object, int>>
-            {
-                {TravelManager.Instance.Party.Derpus, new KeyValuePair<object, int>("energy", 10)}
-            };
+            Penalty = new Penalty();
+            Penalty.AddEntityLoss(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentEnergy, 10);
 
             foreach (var companion in TravelManager.Instance.Party.GetCompanions())
             {
-                entityLosses.Add(companion, new KeyValuePair<object, int>("energy", 10));
+                Penalty.AddEntityLoss(companion, EntityStatTypes.CurrentEnergy, 10);
             }
-
-            Penalty = new Penalty(entityLosses);
         }
 
         public override void Run()
