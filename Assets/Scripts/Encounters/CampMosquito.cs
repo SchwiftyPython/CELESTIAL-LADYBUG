@@ -13,6 +13,17 @@ namespace Assets.Scripts.Encounters
             Title = "Camp Mosquito";
             Description = "The group happens upon an old campsite. During the night, they are attacked by swarms of thirsty mosquitoes and must leave before shutting an eye!";
 
+            // Penalty = new Penalty();
+            // Penalty.AddEntityLoss(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentEnergy, 10);
+            //
+            // foreach (var companion in TravelManager.Instance.Party.GetCompanions())
+            // {
+            //     Penalty.AddEntityLoss(companion, EntityStatTypes.CurrentEnergy, 10);
+            // }
+        }
+
+        public override void Run()
+        {
             Penalty = new Penalty();
             Penalty.AddEntityLoss(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentEnergy, 10);
 
@@ -20,10 +31,7 @@ namespace Assets.Scripts.Encounters
             {
                 Penalty.AddEntityLoss(companion, EntityStatTypes.CurrentEnergy, 10);
             }
-        }
 
-        public override void Run()
-        {
             var fullResultDescription = new List<string>();
 
             fullResultDescription.Add(Description + "\n");

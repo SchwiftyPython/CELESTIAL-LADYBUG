@@ -70,17 +70,17 @@ namespace Assets.Scripts.Travel
             {
                 foreach (var partyGain in reward.PartyGains)
                 {
-                    var gainType = partyGain.Key.ToString();
+                    var gainType = (PartySupplyTypes) partyGain.Key;
 
                     switch (gainType)
                     {
-                        case "food":
+                        case PartySupplyTypes.Food:
                             Party.Food += partyGain.Value;
                             break;
-                        case "potions":
+                        case PartySupplyTypes.HealthPotions:
                             Party.HealthPotions += partyGain.Value;
                             break;
-                        case "gold":
+                        case PartySupplyTypes.Gold:
                             Party.Gold += partyGain.Value;
                             break;
                         default:
@@ -112,25 +112,28 @@ namespace Assets.Scripts.Travel
 
                     if (companion != null)
                     {
-                        var gainType = entityGain.Value.Key.ToString();
-
-                        switch (gainType)
+                        foreach (var statGain in entityGain.Value)
                         {
-                            case "morale":
-                                companion.AddMorale(entityGain.Value.Value);
-                                break;
-                            case "health":
-                                companion.AddHealth(entityGain.Value.Value);
-                                break;
-                            case "energy":
-                                companion.AddEnergy((entityGain.Value.Value));
-                                break;
-                            default:
-                                Debug.Log($"Invalid gain type! {gainType}");
-                                break;
-                        }
+                            var gainType = statGain.Key;
 
-                        rewardsText.Add(BuildCompanionRewardTextItem(companion, entityGain.Value.Value, gainType));
+                            switch (gainType)
+                            {
+                                case EntityStatTypes.CurrentMorale:
+                                    companion.AddMorale(statGain.Value);
+                                    break;
+                                case EntityStatTypes.CurrentHealth:
+                                    companion.AddHealth(statGain.Value);
+                                    break;
+                                case EntityStatTypes.CurrentEnergy:
+                                    companion.AddEnergy(statGain.Value);
+                                    break;
+                                default:
+                                    Debug.Log($"Invalid gain type! {gainType}");
+                                    break;
+                            }
+
+                            rewardsText.Add(BuildCompanionRewardTextItem(companion, statGain.Value, gainType));
+                        }
                     }
                 }
             }

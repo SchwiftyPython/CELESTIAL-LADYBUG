@@ -44,12 +44,8 @@ namespace Assets.Scripts.Encounters
             {
                 optionResultText = $"{chosenCompanion.FirstName()} runs up one of the crates and flips over the fence!";
 
-                var entityGains = new Dictionary<Entity, KeyValuePair<object, int>>
-                {
-                    {chosenCompanion, new KeyValuePair<object, int>("morale", 30)}
-                };
-
-                optionOneReward = new Reward(entityGains);
+                optionOneReward = new Reward();
+                optionOneReward.AddEntityGain(chosenCompanion, EntityStatTypes.CurrentMorale, 30);
             }
             else if (speedCheck == scaleSuccess)
             {
@@ -87,12 +83,8 @@ namespace Assets.Scripts.Encounters
                 optionResultText =
                     $"{chosenCompanion.FirstName()} knocks several guards to the ground with a well placed throw and escapes!";
 
-                var entityGains = new Dictionary<Entity, KeyValuePair<object, int>>
-                {
-                    {chosenCompanion, new KeyValuePair<object, int>("morale", 30)}
-                };
-
-                optionTwoReward = new Reward(entityGains);
+                optionTwoReward = new Reward();
+                optionTwoReward.AddEntityGain(chosenCompanion, EntityStatTypes.CurrentMorale, 30);
             }
             else
             {

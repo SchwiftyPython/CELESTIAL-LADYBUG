@@ -9,23 +9,6 @@ namespace Assets.Scripts.Encounters
         public Dictionary<PartySupplyTypes, int> PartyLosses;
         public List<Effect> Effects;
 
-        public void AddPartyLoss(PartySupplyTypes supplyType, int amountLost)
-        {
-            if (PartyLosses == null)
-            {
-                PartyLosses = new Dictionary<PartySupplyTypes, int>();
-            }
-
-            if (!PartyLosses.ContainsKey(supplyType))
-            {
-                PartyLosses.Add(supplyType, amountLost);
-            }
-            else
-            {
-                PartyLosses[supplyType] += amountLost;
-            }
-        }
-
         public void AddEntityLoss(Entity targetEntity, EntityStatTypes statType, int amountLost)
         {
             if (EntityLosses == null)
@@ -42,6 +25,23 @@ namespace Assets.Scripts.Encounters
             else
             {
                 EntityLosses[targetEntity].Add(loss);
+            }
+        }
+
+        public void AddPartyLoss(PartySupplyTypes supplyType, int amountLost)
+        {
+            if (PartyLosses == null)
+            {
+                PartyLosses = new Dictionary<PartySupplyTypes, int>();
+            }
+
+            if (!PartyLosses.ContainsKey(supplyType))
+            {
+                PartyLosses.Add(supplyType, amountLost);
+            }
+            else
+            {
+                PartyLosses[supplyType] += amountLost;
             }
         }
     }
