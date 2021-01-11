@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Travel
 {
-    public class TravelManager : MonoBehaviour
+    public class TravelManager : MonoBehaviour, ISubscriber
     {
         public Party Party { get; private set; }
 
@@ -24,6 +24,8 @@ namespace Assets.Scripts.Travel
                 Destroy(gameObject);
             }
             DontDestroyOnLoad(gameObject);
+
+            EventMediator.Instance.SubscribeToEvent(GlobalHelper.CampingEncounterFinished, this);
 
             //todo testing
             //TESTING//////////////////////////////////////
@@ -224,6 +226,14 @@ namespace Assets.Scripts.Travel
             }
 
             return penaltiesText;
+        }
+
+        public void OnNotify(string eventName, object broadcaster, object parameter = null)
+        {
+            if (eventName.Equals(GlobalHelper.CampingEncounterFinished))
+            {
+                Party.EatAndHeal();
+            }
         }
     }
 }

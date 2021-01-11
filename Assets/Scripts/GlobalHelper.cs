@@ -20,6 +20,8 @@ namespace Assets.Scripts
         public const string NoOptionEncounter = "NoOptionEncounter";
         public const string EncounterResult = "EncounterResult";
         public const string EncounterFinished = "EncounterFinished";
+        public const string CampingEncounterFinished = "CampingEncounterFinished";
+        public const string PartyEatAndHeal = "PartyEatAndHeal";
 
         #endregion EventNames
 

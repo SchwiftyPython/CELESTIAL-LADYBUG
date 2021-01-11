@@ -1,19 +1,14 @@
 ﻿using System.Collections.Generic;
-using Assets.Scripts.Encounters;
 using TMPro;
 using UnityEngine;
 
 namespace Assets.Scripts.UI
 {
-    public class EncounterResultPopup : MonoBehaviour, ISubscriber
+    //todo this is just placeholder for scrolling message console. Too clunky with this many popups
+    public class EatAndHealResultPopup : MonoBehaviour, ISubscriber
     {
-        private const string PopupEvent = GlobalHelper.EncounterResult;
-        private const string EncounterFinished = GlobalHelper.EncounterFinished;
-        private const string CampingEncounterFinished = GlobalHelper.CampingEncounterFinished;
+        private const string PopupEvent = GlobalHelper.PartyEatAndHeal;
 
-        private EncounterType _encounterType;
-
-        public TextMeshProUGUI EncounterTitle;
         public TextMeshProUGUI ResultDescription;
 
         private void Awake()
@@ -22,12 +17,8 @@ namespace Assets.Scripts.UI
             Hide();
         }
 
-        private void Show(Encounter encounter, List<string> result)
+        public void Show(List<string> result)
         {
-            _encounterType = encounter.EncounterType;
-
-            EncounterTitle.text = encounter.Title;
-
             var resultText = string.Empty;
             foreach (var line in result)
             {
@@ -45,13 +36,6 @@ namespace Assets.Scripts.UI
         {
             gameObject.SetActive(false);
             GameManager.Instance.RemoveActiveWindow(gameObject);
-
-            EventMediator.Instance.Broadcast(EncounterFinished, this);
-
-            if (_encounterType == EncounterType.Camping)
-            {
-                EventMediator.Instance.Broadcast(CampingEncounterFinished, this);
-            }
         }
 
         private void OnDestroy()
@@ -64,13 +48,6 @@ namespace Assets.Scripts.UI
         {
             if (eventName.Equals(PopupEvent))
             {
-                var encounter = broadcaster as Encounter;
-
-                if (encounter == null)
-                {
-                    return;
-                }
-
                 var result = parameter as List<string>;
 
                 if (result == null || result.Count < 1)
@@ -78,7 +55,7 @@ namespace Assets.Scripts.UI
                     return;
                 }
 
-                Show(encounter, result);
+                Show(result);
             }
         }
     }

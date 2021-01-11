@@ -29,7 +29,7 @@ namespace Assets.Scripts.Encounters
         {
             if (selectedOption == null)
             {
-                Debug.Log("No option selected for Stay In School Encounter!");
+                Debug.Log("No option selected for Encounter!");
 
                 throw new ArgumentNullException(nameof(selectedOption));
             }

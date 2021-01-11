@@ -88,12 +88,28 @@ namespace Assets.Scripts
             return new List<Entity>(_companions.Values);
         }
 
-        public void Eat()
+        public void EatAndHeal()
         {
-            if (_companions == null)
+            var eatResult = Eat();
+            var healResult = Heal();
+
+            var totalResult = new List<string>();
+
+            totalResult.AddRange(eatResult);
+            totalResult.AddRange(healResult);
+
+            EventMediator.Instance.Broadcast(GlobalHelper.PartyEatAndHeal, this, totalResult);
+        }
+
+        //todo refactor may not need a list here
+        public List<string> Eat()
+        {
+            if (_companions == null || _companions.Count < 1)
             {
-                return;
+                return new List<string>{"No mouths to feed!"};
             }
+
+            var eatResult = new List<string>();
 
             //todo choose random order to feed companions. This allows for some to eat and not others when food is low. Then subtract morale for the hungry.
 
@@ -106,16 +122,22 @@ namespace Assets.Scripts
                     companion.SubtractMorale(MoraleFoodModifier);
                 }
 
-                Debug.Log("Not enough food! Party morale drops!"); //todo message
+                eatResult.Add("Not enough food! Party morale drops!");
+
+                Debug.Log("Not enough food! Party morale drops!"); 
             }
             else
             {
                 Food -= _companions.Count * FoodConsumedPerCompanion;
 
-                Debug.Log($"Party ate {_companions.Count * FoodConsumedPerCompanion} food!"); //todo message
+                eatResult.Add($"Party ate {_companions.Count * FoodConsumedPerCompanion} food!");
+
+                Debug.Log($"Party ate {_companions.Count * FoodConsumedPerCompanion} food!"); 
             }
 
             //todo food amount changed event to update party status bar
+
+            return eatResult;
         }
 
         public void EatForFree()
@@ -131,32 +153,42 @@ namespace Assets.Scripts
             }
         }
 
-        public void Heal()
+        public List<string> Heal()
         {
-            if (_companions == null)
+            if (_companions == null || _companions.Count < 1)
             {
-                return;
+                return new List<string>{"No one to heal!"};
             }
 
             if (HealthPotions <= 0)
             {
                 Debug.Log("No health potions! Can't heal!");
+
+                return new List<string> { "No health potions! Can't heal!" };
             }
+
+            var healResult = new List<string>();
+
+            //todo choose random order to heal companions.
 
             foreach (var companion in _companions.Values)
             {
                 if (HealthPotions <= 0)
                 {
-                    return;
+                    return healResult;
                 }
 
                 if (companion.Stats.CurrentHealth < companion.Stats.MaxHealth)
                 {
                     companion.UseHealthPotion();
 
+                    healResult.Add($"{companion.FirstName()} used a health potion!");
+
                     HealthPotions--;
                 }
             }
+
+            return healResult;
         }
 
         public void Rest()

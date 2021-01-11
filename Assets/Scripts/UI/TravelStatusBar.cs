@@ -16,6 +16,7 @@ namespace Assets.Scripts.UI
 
         private int _currentStartingIndex;
 
+        public TextMeshProUGUI GoldValue;
         public TextMeshProUGUI FoodValue;
         public TextMeshProUGUI HealthPotionsValue;
         public TextMeshProUGUI DerpusEnergy;
@@ -38,6 +39,7 @@ namespace Assets.Scripts.UI
         {
             var party = TravelManager.Instance.Party;
 
+            GoldValue.text = party.Gold.ToString();
             FoodValue.text = party.Food.ToString();
             HealthPotionsValue.text = party.HealthPotions.ToString();
             DerpusEnergy.text = $"{party.Derpus.Stats.CurrentEnergy}/{party.Derpus.Stats.MaxEnergy}";
@@ -94,6 +96,7 @@ namespace Assets.Scripts.UI
         {
             var party = TravelManager.Instance.Party;
 
+            GoldValue.text = party.Gold.ToString();
             FoodValue.text = party.Food.ToString();
             HealthPotionsValue.text = party.HealthPotions.ToString();
             DerpusEnergy.text = $"{party.Derpus.Stats.CurrentEnergy}/{party.Derpus.Stats.MaxEnergy}";

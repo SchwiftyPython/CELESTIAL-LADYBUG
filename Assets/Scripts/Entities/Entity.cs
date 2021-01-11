@@ -216,7 +216,7 @@ namespace Assets.Scripts.Entities
 
         public void UseHealthPotion()
         {
-            AddHealth(40);
+            AddHealth(40); //todo make a constant somewhere
         }
 
         public void ApplyEffect(Effect effect)
@@ -237,7 +237,7 @@ namespace Assets.Scripts.Entities
 
         public void Rest()
         {
-            AddEnergy(45);
+            AddEnergy(45); //todo make a constant somewhere
         }
 
         private string GenerateName(List<string> possibleNameFiles, Sex sex)

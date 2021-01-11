@@ -78,7 +78,7 @@ namespace Assets.Scripts.Encounters
         {
             Options = new Dictionary<string, Option>();
 
-            var totalCost = CostPerPerson * TravelManager.Instance.Party.GetCompanions().Count + 1;
+            var totalCost = CostPerPerson * TravelManager.Instance.Party.GetCompanions().Count;
 
             string optionTitle;
             string optionResultText;
