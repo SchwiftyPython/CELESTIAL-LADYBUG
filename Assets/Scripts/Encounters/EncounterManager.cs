@@ -15,8 +15,18 @@ namespace Assets.Scripts.Encounters
 
         //todo need ui references 
 
+        public static EncounterManager Instance;
+
         private void Start()
         {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else if (Instance != this)
+            {
+                Destroy(gameObject);
+            }
             DontDestroyOnLoad(gameObject); //todo if continuity flops we can probably not worry about having a new deck every time
 
             _deck = new EncounterDeck();

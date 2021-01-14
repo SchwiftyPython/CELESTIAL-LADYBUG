@@ -13,6 +13,8 @@ namespace Assets.Scripts.Combat
         private string _prefabName;
         private UnityEngine.GameObject _prefabTexture;
 
+        public UnityEngine.GameObject SpriteInstance { get; private set; }
+
         public Map CurrentMap => _backingField.CurrentMap;
 
         public bool IsStatic => _backingField.IsStatic;
@@ -52,6 +54,11 @@ namespace Assets.Scripts.Combat
 
             _prefabTexture = texture;
             _prefabName = texture.name;
+        }
+
+        public void SetSpriteInstance(UnityEngine.GameObject instance)
+        {
+            SpriteInstance = instance;
         }
 
         public void AddComponent(object component)

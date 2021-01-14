@@ -22,6 +22,11 @@ namespace Assets.Scripts
         public const string EncounterFinished = "EncounterFinished";
         public const string CampingEncounterFinished = "CampingEncounterFinished";
         public const string PartyEatAndHeal = "PartyEatAndHeal";
+        public const string PlayerEndTurn = "PlayerEndTurn";
+        public const string AiEndTurn = "AiEndTurn";
+        public const string EndTurn = "EndTurn";
+        public const string CombatFinished = "CombatFinished";
+        public const string EntityDead = "EntityDead";
 
         #endregion EventNames
 

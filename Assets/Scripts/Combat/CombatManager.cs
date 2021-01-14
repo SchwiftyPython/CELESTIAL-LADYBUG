@@ -17,16 +17,35 @@ namespace Assets.Scripts.Combat
         EndCombat
     }
 
-    public class CombatManager : MonoBehaviour
+    public class CombatManager : MonoBehaviour, ISubscriber
     {
+        //private const string PlayerEndTurn = GlobalHelper.PlayerEndTurn;
+        //private const string AiEndTurn = GlobalHelper.AiEndTurn;
+        private const string EndTurn = GlobalHelper.EndTurn;
+        private const string CombatFinished = GlobalHelper.CombatFinished;
+        private const string EntityDead = GlobalHelper.EntityDead;
+
         private CombatState _currentCombatState;
         private Queue<Entity> _turnOrder;
         private Entity _activeEntity;
         private CombatMap _map;
+        private GameObject _pawnHighlighterInstance;
+
+        public GameObject PrototypePawnHighlighterPrefab;
+
+        public static CombatManager Instance;
 
         private void Awake()
         {
-        
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else if (Instance != this)
+            {
+                Destroy(gameObject);
+            }
+            DontDestroyOnLoad(gameObject);
         }
 
         private void Update()
@@ -40,7 +59,11 @@ namespace Assets.Scripts.Combat
 
                     //todo combine party and enemies into list
 
-                    //todo determine turn order
+                    var combatants = new List<Entity>();
+
+                    _map = GenerateMap(combatants);
+
+                    _turnOrder = DetermineTurnOrder(combatants);
 
                     _activeEntity = _turnOrder.Peek();
 
@@ -57,14 +80,17 @@ namespace Assets.Scripts.Combat
                     break;
                 case CombatState.PlayerTurn:
                     UpdateActiveEntityInfoPanel();
-                    //todo subscribe to player action event
+
+                    EventMediator.Instance.SubscribeToEvent(EndTurn, this);
                     break;
                 case CombatState.AiTurn:
+                    EventMediator.Instance.SubscribeToEvent(EndTurn, this);
+
                     //todo tell ai to do its thing
-                    //todo subscribe to ai action event
+
                     break;
                 case CombatState.EndTurn:
-                    RemoveDeadEntities();
+                    RemoveDeadEntitiesFromTurnOrderDisplay();
 
                     if (IsCombatFinished())
                     {
@@ -104,9 +130,32 @@ namespace Assets.Scripts.Combat
 
         }
 
+        private GameObject GetPawnHighlighterInstance()
+        {
+            if (_pawnHighlighterInstance == null)
+            {
+                _pawnHighlighterInstance = Instantiate(PrototypePawnHighlighterPrefab, Vector3.zero, Quaternion.identity);
+            }
+
+            return _pawnHighlighterInstance;
+        }
+
         private bool PlayerDead()
         {
+            foreach (var entity in _turnOrder.ToArray())
+            {
+                if (entity.IsDead())
+                {
+                    continue;
+                }
 
+                if (entity.IsPlayer())
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private Queue<Entity> DetermineTurnOrder(List<Entity> combatants)
@@ -143,6 +192,11 @@ namespace Assets.Scripts.Combat
 
             _turnOrder.Enqueue(lastEntity);
 
+            while (_turnOrder.Peek().IsDead())
+            {
+                _turnOrder.Dequeue();
+            }
+
             return _turnOrder.Peek();
         }
 
@@ -153,23 +207,26 @@ namespace Assets.Scripts.Combat
 
         private void HighlightActiveEntitySprite()
         {
-            //todo
+            var highlighter = GetPawnHighlighterInstance();
+
+            highlighter.transform.position = _activeEntity.SpriteInstance.transform.position;
         }
 
         private void UpdateActiveEntityInfoPanel()
         {
-            //todo
+            //todo might have panel subscribe to end turn event
         }
 
-        //todo we can remove the dead entity's portrait from the turn order and skip it when their turn comes around
+        //todo we can remove the dead entity's portrait from the turn order and remove it from queue when their turn comes around
         private void RemoveDeadEntitiesFromTurnOrderDisplay()
         {
             foreach (var entity in _turnOrder.ToArray())
             {
                 if (entity.IsDead())
                 {
-                    //todo broadcast to remove its portrait and sprite from play.
-                    //todo we'll probably do this when they are killed anyways so this is just a cleanup
+                    //broadcast to remove its portrait and sprite from play.
+                    //we'll probably do this when they are killed anyways so this is just a cleanup
+                    EventMediator.Instance.Broadcast(EntityDead, this, entity);
                 }
             }
         }
@@ -181,6 +238,11 @@ namespace Assets.Scripts.Combat
 
             foreach (var entity in _turnOrder.ToArray())
             {
+                if (entity.IsDead())
+                {
+                    continue;
+                }
+
                 if (entity.IsPlayer())
                 {
                     playerEntities = true;
@@ -199,14 +261,24 @@ namespace Assets.Scripts.Combat
             return true;
         }
 
-        private bool DisplayPostCombatPopup()
+        private void DisplayPostCombatPopup()
         {
-
+            EventMediator.Instance.Broadcast(CombatFinished, this);
         }
 
-        private void GenerateMap()
+        private CombatMap GenerateMap(List<Entity> combatants)
         {
+            return MapGenerator.Instance.Generate(combatants);
+        }
 
+        public void OnNotify(string eventName, object broadcaster, object parameter = null)
+        {
+            if (eventName.Equals(EndTurn))
+            {
+                EventMediator.Instance.UnsubscribeFromEvent(EndTurn, this);
+
+                _currentCombatState = CombatState.EndTurn;
+            }
         }
     }
 }
