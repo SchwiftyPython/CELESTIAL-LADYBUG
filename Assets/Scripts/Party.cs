@@ -220,13 +220,13 @@ namespace Assets.Scripts
 
         private void GenerateStartingParty()
         {
-            Derpus = new Entity(true);
+            Derpus = new Entity(true, true);
 
             _companions = new Dictionary<string, Entity>();
 
             for (var i = 0; i < StartSize; i++)
             {
-                var companion = new Entity();
+                var companion = new Entity(true);
 
                 AddCompanion(companion);
             }

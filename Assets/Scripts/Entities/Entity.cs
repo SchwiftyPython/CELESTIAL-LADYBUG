@@ -33,7 +33,7 @@ namespace Assets.Scripts.Entities
         public UnityEngine.GameObject SpritePrefab { get; private set; }
         public UnityEngine.GameObject SpriteInstance { get; private set; }
 
-        public Entity(bool isDerpus = false) : base((-1, -1), 1, null, false, false, true)
+        public Entity(bool isPlayer, bool isDerpus = false) : base((-1, -1), 1, null, false, false, true)
         {
             if (isDerpus)
             {
@@ -41,6 +41,7 @@ namespace Assets.Scripts.Entities
                 _entityClass = EntityClass.Derpus;
                 Sex = Sex.Male;
                 Name = "Derpus";
+                SpritePrefab = EntityPrefabStore.Instance.DerpusPrototypePrefab;
             }
             else
             {
@@ -60,6 +61,16 @@ namespace Assets.Scripts.Entities
 
                 Sex = PickSex();
                 Name = GenerateName(null, Sex);
+
+                //todo pick prefab based on race and/or class
+                if (isPlayer)
+                {
+                    SpritePrefab = EntityPrefabStore.Instance.CompanionPrototypePrefab;
+                }
+                else
+                {
+                    SpritePrefab = EntityPrefabStore.Instance.EnemyPrototypePrefab;
+                }
             }
 
             Attributes = new Attributes();

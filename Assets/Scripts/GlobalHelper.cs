@@ -12,12 +12,13 @@ namespace Assets.Scripts
         public const string DoubleSpace = "\n\n";
         public const string SingleSpace = "\n";
 
-        #region EventNames
+        #region EventNames  //todo would it be better to make these enums?
 
         public const string EncounterOptionSelected = "EncounterOptionSelected";
         public const string FourOptionEncounter = "FourOptionEncounter";
         public const string TwoOptionEncounter = "TwoOptionEncounter";
         public const string NoOptionEncounter = "NoOptionEncounter";
+        public const string CombatEncounter = "CombatEncounter";
         public const string EncounterResult = "EncounterResult";
         public const string EncounterFinished = "EncounterFinished";
         public const string CampingEncounterFinished = "CampingEncounterFinished";

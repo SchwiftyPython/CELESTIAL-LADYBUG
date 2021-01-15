@@ -11,7 +11,8 @@ namespace Assets.Scripts.Combat
         private IGameObject _backingField;
 
         private string _prefabName;
-        private UnityEngine.GameObject _prefabTexture;
+
+        public UnityEngine.GameObject PrefabTexture { get; private set; }
 
         public UnityEngine.GameObject SpriteInstance { get; private set; }
 
@@ -52,7 +53,7 @@ namespace Assets.Scripts.Combat
             _backingField = new GameObject(position, 0, this, true,
                 isWalkable, isTransparent);
 
-            _prefabTexture = texture;
+            PrefabTexture = texture;
             _prefabName = texture.name;
         }
 
