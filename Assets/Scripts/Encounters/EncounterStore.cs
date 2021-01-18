@@ -15,7 +15,8 @@ namespace Assets.Scripts.Encounters
             {"stay in school", () => new StayInSchool()},
             {"camp mosquito", () => new CampMosquito()},
             {"fight or flight", () => new FightOrFlight()},
-            {"comfy inn", () => new ComfyInn()}
+            {"comfy inn", () => new ComfyInn()},
+            {"bandit attack", () => new BanditAttack()}
         };
 
         private Dictionary<string, Func<Encounter>> _triggeredEncounters = new Dictionary<string, Func<Encounter>>

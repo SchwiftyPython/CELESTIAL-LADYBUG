@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Assets.Scripts.Combat;
 using Assets.Scripts.Travel;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.Encounters
 {
@@ -46,9 +48,8 @@ namespace Assets.Scripts.Encounters
                 penaltiesText = TravelManager.Instance.ApplyEncounterPenalty(selectedOption.Penalty);
             }
 
-            var fullResultDescription = new List<string>(); 
+            var fullResultDescription = new List<string> {selectedOption.ResultText + "\n"};
 
-            fullResultDescription.Add(selectedOption.ResultText + "\n");
             if (rewardsText != null)
             {
                 fullResultDescription.AddRange(rewardsText);
@@ -59,7 +60,32 @@ namespace Assets.Scripts.Encounters
                 fullResultDescription.AddRange(penaltiesText);
             }
 
-            EventMediator.Instance.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
+            if (EncounterType == EncounterType.Combat)
+            {
+                if (selectedOption is RetreatCombatOption retreatCombatOption)
+                {
+                    if (retreatCombatOption.Success)
+                    {
+                        EventMediator.Instance.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
+                    }
+                    else
+                    {
+                        SubscribeToOptionSelectedEvent();
+                        EventMediator.Instance.Broadcast(GlobalHelper.RetreatEncounterFailed, this, fullResultDescription);
+                    }
+                }
+                else //if to arms option selected
+                {
+                    SceneManager.LoadScene(GlobalHelper.CombatScene);
+
+                    CombatManager.Instance.Enemies = ((FightCombatOption) selectedOption).Enemies;
+                }
+               
+            }
+            else
+            {
+                EventMediator.Instance.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
+            }
         }
 
         public bool HasOptions()

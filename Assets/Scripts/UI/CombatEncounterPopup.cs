@@ -7,7 +7,8 @@ namespace Assets.Scripts.UI
 {
     public class CombatEncounterPopup : MonoBehaviour, ISubscriber
     {
-        private const string PopupEvent = GlobalHelper.CombatEncounter;
+        private const string EncounterPopupEvent = GlobalHelper.CombatEncounter;
+        private const string RetreatFailedPopupEvent = GlobalHelper.RetreatEncounterFailed;
 
         private List<GameObject> _optionButtons;
 
@@ -25,7 +26,8 @@ namespace Assets.Scripts.UI
                 OptionButtonTwo
             };
 
-            EventMediator.Instance.SubscribeToEvent(PopupEvent, this);
+            EventMediator.Instance.SubscribeToEvent(EncounterPopupEvent, this);
+            EventMediator.Instance.SubscribeToEvent(RetreatFailedPopupEvent, this);
             Hide();
         }
 
@@ -64,6 +66,43 @@ namespace Assets.Scripts.UI
             GameManager.Instance.AddActiveWindow(gameObject);
         }
 
+        private void ShowAfterRetreatFailed(Encounter encounter, List<string> result)
+        {
+            EncounterTitle.text = encounter.Title;
+
+            var resultText = string.Empty;
+            foreach (var line in result)
+            {
+                resultText += '\n' + line;
+            }
+
+            EncounterDescription.text = resultText;
+
+            DisableAllButtons();
+
+            var optionButtonIndex = 0;
+            foreach (var optionText in encounter.Options.Keys)
+            {
+                var button = _optionButtons[optionButtonIndex].GetComponent<EncounterOptionButton>();
+
+                button.SetOptionText(optionText);
+
+                button.Show();
+
+                //todo we want to make retreat not interactive for now -- refactor if clunky looking
+                if (encounter.Options[optionText] is RetreatCombatOption)
+                {
+                    button.MakeNonInteractive();
+                }
+
+                optionButtonIndex++;
+            }
+
+            gameObject.SetActive(true);
+
+            GameManager.Instance.AddActiveWindow(gameObject);
+        }
+
         public void Hide()
         {
             gameObject.SetActive(false);
@@ -72,13 +111,14 @@ namespace Assets.Scripts.UI
 
         private void OnDestroy()
         {
-            EventMediator.Instance.UnsubscribeFromEvent(PopupEvent, this);
+            EventMediator.Instance.UnsubscribeFromEvent(EncounterPopupEvent, this);
+            EventMediator.Instance.UnsubscribeFromEvent(RetreatFailedPopupEvent, this);
             GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
         {
-            if (eventName.Equals(PopupEvent))
+            if (eventName.Equals(EncounterPopupEvent))
             {
                 var encounter = broadcaster as Encounter;
 
@@ -89,6 +129,25 @@ namespace Assets.Scripts.UI
 
                 Show(encounter);
             }
+            else if (eventName.Equals(RetreatFailedPopupEvent))
+            {
+                var encounter = broadcaster as Encounter;
+
+                if (encounter == null)
+                {
+                    return;
+                }
+
+                var result = parameter as List<string>;
+
+                if (result == null || result.Count < 1)
+                {
+                    return;
+                }
+
+                ShowAfterRetreatFailed(encounter, result);
+            }
+            
         }
     }
 }

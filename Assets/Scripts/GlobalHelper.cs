@@ -19,6 +19,7 @@ namespace Assets.Scripts
         public const string TwoOptionEncounter = "TwoOptionEncounter";
         public const string NoOptionEncounter = "NoOptionEncounter";
         public const string CombatEncounter = "CombatEncounter";
+        public const string RetreatEncounterFailed = "RetreatEncounterFailed";
         public const string EncounterResult = "EncounterResult";
         public const string EncounterFinished = "EncounterFinished";
         public const string CampingEncounterFinished = "CampingEncounterFinished";
@@ -30,6 +31,12 @@ namespace Assets.Scripts
         public const string EntityDead = "EntityDead";
 
         #endregion EventNames
+
+        #region SceneNames
+
+        public const string CombatScene = "Combat";
+
+        #endregion SceneNames
 
         public static void DestroyAllChildren(GameObject parent)
         {

@@ -7,6 +7,8 @@
         public Reward Reward { get; set; }
         public Penalty Penalty { get; set; }
 
+        public Option() {}
+
         public Option(string name, string resultText, Reward reward, Penalty penalty)
         {
             Name = name;

@@ -10,6 +10,7 @@ namespace Assets.Scripts.Combat
 {
     public enum CombatState
     {
+        Loading,
         Start,
         PlayerTurn,
         AiTurn,
@@ -31,6 +32,8 @@ namespace Assets.Scripts.Combat
         private CombatMap _map;
         private GameObject _pawnHighlighterInstance;
 
+        public List<Entity> Enemies; //todo refactor
+
         public GameObject PrototypePawnHighlighterPrefab;
 
         public static CombatManager Instance;
@@ -46,22 +49,34 @@ namespace Assets.Scripts.Combat
                 Destroy(gameObject);
             }
             DontDestroyOnLoad(gameObject);
+
+            _currentCombatState = CombatState.Loading;
         }
 
         private void Update()
         {
             switch (_currentCombatState)
             {
+                case CombatState.Loading: //we want to wait until we have enemy combatants populated
+
+                    if (Enemies != null && Enemies.Count > 0)
+                    {
+                        _currentCombatState = CombatState.Start;
+                    }
+
+                    break;
                 case CombatState.Start:
                     var party = TravelManager.Instance.Party.GetCompanions();
 
-                    //todo get enemies
-
-                    //todo combine party and enemies into list
-
                     var combatants = new List<Entity>();
 
+                    combatants.AddRange(party);
+
+                    combatants.AddRange(Enemies);
+
                     _map = GenerateMap(combatants);
+
+                    //todo draw map
 
                     _turnOrder = DetermineTurnOrder(combatants);
 
