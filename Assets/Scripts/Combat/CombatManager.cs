@@ -59,7 +59,8 @@ namespace Assets.Scripts.Combat
             {
                 case CombatState.Loading: //we want to wait until we have enemy combatants populated
 
-                    if (Enemies != null && Enemies.Count > 0)
+                    //todo travel manager checks for testing in combat scene
+                    if (TravelManager.Instance != null && TravelManager.Instance.Party != null && Enemies != null && Enemies.Count > 0)
                     {
                         _currentCombatState = CombatState.Start;
                     }
@@ -76,7 +77,7 @@ namespace Assets.Scripts.Combat
 
                     _map = GenerateMap(combatants);
 
-                    //todo draw map
+                    DrawMap();
 
                     _turnOrder = DetermineTurnOrder(combatants);
 
@@ -284,6 +285,11 @@ namespace Assets.Scripts.Combat
         private CombatMap GenerateMap(List<Entity> combatants)
         {
             return MapGenerator.Instance.Generate(combatants);
+        }
+
+        private void DrawMap()
+        {
+            BoardHolder.Instance.Build(_map);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

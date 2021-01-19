@@ -9,8 +9,8 @@ namespace Assets.Scripts.Combat
 {
     public class MapGenerator : MonoBehaviour
     {
-        private const int MapWidth = 8;
-        private const int MapHeight = 5;
+        private const int MapWidth = 12;
+        private const int MapHeight = 7;
 
         public GameObject TestGrassTilePrefab; //todo move to some kind of terrain store
 
@@ -62,8 +62,8 @@ namespace Assets.Scripts.Combat
             //todo can come up with different deployments based on encounter.
             //todo for now just place on opposite sides
 
-            (int, int) playerEntityRangeX = (0, 2);
-            (int, int) enemyEntityRangeX = (5, 7);
+            (int, int) playerEntityRangeX = (0, MapWidth / 2);
+            (int, int) enemyEntityRangeX = (MapWidth / 2 + 1, MapWidth);
 
             foreach (var combatant in combatants)
             {

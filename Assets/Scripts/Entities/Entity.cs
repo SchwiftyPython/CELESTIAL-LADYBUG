@@ -12,6 +12,7 @@ namespace Assets.Scripts.Entities
         private EntityClass _entityClass;
         private int _level;
         private int _xp;
+        private bool _isPlayer;
 
         private List<Effect> _effects;
 
@@ -66,10 +67,12 @@ namespace Assets.Scripts.Entities
                 if (isPlayer)
                 {
                     SpritePrefab = EntityPrefabStore.Instance.CompanionPrototypePrefab;
+                    _isPlayer = true;
                 }
                 else
                 {
                     SpritePrefab = EntityPrefabStore.Instance.EnemyPrototypePrefab;
+                    _isPlayer = false;
                 }
             }
 
@@ -97,7 +100,7 @@ namespace Assets.Scripts.Entities
 
         public bool IsPlayer()
         {
-            return _aiController == null;
+            return _isPlayer;
         }
 
         public bool IsDead()
