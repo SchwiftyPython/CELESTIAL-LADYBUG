@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -26,6 +29,7 @@ namespace Assets.Scripts
         public const string PartyEatAndHeal = "PartyEatAndHeal";
         public const string PlayerEndTurn = "PlayerEndTurn";
         public const string AiEndTurn = "AiEndTurn";
+        public const string RefreshCombatUi = "RefreshCombatUi";
         public const string EndTurn = "EndTurn";
         public const string CombatFinished = "CombatFinished";
         public const string EntityDead = "EntityDead";
@@ -37,6 +41,8 @@ namespace Assets.Scripts
         public const string CombatScene = "Combat";
 
         #endregion SceneNames
+
+        private static readonly System.Random SysRandom = new System.Random();
 
         public static void DestroyAllChildren(GameObject parent)
         {
@@ -154,6 +160,22 @@ namespace Assets.Scripts
             var arr = (T[])Enum.GetValues(src.GetType());
             var j = Array.IndexOf(arr, src) + 1;
             return arr.Length == j ? arr[0] : arr[j];
+        }
+
+        public static string RandomString(int size, bool lowerCase = false)
+        {
+            var builder = new StringBuilder(size);
+
+            char offset = lowerCase ? 'a' : 'A';
+            const int lettersOffset = 26;   
+
+            for (var i = 0; i < size; i++)
+            {
+                var @char = (char)SysRandom.Next(offset, offset + lettersOffset);
+                builder.Append(@char);
+            }
+
+            return lowerCase ? builder.ToString().ToLower() : builder.ToString();
         }
     }
 }

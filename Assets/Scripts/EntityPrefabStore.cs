@@ -11,7 +11,7 @@ namespace Assets.Scripts
 
         public static EntityPrefabStore Instance;
 
-        private void Start()
+        private void Awake()
         {
             if (Instance == null)
             {

@@ -40,7 +40,7 @@ namespace Assets.Scripts.Combat
 
                     if (entity != null)
                     {
-                        instance = Instantiate(entity.SpritePrefab, new Vector2(currentColumn, currentRow), Quaternion.identity);
+                        instance = Instantiate(entity.CombatSpritePrefab, new Vector2(currentColumn, currentRow), Quaternion.identity);
 
                         instance.transform.SetParent(EntityHolder);
 

@@ -34,6 +34,8 @@ namespace Assets.Scripts.Entities.Names
         private  List<string> _firstNames;
         private  List<string> _lastNames;
 
+        public bool FilesLoaded { get; private set; }
+
         public static NameStore Instance;
 
         private void Awake()
@@ -68,6 +70,8 @@ namespace Assets.Scripts.Entities.Names
                     _nameLists[nameListIndex] = file.text.Split("\r\n"[0]).ToList();
                     nameListIndex++;
                 }
+
+                FilesLoaded = true;
             }
             catch (Exception e)
             {

@@ -25,12 +25,14 @@ namespace Assets.Scripts.Combat
         private const string EndTurn = GlobalHelper.EndTurn;
         private const string CombatFinished = GlobalHelper.CombatFinished;
         private const string EntityDead = GlobalHelper.EntityDead;
+        private const string RefreshUi = GlobalHelper.RefreshCombatUi;
 
         private CombatState _currentCombatState;
-        private Queue<Entity> _turnOrder;
         private Entity _activeEntity;
         private CombatMap _map;
         private GameObject _pawnHighlighterInstance;
+
+        public Queue<Entity> TurnOrder { get; private set; }
 
         public List<Entity> Enemies; //todo refactor
 
@@ -79,9 +81,11 @@ namespace Assets.Scripts.Combat
 
                     DrawMap();
 
-                    _turnOrder = DetermineTurnOrder(combatants);
+                    TurnOrder = DetermineTurnOrder(combatants);
 
-                    _activeEntity = _turnOrder.Peek();
+                    _activeEntity = TurnOrder.Peek();
+
+                    EventMediator.Instance.Broadcast(RefreshUi, this);
 
                     HighlightActiveEntitySprite();
 
@@ -158,7 +162,7 @@ namespace Assets.Scripts.Combat
 
         private bool PlayerDead()
         {
-            foreach (var entity in _turnOrder.ToArray())
+            foreach (var entity in TurnOrder.ToArray())
             {
                 if (entity.IsDead())
                 {
@@ -204,16 +208,16 @@ namespace Assets.Scripts.Combat
 
         private Entity GetNextInTurnOrder()
         {
-            var lastEntity = _turnOrder.Dequeue();
+            var lastEntity = TurnOrder.Dequeue();
 
-            _turnOrder.Enqueue(lastEntity);
+            TurnOrder.Enqueue(lastEntity);
 
-            while (_turnOrder.Peek().IsDead())
+            while (TurnOrder.Peek().IsDead())
             {
-                _turnOrder.Dequeue();
+                TurnOrder.Dequeue();
             }
 
-            return _turnOrder.Peek();
+            return TurnOrder.Peek();
         }
 
         private bool ActiveEntityPlayerControlled()
@@ -225,7 +229,7 @@ namespace Assets.Scripts.Combat
         {
             var highlighter = GetPawnHighlighterInstance();
 
-            highlighter.transform.position = _activeEntity.SpriteInstance.transform.position;
+            highlighter.transform.position = _activeEntity.CombatSpriteInstance.transform.position;
         }
 
         private void UpdateActiveEntityInfoPanel()
@@ -236,7 +240,7 @@ namespace Assets.Scripts.Combat
         //todo we can remove the dead entity's portrait from the turn order and remove it from queue when their turn comes around
         private void RemoveDeadEntitiesFromTurnOrderDisplay()
         {
-            foreach (var entity in _turnOrder.ToArray())
+            foreach (var entity in TurnOrder.ToArray())
             {
                 if (entity.IsDead())
                 {
@@ -252,7 +256,7 @@ namespace Assets.Scripts.Combat
             var playerEntities = false;
             var aiEntities = false;
 
-            foreach (var entity in _turnOrder.ToArray())
+            foreach (var entity in TurnOrder.ToArray())
             {
                 if (entity.IsDead())
                 {

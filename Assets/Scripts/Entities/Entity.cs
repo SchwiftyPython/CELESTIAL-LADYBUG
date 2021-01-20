@@ -31,8 +31,10 @@ namespace Assets.Scripts.Entities
         public Stats Stats { get; }
         public Sprite Portrait { get; private set; }
 
-        public UnityEngine.GameObject SpritePrefab { get; private set; }
-        public UnityEngine.GameObject SpriteInstance { get; private set; }
+        public UnityEngine.GameObject CombatSpritePrefab { get; private set; }
+        public UnityEngine.GameObject CombatSpriteInstance { get; private set; }
+        public Sprite UiSprite { get; private set; } //todo setup a sprite store that can give us the combat and ui sprites needed
+
 
         public Entity(bool isPlayer, bool isDerpus = false) : base((-1, -1), 1, null, false, false, true)
         {
@@ -42,7 +44,7 @@ namespace Assets.Scripts.Entities
                 _entityClass = EntityClass.Derpus;
                 Sex = Sex.Male;
                 Name = "Derpus";
-                SpritePrefab = EntityPrefabStore.Instance.DerpusPrototypePrefab;
+                CombatSpritePrefab = EntityPrefabStore.Instance.DerpusPrototypePrefab;
             }
             else
             {
@@ -66,12 +68,12 @@ namespace Assets.Scripts.Entities
                 //todo pick prefab based on race and/or class
                 if (isPlayer)
                 {
-                    SpritePrefab = EntityPrefabStore.Instance.CompanionPrototypePrefab;
+                    CombatSpritePrefab = EntityPrefabStore.Instance.CompanionPrototypePrefab;
                     _isPlayer = true;
                 }
                 else
                 {
-                    SpritePrefab = EntityPrefabStore.Instance.EnemyPrototypePrefab;
+                    CombatSpritePrefab = EntityPrefabStore.Instance.EnemyPrototypePrefab;
                     _isPlayer = false;
                 }
             }
@@ -85,17 +87,17 @@ namespace Assets.Scripts.Entities
 
         public void SetSpriteInstance(UnityEngine.GameObject instance)
         {
-            SpriteInstance = instance;
+            CombatSpriteInstance = instance;
         }
 
         public void SetSpritePosition(Vector3 newPosition)
         {
-            if (SpriteInstance == null)
+            if (CombatSpriteInstance == null)
             {
                 return;
             }
 
-            SpriteInstance.transform.position = newPosition;
+            CombatSpriteInstance.transform.position = newPosition;
         }
 
         public bool IsPlayer()
@@ -256,6 +258,11 @@ namespace Assets.Scripts.Entities
 
         private string GenerateName(List<string> possibleNameFiles, Sex sex)
         {
+            if (NameStore.Instance == null || !NameStore.Instance.FilesLoaded)
+            {
+                return GlobalHelper.RandomString(6);
+            }
+
             return NameStore.Instance.GenerateFullName(possibleNameFiles, sex);
         }
 

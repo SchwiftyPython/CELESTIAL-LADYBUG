@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -111,6 +112,16 @@ namespace Assets.Scripts
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
         {
 
+        }
+
+        public void WaitForSeconds(int numSeconds)
+        {
+            StartCoroutine(WaitForSecondsCoroutine(numSeconds));
+        }
+
+        private IEnumerator WaitForSecondsCoroutine(int numSeconds)
+        {
+            yield return new WaitForSeconds(numSeconds);
         }
 
         private void SubscribeToEvents()

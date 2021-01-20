@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Combat;
 using Assets.Scripts.Encounters;
 using Assets.Scripts.Entities;
 using UnityEngine;
@@ -25,7 +26,8 @@ namespace Assets.Scripts.Travel
             }
             DontDestroyOnLoad(gameObject);
 
-            EventMediator.Instance.SubscribeToEvent(GlobalHelper.CampingEncounterFinished, this);
+            //todo disabled for combat testing
+            //EventMediator.Instance.SubscribeToEvent(GlobalHelper.CampingEncounterFinished, this);
 
             //todo testing
             //TESTING//////////////////////////////////////
