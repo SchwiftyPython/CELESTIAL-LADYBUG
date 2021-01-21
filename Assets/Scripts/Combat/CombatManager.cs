@@ -34,6 +34,8 @@ namespace Assets.Scripts.Combat
 
         public Queue<Entity> TurnOrder { get; private set; }
 
+        public int CurrentTurnNumber { get; private set; }
+
         public List<Entity> Enemies; //todo refactor
 
         public GameObject PrototypePawnHighlighterPrefab;
@@ -69,6 +71,8 @@ namespace Assets.Scripts.Combat
 
                     break;
                 case CombatState.Start:
+                    CurrentTurnNumber = 1;
+
                     var party = TravelManager.Instance.Party.GetCompanions();
 
                     var combatants = new List<Entity>();
@@ -85,7 +89,7 @@ namespace Assets.Scripts.Combat
 
                     _activeEntity = TurnOrder.Peek();
 
-                    EventMediator.Instance.Broadcast(RefreshUi, this);
+                    EventMediator.Instance.Broadcast(RefreshUi, this, _activeEntity);
 
                     HighlightActiveEntitySprite();
 
@@ -97,6 +101,8 @@ namespace Assets.Scripts.Combat
                     {
                         _currentCombatState = CombatState.AiTurn;
                     }
+
+                    EventMediator.Instance.Broadcast(GlobalHelper.CombatSceneLoaded, this, _map);
                     break;
                 case CombatState.PlayerTurn:
                     UpdateActiveEntityInfoPanel();
@@ -108,10 +114,11 @@ namespace Assets.Scripts.Combat
 
                     //todo tell ai to do its thing
 
+                    //todo skipping ai turn until implemented
+                    EventMediator.Instance.Broadcast(EndTurn, this);
+
                     break;
                 case CombatState.EndTurn:
-                    RemoveDeadEntitiesFromTurnOrderDisplay();
-
                     if (IsCombatFinished())
                     {
                         _currentCombatState = CombatState.EndCombat;
@@ -130,6 +137,10 @@ namespace Assets.Scripts.Combat
                         {
                             _currentCombatState = CombatState.AiTurn;
                         }
+
+                        CurrentTurnNumber++;
+
+                        EventMediator.Instance.Broadcast(RefreshUi, this, _activeEntity);
                     }
                     break;
                 case CombatState.EndCombat:
@@ -238,6 +249,7 @@ namespace Assets.Scripts.Combat
         }
 
         //todo we can remove the dead entity's portrait from the turn order and remove it from queue when their turn comes around
+        //this happens on refresh anyways
         private void RemoveDeadEntitiesFromTurnOrderDisplay()
         {
             foreach (var entity in TurnOrder.ToArray())

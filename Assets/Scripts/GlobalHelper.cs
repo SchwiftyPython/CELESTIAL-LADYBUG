@@ -29,6 +29,7 @@ namespace Assets.Scripts
         public const string PartyEatAndHeal = "PartyEatAndHeal";
         public const string PlayerEndTurn = "PlayerEndTurn";
         public const string AiEndTurn = "AiEndTurn";
+        public const string CombatSceneLoaded = "CombatSceneLoaded";
         public const string RefreshCombatUi = "RefreshCombatUi";
         public const string EndTurn = "EndTurn";
         public const string CombatFinished = "CombatFinished";

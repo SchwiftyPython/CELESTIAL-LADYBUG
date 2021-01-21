@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Assets.Scripts.Combat;
 using Assets.Scripts.Entities.Names;
 using UnityEngine;
 using GameObject = GoRogue.GameFramework.GameObject;
@@ -123,6 +124,14 @@ namespace Assets.Scripts.Entities
         public bool MovedLastTurn(int currentTurn)
         {
             return currentTurn - _lastTurnMoved <= 1;
+        }
+
+        //todo refactor this so the sprite moves through each square and doesn't just teleport
+        public void MoveTo(Tile tile)
+        {
+            Position = tile.Position;
+
+            CombatSpriteInstance.transform.position = new Vector3(tile.Position.X, tile.Position.Y);
         }
 
         public void GenerateStartingEquipment()

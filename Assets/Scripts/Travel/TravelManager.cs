@@ -3,6 +3,7 @@ using Assets.Scripts.Combat;
 using Assets.Scripts.Encounters;
 using Assets.Scripts.Entities;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.Travel
 {
@@ -26,8 +27,10 @@ namespace Assets.Scripts.Travel
             }
             DontDestroyOnLoad(gameObject);
 
-            //todo disabled for combat testing
-            //EventMediator.Instance.SubscribeToEvent(GlobalHelper.CampingEncounterFinished, this);
+            if (!SceneManager.GetActiveScene().name.Equals("Combat"))
+            {
+                EventMediator.Instance.SubscribeToEvent(GlobalHelper.CampingEncounterFinished, this);
+            }
 
             //todo testing
             //TESTING//////////////////////////////////////

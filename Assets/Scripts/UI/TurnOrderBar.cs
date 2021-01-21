@@ -37,15 +37,17 @@ namespace Assets.Scripts.UI
                 return;
             }
 
-            _sprites = new Queue<GameObject>();
-
-
             int count = 0;
             foreach (var entity in turnOrder)
             {
                 if (count >= MaxSprites)
                 {
                     break;
+                }
+
+                if (entity.IsDead())
+                {
+                    continue;
                 }
 
                 var instance = Instantiate(TurnOrderSpritePrefab, new Vector3(0, 0), Quaternion.identity);

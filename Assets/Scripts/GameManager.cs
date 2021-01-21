@@ -25,13 +25,13 @@ namespace Assets.Scripts
         private const string TravelSceneName = "Travel";
         private const string CombatSceneName = "Combat";
 
-        private Scene _currentScene;
-
         private List<string> _subscribedEventNames;
 
         private List<GameObject> _activeWindows;
 
         private GameState _currentState;
+
+        public Scene CurrentScene { get; private set; }
 
         public static GameManager Instance;
 
@@ -49,7 +49,7 @@ namespace Assets.Scripts
 
             _currentState = GameState.Title;
 
-            _currentScene = SceneManager.GetActiveScene();
+            CurrentScene = SceneManager.GetActiveScene();
 
             _activeWindows = new List<GameObject>();
 
