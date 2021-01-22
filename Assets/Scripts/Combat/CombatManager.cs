@@ -28,9 +28,10 @@ namespace Assets.Scripts.Combat
         private const string RefreshUi = GlobalHelper.RefreshCombatUi;
 
         private CombatState _currentCombatState;
-        private Entity _activeEntity;
         private CombatMap _map;
         private GameObject _pawnHighlighterInstance;
+
+        public Entity ActiveEntity { get; private set; }
 
         public Queue<Entity> TurnOrder { get; private set; }
 
@@ -87,9 +88,9 @@ namespace Assets.Scripts.Combat
 
                     TurnOrder = DetermineTurnOrder(combatants);
 
-                    _activeEntity = TurnOrder.Peek();
+                    ActiveEntity = TurnOrder.Peek();
 
-                    EventMediator.Instance.Broadcast(RefreshUi, this, _activeEntity);
+                    EventMediator.Instance.Broadcast(RefreshUi, this, ActiveEntity);
 
                     HighlightActiveEntitySprite();
 
@@ -107,9 +108,11 @@ namespace Assets.Scripts.Combat
                 case CombatState.PlayerTurn:
                     UpdateActiveEntityInfoPanel();
 
+                    EventMediator.Instance.Broadcast(GlobalHelper.PlayerTurn, this);
                     EventMediator.Instance.SubscribeToEvent(EndTurn, this);
                     break;
                 case CombatState.AiTurn:
+                    EventMediator.Instance.Broadcast(GlobalHelper.AiTurn, this);
                     EventMediator.Instance.SubscribeToEvent(EndTurn, this);
 
                     //todo tell ai to do its thing
@@ -125,7 +128,7 @@ namespace Assets.Scripts.Combat
                     }
                     else
                     {
-                        _activeEntity = GetNextInTurnOrder();
+                        ActiveEntity = GetNextInTurnOrder();
 
                         HighlightActiveEntitySprite();
 
@@ -140,7 +143,7 @@ namespace Assets.Scripts.Combat
 
                         CurrentTurnNumber++;
 
-                        EventMediator.Instance.Broadcast(RefreshUi, this, _activeEntity);
+                        EventMediator.Instance.Broadcast(RefreshUi, this, ActiveEntity);
                     }
                     break;
                 case CombatState.EndCombat:
@@ -233,14 +236,14 @@ namespace Assets.Scripts.Combat
 
         private bool ActiveEntityPlayerControlled()
         {
-            return _activeEntity.IsPlayer();
+            return ActiveEntity.IsPlayer();
         }
 
         private void HighlightActiveEntitySprite()
         {
             var highlighter = GetPawnHighlighterInstance();
 
-            highlighter.transform.position = _activeEntity.CombatSpriteInstance.transform.position;
+            highlighter.transform.position = ActiveEntity.CombatSpriteInstance.transform.position;
         }
 
         private void UpdateActiveEntityInfoPanel()

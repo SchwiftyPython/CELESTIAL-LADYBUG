@@ -9,5 +9,12 @@ namespace Assets.Scripts.Combat
         {
             Direction.YIncreasesUpward = true;
         }
+
+        public bool OutOfBounds(Coord targetCoord)
+        {
+            var (x, y) = targetCoord;
+
+            return x >= Width || x < 0 || y >= Height || y < 0;
+        }
     }
 }

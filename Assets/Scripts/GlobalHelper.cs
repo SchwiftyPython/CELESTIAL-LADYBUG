@@ -27,8 +27,8 @@ namespace Assets.Scripts
         public const string EncounterFinished = "EncounterFinished";
         public const string CampingEncounterFinished = "CampingEncounterFinished";
         public const string PartyEatAndHeal = "PartyEatAndHeal";
-        public const string PlayerEndTurn = "PlayerEndTurn";
-        public const string AiEndTurn = "AiEndTurn";
+        public const string PlayerTurn = "PlayerTurn";
+        public const string AiTurn = "AiTurn";
         public const string CombatSceneLoaded = "CombatSceneLoaded";
         public const string RefreshCombatUi = "RefreshCombatUi";
         public const string EndTurn = "EndTurn";

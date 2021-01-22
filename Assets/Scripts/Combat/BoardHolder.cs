@@ -34,6 +34,8 @@ namespace Assets.Scripts.Combat
 
                     var instance = Instantiate(tile.PrefabTexture, new Vector2(currentColumn, currentRow), Quaternion.identity);
 
+                    tile.SetSpriteInstance(instance);
+
                     instance.transform.SetParent(transform);
 
                     var entity = map.GetEntity<Entity>(coord);
