@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Entities;
+using Assets.Scripts.UI;
 using GoRogue;
 using UnityEngine;
 
@@ -35,6 +36,10 @@ namespace Assets.Scripts.Combat
                     var instance = Instantiate(tile.PrefabTexture, new Vector2(currentColumn, currentRow), Quaternion.identity);
 
                     tile.SetSpriteInstance(instance);
+
+                    instance.AddComponent<OnMouseOverTile>();
+
+                    instance.GetComponent<OnMouseOverTile>().Tile = tile;
 
                     instance.transform.SetParent(transform);
 

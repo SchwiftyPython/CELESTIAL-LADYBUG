@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using GoRogue;
 using UnityEngine;
 
@@ -18,6 +17,8 @@ namespace Assets.Scripts.Combat
         private CombatMap _map;
 
         private List<Tile> _highlightedTiles;
+
+        private int _apMovementCost;
 
         public Color HighlightedColor; //todo refactor -- need to look into better way to highlight probably with an actual sprite
 
@@ -59,8 +60,6 @@ namespace Assets.Scripts.Combat
 
         private void HighlightTileUnderMouse()
         {
-            //todo just highlight the tile under the mouse
-
             ClearHighlights();
 
             var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -84,8 +83,6 @@ namespace Assets.Scripts.Combat
 
         private void HighlightPathToMouse()
         {
-            //todo do this on left mouse click instead of hover
-
             ClearHighlights();
 
             var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -123,6 +120,9 @@ namespace Assets.Scripts.Combat
                 return;
             }
 
+            _apMovementCost = 0;
+
+            //todo not sure if first and last steps are inclusive - don't want to count first tile if it is the start point
             foreach (var step in path.Steps)
             {
                 var tileStep = _map.GetTerrain<Floor>(step);
@@ -132,8 +132,12 @@ namespace Assets.Scripts.Combat
                     continue;
                 }
 
+                _apMovementCost += tileStep.ApCost;
+
                 HighlightTile(tileStep);
             }
+
+            EventMediator.Instance.Broadcast(GlobalHelper.TileSelected, tile, _apMovementCost);
         }
 
         private void HighlightTile(Tile tile)

@@ -5,7 +5,8 @@ namespace Assets.Scripts.Combat
 {
     public class Wall : Tile
     {
-        public Wall(GameObject texture, Coord position) : base(texture, position, false, false)
+        //todo get prefab texture from terrain store based on tile type
+        public Wall(TileType tileType, GameObject texture, Coord position) : base(tileType, texture, position, false, false)
         {
         }
     }

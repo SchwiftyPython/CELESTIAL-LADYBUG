@@ -28,8 +28,9 @@ namespace Assets.Scripts.Combat
         private const string RefreshUi = GlobalHelper.RefreshCombatUi;
 
         private CombatState _currentCombatState;
-        private CombatMap _map;
         private GameObject _pawnHighlighterInstance;
+
+        public CombatMap Map { get; private set; }
 
         public Entity ActiveEntity { get; private set; }
 
@@ -82,7 +83,7 @@ namespace Assets.Scripts.Combat
 
                     combatants.AddRange(Enemies);
 
-                    _map = GenerateMap(combatants);
+                    Map = GenerateMap(combatants);
 
                     DrawMap();
 
@@ -103,7 +104,7 @@ namespace Assets.Scripts.Combat
                         _currentCombatState = CombatState.AiTurn;
                     }
 
-                    EventMediator.Instance.Broadcast(GlobalHelper.CombatSceneLoaded, this, _map);
+                    EventMediator.Instance.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
                     break;
                 case CombatState.PlayerTurn:
                     UpdateActiveEntityInfoPanel();
@@ -308,7 +309,7 @@ namespace Assets.Scripts.Combat
 
         private void DrawMap()
         {
-            BoardHolder.Instance.Build(_map);
+            BoardHolder.Instance.Build(Map);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

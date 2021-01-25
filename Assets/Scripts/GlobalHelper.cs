@@ -31,6 +31,9 @@ namespace Assets.Scripts
         public const string AiTurn = "AiTurn";
         public const string CombatSceneLoaded = "CombatSceneLoaded";
         public const string RefreshCombatUi = "RefreshCombatUi";
+        public const string TileSelected = "TileSelected";
+        public const string TileHovered = "TileHovered";
+        public const string HidePopup = "HidePopup";
         public const string EndTurn = "EndTurn";
         public const string CombatFinished = "CombatFinished";
         public const string EntityDead = "EntityDead";

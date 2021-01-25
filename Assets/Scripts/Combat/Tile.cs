@@ -16,6 +16,8 @@ namespace Assets.Scripts.Combat
 
         public UnityEngine.GameObject SpriteInstance { get; private set; }
 
+        public TileType TileType { get; private set; }
+
         public Map CurrentMap => _backingField.CurrentMap;
 
         public bool IsStatic => _backingField.IsStatic;
@@ -48,7 +50,7 @@ namespace Assets.Scripts.Combat
 
         public int Layer => _backingField.Layer;
 
-        public Tile(UnityEngine.GameObject texture, Coord position, bool isWalkable, bool isTransparent)
+        public Tile(TileType tileType, UnityEngine.GameObject texture, Coord position, bool isWalkable, bool isTransparent)
         {
             _backingField = new GameObject(position, 0, this, true,
                 isWalkable, isTransparent);

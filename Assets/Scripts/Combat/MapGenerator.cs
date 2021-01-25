@@ -49,7 +49,7 @@ namespace Assets.Scripts.Combat
             foreach (var position in terrainMap.Positions())
             {
                 //all floors for prototype first pass
-                map.SetTerrain(new Floor(TestGrassTilePrefab, position));
+                map.SetTerrain(new Floor(TileType.Grass, TestGrassTilePrefab, position));
             }
 
             return map;
