@@ -127,8 +127,16 @@ namespace Assets.Scripts.Entities
         }
 
         //todo refactor this so the sprite moves through each square and doesn't just teleport
-        public void MoveTo(Tile tile)
+        public void MoveTo(Tile tile, int apMovementCost)
         {
+            if (apMovementCost > Stats.CurrentActionPoints)
+            {
+                Debug.Log("AP movement cost greater than current AP!");
+                return;
+            }
+
+            Stats.CurrentActionPoints -= apMovementCost;
+
             Position = tile.Position;
 
             CombatSpriteInstance.transform.position = new Vector3(tile.Position.X, tile.Position.Y);

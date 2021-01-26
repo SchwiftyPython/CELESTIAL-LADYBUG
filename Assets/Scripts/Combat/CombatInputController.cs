@@ -12,11 +12,13 @@ namespace Assets.Scripts.Combat
         private const string AiTurn = GlobalHelper.AiTurn;
 
         private bool _isPlayerTurn;
-        private bool _tileSelected;
+        private bool _isTileSelected;
 
         private CombatMap _map;
 
         private List<Tile> _highlightedTiles;
+
+        private Tile _selectedTile;
 
         private int _apMovementCost;
 
@@ -33,27 +35,65 @@ namespace Assets.Scripts.Combat
         {
             if (_isPlayerTurn)
             {
-                if (!_tileSelected)
+                if (!_isTileSelected)
                 {
+                    //todo highlight tile or show entity info if entity present
+
                     HighlightTileUnderMouse();
                 }
 
                 if (Input.GetMouseButtonDown(0))
                 {
-                    if (!_tileSelected)
+                    if (!_isTileSelected)
                     {
-                        _tileSelected = true;
+                        //todo only allow for tiles within entity movement range
+
+                        HighlightPathToMouse();
                     }
                     else
                     {
-                        _tileSelected = false;
-                    }
+                        //check if same tile clicked then move there if true
 
-                    HighlightPathToMouse();
+                        var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+                        var mouseCoord = new Coord((int)mousePosition.x, (int)mousePosition.y);
+
+                        if (_map.OutOfBounds(mouseCoord))
+                        {
+                            return;
+                        }
+
+                        var targetTile = _map.GetTerrain<Floor>(mouseCoord);
+
+                        if (targetTile == null || !targetTile.IsWalkable)
+                        {
+                            return;
+                        }
+
+                        if (_selectedTile == targetTile)
+                        {
+                            var activeEntity = CombatManager.Instance.ActiveEntity;
+
+                            if (_apMovementCost > activeEntity.Stats.CurrentActionPoints)
+                            {
+                                return;
+                            }
+
+                            activeEntity.MoveTo(targetTile, _apMovementCost);
+
+                            EventMediator.Instance.Broadcast(GlobalHelper.RefreshCombatUi, this, activeEntity);
+                        }
+
+                        _isTileSelected = false;
+
+                        EventMediator.Instance.Broadcast(GlobalHelper.TileDeselected, this);
+                    }
                 }
                 else if (Input.GetMouseButtonDown(1))
                 {
+                    _isTileSelected = false;
 
+                    EventMediator.Instance.Broadcast(GlobalHelper.TileDeselected, this);
                 }
             }
         }
@@ -91,13 +131,15 @@ namespace Assets.Scripts.Combat
 
             if (_map.OutOfBounds(mouseCoord))
             {
+                _isTileSelected = false;
                 return;
             }
 
             var targetTile = _map.GetTerrain<Floor>(mouseCoord);
 
-            if (targetTile == null || !targetTile.IsWalkable)
+            if (targetTile == null || !targetTile.IsWalkable || !_map.WalkabilityView[mouseCoord])
             {
+                _isTileSelected = false;
                 return;
             }
 
@@ -117,8 +159,11 @@ namespace Assets.Scripts.Combat
 
             if (path == null || !path.Steps.Any())
             {
+                _isTileSelected = false;
                 return;
             }
+
+            _selectedTile = tile;
 
             _apMovementCost = 0;
 
@@ -129,6 +174,7 @@ namespace Assets.Scripts.Combat
 
                 if (!_map.WalkabilityView[step])
                 {
+                    //todo does this ever happen?
                     continue;
                 }
 
@@ -136,6 +182,8 @@ namespace Assets.Scripts.Combat
 
                 HighlightTile(tileStep);
             }
+
+            _isTileSelected = true;
 
             EventMediator.Instance.Broadcast(GlobalHelper.TileSelected, tile, _apMovementCost);
         }

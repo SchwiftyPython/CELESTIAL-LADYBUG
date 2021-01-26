@@ -4,45 +4,56 @@ using UnityEngine;
 namespace Assets.Scripts.UI
 {
     //todo can probably handle highlighting here too -- but don't fix it if it ain't broke
-    public class OnMouseOverTile : MonoBehaviour
+    public class OnMouseOverTile : MonoBehaviour, ISubscriber
     {
+        private const string TileSelectedEvent = GlobalHelper.TileSelected;
+        private const string TileDeselectedEvent = GlobalHelper.TileDeselected;
+
+        private bool _tileSelected;
+
         public Tile Tile { get; set; }
+
+        private void Start()
+        {
+            _tileSelected = false;
+
+            EventMediator.Instance.SubscribeToEvent(TileSelectedEvent, this);
+            EventMediator.Instance.SubscribeToEvent(TileDeselectedEvent, this);
+        }
 
         private void OnMouseEnter()
         {
-            //yield return new WaitForSeconds(0.5f);
-
-            /*var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            var mouseCoord = new Coord((int) mousePosition.x, (int) mousePosition.y);
-
-            var map = CombatManager.Instance.Map;
-
-            if (map.OutOfBounds(mouseCoord))
+            if (!_tileSelected)
             {
-                yield break;
+                EventMediator.Instance.Broadcast(GlobalHelper.TileHovered, Tile);
             }
-
-            var targetTile = map.GetTerrain<Floor>(mouseCoord);
-
-            if (targetTile == null || !targetTile.IsWalkable)
-            {
-                yield break;
-            }*/
-
-            //todo need to not do this if a tile is selected
-
-            EventMediator.Instance.Broadcast(GlobalHelper.TileHovered, Tile);
         }
 
         private void OnMouseExit()
         {
-            EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
+            if (!_tileSelected)
+            {
+                EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
+            }
         }
 
         private void OnMouseDown()
         {
             //todo maybe we can do cost here if combat input controller doesn't work out
+        }
+
+        public void OnNotify(string eventName, object broadcaster, object parameter = null)
+        {
+            if (eventName.Equals(TileSelectedEvent))
+            {
+                _tileSelected = true;
+            }
+            else if (eventName.Equals(TileDeselectedEvent))
+            {
+                _tileSelected = false;
+
+                EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
+            }
         }
     }
 }

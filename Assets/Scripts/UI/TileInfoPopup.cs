@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.UI
 {
-    //todo need a Popup interface
+    //todo need a Popup interface or base class
     public class TileInfoPopup : MonoBehaviour, ISubscriber
     {
         private const string HoverPopupEvent = GlobalHelper.TileHovered;
@@ -25,11 +25,15 @@ namespace Assets.Scripts.UI
             Hide();
         }
 
+        //todo refactor
         //for single tile ap cost on hover for some amount of time
         private void Show(Floor floorTile)
         {
             _tileType.text = floorTile.TileType.ToString();
-            _apCost.text = floorTile.ApCost.ToString();
+            _apCost.text = $"{floorTile.ApCost} AP to cross";
+
+            var position = Input.mousePosition;
+            gameObject.transform.position = new Vector2(position.x + 90f, position.y + 80f);
 
             EventMediator.Instance.SubscribeToEvent(HidePopupEvent, this);
 
@@ -37,11 +41,15 @@ namespace Assets.Scripts.UI
             GameManager.Instance.AddActiveWindow(gameObject);
         }
 
+        //todo refactor
         //for when tile selected and path is drawn
         private void Show(Floor floorTile, int apCostToTile)
         {
             _tileType.text = floorTile.TileType.ToString();
-            _apCost.text = apCostToTile.ToString();
+            _apCost.text = $"{apCostToTile} AP to move here";
+
+            var position = Input.mousePosition;
+            gameObject.transform.position = new Vector2(position.x + 90f, position.y + 80f);
 
             EventMediator.Instance.SubscribeToEvent(HidePopupEvent, this);
 
