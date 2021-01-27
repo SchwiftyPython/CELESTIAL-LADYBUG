@@ -1,18 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Weapon : MonoBehaviour
+﻿namespace Assets.Scripts.Items
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Weapon : Item
     {
-        
-    }
+        public (int, int) DamageRange { get; private set; }
+        public int Range { get; private set; }
+        public bool IsRanged { get; private set; }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public Weapon(string itemName, ItemType type, (int, int) damageRange, int range) : base(itemName, type)
+        {
+            DamageRange = damageRange;
+            Range = range;
+            IsRanged = Range > 1;
+        }
     }
 }

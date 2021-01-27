@@ -21,7 +21,6 @@ namespace Assets.Scripts.UI
         {
             EventMediator.Instance.SubscribeToEvent(HoverPopupEvent, this);
             EventMediator.Instance.SubscribeToEvent(ClickPopupEvent, this);
-            EventMediator.Instance.SubscribeToEvent(HidePopupEvent, this);
             Hide();
         }
 

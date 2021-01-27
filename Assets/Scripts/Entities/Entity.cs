@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Entities.Names;
+using Assets.Scripts.Items;
 using UnityEngine;
 using GameObject = GoRogue.GameFramework.GameObject;
 

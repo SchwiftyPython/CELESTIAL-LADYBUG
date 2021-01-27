@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Entities;
 using GoRogue;
 using UnityEngine;
 
@@ -31,6 +32,7 @@ namespace Assets.Scripts.Combat
             EventMediator.Instance.SubscribeToEvent(AiTurn, this);
         }
 
+        //todo need refactor big time
         private void Update()
         {
             if (_isPlayerTurn)
@@ -39,7 +41,20 @@ namespace Assets.Scripts.Combat
                 {
                     //todo highlight tile or show entity info if entity present
 
-                    HighlightTileUnderMouse();
+                    var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+                    var mouseCoord = new Coord((int)mousePosition.x, (int)mousePosition.y);
+
+                    var entity = (Entity) _map.Entities.GetItems(mouseCoord).FirstOrDefault();
+
+                    if (entity == null)
+                    {
+                        HighlightTileUnderMouse();
+                    }
+                    else
+                    {
+                        ShowEntityInfo(entity);
+                    }
                 }
 
                 if (Input.GetMouseButtonDown(0))
@@ -185,6 +200,8 @@ namespace Assets.Scripts.Combat
 
             _isTileSelected = true;
 
+            EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
+
             EventMediator.Instance.Broadcast(GlobalHelper.TileSelected, tile, _apMovementCost);
         }
 
@@ -217,6 +234,13 @@ namespace Assets.Scripts.Combat
             }
 
             _highlightedTiles = new List<Tile>();
+        }
+
+        private void ShowEntityInfo(Entity targetEntity)
+        {
+            EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
+
+            EventMediator.Instance.Broadcast(GlobalHelper.TileHovered, this, targetEntity);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

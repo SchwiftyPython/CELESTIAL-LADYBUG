@@ -1,18 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using GoRogue;
+using GoRogue.GameFramework;
+using GameObject = UnityEngine.GameObject;
 
-public class Item : MonoBehaviour
+namespace Assets.Scripts.Items
 {
-    // Start is called before the first frame update
-    void Start()
+    //todo inherit from GameObject or IGameobject to take advantage of components?
+    public class Item
     {
-        
-    }
+        public enum ItemType
+        {
+            Sword,
+            LeatherArmor
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public GameObject InventoryPrefab { get; private set; }
+        public GameObject InventorySprite { get; private set; }
+
+        public string ItemName { get; private set; }
+
+        public ItemType Type { get; private set; }
+
+        public Item(string itemName, ItemType type)
+        {
+            ItemName = itemName;
+            Type = type;
+        }
     }
 }

@@ -1,18 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Armor : MonoBehaviour
+﻿namespace Assets.Scripts.Items
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Armor : Item
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        //todo going to try minecraft damage protection
+        public int Toughness { get; private set; }
     }
 }
