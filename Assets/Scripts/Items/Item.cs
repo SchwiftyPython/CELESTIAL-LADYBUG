@@ -1,4 +1,5 @@
-﻿using GoRogue;
+﻿using System.ComponentModel;
+using GoRogue;
 using GoRogue.GameFramework;
 using GameObject = UnityEngine.GameObject;
 
@@ -9,7 +10,9 @@ namespace Assets.Scripts.Items
     {
         public enum ItemType
         {
+            [Description("Sword")]
             Sword,
+            [Description("Leather Armor")]
             LeatherArmor
         }
 

@@ -20,6 +20,8 @@ namespace Assets.Scripts.Combat
             {
                 var bandit = new Entity(false);
 
+                bandit.GenerateStartingEquipment();
+
                 bandits.Add(bandit);
             }
 

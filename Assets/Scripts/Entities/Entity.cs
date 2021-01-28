@@ -145,12 +145,25 @@ namespace Assets.Scripts.Entities
 
         public void GenerateStartingEquipment()
         {
-            //todo
+            //todo not implemented - temp for testing
+
+            var testSword = new Weapon("Sword", Item.ItemType.Sword, (35, 40), 1);
+
+            EquipWeapon(testSword);
+
+            var testArmor = new Armor("Leather Armor", Item.ItemType.LeatherArmor, 3);
+
+            EquipArmor(testArmor);
         }
 
         public void EquipWeapon(Weapon newWeapon)
         {
-            //todo
+            if (_equippedWeapon != null)
+            {
+                UnEquipWeapon();
+            }
+
+            _equippedWeapon = newWeapon;
         }
 
         public void UnEquipWeapon()
@@ -160,7 +173,12 @@ namespace Assets.Scripts.Entities
 
         public void EquipArmor(Armor newArmor)
         {
-            //todo
+            if (_equippedArmor != null)
+            {
+                UnEquipArmor();
+            }
+
+            _equippedArmor = newArmor;
         }
 
         public void UnEquipArmor()
