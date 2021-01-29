@@ -1,18 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Ability : MonoBehaviour
+﻿namespace Assets.Scripts.Abilities
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Ability 
     {
-        
-    }
+        public string Name { get; private set; }
+        public int ApCost { get; private set; }
+        public int Range { get; private set; }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public Ability(string name, int apCost, int range)
+        {
+            Name = name;
+            ApCost = apCost;
+            Range = range;
+        }
     }
 }

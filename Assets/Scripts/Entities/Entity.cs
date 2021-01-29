@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Assets.Scripts.Abilities;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Entities.Names;
 using Assets.Scripts.Items;
