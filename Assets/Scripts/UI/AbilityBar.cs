@@ -3,6 +3,7 @@ using System.Linq;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Entities;
+using GoRogue;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -71,33 +72,60 @@ namespace Assets.Scripts.UI
 
             testInstance.transform.SetParent(AbilityButtonParent);
 
-            //todo check if there are valid targets and if there is enough ap for ability
-            //todo make interactable if both are true 
+            var buttonScript = testInstance.GetComponent<Button>().GetComponent<UseAbilityButton>();
+
+            if (AbilityIsUsable(testSlashAbility))
+            {
+                buttonScript.EnableButton();
+            }
+            else
+            {
+                buttonScript.DisableButton();
+            }
 
         }
 
         private void Refresh()
         {
-            //todo loop through all abilities in bar and determine if interactable
+            for (var i = 0; i < AbilityButtonParent.transform.childCount; i++)
+            {
+                var buttonScript = AbilityButtonParent.transform.GetChild(i).gameObject.GetComponent<Button>().GetComponent<UseAbilityButton>();
+
+                var ability = buttonScript.Ability;
+
+                if (_activeEntity.Stats.CurrentActionPoints >= ability.ApCost && AbilityIsUsable(ability))
+                {
+                    buttonScript.EnableButton();
+                }
+            }
         }
 
         private bool AbilityIsUsable(Ability ability)
         {
-            if (_activeEntity.Stats.CurrentActionPoints >= ability.ApCost)
+            if (_activeEntity.Stats.CurrentActionPoints < ability.ApCost)
             {
-                return true;
+                return false;
             }
-
-            //todo for each valid target see if any are in range
 
             var allEntities = CombatManager.Instance.TurnOrder.ToList();
 
             foreach (var entity in allEntities)
             {
-                //todo use Chebyshev distance see gorogue article
+                //todo need to determine if ability target type is hostile or friendly. -- assuming hostile here
+                if (entity.IsPlayer() || entity.IsDerpus())
+                {
+                    continue;
+                }
+
+                var distance = Distance.CHEBYSHEV.Calculate(_activeEntity.Position, entity.Position);
+
+                if (ability.Range >= distance)
+                {
+                    return true;
+                }
             }
 
-            //todo return true if any conditions met otherwise false
+            return false;
         }
 
         private static Sprite GetIconForAbility(Ability ability)

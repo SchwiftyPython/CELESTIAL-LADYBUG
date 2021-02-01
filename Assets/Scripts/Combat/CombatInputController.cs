@@ -3,6 +3,8 @@ using System.Linq;
 using Assets.Scripts.Entities;
 using GoRogue;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Combat
 {
@@ -23,10 +25,22 @@ namespace Assets.Scripts.Combat
 
         private int _apMovementCost;
 
+        private GraphicRaycaster _canvasGraphicRaycaster;
+        private EventSystem _canvasEventSystem;
+
         public Color HighlightedColor; //todo refactor -- need to look into better way to highlight probably with an actual sprite
+
+        public GameObject Canvas;
 
         private void Start()
         {
+            if (Canvas == null)
+            {
+                Canvas = GameObject.Find("UI");
+            }
+            _canvasGraphicRaycaster = Canvas.GetComponent<GraphicRaycaster>();
+            _canvasEventSystem = Canvas.GetComponent<EventSystem>();
+
             EventMediator.Instance.SubscribeToEvent(CombatSceneLoaded, this);
             EventMediator.Instance.SubscribeToEvent(PlayerTurn, this);
             EventMediator.Instance.SubscribeToEvent(AiTurn, this);
@@ -40,6 +54,12 @@ namespace Assets.Scripts.Combat
                 if (!_isTileSelected)
                 {
                     //todo highlight tile or show entity info if entity present
+
+                    if (MouseHitUi())
+                    {
+                        ClearHighlights();
+                        return;
+                    }
 
                     var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -62,6 +82,14 @@ namespace Assets.Scripts.Combat
                     if (!_isTileSelected)
                     {
                         //todo only allow for tiles within entity movement range
+
+                        //todo need to block when interacting with ui
+
+                        if (MouseHitUi())
+                        {
+                            ClearHighlights();
+                            return;
+                        }
 
                         HighlightPathToMouse();
                     }
@@ -111,6 +139,24 @@ namespace Assets.Scripts.Combat
                     EventMediator.Instance.Broadcast(GlobalHelper.TileDeselected, this);
                 }
             }
+        }
+
+        private bool MouseHitUi()
+        {
+            if (Canvas == null)
+            {
+                Canvas = GameObject.Find("UI");
+            }
+            _canvasGraphicRaycaster = Canvas.GetComponent<GraphicRaycaster>();
+            _canvasEventSystem = Canvas.GetComponent<EventSystem>();
+
+            var pointerEventData = new PointerEventData(_canvasEventSystem) { position = Input.mousePosition };
+
+            var results = new List<RaycastResult>();
+
+            _canvasGraphicRaycaster.Raycast(pointerEventData, results);
+
+            return results.Any();
         }
 
         private void HighlightTileUnderMouse()
