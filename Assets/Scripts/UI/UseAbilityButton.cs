@@ -1,10 +1,11 @@
 ﻿using Assets.Scripts.Abilities;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
-    public class UseAbilityButton : MonoBehaviour
+    public class UseAbilityButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         private Image _buttonIcon;
         private Button _button;
@@ -65,6 +66,17 @@ namespace Assets.Scripts.UI
         private void SetIcon(Sprite icon)
         {
             _buttonIcon.sprite = icon;
+        }
+
+        //todo this bugs out when the tootip appears under mouse. I took out any raycast target in the tooltip but no difference.
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            EventMediator.Instance.Broadcast(GlobalHelper.AbilityHovered, this, Ability);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
         }
     }
 }

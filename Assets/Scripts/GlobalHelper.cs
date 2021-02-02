@@ -34,6 +34,7 @@ namespace Assets.Scripts
         public const string TileSelected = "TileSelected";
         public const string TileDeselected = "TileDeselected";
         public const string TileHovered = "TileHovered";
+        public const string AbilityHovered = "AbilityHovered";
         public const string HidePopup = "HidePopup";
         public const string EndTurn = "EndTurn";
         public const string CombatFinished = "CombatFinished";

@@ -19,7 +19,7 @@ namespace Assets.Scripts.Entities
 
         private List<Effect> _effects;
 
-        private Weapon _equippedWeapon;
+        
         private Armor _equippedArmor;
 
         private AiController _aiController;
@@ -33,6 +33,7 @@ namespace Assets.Scripts.Entities
         public Attributes Attributes { get; }
         public Stats Stats { get; }
         public Sprite Portrait { get; private set; }
+        public Weapon EquippedWeapon { get; private set; }
 
         public UnityEngine.GameObject CombatSpritePrefab { get; private set; }
         public UnityEngine.GameObject CombatSpriteInstance { get; private set; }
@@ -159,12 +160,12 @@ namespace Assets.Scripts.Entities
 
         public void EquipWeapon(Weapon newWeapon)
         {
-            if (_equippedWeapon != null)
+            if (EquippedWeapon != null)
             {
                 UnEquipWeapon();
             }
 
-            _equippedWeapon = newWeapon;
+            EquippedWeapon = newWeapon;
         }
 
         public void UnEquipWeapon()
