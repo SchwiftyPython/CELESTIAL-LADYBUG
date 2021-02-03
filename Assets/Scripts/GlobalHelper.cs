@@ -37,6 +37,7 @@ namespace Assets.Scripts
         public const string AbilityHovered = "AbilityHovered";
         public const string HidePopup = "HidePopup";
         public const string EndTurn = "EndTurn";
+        public const string NextTarget = "NextTarget";
         public const string CombatFinished = "CombatFinished";
         public const string EntityDead = "EntityDead";
 

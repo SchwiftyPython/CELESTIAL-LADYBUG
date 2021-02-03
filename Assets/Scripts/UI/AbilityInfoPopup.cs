@@ -31,10 +31,13 @@ namespace Assets.Scripts.UI
 
         private void Show(Ability ability)
         {
-            _name.text = ability.Name;
+            _name.text = GlobalHelper.Capitalize(ability.Name);
             _abilityDescription.text = "Description not implemented yet"; //todo
             _apCost.text = ability.ApCost.ToString();
-            _damageDescription.text = CombatManager.Instance.ActiveEntity.EquippedWeapon.DamageRange.ToString();
+
+            var (damageMin, damageMax) = CombatManager.Instance.ActiveEntity.EquippedWeapon.DamageRange;
+
+            _damageDescription.text = $"Deals {damageMin} - {damageMax} damage";
 
             var position = Input.mousePosition;
             gameObject.transform.position = new Vector2(position.x + 180f, position.y + 160f);

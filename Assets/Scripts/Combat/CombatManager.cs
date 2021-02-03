@@ -22,7 +22,7 @@ namespace Assets.Scripts.Combat
     {
         //private const string PlayerEndTurn = GlobalHelper.PlayerEndTurn;
         //private const string AiEndTurn = GlobalHelper.AiEndTurn;
-        private const string EndTurn = GlobalHelper.EndTurn;
+        private const string EndTurnEvent = GlobalHelper.EndTurn;
         private const string CombatFinished = GlobalHelper.CombatFinished;
         private const string EntityDead = GlobalHelper.EntityDead;
         private const string RefreshUi = GlobalHelper.RefreshCombatUi;
@@ -110,16 +110,16 @@ namespace Assets.Scripts.Combat
                     UpdateActiveEntityInfoPanel();
 
                     EventMediator.Instance.Broadcast(GlobalHelper.PlayerTurn, this);
-                    EventMediator.Instance.SubscribeToEvent(EndTurn, this);
+                    EventMediator.Instance.SubscribeToEvent(EndTurnEvent, this);
                     break;
                 case CombatState.AiTurn:
                     EventMediator.Instance.Broadcast(GlobalHelper.AiTurn, this);
-                    EventMediator.Instance.SubscribeToEvent(EndTurn, this);
+                    EventMediator.Instance.SubscribeToEvent(EndTurnEvent, this);
 
                     //todo tell ai to do its thing
 
                     //todo skipping ai turn until implemented
-                    EventMediator.Instance.Broadcast(EndTurn, this);
+                    EventMediator.Instance.Broadcast(EndTurnEvent, this);
 
                     break;
                 case CombatState.EndTurn:
@@ -130,6 +130,9 @@ namespace Assets.Scripts.Combat
                     else
                     {
                         ActiveEntity = GetNextInTurnOrder();
+
+                        //todo make a method for this in Entity
+                        ActiveEntity.Stats.CurrentActionPoints = ActiveEntity.Stats.MaxActionPoints;
 
                         HighlightActiveEntitySprite();
 
@@ -162,7 +165,6 @@ namespace Assets.Scripts.Combat
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
         }
 
         private GameObject GetPawnHighlighterInstance()
@@ -314,9 +316,9 @@ namespace Assets.Scripts.Combat
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
         {
-            if (eventName.Equals(EndTurn))
+            if (eventName.Equals(EndTurnEvent))
             {
-                EventMediator.Instance.UnsubscribeFromEvent(EndTurn, this);
+                EventMediator.Instance.UnsubscribeFromEvent(EndTurnEvent, this);
 
                 _currentCombatState = CombatState.EndTurn;
             }

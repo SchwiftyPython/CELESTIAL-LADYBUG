@@ -13,6 +13,7 @@ namespace Assets.Scripts.Combat
         private const string CombatSceneLoaded = GlobalHelper.CombatSceneLoaded;
         private const string PlayerTurn = GlobalHelper.PlayerTurn;
         private const string AiTurn = GlobalHelper.AiTurn;
+        private const string EndTurn = GlobalHelper.EndTurn;
 
         private bool _isPlayerTurn;
         private bool _isTileSelected;
@@ -28,12 +29,27 @@ namespace Assets.Scripts.Combat
         private GraphicRaycaster _canvasGraphicRaycaster;
         private EventSystem _canvasEventSystem;
 
+        private Queue<Entity> _abilityTargets;
+        private Entity _selectedAbilityTarget;
+        private Tile _highlightedAbilityTile;
+
         public Color HighlightedColor; //todo refactor -- need to look into better way to highlight probably with an actual sprite
 
         public GameObject Canvas;
 
+        public static CombatInputController Instance;
+
         private void Start()
         {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else if (Instance != this)
+            {
+                Destroy(gameObject);
+            }
+
             if (Canvas == null)
             {
                 Canvas = GameObject.Find("UI");
@@ -44,6 +60,7 @@ namespace Assets.Scripts.Combat
             EventMediator.Instance.SubscribeToEvent(CombatSceneLoaded, this);
             EventMediator.Instance.SubscribeToEvent(PlayerTurn, this);
             EventMediator.Instance.SubscribeToEvent(AiTurn, this);
+            EventMediator.Instance.SubscribeToEvent(EndTurn, this);
         }
 
         //todo need refactor big time
@@ -138,7 +155,42 @@ namespace Assets.Scripts.Combat
 
                     EventMediator.Instance.Broadcast(GlobalHelper.TileDeselected, this);
                 }
+                else if (Input.GetKeyDown(KeyCode.Tab))
+                {
+                    //EventMediator.Instance.Broadcast(GlobalHelper.NextTarget, this);
+
+                    NextTarget();
+                }
             }
+        }
+
+        public void AbilityButtonClicked(Queue<Entity> targets)
+        {
+            _abilityTargets = new Queue<Entity>(targets);
+
+            _selectedAbilityTarget = targets.Peek();
+
+            ClearHighlightUnderAbilityTarget();
+
+            HighlightTileUnderAbilityTarget(_selectedAbilityTarget);
+        }
+
+        private void NextTarget()
+        {
+            if (_abilityTargets == null || _abilityTargets.Count < 2)
+            {
+                return;
+            }
+
+            ClearHighlightUnderAbilityTarget();
+
+            var lastTarget = _abilityTargets.Dequeue();
+
+            _abilityTargets.Enqueue(lastTarget);
+
+            _selectedAbilityTarget = _abilityTargets.Peek();
+
+            HighlightTileUnderAbilityTarget(_selectedAbilityTarget);
         }
 
         private bool MouseHitUi()
@@ -262,6 +314,29 @@ namespace Assets.Scripts.Combat
             tile.SpriteInstance.GetComponent<SpriteRenderer>().color = HighlightedColor;
         }
 
+        private void HighlightTileUnderAbilityTarget(Entity abilityTarget)
+        {
+            if (abilityTarget == null)
+            {
+                return;
+            }
+
+            _highlightedAbilityTile = abilityTarget.CurrentMap.GetTerrain<Tile>(abilityTarget.Position);
+            _highlightedAbilityTile.SpriteInstance.GetComponent<SpriteRenderer>().color = HighlightedColor;
+        }
+
+        private void ClearHighlightUnderAbilityTarget()
+        {
+            if (_highlightedAbilityTile == null)
+            {
+                return;
+            }
+
+            _highlightedAbilityTile.SpriteInstance.GetComponent<SpriteRenderer>().color = Color.white;
+
+            _highlightedAbilityTile = null;
+        }
+
         public void ClearHighlights()
         {
             if (_highlightedTiles == null || _highlightedTiles.Count <= 0)
@@ -302,6 +377,10 @@ namespace Assets.Scripts.Combat
             else if (eventName.Equals(AiTurn))
             {
                 _isPlayerTurn = false;
+            }
+            else if (eventName.Equals(EndTurn))
+            {
+                ClearHighlightUnderAbilityTarget();
             }
         }
     }
