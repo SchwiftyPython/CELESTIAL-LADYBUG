@@ -212,20 +212,29 @@ namespace Assets.Scripts.Entities
 
         public int CalculateChanceToHit(Entity target)
         {
-            //todo
-            return -1;
+            //todo need to add modifiers
+
+            return CalculateBaseChanceToHit(target);
         }
 
         public int CalculateBaseChanceToHit(Entity target)
         {
-            //todo
-            return -1;
+            return Stats.MeleeSkill - target.Stats.MeleeSkill / 2;
         }
 
         public bool AttackHit(int chanceToHit)
         {
-            //todo
-            return true;
+            //todo diceroller
+            var roll = Random.Range(1, 101);
+
+            if (roll <= chanceToHit)
+            {
+                return true;
+            }
+
+            //todo send this info to combat console
+
+            return false;
         }
 
         public void AddHealth(int amount)

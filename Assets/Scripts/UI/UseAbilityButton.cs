@@ -106,8 +106,6 @@ namespace Assets.Scripts.UI
             // HighlightTile(tile);
 
             CombatInputController.Instance.AbilityButtonClicked(_targets);
-
-            //todo show hit chance popup
         }
 
         private void NextTarget()

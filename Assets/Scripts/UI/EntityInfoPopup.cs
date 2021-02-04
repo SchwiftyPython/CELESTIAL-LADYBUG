@@ -58,7 +58,6 @@ namespace Assets.Scripts.UI
             GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 
-
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
         {
             if (eventName.Equals(HoverPopupEvent))

@@ -173,6 +173,11 @@ namespace Assets.Scripts.Combat
             ClearHighlightUnderAbilityTarget();
 
             HighlightTileUnderAbilityTarget(_selectedAbilityTarget);
+
+            var hitChance = CombatManager.Instance.ActiveEntity.CalculateChanceToHit(_selectedAbilityTarget);
+
+            //todo we'll need some kind of DTO to hold the hit chance and modifiers
+            EventMediator.Instance.Broadcast(GlobalHelper.EntityTargeted, _selectedAbilityTarget, hitChance);
         }
 
         private void NextTarget()
@@ -181,6 +186,8 @@ namespace Assets.Scripts.Combat
             {
                 return;
             }
+
+            EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
 
             ClearHighlightUnderAbilityTarget();
 
@@ -191,6 +198,11 @@ namespace Assets.Scripts.Combat
             _selectedAbilityTarget = _abilityTargets.Peek();
 
             HighlightTileUnderAbilityTarget(_selectedAbilityTarget);
+
+            var hitChance = CombatManager.Instance.ActiveEntity.CalculateChanceToHit(_selectedAbilityTarget);
+
+            //todo we'll need some kind of DTO to hold the hit chance and modifiers
+            EventMediator.Instance.Broadcast(GlobalHelper.EntityTargeted, _selectedAbilityTarget, hitChance);
         }
 
         private bool MouseHitUi()
