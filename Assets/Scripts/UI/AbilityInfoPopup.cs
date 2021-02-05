@@ -66,6 +66,11 @@ namespace Assets.Scripts.UI
         {
             if (eventName.Equals(HoverPopupEvent))
             {
+                if (GameManager.Instance.AnyActiveWindows())
+                {
+                    return;
+                }
+
                 if (!(parameter is Ability ability))
                 {
                     return;

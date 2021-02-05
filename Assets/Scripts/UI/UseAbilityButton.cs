@@ -70,12 +70,17 @@ namespace Assets.Scripts.UI
 
         public void OnClick()
         {
+            //todo targets thing would mean we'd want to select the target then an ability.
+            //todo let's try select ability then select with mouse click
+            //todo hit chance shows on hover and click
+            //todo second click confirms action
+
             if (!_button.interactable)
             {
                 return;
             }
 
-            var allEntities = CombatManager.Instance.TurnOrder.ToList();
+            /*var allEntities = CombatManager.Instance.TurnOrder.ToList();
 
             var activeEntity = CombatManager.Instance.ActiveEntity;
 
@@ -95,17 +100,11 @@ namespace Assets.Scripts.UI
                 {
                     _targets.Enqueue(entity);
                 }
-            }
+            }*/
 
-            // _selectedTarget = _targets.Peek();
-            //
-            // ClearHighlight();
-            //
-            // var tile = _selectedTarget.CurrentMap.GetTerrain<Floor>(_selectedTarget.Position);
-            //
-            // HighlightTile(tile);
+            EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
 
-            CombatInputController.Instance.AbilityButtonClicked(_targets);
+            CombatInputController.Instance.AbilityButtonClicked();
         }
 
         private void NextTarget()

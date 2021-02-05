@@ -17,6 +17,7 @@ namespace Assets.Scripts.Combat
 
         private bool _isPlayerTurn;
         private bool _isTileSelected;
+        private bool _isAbilitySelected;
 
         private CombatMap _map;
 
@@ -68,6 +69,7 @@ namespace Assets.Scripts.Combat
         {
             if (_isPlayerTurn)
             {
+                //todo need to block when an entity is selected by an ability
                 if (!_isTileSelected)
                 {
                     //todo highlight tile or show entity info if entity present
@@ -84,13 +86,21 @@ namespace Assets.Scripts.Combat
 
                     var entity = (Entity) _map.Entities.GetItems(mouseCoord).FirstOrDefault();
 
-                    if (entity == null)
+                    //todo clean up
+                    if (entity == null && !_isAbilitySelected)
                     {
                         HighlightTileUnderMouse();
                     }
-                    else
+                    else if(entity != null)
                     {
-                        ShowEntityInfo(entity);
+                        if (_isAbilitySelected)
+                        {
+                            ShowHitChance(entity);
+                        }
+                        else
+                        {
+                            ShowEntityInfo(entity);
+                        }
                     }
                 }
 
@@ -113,6 +123,8 @@ namespace Assets.Scripts.Combat
                     else
                     {
                         //check if same tile clicked then move there if true
+
+                        //todo check if ability is selected and if a valid target is clicked then use ability if true
 
                         var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -152,6 +164,7 @@ namespace Assets.Scripts.Combat
                 else if (Input.GetMouseButtonDown(1))
                 {
                     _isTileSelected = false;
+                    _isAbilitySelected = false;
 
                     EventMediator.Instance.Broadcast(GlobalHelper.TileDeselected, this);
                 }
@@ -159,7 +172,7 @@ namespace Assets.Scripts.Combat
                 {
                     //EventMediator.Instance.Broadcast(GlobalHelper.NextTarget, this);
 
-                    NextTarget();
+                    //NextTarget();
                 }
             }
         }
@@ -178,6 +191,11 @@ namespace Assets.Scripts.Combat
 
             //todo we'll need some kind of DTO to hold the hit chance and modifiers
             EventMediator.Instance.Broadcast(GlobalHelper.EntityTargeted, _selectedAbilityTarget, hitChance);
+        }
+
+        public void AbilityButtonClicked()
+        {
+            _isAbilitySelected = true;
         }
 
         private void NextTarget()
@@ -374,6 +392,20 @@ namespace Assets.Scripts.Combat
             EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
 
             EventMediator.Instance.Broadcast(GlobalHelper.TileHovered, this, targetEntity);
+        }
+
+        private void ShowHitChance(Entity targetEntity)
+        {
+            _selectedAbilityTarget = targetEntity;
+
+            ClearHighlightUnderAbilityTarget();
+
+            HighlightTileUnderAbilityTarget(_selectedAbilityTarget);
+
+            var hitChance = CombatManager.Instance.ActiveEntity.CalculateChanceToHit(_selectedAbilityTarget);
+
+            //todo we'll need some kind of DTO to hold the hit chance and modifiers
+            EventMediator.Instance.Broadcast(GlobalHelper.EntityTargeted, _selectedAbilityTarget, hitChance);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

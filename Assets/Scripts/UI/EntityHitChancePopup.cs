@@ -41,8 +41,8 @@ namespace Assets.Scripts.UI
 
             _nextTurn.text = $"Acts in {nextTurn} turns";
 
-            var position = targetEntity.Position;
-            gameObject.transform.position = new Vector2(position.X + 90f, position.Y + 80f);
+            var position = Camera.main.WorldToScreenPoint(targetEntity.CombatSpriteInstance.transform.position);
+            gameObject.transform.position = new Vector2(position.x + 150f, position.y - 75f);
 
             EventMediator.Instance.SubscribeToEvent(HideEvent, this);
 
@@ -82,6 +82,12 @@ namespace Assets.Scripts.UI
             }
             else if (eventName.Equals(HideEvent))
             {
+                //todo check this against a list of valid broadcasters
+                if (broadcaster is UseAbilityButton)
+                {
+                    return;
+                }
+
                 Hide();
             }
         }
