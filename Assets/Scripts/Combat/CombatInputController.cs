@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Abilities;
 using Assets.Scripts.Entities;
 using GoRogue;
 using UnityEngine;
@@ -33,6 +34,7 @@ namespace Assets.Scripts.Combat
         private Queue<Entity> _abilityTargets;
         private Entity _selectedAbilityTarget;
         private Tile _highlightedAbilityTile;
+        private Ability _selectedAbility;
 
         public Color HighlightedColor; //todo refactor -- need to look into better way to highlight probably with an actual sprite
 
@@ -108,23 +110,49 @@ namespace Assets.Scripts.Combat
                 {
                     if (!_isTileSelected)
                     {
-                        //todo only allow for tiles within entity movement range
+                        //check if ability is selected and if a valid target is clicked then use ability if true
 
-                        //todo need to block when interacting with ui
-
-                        if (MouseHitUi())
+                        if (_isAbilitySelected)
                         {
-                            ClearHighlights();
-                            return;
-                        }
+                            //todo need method for this block - Get <T> from mouse position - entity, tile, floor whatever
 
-                        HighlightPathToMouse();
+                            var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+                            var mouseCoord = new Coord((int)mousePosition.x, (int)mousePosition.y);
+
+                            var entity = (Entity)_map.Entities.GetItems(mouseCoord).FirstOrDefault();
+
+                            if (entity != null && _selectedAbility.TargetInRange(CombatManager.Instance.ActiveEntity, entity))
+                            {
+                                _selectedAbility.Use(CombatManager.Instance.ActiveEntity, entity);
+
+                                _selectedAbility = null;
+
+                                _isAbilitySelected = false;
+
+                                ClearHighlights();
+
+                                EventMediator.Instance.Broadcast(GlobalHelper.RefreshCombatUi, this, CombatManager.Instance.ActiveEntity);
+                            }
+                        }
+                        else
+                        {
+                            //todo only allow for tiles within entity movement range
+
+                            //todo need to block when interacting with ui
+
+                            if (MouseHitUi())
+                            {
+                                ClearHighlights();
+                                return;
+                            }
+
+                            HighlightPathToMouse();
+                        }
                     }
                     else
                     {
                         //check if same tile clicked then move there if true
-
-                        //todo check if ability is selected and if a valid target is clicked then use ability if true
 
                         var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -168,11 +196,15 @@ namespace Assets.Scripts.Combat
 
                     EventMediator.Instance.Broadcast(GlobalHelper.TileDeselected, this);
                 }
-                else if (Input.GetKeyDown(KeyCode.Tab))
+                else if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    //EventMediator.Instance.Broadcast(GlobalHelper.NextTarget, this);
+                    //todo clear if anything selected
+                    //todo show menu if nothing selected
 
-                    //NextTarget();
+                    _isTileSelected = false;
+                    _isAbilitySelected = false;
+
+                    EventMediator.Instance.Broadcast(GlobalHelper.TileDeselected, this);
                 }
             }
         }
@@ -193,8 +225,9 @@ namespace Assets.Scripts.Combat
             EventMediator.Instance.Broadcast(GlobalHelper.EntityTargeted, _selectedAbilityTarget, hitChance);
         }
 
-        public void AbilityButtonClicked()
+        public void AbilityButtonClicked(Ability selectedAbility)
         {
+            _selectedAbility = selectedAbility;
             _isAbilitySelected = true;
         }
 
@@ -396,6 +429,8 @@ namespace Assets.Scripts.Combat
 
         private void ShowHitChance(Entity targetEntity)
         {
+            EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
+
             _selectedAbilityTarget = targetEntity;
 
             ClearHighlightUnderAbilityTarget();

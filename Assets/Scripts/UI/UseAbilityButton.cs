@@ -104,7 +104,7 @@ namespace Assets.Scripts.UI
 
             EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
 
-            CombatInputController.Instance.AbilityButtonClicked();
+            CombatInputController.Instance.AbilityButtonClicked(Ability);
         }
 
         private void NextTarget()

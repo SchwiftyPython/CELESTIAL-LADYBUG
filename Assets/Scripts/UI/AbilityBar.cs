@@ -97,6 +97,10 @@ namespace Assets.Scripts.UI
                 {
                     buttonScript.EnableButton();
                 }
+                else
+                {
+                    buttonScript.DisableButton();
+                }
             }
         }
 

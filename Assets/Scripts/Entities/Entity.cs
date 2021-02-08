@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.Combat;
@@ -6,6 +7,7 @@ using Assets.Scripts.Entities.Names;
 using Assets.Scripts.Items;
 using UnityEngine;
 using GameObject = GoRogue.GameFramework.GameObject;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Entities
 {
@@ -188,14 +190,26 @@ namespace Assets.Scripts.Entities
             //todo
         }
 
-        public void MeleeAttack()
+        public void MeleeAttack(Entity target)
         {
+            var hitChance = CalculateChanceToHit(target);
 
+            if (AttackHit(hitChance))
+            {
+                var (minDamage, maxDamage) = EquippedWeapon.DamageRange;
+
+                var damage = Random.Range(minDamage, maxDamage + 1);
+
+                target.SubtractHealth(damage);
+
+                //todo message
+                Debug.Log(($"{Name} dealt {damage} damage to {target.Name}!"));
+            }
         }
 
-        public void RangedAttack()
+        public void RangedAttack(Entity target)
         {
-
+            throw new NotImplementedException();
         }
 
         public bool HasMissileWeaponEquipped()
@@ -206,8 +220,8 @@ namespace Assets.Scripts.Entities
 
         public bool TargetInRange(Entity target)
         {
-            //todo
-            return true;
+            //todo prob not needed since everything is ability based
+            throw new NotImplementedException();
         }
 
         public int CalculateChanceToHit(Entity target)
@@ -219,6 +233,9 @@ namespace Assets.Scripts.Entities
 
         public int CalculateBaseChanceToHit(Entity target)
         {
+            Debug.Log($"Attacker Melee Skill: {Stats.MeleeSkill}");
+            Debug.Log($"Defender Melee Skill: {target.Stats.MeleeSkill}");
+
             return Stats.MeleeSkill - target.Stats.MeleeSkill / 2;
         }
 
@@ -229,10 +246,13 @@ namespace Assets.Scripts.Entities
 
             if (roll <= chanceToHit)
             {
+                Debug.Log($"Attack hit! Needed {chanceToHit} Rolled: {roll}");
+
                 return true;
             }
 
             //todo send this info to combat console
+            Debug.Log($"Attack missed! Needed {chanceToHit} Rolled: {roll}");
 
             return false;
         }
