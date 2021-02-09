@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Assets.Scripts.Abilities;
+using Assets.Scripts.AI;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Entities.Names;
 using Assets.Scripts.Items;
@@ -26,8 +27,6 @@ namespace Assets.Scripts.Entities
 
         private AiController _aiController;
 
-        private List<Ability> _abilities;
-        
         private int _lastTurnMoved;
 
         public string Name { get; set; }
@@ -36,6 +35,7 @@ namespace Assets.Scripts.Entities
         public Stats Stats { get; }
         public Sprite Portrait { get; private set; }
         public Weapon EquippedWeapon { get; private set; }
+        public List<Ability> Abilities { get; private set; }
 
         public UnityEngine.GameObject CombatSpritePrefab { get; private set; }
         public UnityEngine.GameObject CombatSpriteInstance { get; private set; }
@@ -89,6 +89,13 @@ namespace Assets.Scripts.Entities
 
             _level = 1;
             _xp = 0;
+
+            Abilities = new List<Ability>();
+
+            //todo for testing need to remove
+            var testSlashAbility = new Ability("slash", 3, 1);
+
+            Abilities.Add(testSlashAbility);
         }
 
         public void SetSpriteInstance(UnityEngine.GameObject instance)
