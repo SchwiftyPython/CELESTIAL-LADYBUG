@@ -25,6 +25,7 @@ namespace Assets.Scripts.Entities
         
         private Armor _equippedArmor;
 
+        //todo use this instead of get component if possible
         private AiController _aiController;
 
         private int _lastTurnMoved;
@@ -149,9 +150,11 @@ namespace Assets.Scripts.Entities
 
             Stats.CurrentActionPoints -= apMovementCost;
 
+            //todo this will not update the position if blocked
+            //we could make a method to encapsulate this and check if position was updated to make it more clear
             Position = tile.Position;
 
-            CombatSpriteInstance.transform.position = new Vector3(tile.Position.X, tile.Position.Y);
+            CombatSpriteInstance.transform.position = new Vector3(Position.X, Position.Y);
         }
 
         public void GenerateStartingEquipment()
@@ -201,16 +204,30 @@ namespace Assets.Scripts.Entities
         {
             var hitChance = CalculateChanceToHit(target);
 
-            if (AttackHit(hitChance))
+            if (AttackHit(hitChance)) //todo handle damage in its own method since ranged will use this too
             {
                 var (minDamage, maxDamage) = EquippedWeapon.DamageRange;
 
                 var damage = Random.Range(minDamage, maxDamage + 1);
 
+                var targetArmor = target.GetArmorToughness();
+
+                var damageReduction = GetDamageReduction(damage, targetArmor);
+
+                damage -= (int) (damage * damageReduction);
+
                 target.SubtractHealth(damage);
 
                 //todo message
                 Debug.Log(($"{Name} dealt {damage} damage to {target.Name}!"));
+
+                if (target.IsDead())
+                {
+                    //todo message
+                    Debug.Log(($"{Name} killed {target.Name}!"));
+
+                    EventMediator.Instance.Broadcast(GlobalHelper.EntityDead, this, target);
+                }
             }
         }
 
@@ -223,6 +240,16 @@ namespace Assets.Scripts.Entities
         {
             //todo
             return true;
+        }
+
+        public int GetArmorToughness()
+        {
+            if (_equippedArmor == null)
+            {
+                return 0;
+            }
+
+            return _equippedArmor.Toughness;
         }
 
         public bool TargetInRange(Entity target)
@@ -328,6 +355,15 @@ namespace Assets.Scripts.Entities
         public void Rest()
         {
             AddEnergy(45); //todo make a constant somewhere
+        }
+
+        private float GetDamageReduction(int damage, int armor)
+        {
+            var reduction = (damage - armor) * (400f / (400f + armor));
+
+            Debug.Log($"Damage reduction = {reduction}%");
+
+            return reduction / 100;
         }
 
         private string GenerateName(List<string> possibleNameFiles, Sex sex)

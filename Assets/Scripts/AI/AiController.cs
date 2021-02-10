@@ -12,6 +12,7 @@ namespace Assets.Scripts.AI
     public class AiController : MonoBehaviour
     {
         private List<Tile> _pathToTarget;
+        private bool _actionAvailable;
 
         public Entity Self { get; private set; }
         public Entity Target { get; private set; }
@@ -28,8 +29,10 @@ namespace Assets.Scripts.AI
 
         public void TakeTurn()
         {
+            _actionAvailable = true;
+
             //todo this if should probably be a while loop
-            while (Self.Stats.CurrentActionPoints < 1)
+            while (Self.Stats.CurrentActionPoints > 0 && _actionAvailable)
             {
                 if (Target == null || Target.IsDead())
                 {
@@ -74,9 +77,21 @@ namespace Assets.Scripts.AI
 
             var map = CombatManager.Instance.Map;
 
+            //todo either we have to get a tile adjacent to the target or stop from moving onto the target's tile
+            //todo not sure how that is happening - thought GoRogue would prevent that -- The sprite is moving but not the entity?
             var path = map.AStar.ShortestPath(Self.Position, Target.Position);
 
-            //todo get as close as possible
+            //todo take next step
+
+            var tileStep = map.GetTerrain<Floor>(path.GetStep(0));
+
+            if (Self.Stats.CurrentActionPoints < tileStep.ApCost)
+            {
+                _actionAvailable = false;
+                return;
+            }
+
+            Self.MoveTo(tileStep, tileStep.ApCost);
         }
 
         public void Attack(List<Ability> usableAbilities)
@@ -90,7 +105,7 @@ namespace Assets.Scripts.AI
         {
             var targets = CombatManager.Instance.TurnOrder.ToList();
 
-            foreach (var target in targets)
+            foreach (var target in targets.ToArray())
             {
                 if (target.IsPlayer() || target.IsDerpus())
                 {

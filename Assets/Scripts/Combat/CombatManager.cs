@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.AI;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Travel;
 using UnityEngine;
@@ -104,6 +105,7 @@ namespace Assets.Scripts.Combat
                         _currentCombatState = CombatState.AiTurn;
                     }
 
+                    EventMediator.Instance.SubscribeToEvent(GlobalHelper.EntityDead, this);
                     EventMediator.Instance.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
                     break;
                 case CombatState.PlayerTurn:
@@ -117,10 +119,7 @@ namespace Assets.Scripts.Combat
                     EventMediator.Instance.SubscribeToEvent(EndTurnEvent, this);
 
                     //todo tell ai to do its thing
-
-                    //todo skipping ai turn until implemented
-                    EventMediator.Instance.Broadcast(EndTurnEvent, this);
-
+                    ActiveEntity.CombatSpriteInstance.GetComponent<AiController>().TakeTurn();
                     break;
                 case CombatState.EndTurn:
                     if (IsCombatFinished())
@@ -237,6 +236,17 @@ namespace Assets.Scripts.Combat
             return TurnOrder.Peek();
         }
 
+        private void RemoveDeadEntity(Entity deadEntity)
+        {
+            TurnOrder = new Queue<Entity>(TurnOrder.Where(entity => entity != deadEntity));
+
+            Map.RemoveEntity(deadEntity);
+
+            Destroy(deadEntity.CombatSpriteInstance);
+
+            //todo remove from turn order display if refresh doesn't handle it
+        }
+
         private bool ActiveEntityPlayerControlled()
         {
             return ActiveEntity.IsPlayer();
@@ -321,6 +331,15 @@ namespace Assets.Scripts.Combat
                 EventMediator.Instance.UnsubscribeFromEvent(EndTurnEvent, this);
 
                 _currentCombatState = CombatState.EndTurn;
+            }
+            else if (eventName.Equals(GlobalHelper.EntityDead))
+            {
+                if (!(parameter is Entity deadEntity))
+                {
+                    return;
+                }
+
+                RemoveDeadEntity(deadEntity);
             }
         }
     }

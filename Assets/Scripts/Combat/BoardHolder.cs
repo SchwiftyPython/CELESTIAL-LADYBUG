@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Entities;
+﻿using Assets.Scripts.AI;
+using Assets.Scripts.Entities;
 using Assets.Scripts.UI;
 using GoRogue;
 using UnityEngine;
@@ -52,6 +53,12 @@ namespace Assets.Scripts.Combat
                         instance.transform.SetParent(EntityHolder);
 
                         entity.SetSpriteInstance(instance);
+
+                        if (!entity.IsPlayer())
+                        {
+                            instance.AddComponent<AiController>();
+                            instance.GetComponent<AiController>().SetSelf(entity);
+                        }
                     }
                 }
             }
