@@ -164,8 +164,8 @@ namespace Assets.Scripts.Entities
         public int Attack { get; set; }
         public int MeleeSkill { get; set; }
         public int RangedSkill { get; set; }
-        public int Armor { get; set; }
-        public int Critical { get; set; }
+        public int Armor { get; set; } //todo maybe only for some types or can we "equip" natural armor in those cases?
+        public int Critical { get; set; } //todo have this ignore damage reduction when implemented
         
 
         public Stats(Attributes attributes)
@@ -190,11 +190,11 @@ namespace Assets.Scripts.Entities
 
             Attack = (int) (attributes.Might * 4.3);
 
-            MeleeSkill = (int) (RollD20() * 4.4f) + 5;
+            MeleeSkill = RollD10() * 10 + RollD10();
 
-            RangedSkill = (int) (RollD20() * 4.4f) + 5;
+            RangedSkill = RollD10() * 10 + RollD10();
 
-            Armor = RollD20() + 7;
+            //Armor = RollD20() + 7;
 
             Critical = (int)(attributes.Speed * 2.4 + attributes.Intellect * 2.4 + RollD20());
 
@@ -214,6 +214,18 @@ namespace Assets.Scripts.Entities
         {
             //todo replace this with diceroller 
             return Random.Range(1, 21);
+        }
+
+        private int RollD12()
+        {
+            //todo replace this with diceroller 
+            return Random.Range(1, 13);
+        }
+
+        private int RollD10()
+        {
+            //todo replace this with diceroller 
+            return Random.Range(1, 11);
         }
     }
 }

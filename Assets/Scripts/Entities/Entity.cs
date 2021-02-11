@@ -218,13 +218,15 @@ namespace Assets.Scripts.Entities
 
                 target.SubtractHealth(damage);
 
-                //todo message
-                Debug.Log(($"{Name} dealt {damage} damage to {target.Name}!"));
+                var message = $"{Name} dealt {damage} damage to {target.Name}!";
+
+                EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
                 if (target.IsDead())
                 {
-                    //todo message
-                    Debug.Log(($"{Name} killed {target.Name}!"));
+                    message = $"{Name} killed {target.Name}!";
+
+                    EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
                     EventMediator.Instance.Broadcast(GlobalHelper.EntityDead, this, target);
                 }
@@ -270,7 +272,7 @@ namespace Assets.Scripts.Entities
             Debug.Log($"Attacker Melee Skill: {Stats.MeleeSkill}");
             Debug.Log($"Defender Melee Skill: {target.Stats.MeleeSkill}");
 
-            return Stats.MeleeSkill - target.Stats.MeleeSkill / 2;
+            return Stats.MeleeSkill - target.Stats.MeleeSkill / 10;
         }
 
         public bool AttackHit(int chanceToHit)
@@ -278,15 +280,19 @@ namespace Assets.Scripts.Entities
             //todo diceroller
             var roll = Random.Range(1, 101);
 
+            string message;
             if (roll <= chanceToHit)
             {
-                Debug.Log($"Attack hit! Needed {chanceToHit} Rolled: {roll}");
+                message = $"Attack hit! Rolled: {roll} Needed: {chanceToHit}";
+
+                EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
                 return true;
             }
 
-            //todo send this info to combat console
-            Debug.Log($"Attack missed! Needed {chanceToHit} Rolled: {roll}");
+            message = $"Attack missed! Rolled: {roll} Needed: {chanceToHit}";
+
+            EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
             return false;
         }

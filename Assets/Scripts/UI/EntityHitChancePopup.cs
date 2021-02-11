@@ -31,6 +31,8 @@ namespace Assets.Scripts.UI
 
         private void Show(Entity targetEntity, int hitChance)
         {
+            //todo should show equipped armor toughness
+
             _name.text = targetEntity.Name;
             _health.text = $"{targetEntity.Stats.CurrentHealth}/{targetEntity.Stats.MaxHealth}";
 
