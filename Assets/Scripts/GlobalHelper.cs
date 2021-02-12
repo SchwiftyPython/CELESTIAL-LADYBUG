@@ -46,6 +46,8 @@ namespace Assets.Scripts
         #region SceneNames
 
         public const string CombatScene = "Combat";
+        public const string TravelScene = "Travel";
+        public const string TitleScreenScene = "TitleScreen";
 
         #endregion SceneNames
 

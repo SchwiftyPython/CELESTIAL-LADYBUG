@@ -5,6 +5,7 @@ using Assets.Scripts.AI;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Travel;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Combat
@@ -58,6 +59,8 @@ namespace Assets.Scripts.Combat
             DontDestroyOnLoad(gameObject);
 
             _currentCombatState = CombatState.Loading;
+
+            EventMediator.Instance.SubscribeToEvent(RefreshUi, this);
         }
 
         private void Update()
@@ -156,9 +159,14 @@ namespace Assets.Scripts.Combat
                     if (PlayerDead())
                     {
                         //todo show popup with button to quit to menu
-                    }
 
-                    //todo load travel screen
+
+                    }
+                    else
+                    {
+                        //todo load travel screen
+                        SceneManager.LoadScene(GlobalHelper.TravelScene);
+                    }
 
                     break;
                 default:
@@ -340,6 +348,10 @@ namespace Assets.Scripts.Combat
                 }
 
                 RemoveDeadEntity(deadEntity);
+            }
+            else if (eventName.Equals(RefreshUi))
+            {
+                HighlightActiveEntitySprite();
             }
         }
     }

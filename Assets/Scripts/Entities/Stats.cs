@@ -7,6 +7,9 @@ namespace Assets.Scripts.Entities
         //todo just temp til we replace the text version of the stats in ui
         private const int PrototypeStatsCap = 99;
 
+        private const int SkillCap = 100;
+        private const int SkillMin = 11;
+
         private const int CurrentStatsMin = 0; 
 
         private int _maxHealth;
@@ -162,12 +165,51 @@ namespace Assets.Scripts.Entities
 
         public int Initiative { get; set; }
         public int Attack { get; set; }
-        public int MeleeSkill { get; set; }
-        public int RangedSkill { get; set; }
+
+        private int _meleeSkill;
+        public int MeleeSkill
+        {
+            get => _meleeSkill;
+            set
+            {
+                if (value < SkillMin)
+                {
+                    _meleeSkill = SkillMin;
+                }
+                else if (value > SkillCap)
+                {
+                    _meleeSkill = SkillCap;
+                }
+                else
+                {
+                    _meleeSkill = value;
+                }
+            }
+        }
+
+        private int _rangedSkill;
+        public int RangedSkill
+        {
+            get => _rangedSkill;
+            set 
+            {
+                if (value < SkillMin)
+                {
+                    _rangedSkill = SkillMin;
+                }
+                else if (value > SkillCap)
+                {
+                    _rangedSkill = SkillCap;
+                }
+                else
+                {
+                    _rangedSkill = value;
+                }
+            }
+        }
         public int Armor { get; set; } //todo maybe only for some types or can we "equip" natural armor in those cases?
         public int Critical { get; set; } //todo have this ignore damage reduction when implemented
         
-
         public Stats(Attributes attributes)
         {
             GenerateStats(attributes);

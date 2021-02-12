@@ -22,6 +22,13 @@ namespace Assets.Scripts.Abilities
         {
             //todo testing for prototype - assumes combat ability
 
+            //todo message assumes combat ability
+            var message = $"{abilityOwner.Name} attacks {target.Name} with {GlobalHelper.CapitalizeAllWords(Name)}!";
+
+            EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+
+            //todo either we change this check or we give a weapon a "reach" property and check for that
+            //for spears for example that could melee attack 2 squares away
             if (Range < 2)
             {
                 abilityOwner.MeleeAttack(target);
