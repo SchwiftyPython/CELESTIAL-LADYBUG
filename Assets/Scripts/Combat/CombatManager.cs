@@ -158,13 +158,10 @@ namespace Assets.Scripts.Combat
                     //todo maybe move this portion to the post combat popup
                     if (PlayerDead())
                     {
-                        //todo show popup with button to quit to menu
-
-
+                        EventMediator.Instance.Broadcast(GlobalHelper.GameOver, this);
                     }
                     else
                     {
-                        //todo load travel screen
                         SceneManager.LoadScene(GlobalHelper.TravelScene);
                     }
 

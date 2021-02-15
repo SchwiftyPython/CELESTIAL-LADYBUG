@@ -224,6 +224,8 @@ namespace Assets.Scripts.Entities
 
                 if (target.IsDead())
                 {
+                    //todo sound for dying peep
+
                     message = $"{Name} killed {target.Name}!";
 
                     EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
@@ -287,8 +289,12 @@ namespace Assets.Scripts.Entities
 
                 EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
+                EventMediator.Instance.Broadcast(GlobalHelper.MeleeHit, this);
+
                 return true;
             }
+
+            //todo sound for missed attack
 
             message = $"Attack missed! Rolled: {roll} Needed: {chanceToHit}";
 

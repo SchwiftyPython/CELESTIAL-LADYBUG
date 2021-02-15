@@ -40,6 +40,9 @@ namespace Assets.Scripts
         public const string CombatFinished = "CombatFinished";
         public const string EntityDead = "EntityDead";
         public const string SendMessageToConsole = "SendMessageToConsole";
+        public const string GameOver = "GameOver";
+        public const string ButtonClick = "ButtonClick";
+        public const string MeleeHit = "MeleeHit";
 
         #endregion EventNames
 

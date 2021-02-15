@@ -39,6 +39,12 @@ namespace Assets.Scripts.AI
                     Target = FindTarget();
                 }
 
+                if (Target == null)
+                {
+                    _actionAvailable = false;
+                    continue;
+                }
+
                 //todo find distance to target
                 var distance = Distance.CHEBYSHEV.Calculate(Self.Position, Target.Position);
 
@@ -113,6 +119,11 @@ namespace Assets.Scripts.AI
                 }
 
                 targets.Remove(target);
+            }
+
+            if (targets.Count < 1)
+            {
+                return null;
             }
 
             return targets[Random.Range(0, targets.Count)];
