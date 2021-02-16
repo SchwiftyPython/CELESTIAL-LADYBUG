@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Assets.Scripts.Combat;
 using Assets.Scripts.Encounters;
 using Assets.Scripts.Entities;
 using UnityEngine;
@@ -27,7 +26,7 @@ namespace Assets.Scripts.Travel
             }
             DontDestroyOnLoad(gameObject);
 
-            if (!SceneManager.GetActiveScene().name.Equals("Combat"))
+            if (!SceneManager.GetActiveScene().name.Equals(GlobalHelper.CombatScene))
             {
                 EventMediator.Instance.SubscribeToEvent(GlobalHelper.CampingEncounterFinished, this);
             }

@@ -13,7 +13,7 @@ namespace Assets.Scripts
         public const string DoubleSpace = "\n\n";
         public const string SingleSpace = "\n";
 
-        #region EventNames  //todo would it be better to make these enums?
+        #region EventNames  //todo would it be better to make these enums? Prob needs own file at this point
 
         public const string EncounterOptionSelected = "EncounterOptionSelected";
         public const string FourOptionEncounter = "FourOptionEncounter";
@@ -43,6 +43,8 @@ namespace Assets.Scripts
         public const string GameOver = "GameOver";
         public const string ButtonClick = "ButtonClick";
         public const string MeleeHit = "MeleeHit";
+        public const string MeleeMiss = "MeleeMiss";
+        public const string ActiveEntityMoved = "ActiveEntityMoved";
 
         #endregion EventNames
 

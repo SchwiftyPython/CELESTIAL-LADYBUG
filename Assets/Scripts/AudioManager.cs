@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Entities;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -9,11 +10,15 @@ namespace Assets.Scripts
         private readonly IList<string> _subscribedEvents = new List<string>
         {
             GlobalHelper.ButtonClick,
-            GlobalHelper.MeleeHit
+            GlobalHelper.MeleeHit,
+            GlobalHelper.MeleeMiss
         };
 
         public AudioClip Click;
         public AudioClip MeleeHit;
+        public AudioClip MeleeMiss;
+        public AudioClip CompanionPain;
+        public AudioClip EnemyPain;
 
         public AudioSource SoundSource;
 
@@ -22,9 +27,9 @@ namespace Assets.Scripts
             SubscribeToEvents();
         }
 
-        private void Play()
+        private void PlayOneShot(AudioClip clip)
         {
-            SoundSource.Play();
+            SoundSource.PlayOneShot(clip, .5f);
         }
 
         private void SubscribeToEvents()
@@ -44,15 +49,30 @@ namespace Assets.Scripts
         {
             if (eventName.Equals(GlobalHelper.ButtonClick))
             {
-                SoundSource.clip = Click;
-                SoundSource.volume = .50f;
-                Play();
+                PlayOneShot(Click);
             }
             else if (eventName.Equals(GlobalHelper.MeleeHit))
             {
-                SoundSource.clip = MeleeHit;
-                SoundSource.volume = .50f;
-                Play();
+                PlayOneShot(MeleeHit);
+
+                if (!(broadcaster is Entity attacker))
+                {
+                    return;
+                }
+
+                //todo get corresponding sounds from a sound store
+                if (attacker.IsPlayer())
+                {
+                    PlayOneShot(EnemyPain);
+                }
+                else
+                {
+                    PlayOneShot(CompanionPain);
+                }
+            }
+            else if (eventName.Equals(GlobalHelper.MeleeMiss))
+            {
+                PlayOneShot(MeleeMiss);
             }
         }
     }

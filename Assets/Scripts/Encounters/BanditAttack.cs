@@ -28,6 +28,8 @@ namespace Assets.Scripts.Encounters
             {
                 var bandit = new Entity(false);
 
+                bandit.GenerateStartingEquipment();
+
                 bandits.Add(bandit);
             }
 

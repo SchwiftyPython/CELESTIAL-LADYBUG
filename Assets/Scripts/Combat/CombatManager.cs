@@ -60,7 +60,10 @@ namespace Assets.Scripts.Combat
 
             _currentCombatState = CombatState.Loading;
 
-            EventMediator.Instance.SubscribeToEvent(RefreshUi, this);
+            if (SceneManager.GetActiveScene().name.Equals(GlobalHelper.CombatScene))
+            {
+                EventMediator.Instance.SubscribeToEvent(RefreshUi, this);
+            }
         }
 
         private void Update()
@@ -95,8 +98,6 @@ namespace Assets.Scripts.Combat
 
                     ActiveEntity = TurnOrder.Peek();
 
-                    EventMediator.Instance.Broadcast(RefreshUi, this, ActiveEntity);
-
                     HighlightActiveEntitySprite();
 
                     if (ActiveEntityPlayerControlled())
@@ -109,7 +110,9 @@ namespace Assets.Scripts.Combat
                     }
 
                     EventMediator.Instance.SubscribeToEvent(GlobalHelper.EntityDead, this);
+                    //EventMediator.Instance.SubscribeToEvent(RefreshUi, this);
                     EventMediator.Instance.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
+                    //EventMediator.Instance.Broadcast(RefreshUi, this, ActiveEntity);
                     break;
                 case CombatState.PlayerTurn:
                     UpdateActiveEntityInfoPanel();
@@ -259,6 +262,13 @@ namespace Assets.Scripts.Combat
 
         private void HighlightActiveEntitySprite()
         {
+            if (ActiveEntity == null)
+            {
+                ActiveEntity = TurnOrder.Peek();
+
+                Debug.Log($"Can't highlight active sprite because it is null!");
+            }
+
             var highlighter = GetPawnHighlighterInstance();
 
             highlighter.transform.position = ActiveEntity.CombatSpriteInstance.transform.position;
@@ -345,6 +355,11 @@ namespace Assets.Scripts.Combat
                 }
 
                 RemoveDeadEntity(deadEntity);
+
+                if (IsCombatFinished())
+                {
+                    _currentCombatState = CombatState.EndCombat;
+                }
             }
             else if (eventName.Equals(RefreshUi))
             {

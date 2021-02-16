@@ -294,11 +294,11 @@ namespace Assets.Scripts.Entities
                 return true;
             }
 
-            //todo sound for missed attack
-
             message = $"Attack missed! Rolled: {roll} Needed: {chanceToHit}";
 
             EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+
+            EventMediator.Instance.Broadcast(GlobalHelper.MeleeMiss, this);
 
             return false;
         }

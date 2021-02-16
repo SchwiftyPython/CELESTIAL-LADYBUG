@@ -2052,7 +2052,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &604771530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2065,6 +2065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2a8127cf1fbb9648af79fefb4abb722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TestingEnabled: 0
 --- !u!4 &604771531
 Transform:
   m_ObjectHideFlags: 0
@@ -6366,6 +6367,7 @@ GameObject:
   - component: {fileID: 1499645662}
   - component: {fileID: 1499645661}
   - component: {fileID: 1499645660}
+  - component: {fileID: 1499645663}
   m_Layer: 5
   m_Name: MainMenuButton
   m_TagString: Untagged
@@ -6447,6 +6449,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1499645663}
+        m_MethodName: Clicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1499645661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6484,6 +6497,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1499645658}
   m_CullTransparentMesh: 0
+--- !u!114 &1499645663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499645658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0478c67f840bd6c4d9c4edd0b1bde463, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1569189849
 GameObject:
   m_ObjectHideFlags: 0
@@ -6930,6 +6955,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Click: {fileID: 8300000, guid: 12c343f6c5ce2a34986581827e710520, type: 3}
   MeleeHit: {fileID: 8300000, guid: 75df68cee64b97546842bf57e94b8e10, type: 3}
+  MeleeMiss: {fileID: 8300000, guid: 923a3bc70818a944b9bd68ca60e7c846, type: 3}
+  CompanionPain: {fileID: 8300000, guid: 5d9b4f7d4f01a834db85018c38154f79, type: 3}
+  EnemyPain: {fileID: 8300000, guid: 119b96a519376bc4f97419fd9c7b701c, type: 3}
   SoundSource: {fileID: 1667606825}
 --- !u!1 &1671906415
 GameObject:
@@ -8605,6 +8633,7 @@ GameObject:
   - component: {fileID: 2112810297}
   - component: {fileID: 2112810296}
   - component: {fileID: 2112810299}
+  - component: {fileID: 2112810300}
   m_Layer: 5
   m_Name: EndTurnButton
   m_TagString: Untagged
@@ -8686,6 +8715,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2112810300}
+        m_MethodName: Clicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2112810297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8733,5 +8773,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 803205f0758a1e443a39e7c024c8558c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2112810300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2112810294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0478c67f840bd6c4d9c4edd0b1bde463, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
