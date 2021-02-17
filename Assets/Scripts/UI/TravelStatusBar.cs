@@ -31,8 +31,8 @@ namespace Assets.Scripts.UI
 
         private void Start()
         {
-            Populate();
-            SubscribeToEvents();
+             Populate();
+             SubscribeToEvents();
         }
 
         public void Populate()
@@ -50,7 +50,10 @@ namespace Assets.Scripts.UI
 
         private void PopulateCompanionStatuses(Party party)
         {
-            GlobalHelper.DestroyAllChildren(CompanionStatusParent.gameObject);
+            if (CompanionStatusParent != null && CompanionStatusParent.gameObject != null)
+            {
+                GlobalHelper.DestroyAllChildren(CompanionStatusParent.gameObject);
+            }
 
             CompanionStatuses = new List<GameObject>();
 
@@ -86,6 +89,11 @@ namespace Assets.Scripts.UI
                     CompanionStatuses[i].GetComponentInChildren<CompanionStatus>().Hide();
                 }
 
+                if (ScrollPartyRightButton == null || ScrollPartyLeftButton == null)
+                {
+                    return;
+                }
+
                 ScrollPartyLeftButton.SetActive(false);
                 ScrollPartyRightButton.SetActive(true);
             }
@@ -105,12 +113,73 @@ namespace Assets.Scripts.UI
 
         public void ScrollPartyListLeft()
         {
+            if (_currentStartingIndex == 0)
+            {
+                ScrollPartyLeftButton.SetActive(false);
+                return;
+            }
 
+            _currentStartingIndex--;
+
+            var (minIndex, maxIndex) = (_currentStartingIndex, _currentStartingIndex + MaxStatusesDisplayed);
+            
+            var index = 0;
+            foreach (var status in CompanionStatuses)
+            {
+                if (index >= minIndex && index < maxIndex)
+                {
+                    status.GetComponentInChildren<CompanionStatus>().Show();
+                }
+                else
+                {
+                    status.GetComponentInChildren<CompanionStatus>().Hide();
+                }
+
+                index++;
+            }
+
+            if (_currentStartingIndex == 0)
+            {
+                ScrollPartyLeftButton.SetActive(false);
+            }
+
+            ScrollPartyRightButton.SetActive(true);
         }
 
         public void ScrollPartyListRight()
         {
+            if (_currentStartingIndex == CompanionStatuses.Count - MaxStatusesDisplayed)
+            {
+                ScrollPartyRightButton.SetActive(false);
+                ScrollPartyLeftButton.SetActive(true);
+                return;
+            }
 
+            _currentStartingIndex++;
+
+            var (minIndex, maxIndex) = (_currentStartingIndex, _currentStartingIndex + MaxStatusesDisplayed);
+
+            var index = 0;
+            foreach (var status in CompanionStatuses)
+            {
+                if (index >= minIndex && index < maxIndex)
+                {
+                    status.GetComponentInChildren<CompanionStatus>().Show();
+                }
+                else
+                {
+                    status.GetComponentInChildren<CompanionStatus>().Hide();
+                }
+
+                index++;
+            }
+
+            if (_currentStartingIndex == CompanionStatuses.Count - MaxStatusesDisplayed)
+            {
+                ScrollPartyRightButton.SetActive(false);
+            }
+
+            ScrollPartyLeftButton.SetActive(true);
         }
 
         private void SubscribeToEvents()

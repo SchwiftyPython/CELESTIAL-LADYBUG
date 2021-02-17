@@ -8,13 +8,17 @@ namespace Assets.Scripts.Travel
 {
     public class TravelManager : MonoBehaviour, ISubscriber
     {
+        private const int TotalDaysToDestination = 5;
+
+        private int _currentDayOfTravel;
+
         public Party Party { get; private set; }
 
         public TravelNode CurrentNode { get; private set; }
 
         public static TravelManager Instance;
 
-        private void Awake()
+        private void Start()
         {
             if (Instance == null)
             {
@@ -30,6 +34,8 @@ namespace Assets.Scripts.Travel
             {
                 EventMediator.Instance.SubscribeToEvent(GlobalHelper.CampingEncounterFinished, this);
             }
+
+            _currentDayOfTravel = 0;
 
             //todo testing
             //TESTING//////////////////////////////////////
@@ -237,6 +243,10 @@ namespace Assets.Scripts.Travel
             if (eventName.Equals(GlobalHelper.CampingEncounterFinished))
             {
                 Party.EatAndHeal();
+
+                _currentDayOfTravel++;
+
+                //todo game won when current day == total days of travel
             }
         }
     }

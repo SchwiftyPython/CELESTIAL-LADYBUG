@@ -35,7 +35,7 @@ namespace Assets.Scripts
 
         public static GameManager Instance;
 
-        private void Awake()
+        private void Start()
         {
             if (Instance == null)
             {

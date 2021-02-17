@@ -10,7 +10,7 @@ namespace Assets.Scripts.Encounters
     {
         private Dictionary<string, Func<Encounter>> _allEncounters;
 
-        private Dictionary<string, Func<Encounter>> _nonTriggeredEncounters = new Dictionary<string, Func<Encounter>>
+        private readonly Dictionary<string, Func<Encounter>> _nonTriggeredEncounters = new Dictionary<string, Func<Encounter>>
         {
             {"stay in school", () => new StayInSchool()},
             {"camp mosquito", () => new CampMosquito()},

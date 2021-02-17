@@ -17,7 +17,8 @@ namespace Assets.Scripts.Combat
         PlayerTurn,
         AiTurn,
         EndTurn,
-        EndCombat
+        EndCombat,
+        NotActive
     }
 
     public class CombatManager : MonoBehaviour, ISubscriber
@@ -46,7 +47,7 @@ namespace Assets.Scripts.Combat
 
         public static CombatManager Instance;
 
-        private void Awake()
+        private void Start()
         {
             if (Instance == null)
             {
@@ -58,12 +59,7 @@ namespace Assets.Scripts.Combat
             }
             DontDestroyOnLoad(gameObject);
 
-            _currentCombatState = CombatState.Loading;
-
-            if (SceneManager.GetActiveScene().name.Equals(GlobalHelper.CombatScene))
-            {
-                EventMediator.Instance.SubscribeToEvent(RefreshUi, this);
-            }
+            _currentCombatState = CombatState.NotActive;
         }
 
         private void Update()
@@ -110,9 +106,9 @@ namespace Assets.Scripts.Combat
                     }
 
                     EventMediator.Instance.SubscribeToEvent(GlobalHelper.EntityDead, this);
-                    //EventMediator.Instance.SubscribeToEvent(RefreshUi, this);
+                    EventMediator.Instance.SubscribeToEvent(GlobalHelper.ActiveEntityMoved, this);
                     EventMediator.Instance.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
-                    //EventMediator.Instance.Broadcast(RefreshUi, this, ActiveEntity);
+                    EventMediator.Instance.Broadcast(RefreshUi, this, ActiveEntity);
                     break;
                 case CombatState.PlayerTurn:
                     UpdateActiveEntityInfoPanel();
@@ -165,13 +161,25 @@ namespace Assets.Scripts.Combat
                     }
                     else
                     {
-                        SceneManager.LoadScene(GlobalHelper.TravelScene);
+                        if (!SceneManager.GetSceneByName(GlobalHelper.TravelScene).isLoaded)
+                        {
+                            SceneManager.LoadScene(GlobalHelper.TravelScene);
+                        }
                     }
 
+                    _currentCombatState = CombatState.NotActive;
+
+                    break;
+                case CombatState.NotActive:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        public void Load()
+        {
+            _currentCombatState = CombatState.Loading;
         }
 
         private GameObject GetPawnHighlighterInstance()
@@ -361,7 +369,7 @@ namespace Assets.Scripts.Combat
                     _currentCombatState = CombatState.EndCombat;
                 }
             }
-            else if (eventName.Equals(RefreshUi))
+            else if (eventName.Equals(GlobalHelper.ActiveEntityMoved))
             {
                 HighlightActiveEntitySprite();
             }

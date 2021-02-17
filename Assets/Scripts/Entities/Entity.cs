@@ -155,6 +155,8 @@ namespace Assets.Scripts.Entities
             Position = tile.Position;
 
             CombatSpriteInstance.transform.position = new Vector3(Position.X, Position.Y);
+
+            EventMediator.Instance.Broadcast(GlobalHelper.ActiveEntityMoved, this);
         }
 
         public void GenerateStartingEquipment()

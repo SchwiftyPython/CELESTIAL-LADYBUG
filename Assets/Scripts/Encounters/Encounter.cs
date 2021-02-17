@@ -79,6 +79,8 @@ namespace Assets.Scripts.Encounters
                     SceneManager.LoadScene(GlobalHelper.CombatScene);
 
                     CombatManager.Instance.Enemies = ((FightCombatOption) selectedOption).Enemies;
+
+                    CombatManager.Instance.Load();
                 }
                
             }
