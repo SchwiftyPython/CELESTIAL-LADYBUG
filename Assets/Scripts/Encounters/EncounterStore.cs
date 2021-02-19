@@ -6,17 +6,25 @@ namespace Assets.Scripts.Encounters
 {
     //todo refactor - do we need separate dictionaries for each kind of encounter? Prob triggered (mental break and continuity) and non-triggered at minimum
     //todo we can see how maintainable, debuggable, and performant just performing queries is though
+    //todo since we're starting to assign encounters to their own decks, would make sense to see if we can load these from a file
     public class EncounterStore : MonoBehaviour
     {
         private Dictionary<string, Func<Encounter>> _allEncounters;
 
-        private readonly Dictionary<string, Func<Encounter>> _nonTriggeredEncounters = new Dictionary<string, Func<Encounter>>
+        private readonly Dictionary<string, Func<Encounter>> _normalEncounters = new Dictionary<string, Func<Encounter>>
         {
             {"stay in school", () => new StayInSchool()},
-            {"camp mosquito", () => new CampMosquito()},
             {"fight or flight", () => new FightOrFlight()},
+            {"bandit attack", () => new BanditAttack()},
+            {"genie in a bottle", () => new GenieInABottle()},
+            {"sweetroll robbery", () => new SweetrollRobbery()}
+        };
+
+        private readonly Dictionary<string, Func<Encounter>> _campingEncounters = new Dictionary<string, Func<Encounter>>
+        {
+            {"camp mosquito", () => new CampMosquito()},
             {"comfy inn", () => new ComfyInn()},
-            {"bandit attack", () => new BanditAttack()}
+            {"holy inferno", () => new HolyInferno()}
         };
 
         private Dictionary<string, Func<Encounter>> _triggeredEncounters = new Dictionary<string, Func<Encounter>>
@@ -40,7 +48,12 @@ namespace Assets.Scripts.Encounters
 
             _allEncounters = new Dictionary<string, Func<Encounter>>();
 
-            foreach (var encounter in _nonTriggeredEncounters)
+            foreach (var encounter in _normalEncounters)
+            {
+                _allEncounters.Add(encounter.Key, encounter.Value);
+            }
+
+            foreach (var encounter in _campingEncounters)
             {
                 _allEncounters.Add(encounter.Key, encounter.Value);
             }

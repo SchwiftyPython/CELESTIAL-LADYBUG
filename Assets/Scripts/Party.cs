@@ -218,6 +218,25 @@ namespace Assets.Scripts
             return _companions.ElementAt(index).Value;
         }
 
+        public Entity GetCompanionWithHighestIntellect()
+        {
+            if (_companions == null || _companions.Count < 1)
+            {
+                return Derpus;
+            }
+
+            Entity smartyPants = null;
+            foreach (var companion in _companions.Values)
+            {
+                if (smartyPants == null || companion.Attributes.Intellect > smartyPants.Attributes.Intellect)
+                {
+                    smartyPants = companion;
+                }
+            }
+
+            return smartyPants;
+        }
+
         private void GenerateStartingParty()
         {
             Derpus = new Entity(true, true);

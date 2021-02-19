@@ -1,0 +1,100 @@
+﻿using System.Collections.Generic;
+using Assets.Scripts.Travel;
+using UnityEngine;
+
+namespace Assets.Scripts.Encounters
+{
+    public class HolyInferno : Encounter
+    {
+        public HolyInferno()
+        {
+            Rarity = Rarity.Uncommon;
+            EncounterType = EncounterType.Camping;
+            Title = "Holy Inferno";
+            Description = "The party finds an old, abandoned church on the trail. A dry place to sleep. Too dry. They awaken in the middle of the night and the building is on fire!";
+        }
+
+        public override void Run()
+        {
+            Options = new Dictionary<string, Option>();
+
+            var optionTitle = "Look for a safe way out";
+
+            const int escapeSuccess = 26;
+
+            var smartyPants = TravelManager.Instance.Party.GetCompanionWithHighestIntellect();
+
+            //todo diceroller here
+            var intCheck = smartyPants.Attributes.Intellect + Random.Range(1, 21);
+
+            Debug.Log("Holy Inferno safe way out check: ");
+            Debug.Log($"Value Needed: {escapeSuccess}");
+            Debug.Log(
+                $"Rolled: {intCheck - smartyPants.Attributes.Intellect} + Intellect: {smartyPants.Attributes.Intellect} = Final Value {intCheck}");
+            
+            Penalty penalty = null;
+
+            string optionResultText;
+
+            if (intCheck > escapeSuccess)
+            {
+                optionResultText = $"{smartyPants.Name} thinks fast and finds a way out. No one is injured!";
+            }
+            else if (intCheck == escapeSuccess)
+            {
+                optionResultText = $"{smartyPants.Name} tries to find a safe exit, but wastes precious time making a decision. Everyone escapes, but they look a little crispy...";
+
+                penalty = new Penalty();
+
+                foreach (var companion in TravelManager.Instance.Party.GetCompanions())
+                {
+                    penalty.AddEntityLoss(companion, EntityStatTypes.CurrentHealth, 10);
+                }
+            }
+            else
+            {
+                optionResultText = $"{smartyPants.Name} tries to find a safe exit, but panics instead! Everyone runs screaming from the building!";
+
+                penalty = new Penalty();
+                penalty.AddEntityLoss(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentMorale, 10);
+
+                foreach (var companion in TravelManager.Instance.Party.GetCompanions())
+                {
+                    penalty.AddEntityLoss(companion, EntityStatTypes.CurrentMorale, 10);
+                }
+            }
+
+            var optionOne = new Option(optionTitle, optionResultText, null, penalty);
+
+            Options.Add(optionTitle, optionOne);
+
+            optionTitle = "RUN!";
+
+            var chosenCompanion = TravelManager.Instance.Party.GetRandomCompanion();
+
+            optionResultText = $"Everyone flees to safety in a panic. After ensuring everyone is unharmed, {chosenCompanion.Name} notices that their bag was left behind.";
+
+            penalty = new Penalty();
+
+            var foodLost = TravelManager.Instance.Party.Food / 4;
+
+            penalty.AddPartyLoss(PartySupplyTypes.Food, foodLost);
+
+            var goldLost = TravelManager.Instance.Party.Gold / 4;
+
+            penalty.AddPartyLoss(PartySupplyTypes.Gold, goldLost);
+
+            var potionsLost = TravelManager.Instance.Party.HealthPotions / 4;
+
+            penalty.AddPartyLoss(PartySupplyTypes.HealthPotions, potionsLost);
+
+            var optionTwo = new Option(optionTitle, optionResultText, null, penalty);
+
+            Options.Add(optionTitle, optionTwo);
+
+            SubscribeToOptionSelectedEvent();
+
+            EventMediator.Instance.Broadcast(GlobalHelper.FourOptionEncounter, this);
+        }
+    }
+}
