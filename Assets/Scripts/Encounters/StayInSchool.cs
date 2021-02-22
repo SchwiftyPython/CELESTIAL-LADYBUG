@@ -25,7 +25,7 @@ namespace Assets.Scripts.Encounters
             var penalty = new Penalty();
             penalty.AddEntityLoss(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentMorale, 10);
 
-            var optionOne = new Option(optionTitle, optionResultText, reward, penalty);
+            var optionOne = new Option(optionTitle, optionResultText, reward, penalty, EncounterType);
 
             Options.Add(optionTitle, optionOne);
 
@@ -33,7 +33,7 @@ namespace Assets.Scripts.Encounters
             optionResultText =
                 "You decide to pass it by. You swear you catch Derpus staring at it as it fades out of sight.";
 
-            var optionTwo = new Option(optionTitle, optionResultText);
+            var optionTwo = new Option(optionTitle, optionResultText, EncounterType);
 
             Options.Add(optionTitle, optionTwo);
         }

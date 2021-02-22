@@ -60,7 +60,7 @@ namespace Assets.Scripts.Encounters
                 optionOnePenalty.AddEntityLoss(chosenCompanion, EntityStatTypes.CurrentHealth, 15);
             }
 
-            var optionOne = new Option(optionTitle, optionResultText, optionOneReward, optionOnePenalty);
+            var optionOne = new Option(optionTitle, optionResultText, optionOneReward, optionOnePenalty, EncounterType);
 
             Options.Add(optionTitle, optionOne);
 
@@ -95,7 +95,7 @@ namespace Assets.Scripts.Encounters
                 optionTwoPenalty.AddEntityLoss(chosenCompanion, EntityStatTypes.CurrentHealth, 30);
             }
 
-            var optionTwo = new Option(optionTitle, optionResultText, optionTwoReward, optionTwoPenalty);
+            var optionTwo = new Option(optionTitle, optionResultText, optionTwoReward, optionTwoPenalty, EncounterType);
 
             Options.Add(optionTitle, optionTwo);
 

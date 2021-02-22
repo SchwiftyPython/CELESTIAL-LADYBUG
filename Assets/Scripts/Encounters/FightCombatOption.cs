@@ -7,7 +7,7 @@ namespace Assets.Scripts.Encounters
     {
         public List<Entity> Enemies { get; private set; }
 
-        public FightCombatOption(string optionTitle, string optionResultText, List<Entity> enemies) : base(optionTitle, optionResultText)
+        public FightCombatOption(string optionTitle, string optionResultText, List<Entity> enemies) : base(optionTitle, optionResultText, EncounterType.Combat)
         {
             Enemies = enemies;
         }

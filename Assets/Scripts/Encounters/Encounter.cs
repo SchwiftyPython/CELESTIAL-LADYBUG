@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Travel;
 using UnityEngine;
@@ -60,6 +61,8 @@ namespace Assets.Scripts.Encounters
                 fullResultDescription.AddRange(penaltiesText);
             }
 
+            EncounterType = selectedOption.TargetEncounterType;
+
             if (EncounterType == EncounterType.Combat)
             {
                 if (selectedOption is RetreatCombatOption retreatCombatOption)
@@ -84,9 +87,13 @@ namespace Assets.Scripts.Encounters
                 }
                
             }
-            else
+            else if (fullResultDescription.Count > 1 || !fullResultDescription.First().Equals("\n"))
             {
                 EventMediator.Instance.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
+            }
+            else
+            {
+                EventMediator.Instance.Broadcast(GlobalHelper.EncounterFinished, this);
             }
         }
 

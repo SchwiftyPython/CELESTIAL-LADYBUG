@@ -18,60 +18,6 @@ namespace Assets.Scripts.Encounters
             EncounterType = EncounterType.Camping;
             Title = "Comfy Inn";
             Description = $"A little inn pops up on the road as the sun is setting. A little old lady runs the place and says it'll cost {CostPerPerson} gold each to stay the night.";
-
-            /*Options = new Dictionary<string, Option>();
-
-            var totalCost = CostPerPerson * TravelManager.Instance.Party.GetCompanions().Count + 1;
-
-            string optionTitle;
-            string optionResultText;
-            if (totalCost <= TravelManager.Instance.Party.Gold)
-            {
-                optionTitle = $"Pay the {totalCost} gold";
-                optionResultText = $"The group pays {totalCost} gold to stay the night. It's pretty comfy!";
-
-                var optionReward = new Reward();
-                optionReward.AddEntityGain(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentEnergy, EnergyGain);
-
-                foreach (var companion in TravelManager.Instance.Party.GetCompanions())
-                {
-                    optionReward.AddEntityGain(companion, EntityStatTypes.CurrentEnergy, EnergyGain);
-                }
-
-                var optionOnePenalty = new Penalty();
-                optionOnePenalty.AddPartyLoss(PartySupplyTypes.Gold, totalCost);
-
-                var rollForBreakfast = Random.Range(0, 101); //todo diceroller
-
-                if (rollForBreakfast <= BreakfastChance)
-                {
-                    optionResultText = "\nThe innkeeper serves breakfast as thanks for being great guests!";
-
-                    optionReward.AddEntityGain(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentMorale, EnergyGain);
-
-                    foreach (var companion in TravelManager.Instance.Party.GetCompanions())
-                    {
-                        optionReward.AddEntityGain(companion, EntityStatTypes.CurrentMorale, EnergyGain);
-                    }
-
-                    optionReward.AddPartyGain(PartySupplyTypes.Food, TravelManager.Instance.Party.GetCompanions().Count * Party.FoodConsumedPerCompanion);
-                }
-
-                Options.Add(optionTitle, new Option(optionTitle, optionResultText, optionReward, optionOnePenalty));
-            }
-
-            optionTitle = "No thanks";
-            optionResultText = "You keep on going and travel through the night.";
-
-            var optionTwoPenalty = new Penalty();
-            optionTwoPenalty.AddEntityLoss(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentEnergy, 10);
-
-            foreach (var companion in TravelManager.Instance.Party.GetCompanions())
-            {
-                optionTwoPenalty.AddEntityLoss(companion, EntityStatTypes.CurrentEnergy, 10);
-            }
-
-            Options.Add(optionTitle, new Option(optionTitle, optionResultText, null, optionTwoPenalty));*/
         }
 
         public override void Run()
@@ -114,7 +60,7 @@ namespace Assets.Scripts.Encounters
                     optionReward.AddPartyGain(PartySupplyTypes.Food, TravelManager.Instance.Party.GetCompanions().Count * Party.FoodConsumedPerCompanion);
                 }
 
-                Options.Add(optionTitle, new Option(optionTitle, optionResultText, optionReward, optionOnePenalty));
+                Options.Add(optionTitle, new Option(optionTitle, optionResultText, optionReward, optionOnePenalty, EncounterType));
             }
 
             optionTitle = "No thanks";
@@ -128,7 +74,7 @@ namespace Assets.Scripts.Encounters
                 optionTwoPenalty.AddEntityLoss(companion, EntityStatTypes.CurrentEnergy, 10);
             }
 
-            Options.Add(optionTitle, new Option(optionTitle, optionResultText, null, optionTwoPenalty));
+            Options.Add(optionTitle, new Option(optionTitle, optionResultText, null, optionTwoPenalty, EncounterType));
 
             SubscribeToOptionSelectedEvent();
 

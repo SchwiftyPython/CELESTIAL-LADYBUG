@@ -13,18 +13,19 @@ namespace Assets.Scripts.Encounters
 
         private readonly Dictionary<string, Func<Encounter>> _normalEncounters = new Dictionary<string, Func<Encounter>>
         {
-            {"stay in school", () => new StayInSchool()},
-            {"fight or flight", () => new FightOrFlight()},
-            {"bandit attack", () => new BanditAttack()},
-            {"genie in a bottle", () => new GenieInABottle()},
-            {"sweetroll robbery", () => new SweetrollRobbery()}
+            // {"stay in school", () => new StayInSchool()},
+            // {"fight or flight", () => new FightOrFlight()},
+            // {"bandit attack", () => new BanditAttack()},
+            // {"genie in a bottle", () => new GenieInABottle()},
+            // {"sweetroll robbery", () => new SweetrollRobbery()},
+            {"disabled wagon", () => new DisabledWagon()}
         };
 
         private readonly Dictionary<string, Func<Encounter>> _campingEncounters = new Dictionary<string, Func<Encounter>>
         {
-            {"camp mosquito", () => new CampMosquito()},
-            {"comfy inn", () => new ComfyInn()},
-            {"holy inferno", () => new HolyInferno()}
+            // {"camp mosquito", () => new CampMosquito()},
+            // {"comfy inn", () => new ComfyInn()},
+            // {"holy inferno", () => new HolyInferno()}
         };
 
         private Dictionary<string, Func<Encounter>> _triggeredEncounters = new Dictionary<string, Func<Encounter>>

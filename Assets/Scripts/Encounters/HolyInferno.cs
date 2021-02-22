@@ -64,7 +64,7 @@ namespace Assets.Scripts.Encounters
                 }
             }
 
-            var optionOne = new Option(optionTitle, optionResultText, null, penalty);
+            var optionOne = new Option(optionTitle, optionResultText, null, penalty, EncounterType);
 
             Options.Add(optionTitle, optionOne);
 
@@ -88,7 +88,7 @@ namespace Assets.Scripts.Encounters
 
             penalty.AddPartyLoss(PartySupplyTypes.HealthPotions, potionsLost);
 
-            var optionTwo = new Option(optionTitle, optionResultText, null, penalty);
+            var optionTwo = new Option(optionTitle, optionResultText, null, penalty, EncounterType);
 
             Options.Add(optionTitle, optionTwo);
 

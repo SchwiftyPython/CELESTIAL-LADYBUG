@@ -32,7 +32,7 @@ namespace Assets.Scripts.Encounters
 
             reward.AddPartyGain(PartySupplyTypes.Food, foodGained);
 
-            var optionOne = new Option(optionTitle, optionResultText, reward, null);
+            var optionOne = new Option(optionTitle, optionResultText, reward, null, EncounterType);
 
             Options.Add(optionTitle, optionOne);
 
@@ -44,7 +44,7 @@ namespace Assets.Scripts.Encounters
             reward.AddEntityGain(chosenCompanion, EntityStatTypes.CurrentHealth, chosenCompanion.Stats.MaxHealth);
             reward.AddEntityGain(chosenCompanion, EntityStatTypes.CurrentEnergy, chosenCompanion.Stats.MaxEnergy);
 
-            var optionTwo = new Option(optionTitle, optionResultText, reward, null);
+            var optionTwo = new Option(optionTitle, optionResultText, reward, null, EncounterType);
 
             Options.Add(optionTitle, optionTwo);
 
@@ -57,7 +57,7 @@ namespace Assets.Scripts.Encounters
 
             reward.AddPartyGain(PartySupplyTypes.Gold, goldAmount);
 
-            var optionThree = new Option(optionTitle, optionResultText, reward, null);
+            var optionThree = new Option(optionTitle, optionResultText, reward, null, EncounterType);
 
             Options.Add(optionTitle, optionThree);
 
