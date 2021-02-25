@@ -24,9 +24,7 @@ namespace Assets.Scripts.Encounters
                 Penalty.AddEntityLoss(companion, EntityStatTypes.CurrentEnergy, 10);
             }
 
-            var fullResultDescription = new List<string>();
-
-            fullResultDescription.Add(Description + "\n");
+            var fullResultDescription = new List<string> {Description + "\n"};
 
             var penaltiesText = TravelManager.Instance.ApplyEncounterPenalty(Penalty);
 

@@ -86,7 +86,7 @@ namespace Assets.Scripts.Entities
             }
 
             Attributes = new Attributes();
-            Stats = new Stats(Attributes);
+            Stats = new Stats(this, Attributes);
 
             _level = 1;
             _xp = 0;
@@ -232,7 +232,7 @@ namespace Assets.Scripts.Entities
 
                     EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
-                    EventMediator.Instance.Broadcast(GlobalHelper.EntityDead, this, target);
+                    //EventMediator.Instance.Broadcast(GlobalHelper.EntityDead, this, target);
                 }
             }
         }

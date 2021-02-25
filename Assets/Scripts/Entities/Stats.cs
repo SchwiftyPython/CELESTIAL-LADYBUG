@@ -10,7 +10,9 @@ namespace Assets.Scripts.Entities
         private const int SkillCap = 100;
         private const int SkillMin = 11;
 
-        private const int CurrentStatsMin = 0; 
+        private const int CurrentStatsMin = 0;
+
+        private Entity _parent;
 
         private int _maxHealth;
         public int MaxHealth
@@ -37,6 +39,7 @@ namespace Assets.Scripts.Entities
                 if (value < CurrentStatsMin)
                 {
                     _currentHealth = CurrentStatsMin;
+                    EventMediator.Instance.Broadcast(GlobalHelper.EntityDead, _parent);
                 }
                 else if(value > MaxHealth)
                 {
@@ -113,6 +116,7 @@ namespace Assets.Scripts.Entities
                 if (value < CurrentStatsMin)
                 {
                     _currentMorale = CurrentStatsMin;
+                    EventMediator.Instance.Broadcast(GlobalHelper.MentalBreak, _parent);
                 }
                 else if (value > MaxMorale)
                 {
@@ -210,14 +214,15 @@ namespace Assets.Scripts.Entities
         public int Armor { get; set; } //todo maybe only for some types or can we "equip" natural armor in those cases?
         public int Critical { get; set; } //todo have this ignore damage reduction when implemented
         
-        public Stats(Attributes attributes)
+        public Stats(Entity parent, Attributes attributes)
         {
+            _parent = parent;
             GenerateStats(attributes);
         }
 
         private void GenerateStats(Attributes attributes)
         {
-            //todo these are arbitrary numbers - need to tweak
+            //todo these are arbitrary numbers - might need to tweak
 
             MaxHealth = (int) (attributes.Might * 3.1f + RollD20());
             CurrentHealth = MaxHealth;

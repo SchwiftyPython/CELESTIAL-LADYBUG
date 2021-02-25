@@ -39,6 +39,7 @@ namespace Assets.Scripts
         public const string EntityTargeted = "EntityTargeted";
         public const string CombatFinished = "CombatFinished";
         public const string EntityDead = "EntityDead";
+        public const string MentalBreak = "MentalBreak";
         public const string SendMessageToConsole = "SendMessageToConsole";
         public const string GameOver = "GameOver";
         public const string ButtonClick = "ButtonClick";

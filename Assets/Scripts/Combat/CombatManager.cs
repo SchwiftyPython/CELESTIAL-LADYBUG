@@ -357,7 +357,7 @@ namespace Assets.Scripts.Combat
             }
             else if (eventName.Equals(GlobalHelper.EntityDead))
             {
-                if (!(parameter is Entity deadEntity))
+                if (!(broadcaster is Entity deadEntity))
                 {
                     return;
                 }

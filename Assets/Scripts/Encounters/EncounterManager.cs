@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Decks;
+using Assets.Scripts.Entities;
 using UnityEngine;
 
 namespace Assets.Scripts.Encounters
@@ -6,6 +7,7 @@ namespace Assets.Scripts.Encounters
     public class EncounterManager : MonoBehaviour, ISubscriber
     {
         private const string EncounterFinished = GlobalHelper.EncounterFinished;
+        private const string MentalBreak = GlobalHelper.MentalBreak;
 
         private bool _timerPaused;
 
@@ -30,6 +32,10 @@ namespace Assets.Scripts.Encounters
             DontDestroyOnLoad(gameObject); //todo if continuity flops we can probably not worry about having a new deck every time
 
             _deck = new EncounterDeck();
+
+            //todo need to make different encounter decks
+
+            EventMediator.Instance.SubscribeToEvent(MentalBreak, this);
 
             ResetTimer();
         }
@@ -83,6 +89,16 @@ namespace Assets.Scripts.Encounters
                 ResetTimer();
 
                 EventMediator.Instance.UnsubscribeFromEvent(EncounterFinished, this);
+            }
+            else if (eventName.Equals(MentalBreak))
+            {
+                if(!(broadcaster is Entity companion))
+                {
+                    return;
+                }
+
+                //todo draw from the mental break deck
+                EncounterStore.Instance.GetRandomMentalBreakEncounter(companion).Run();
             }
 
             //todo events for pause timer, resume timer, reset timer, draw trigger encounter

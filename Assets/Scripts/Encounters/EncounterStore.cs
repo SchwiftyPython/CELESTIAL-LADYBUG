@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Assets.Scripts.Entities;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Encounters
 {
@@ -13,24 +16,26 @@ namespace Assets.Scripts.Encounters
 
         private readonly Dictionary<string, Func<Encounter>> _normalEncounters = new Dictionary<string, Func<Encounter>>
         {
-            // {"stay in school", () => new StayInSchool()},
-            // {"fight or flight", () => new FightOrFlight()},
-            // {"bandit attack", () => new BanditAttack()},
-            // {"genie in a bottle", () => new GenieInABottle()},
-            // {"sweetroll robbery", () => new SweetrollRobbery()},
-            {"disabled wagon", () => new DisabledWagon()}
+            {"stay in school", () => new StayInSchool()},
+            {"fight or flight", () => new FightOrFlight()},
+            {"bandit attack", () => new BanditAttack()},
+            {"genie in a bottle", () => new GenieInABottle()},
+            {"sweetroll robbery", () => new SweetrollRobbery()},
+            {"disabled wagon", () => new DisabledWagon()},
+            {"nasty storm", () => new NastyStorm()},
         };
 
         private readonly Dictionary<string, Func<Encounter>> _campingEncounters = new Dictionary<string, Func<Encounter>>
         {
-            // {"camp mosquito", () => new CampMosquito()},
-            // {"comfy inn", () => new ComfyInn()},
-            // {"holy inferno", () => new HolyInferno()}
+            {"camp mosquito", () => new CampMosquito()},
+            {"comfy inn", () => new ComfyInn()},
+            {"holy inferno", () => new HolyInferno()},
+            {"star blanket", () => new StarBlanket()},
         };
 
-        private Dictionary<string, Func<Encounter>> _triggeredEncounters = new Dictionary<string, Func<Encounter>>
+        private readonly Dictionary<string, Func<Entity, Encounter>> _mentalBreakEncounters = new Dictionary<string, Func<Entity, Encounter>>
         {
-            
+            {"dazed mugging", dazedCompanion => new DazedMugging(dazedCompanion)}
         };
 
         public static EncounterStore Instance;
@@ -59,10 +64,10 @@ namespace Assets.Scripts.Encounters
                 _allEncounters.Add(encounter.Key, encounter.Value);
             }
 
-            foreach (var encounter in _triggeredEncounters)
-            {
-                _allEncounters.Add(encounter.Key, encounter.Value);
-            }
+            // foreach (var encounter in _mentalBreakEncounters)
+            // {
+            //     _allEncounters.Add(encounter.Key, encounter.Value);
+            // }
         }
 
         public List<Encounter> GetAllNonTriggeredEncounters()
@@ -75,6 +80,15 @@ namespace Assets.Scripts.Encounters
             }
 
             return encounters;
+        }
+
+        public Encounter GetRandomMentalBreakEncounter(Entity companion)
+        {
+            var index = Random.Range(0, _mentalBreakEncounters.Count);
+
+            var key = _mentalBreakEncounters.ElementAt(index).Key;
+
+            return _mentalBreakEncounters[key].Invoke(companion);
         }
     }
 }

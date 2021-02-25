@@ -35,6 +35,8 @@ namespace Assets.Scripts.Travel
                 EventMediator.Instance.SubscribeToEvent(GlobalHelper.CampingEncounterFinished, this);
             }
 
+            EventMediator.Instance.SubscribeToEvent(GlobalHelper.EntityDead, this);
+
             _currentDayOfTravel = 0;
 
             //todo testing
@@ -247,6 +249,17 @@ namespace Assets.Scripts.Travel
                 _currentDayOfTravel++;
 
                 //todo game won when current day == total days of travel
+
+                //todo need an indication if camping event counts towards days traveled
+            }
+            else if (eventName.Equals(GlobalHelper.EntityDead))
+            {
+                if (!(broadcaster is Entity deadGuy) || !deadGuy.IsPlayer())
+                {
+                    return;
+                }
+
+                Party.RemoveCompanion(deadGuy);
             }
         }
     }
