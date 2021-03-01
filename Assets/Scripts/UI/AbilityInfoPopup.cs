@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Abilities;
 using Assets.Scripts.Combat;
+using Assets.Scripts.Entities;
 using TMPro;
 using UnityEngine;
 
@@ -29,7 +30,7 @@ namespace Assets.Scripts.UI
             Hide();
         }
 
-        private void Show(Ability ability)
+        private void Show(Ability ability, int baseDamage)
         {
             _name.text = GlobalHelper.Capitalize(ability.Name);
             _abilityDescription.text = "Description not implemented yet"; //todo
@@ -37,7 +38,7 @@ namespace Assets.Scripts.UI
 
             var (damageMin, damageMax) = CombatManager.Instance.ActiveEntity.EquippedWeapon.DamageRange;
 
-            _damageDescription.text = $"Deals {damageMin} - {damageMax} damage";
+            _damageDescription.text = $"Deals {damageMin + baseDamage} - {damageMax + baseDamage} damage";
 
             var position = Input.mousePosition;
             gameObject.transform.position = new Vector2(position.x + 180f, position.y + 160f);
@@ -71,12 +72,17 @@ namespace Assets.Scripts.UI
                     return;
                 }
 
+                if (!(broadcaster is Entity abilityOwner))
+                {
+                    return;
+                }
+
                 if (!(parameter is Ability ability))
                 {
                     return;
                 }
 
-                Show(ability);
+                Show(ability, abilityOwner.Stats.Attack);
             }
             else if (eventName.Equals(HidePopupEvent))
             {

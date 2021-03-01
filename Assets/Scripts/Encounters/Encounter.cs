@@ -26,6 +26,8 @@ namespace Assets.Scripts.Encounters
 
         public Penalty Penalty;
 
+        public bool CountsAsDayTraveled;
+
         public abstract void Run();
 
         public void OptionSelected(Option selectedOption)

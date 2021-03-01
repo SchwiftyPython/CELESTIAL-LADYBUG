@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Encounters.Camping;
+using Assets.Scripts.Encounters.Combat;
+using Assets.Scripts.Encounters.MentalBreak;
+using Assets.Scripts.Encounters.Normal;
 using Assets.Scripts.Entities;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -16,21 +20,25 @@ namespace Assets.Scripts.Encounters
 
         private readonly Dictionary<string, Func<Encounter>> _normalEncounters = new Dictionary<string, Func<Encounter>>
         {
-            {"stay in school", () => new StayInSchool()},
-            {"fight or flight", () => new FightOrFlight()},
-            {"bandit attack", () => new BanditAttack()},
-            {"genie in a bottle", () => new GenieInABottle()},
-            {"sweetroll robbery", () => new SweetrollRobbery()},
-            {"disabled wagon", () => new DisabledWagon()},
-            {"nasty storm", () => new NastyStorm()},
+            // {"stay in school", () => new StayInSchool()},
+            // {"fight or flight", () => new FightOrFlight()},
+            // {"bandit attack", () => new BanditAttack()},
+            // {"genie in a bottle", () => new GenieInABottle()},
+            // {"sweetroll robbery", () => new SweetrollRobbery()},
+            // {"disabled wagon", () => new DisabledWagon()},
+            // {"nasty storm", () => new NastyStorm()},
         };
 
         private readonly Dictionary<string, Func<Encounter>> _campingEncounters = new Dictionary<string, Func<Encounter>>
         {
-            {"camp mosquito", () => new CampMosquito()},
-            {"comfy inn", () => new ComfyInn()},
-            {"holy inferno", () => new HolyInferno()},
-            {"star blanket", () => new StarBlanket()},
+            // {"camp mosquito", () => new CampMosquito()},
+            // {"comfy inn", () => new ComfyInn()},
+            // {"holy inferno", () => new HolyInferno()},
+            // {"star blanket", () => new StarBlanket()},
+            // {"conk out", () => new ConkOut()},
+            // {"peaceful village", () => new PeacefulVillage()},
+            // {"rock skipping contest", () => new RockSkippingContest()},
+            {"cauldron roulette", () => new CauldronRoulette()}
         };
 
         private readonly Dictionary<string, Func<Entity, Encounter>> _mentalBreakEncounters = new Dictionary<string, Func<Entity, Encounter>>
@@ -63,11 +71,6 @@ namespace Assets.Scripts.Encounters
             {
                 _allEncounters.Add(encounter.Key, encounter.Value);
             }
-
-            // foreach (var encounter in _mentalBreakEncounters)
-            // {
-            //     _allEncounters.Add(encounter.Key, encounter.Value);
-            // }
         }
 
         public List<Encounter> GetAllNonTriggeredEncounters()

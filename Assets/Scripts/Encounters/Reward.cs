@@ -5,49 +5,46 @@ namespace Assets.Scripts.Encounters
 {
     public class Reward 
     {
-        public Dictionary<Entity, List<KeyValuePair<EntityStatTypes, int>>> EntityGains;
+        public Dictionary<Entity, List<KeyValuePair<EntityStatTypes, int>>> EntityStatGains;
+        public Dictionary<Entity, List<KeyValuePair<EntityAttributeTypes, int>>> EntityAttributeGains;
         public Dictionary<PartySupplyTypes, int> PartyGains;
         public List<Effect> Effects;
 
-        /*public Reward(Dictionary<Entity, KeyValuePair<object, int>> entityGains, Dictionary<object, int> partyGains, List<Effect> effects)
-        {
-            EntityGains = entityGains;
-            PartyGains = partyGains;
-            Effects = effects;
-        }
-
-        public Reward(Dictionary<object, int> partyGains)
-        {
-            PartyGains = partyGains;
-        }
-
-        public Reward(Dictionary<Entity, KeyValuePair<object, int>> entityGains)
-        {
-            EntityGains = entityGains;
-        }
-
-        public Reward(Dictionary<Entity, KeyValuePair<object, int>> entityGains, Dictionary<object, int> partyGains)
-        {
-            EntityGains = entityGains;
-            PartyGains = partyGains;
-        }*/
-
         public void AddEntityGain(Entity targetEntity, EntityStatTypes statType, int amountGained)
         {
-            if (EntityGains == null)
+            if (EntityStatGains == null)
             {
-                EntityGains = new Dictionary<Entity, List<KeyValuePair<EntityStatTypes, int>>>();
+                EntityStatGains = new Dictionary<Entity, List<KeyValuePair<EntityStatTypes, int>>>();
             }
 
             var gain = new KeyValuePair<EntityStatTypes, int>(statType, amountGained);
 
-            if (!EntityGains.ContainsKey(targetEntity))
+            if (!EntityStatGains.ContainsKey(targetEntity))
             {
-                EntityGains.Add(targetEntity, new List<KeyValuePair<EntityStatTypes, int>> { gain });
+                EntityStatGains.Add(targetEntity, new List<KeyValuePair<EntityStatTypes, int>> { gain });
             }
             else
             {
-                EntityGains[targetEntity].Add(gain);
+                EntityStatGains[targetEntity].Add(gain);
+            }
+        }
+
+        public void AddEntityGain(Entity targetEntity, EntityAttributeTypes attributeType, int amountGained)
+        {
+            if (EntityAttributeGains == null)
+            {
+                EntityAttributeGains = new Dictionary<Entity, List<KeyValuePair<EntityAttributeTypes, int>>>();
+            }
+
+            var gain = new KeyValuePair<EntityAttributeTypes, int>(attributeType, amountGained);
+
+            if (!EntityAttributeGains.ContainsKey(targetEntity))
+            {
+                EntityAttributeGains.Add(targetEntity, new List<KeyValuePair<EntityAttributeTypes, int>> { gain });
+            }
+            else
+            {
+                EntityAttributeGains[targetEntity].Add(gain);
             }
         }
 

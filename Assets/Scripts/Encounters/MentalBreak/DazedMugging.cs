@@ -2,7 +2,7 @@
 using Assets.Scripts.Entities;
 using Assets.Scripts.Travel;
 
-namespace Assets.Scripts.Encounters
+namespace Assets.Scripts.Encounters.MentalBreak
 {
     public class DazedMugging : Encounter
     {

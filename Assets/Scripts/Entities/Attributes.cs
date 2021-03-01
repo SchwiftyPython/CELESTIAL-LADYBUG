@@ -7,7 +7,8 @@ namespace Assets.Scripts.Entities
         private const int AttributeMin = 1;
         private const int AttributeMax = 10;
 
-        public int Might { get; set; }
+        //todo need to update Stats when these values change
+        public int Might { get; set; } 
         public int Speed { get; set; }
         public int Intellect { get; set; }
 

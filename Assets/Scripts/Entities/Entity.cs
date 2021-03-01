@@ -94,7 +94,7 @@ namespace Assets.Scripts.Entities
             Abilities = new List<Ability>();
 
             //todo for testing need to remove
-            var testSlashAbility = new Ability("slash", 3, 1);
+            var testSlashAbility = new Ability("slash", 3, 1, this);
 
             Abilities.Add(testSlashAbility);
         }
@@ -210,7 +210,7 @@ namespace Assets.Scripts.Entities
             {
                 var (minDamage, maxDamage) = EquippedWeapon.DamageRange;
 
-                var damage = Random.Range(minDamage, maxDamage + 1);
+                var damage = Random.Range(minDamage, maxDamage + 1) + Stats.Attack;
 
                 var targetArmor = target.GetArmorToughness();
 
@@ -231,8 +231,6 @@ namespace Assets.Scripts.Entities
                     message = $"{Name} killed {target.Name}!";
 
                     EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
-
-                    //EventMediator.Instance.Broadcast(GlobalHelper.EntityDead, this, target);
                 }
             }
         }
@@ -343,6 +341,16 @@ namespace Assets.Scripts.Entities
         public void SubtractActionPoints(int amount)
         {
             Stats.CurrentActionPoints -= amount;
+        }
+
+        public void AddMight(int amount)
+        {
+            Attributes.Might += amount;
+        }
+
+        public void SubtractMight(int amount)
+        {
+            Attributes.Might -= amount;
         }
 
         public void UseHealthPotion()

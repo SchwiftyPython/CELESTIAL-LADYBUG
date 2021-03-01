@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Assets.Scripts.Encounters
+namespace Assets.Scripts.Encounters.Camping
 {
     public class StarBlanket : Encounter
     {

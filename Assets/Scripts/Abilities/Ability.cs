@@ -5,17 +5,17 @@ namespace Assets.Scripts.Abilities
 {
     public class Ability 
     {
-        //todo might need ability owner property
-
         public string Name { get; private set; }
         public int ApCost { get; private set; }
         public int Range { get; private set; }
+        public Entity AbilityOwner { get; private set; }
 
-        public Ability(string name, int apCost, int range)
+        public Ability(string name, int apCost, int range, Entity abilityOwner)
         {
             Name = name;
             ApCost = apCost;
             Range = range;
+            AbilityOwner = abilityOwner;
         }
 
         public void Use(Entity abilityOwner, Entity target)

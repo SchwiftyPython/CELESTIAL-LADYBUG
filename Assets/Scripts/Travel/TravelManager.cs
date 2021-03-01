@@ -65,6 +65,11 @@ namespace Assets.Scripts.Travel
             return $"{companion.Name} gained {value} {GlobalHelper.GetEnumDescription(gainType)}!";
         }
 
+        private string BuildCompanionRewardTextItem(Entity companion, int attributeGainValue, EntityAttributeTypes gainType)
+        {
+            return $"{companion.Name} gained {attributeGainValue} {GlobalHelper.GetEnumDescription(gainType)}!";
+        }
+
         public string BuildCompanionLossTextItem(Entity companion, int value, EntityStatTypes lossType)
         {
             return $"{companion.Name} lost {value} {GlobalHelper.GetEnumDescription(lossType)}!";
@@ -106,9 +111,9 @@ namespace Assets.Scripts.Travel
                 }
             }
 
-            if (reward.EntityGains != null && reward.EntityGains.Count > 0)
+            if (reward.EntityStatGains != null && reward.EntityStatGains.Count > 0)
             {
-                foreach (var entityGain in reward.EntityGains)
+                foreach (var entityGain in reward.EntityStatGains)
                 {
                     var targetEntity = entityGain.Key;
 
@@ -147,6 +152,52 @@ namespace Assets.Scripts.Travel
                             }
 
                             rewardsText.Add(BuildCompanionRewardTextItem(companion, statGain.Value, gainType));
+                        }
+                    }
+                }
+            }
+
+            if (reward.EntityAttributeGains != null && reward.EntityAttributeGains.Count > 0)
+            {
+                foreach (var entityGain in reward.EntityAttributeGains)
+                {
+                    var targetEntity = entityGain.Key;
+
+                    Entity companion;
+
+                    if (targetEntity.IsDerpus())
+                    {
+                        companion = Party.Derpus;
+                    }
+                    else
+                    {
+                        //it's possible the entity isn't in the party anymore so this is how we check off the top of my head
+                        companion = Party.GetCompanion(targetEntity.Name);
+                    }
+
+                    if (companion != null)
+                    {
+                        foreach (var attributeGain in entityGain.Value)
+                        {
+                            var gainType = attributeGain.Key;
+
+                            switch (gainType)
+                            {
+                                case EntityAttributeTypes.Might:
+                                    companion.AddMorale(attributeGain.Value);
+                                    break;
+                                case EntityAttributeTypes.Speed:
+                                    companion.AddHealth(attributeGain.Value);
+                                    break;
+                                case EntityAttributeTypes.Intellect:
+                                    companion.AddEnergy(attributeGain.Value);
+                                    break;
+                                default:
+                                    Debug.Log($"Invalid gain type! {gainType}");
+                                    break;
+                            }
+
+                            rewardsText.Add(BuildCompanionRewardTextItem(companion, attributeGain.Value, gainType));
                         }
                     }
                 }

@@ -2,7 +2,7 @@
 using Assets.Scripts.Travel;
 using UnityEngine;
 
-namespace Assets.Scripts.Encounters
+namespace Assets.Scripts.Encounters.Camping
 {
     public class HolyInferno : Encounter
     {

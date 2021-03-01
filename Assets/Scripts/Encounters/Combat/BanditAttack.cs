@@ -2,7 +2,7 @@
 using Assets.Scripts.Entities;
 using UnityEngine;
 
-namespace Assets.Scripts.Encounters
+namespace Assets.Scripts.Encounters.Combat
 {
     public class BanditAttack : Encounter
     {

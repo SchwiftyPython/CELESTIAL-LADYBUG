@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Travel;
 
-namespace Assets.Scripts.Encounters
+namespace Assets.Scripts.Encounters.Normal
 {
     public class SweetrollRobbery : Encounter
     {

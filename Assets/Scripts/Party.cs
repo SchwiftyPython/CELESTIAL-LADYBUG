@@ -60,17 +60,17 @@ namespace Assets.Scripts
 
         public void RemoveCompanion(Entity companion)
         {
-            if (_companions == null)
-            {
-                return;
-            }
-
-            if (_companions.Count <= 0 || !_companions.ContainsKey(companion.Name))
+            if (_companions == null || !_companions.ContainsKey(companion.Name))
             {
                 return;
             }
 
             _companions.Remove(companion.Name);
+
+            if (_companions.Count <= 0)
+            {
+                EventMediator.Instance.Broadcast(GlobalHelper.GameOver, this);
+            }
         }
 
         public Entity GetCompanion(string companionName)
@@ -218,6 +218,7 @@ namespace Assets.Scripts
             return _companions.ElementAt(index).Value;
         }
 
+        //todo wrapper method for these that takes in a stat type
         public Entity GetCompanionWithHighestIntellect()
         {
             if (_companions == null || _companions.Count < 1)
@@ -235,6 +236,25 @@ namespace Assets.Scripts
             }
 
             return smartyPants;
+        }
+
+        public Entity GetCompanionWithHighestRangedSkill()
+        {
+            if (_companions == null || _companions.Count < 1)
+            {
+                return Derpus;
+            }
+
+            Entity bestShot = null;
+            foreach (var companion in _companions.Values)
+            {
+                if (bestShot == null || companion.Stats.RangedSkill > bestShot.Stats.RangedSkill)
+                {
+                    bestShot = companion;
+                }
+            }
+
+            return bestShot;
         }
 
         private void GenerateStartingParty()

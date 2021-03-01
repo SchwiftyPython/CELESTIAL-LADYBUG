@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using Assets.Scripts.Entities;
 using Assets.Scripts.Travel;
 using UnityEngine;
 
-namespace Assets.Scripts.Encounters
+namespace Assets.Scripts.Encounters.Normal
 {
     public class FightOrFlight : Encounter
     {

@@ -109,6 +109,11 @@ namespace Assets.Scripts
             SceneManager.LoadScene(TravelSceneName);
         }
 
+        public void QuitToDesktop()
+        {
+            Application.Quit();
+        }
+
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
         {
 

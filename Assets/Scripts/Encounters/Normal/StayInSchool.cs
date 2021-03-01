@@ -2,7 +2,7 @@
 using Assets.Scripts.Travel;
 
 //todo refactor
-namespace Assets.Scripts.Encounters
+namespace Assets.Scripts.Encounters.Normal
 {
     public class StayInSchool : Encounter
     {

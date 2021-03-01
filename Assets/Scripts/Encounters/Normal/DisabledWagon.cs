@@ -2,7 +2,7 @@
 using Assets.Scripts.Travel;
 using UnityEngine;
 
-namespace Assets.Scripts.Encounters
+namespace Assets.Scripts.Encounters.Normal
 {
     public class DisabledWagon : Encounter
     {
