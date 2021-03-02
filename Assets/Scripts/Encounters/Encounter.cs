@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.Encounters
 {
-    public abstract class Encounter: ISubscriber
+    public abstract class Encounter : ISubscriber
     {
         private const string OptionSelectedEvent = GlobalHelper.EncounterOptionSelected;
 

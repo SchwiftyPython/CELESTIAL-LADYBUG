@@ -12,6 +12,7 @@ namespace Assets.Scripts.UI
         private const string CampingEncounterFinished = GlobalHelper.CampingEncounterFinished;
 
         private EncounterType _encounterType;
+        private bool _countsAsDayTraveled;
 
         public TextMeshProUGUI EncounterTitle;
         public TextMeshProUGUI ResultDescription;
@@ -25,6 +26,11 @@ namespace Assets.Scripts.UI
         private void Show(Encounter encounter, List<string> result)
         {
             _encounterType = encounter.EncounterType;
+
+            if (_encounterType == EncounterType.Camping)
+            {
+                _countsAsDayTraveled = encounter.CountsAsDayTraveled;
+            }
 
             EncounterTitle.text = encounter.Title;
 
@@ -50,7 +56,7 @@ namespace Assets.Scripts.UI
 
             if (_encounterType == EncounterType.Camping)
             {
-                EventMediator.Instance.Broadcast(CampingEncounterFinished, this);
+                EventMediator.Instance.Broadcast(CampingEncounterFinished, this, _countsAsDayTraveled);
             }
         }
 

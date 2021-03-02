@@ -8,7 +8,10 @@ namespace Assets.Scripts.Travel
 {
     public class TravelManager : MonoBehaviour, ISubscriber
     {
-        private const int TotalDaysToDestination = 5;
+        private const int DemoDaysToDestination = 5;
+        private const int FullGameDaysToDestination = 15;
+
+        private int _travelDaysToDestination;
 
         private int _currentDayOfTravel;
 
@@ -43,11 +46,18 @@ namespace Assets.Scripts.Travel
             //TESTING//////////////////////////////////////
             NewParty();
             //END TESTING/////////////////////////////////
+
+            StartNewDay();
         }
 
         public void NewParty()
         {
             Party = new Party();
+        }
+
+        public void StartNewDay()
+        {
+            EncounterManager.Instance.BuildDecksForNewDay();
         }
 
         public string BuildPartyRewardTextItem(int value, PartySupplyTypes gainType)
@@ -299,9 +309,16 @@ namespace Assets.Scripts.Travel
 
                 _currentDayOfTravel++;
 
-                //todo game won when current day == total days of travel
+                var countsAsDayTraveled = (bool) parameter;
 
-                //todo need an indication if camping event counts towards days traveled
+                if (countsAsDayTraveled)
+                {
+                    _travelDaysToDestination--;
+                }
+
+                //todo game won when travel days to destination == 0
+
+                StartNewDay();
             }
             else if (eventName.Equals(GlobalHelper.EntityDead))
             {

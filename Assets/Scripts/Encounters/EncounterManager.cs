@@ -11,7 +11,8 @@ namespace Assets.Scripts.Encounters
 
         private bool _timerPaused;
 
-        private EncounterDeck _deck;
+        private EncounterDeck _normalEncounterDeck;
+        private EncounterDeck _campingDeck;
 
         public float TimeTilNextEncounter;
 
@@ -29,15 +30,11 @@ namespace Assets.Scripts.Encounters
             {
                 Destroy(gameObject);
             }
-            DontDestroyOnLoad(gameObject); //todo if continuity flops we can probably not worry about having a new deck every time
-
-            _deck = new EncounterDeck();
-
-            //todo need to make different encounter decks
-
+            DontDestroyOnLoad(gameObject);
+            
             EventMediator.Instance.SubscribeToEvent(MentalBreak, this);
 
-            ResetTimer();
+            PauseTimer();
         }
 
         private void Update()
@@ -57,9 +54,38 @@ namespace Assets.Scripts.Encounters
             }
         }
 
+        public void BuildDecksForNewDay()
+        {
+            var normalEncounterSize = 3;
+
+            const int extraEncounterChance = 5;
+
+            //todo diceroller
+            var roll = Random.Range(1, 101);
+
+            if (roll <= extraEncounterChance)
+            {
+                normalEncounterSize++;
+            }
+
+            _normalEncounterDeck = new EncounterDeck(EncounterStore.Instance.GetNormalEncounters(), normalEncounterSize);
+
+            if (_campingDeck == null || _campingDeck.Size < 1)
+            {
+                _campingDeck = new EncounterDeck(EncounterStore.Instance.GetCampingEncounters(), 5);
+            }
+
+            ResetTimer();
+        }
+
         private void DrawNextEncounter()
         {
-            var encounter = _deck.Draw();
+            var encounter = _normalEncounterDeck.Draw();
+            
+            if (encounter == null)
+            {
+                encounter = _campingDeck.Draw();
+            }
 
             encounter.Run();
 

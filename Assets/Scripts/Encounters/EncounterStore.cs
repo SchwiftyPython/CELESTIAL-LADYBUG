@@ -16,29 +16,29 @@ namespace Assets.Scripts.Encounters
     //todo since we're starting to assign encounters to their own decks, would make sense to see if we can load these from a file
     public class EncounterStore : MonoBehaviour
     {
-        private Dictionary<string, Func<Encounter>> _allEncounters;
+        //private Dictionary<string, Func<Encounter>> _allEncounters;
 
         private readonly Dictionary<string, Func<Encounter>> _normalEncounters = new Dictionary<string, Func<Encounter>>
         {
-            // {"stay in school", () => new StayInSchool()},
-            // {"fight or flight", () => new FightOrFlight()},
-            // {"bandit attack", () => new BanditAttack()},
-            // {"genie in a bottle", () => new GenieInABottle()},
-            // {"sweetroll robbery", () => new SweetrollRobbery()},
-            // {"disabled wagon", () => new DisabledWagon()},
-            // {"nasty storm", () => new NastyStorm()},
+            {"stay in school", () => new StayInSchool()},
+            {"fight or flight", () => new FightOrFlight()},
+            {"bandit attack", () => new BanditAttack()},
+            {"genie in a bottle", () => new GenieInABottle()},
+            {"sweetroll robbery", () => new SweetrollRobbery()},
+            {"disabled wagon", () => new DisabledWagon()},
+            {"nasty storm", () => new NastyStorm()},
+            {"rock skipping contest", () => new RockSkippingContest()},
+            {"cauldron roulette", () => new CauldronRoulette()}
         };
 
         private readonly Dictionary<string, Func<Encounter>> _campingEncounters = new Dictionary<string, Func<Encounter>>
         {
-            // {"camp mosquito", () => new CampMosquito()},
-            // {"comfy inn", () => new ComfyInn()},
-            // {"holy inferno", () => new HolyInferno()},
-            // {"star blanket", () => new StarBlanket()},
-            // {"conk out", () => new ConkOut()},
-            // {"peaceful village", () => new PeacefulVillage()},
-            // {"rock skipping contest", () => new RockSkippingContest()},
-            {"cauldron roulette", () => new CauldronRoulette()}
+            {"camp mosquito", () => new CampMosquito()},
+            {"comfy inn", () => new ComfyInn()},
+            {"holy inferno", () => new HolyInferno()},
+            {"star blanket", () => new StarBlanket()},
+            {"conk out", () => new ConkOut()},
+            {"peaceful village", () => new PeacefulVillage()}
         };
 
         private readonly Dictionary<string, Func<Entity, Encounter>> _mentalBreakEncounters = new Dictionary<string, Func<Entity, Encounter>>
@@ -60,24 +60,36 @@ namespace Assets.Scripts.Encounters
             }
             DontDestroyOnLoad(gameObject);
 
-            _allEncounters = new Dictionary<string, Func<Encounter>>();
-
-            foreach (var encounter in _normalEncounters)
-            {
-                _allEncounters.Add(encounter.Key, encounter.Value);
-            }
-
-            foreach (var encounter in _campingEncounters)
-            {
-                _allEncounters.Add(encounter.Key, encounter.Value);
-            }
+            // _allEncounters = new Dictionary<string, Func<Encounter>>();
+            //
+            // foreach (var encounter in _normalEncounters)
+            // {
+            //     _allEncounters.Add(encounter.Key, encounter.Value);
+            // }
+            //
+            // foreach (var encounter in _campingEncounters)
+            // {
+            //     _allEncounters.Add(encounter.Key, encounter.Value);
+            // }
         }
 
-        public List<Encounter> GetAllNonTriggeredEncounters()
+        public List<Encounter> GetNormalEncounters()
         {
             var encounters = new List<Encounter>();
 
-            foreach (var encounter in _allEncounters)
+            foreach (var encounter in _normalEncounters)
+            {
+                encounters.Add(encounter.Value.Invoke());
+            }
+
+            return encounters;
+        }
+
+        public List<Encounter> GetCampingEncounters()
+        {
+            var encounters = new List<Encounter>();
+
+            foreach (var encounter in _campingEncounters)
             {
                 encounters.Add(encounter.Value.Invoke());
             }

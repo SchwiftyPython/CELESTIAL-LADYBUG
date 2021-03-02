@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Encounters;
+using UnityEngine;
 
 namespace Assets.Scripts.Decks
 {
@@ -9,64 +10,72 @@ namespace Assets.Scripts.Decks
         private const int UncommonCap = 2;
         private const int RareCap = 1;
 
-        private const int NormalCap = 5;
-        private const int CrossroadsCap = 2;
-        private const int TradingCap = 1;
-        private const int CampingCap = 2;
-        private const int CombatCap = 3;
-        private const int ContinuityCap = 1;
+        public override Queue<Encounter> Cards { get; set; }
 
-        private RarityCapper _rarityCapper;
-        private EncounterTypeCapper _encounterTypeCapper;
-
-        public override List<Encounter> Cards { get; set; }
-
-        public EncounterDeck()
+        public EncounterDeck(List<Encounter> cardPool, int deckSize)
         {
             CardIndex = 0;
-            Build(EncounterStore.Instance.GetAllNonTriggeredEncounters()); 
+            Build(cardPool, deckSize, new RarityCapper(CommonCap, UncommonCap, RareCap));
             Shuffle();
-            _rarityCapper = new RarityCapper(CommonCap, UncommonCap, RareCap);
-            _encounterTypeCapper = new EncounterTypeCapper(NormalCap, CrossroadsCap, TradingCap, CampingCap, CombatCap, ContinuityCap);
+        }
+
+        public sealed override void Build(List<Encounter> cardPool, int deckSize, RarityCapper capper)
+        {
+            Cards = new Queue<Encounter>();
+            Size = deckSize;
+
+            var usedIndexes = new List<int>();
+
+            while (Cards.Count < Size)
+            {
+                const int maxTries = 4;
+                var validCard = false;
+                var numTries = 0;
+
+                var index = Random.Range(0, cardPool.Count);
+
+                usedIndexes.Add(index);
+
+                Encounter card = null;
+
+                while (!validCard && numTries < maxTries)
+                {
+                    numTries++;
+
+                    if (usedIndexes.Contains(index))
+                    {
+                        continue;
+                    }
+
+                    card = cardPool[index];
+
+                    if (!capper.IsCapped(card.Rarity))
+                    {
+                        validCard = true;
+                    }
+
+                    index = Random.Range(0, cardPool.Count);
+                }
+
+                if (card == null)
+                {
+                    card = cardPool[Random.Range(0, cardPool.Count)];
+                }
+
+                Cards.Enqueue(card);
+            }
         }
 
         public override Encounter Draw()
         {
-            var maxTries = 8;
-            var validCard = false;
-            var numTries = 0;
-
-            Encounter card = null;
-            while (!validCard && numTries < maxTries)
+            if (Cards == null || Cards.Count < 1)
             {
-                numTries++;
-
-                card = Cards[CardIndex];
-
-                if (!_rarityCapper.IsCapped(card.Rarity) && !_encounterTypeCapper.IsCapped(card.EncounterType))
-                {
-                    validCard = true;
-                }
-
-                if (CardIndex >= Size - 1)
-                {
-                    Shuffle();
-                    CardIndex = 0;
-                }
-                else
-                {
-                    CardIndex++;
-                }
+                return null;
             }
 
-            if (card != null)
-            {
-                _rarityCapper.RecordCard(card.Rarity);
-                _encounterTypeCapper.RecordCard(card.EncounterType);
-                return card;
-            }
+            Size--;
 
-            return null;
+            return Cards.Dequeue();
         }
     }
 }
