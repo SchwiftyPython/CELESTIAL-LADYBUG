@@ -9,7 +9,8 @@ namespace Assets.Scripts.UI
     {
         private readonly List<string> _refreshEvents = new List<string>
         {
-            GlobalHelper.EncounterFinished
+            GlobalHelper.EncounterFinished,
+            GlobalHelper.CampingEncounterFinished
         };
 
         private const int MaxStatusesDisplayed = 4;
@@ -29,6 +30,8 @@ namespace Assets.Scripts.UI
         public GameObject ScrollPartyLeftButton;
         public GameObject ScrollPartyRightButton;
 
+        public TextMeshProUGUI TravelDaysToDestinationLabel;
+
         private void Start()
         {
              Populate();
@@ -46,6 +49,8 @@ namespace Assets.Scripts.UI
             DerpusMorale.text = $"{party.Derpus.Stats.CurrentMorale}/{party.Derpus.Stats.MaxMorale}";
 
             PopulateCompanionStatuses(party);
+
+            TravelDaysToDestinationLabel.text = $"Days of Travel Left: {TravelManager.Instance.TravelDaysToDestination}";
         }
 
         private void PopulateCompanionStatuses(Party party)

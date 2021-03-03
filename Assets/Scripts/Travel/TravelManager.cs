@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Encounters;
 using Assets.Scripts.Entities;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,9 +12,9 @@ namespace Assets.Scripts.Travel
         private const int DemoDaysToDestination = 5;
         private const int FullGameDaysToDestination = 15;
 
-        private int _travelDaysToDestination;
-
         private int _currentDayOfTravel;
+
+        public int TravelDaysToDestination { get; private set; }
 
         public Party Party { get; private set; }
 
@@ -41,6 +42,8 @@ namespace Assets.Scripts.Travel
             EventMediator.Instance.SubscribeToEvent(GlobalHelper.EntityDead, this);
 
             _currentDayOfTravel = 0;
+
+            TravelDaysToDestination = DemoDaysToDestination;
 
             //todo testing
             //TESTING//////////////////////////////////////
@@ -313,7 +316,7 @@ namespace Assets.Scripts.Travel
 
                 if (countsAsDayTraveled)
                 {
-                    _travelDaysToDestination--;
+                    TravelDaysToDestination--;
                 }
 
                 //todo game won when travel days to destination == 0

@@ -16,13 +16,10 @@ namespace Assets.Scripts.Encounters
     //todo since we're starting to assign encounters to their own decks, would make sense to see if we can load these from a file
     public class EncounterStore : MonoBehaviour
     {
-        //private Dictionary<string, Func<Encounter>> _allEncounters;
-
         private readonly Dictionary<string, Func<Encounter>> _normalEncounters = new Dictionary<string, Func<Encounter>>
         {
             {"stay in school", () => new StayInSchool()},
             {"fight or flight", () => new FightOrFlight()},
-            {"bandit attack", () => new BanditAttack()},
             {"genie in a bottle", () => new GenieInABottle()},
             {"sweetroll robbery", () => new SweetrollRobbery()},
             {"disabled wagon", () => new DisabledWagon()},
@@ -39,6 +36,11 @@ namespace Assets.Scripts.Encounters
             {"star blanket", () => new StarBlanket()},
             {"conk out", () => new ConkOut()},
             {"peaceful village", () => new PeacefulVillage()}
+        };
+
+        private readonly Dictionary<string, Func<Encounter>> _combatEncounters = new Dictionary<string, Func<Encounter>>
+        {
+            {"bandit attack", () => new BanditAttack()}
         };
 
         private readonly Dictionary<string, Func<Entity, Encounter>> _mentalBreakEncounters = new Dictionary<string, Func<Entity, Encounter>>
@@ -90,6 +92,18 @@ namespace Assets.Scripts.Encounters
             var encounters = new List<Encounter>();
 
             foreach (var encounter in _campingEncounters)
+            {
+                encounters.Add(encounter.Value.Invoke());
+            }
+
+            return encounters;
+        }
+
+        public List<Encounter> GetCombatEncounters()
+        {
+            var encounters = new List<Encounter>();
+
+            foreach (var encounter in _combatEncounters)
             {
                 encounters.Add(encounter.Value.Invoke());
             }

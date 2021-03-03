@@ -70,6 +70,12 @@ namespace Assets.Scripts.Encounters
 
             _normalEncounterDeck = new EncounterDeck(EncounterStore.Instance.GetNormalEncounters(), normalEncounterSize);
 
+            var combatEncounters = EncounterStore.Instance.GetCombatEncounters();
+
+            _normalEncounterDeck.AddCard(combatEncounters[Random.Range(0, combatEncounters.Count)]);
+
+            _normalEncounterDeck.Shuffle();
+
             if (_campingDeck == null || _campingDeck.Size < 1)
             {
                 _campingDeck = new EncounterDeck(EncounterStore.Instance.GetCampingEncounters(), 5);

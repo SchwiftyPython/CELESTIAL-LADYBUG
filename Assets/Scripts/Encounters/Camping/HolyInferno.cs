@@ -12,6 +12,7 @@ namespace Assets.Scripts.Encounters.Camping
             EncounterType = EncounterType.Camping;
             Title = "Holy Inferno";
             Description = "The party finds an old, abandoned church on the trail. A dry place to sleep. Too dry. They awaken in the middle of the night and the building is on fire!";
+            CountsAsDayTraveled = true;
         }
 
         public override void Run()

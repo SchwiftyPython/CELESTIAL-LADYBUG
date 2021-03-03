@@ -67,22 +67,24 @@ namespace Assets.Scripts.UI
         {
             if (eventName.Equals(HoverPopupEvent))
             {
+                //todo bug here probably checking parameter
+
                 if (GameManager.Instance.AnyActiveWindows())
                 {
                     return;
                 }
 
-                if (!(broadcaster is Entity abilityOwner))
-                {
-                    return;
-                }
+                // if (!(broadcaster is Entity abilityOwner))
+                // {
+                //     return;
+                // }
 
                 if (!(parameter is Ability ability))
                 {
                     return;
                 }
 
-                Show(ability, abilityOwner.Stats.Attack);
+                Show(ability, ability.AbilityOwner.Stats.Attack);
             }
             else if (eventName.Equals(HidePopupEvent))
             {

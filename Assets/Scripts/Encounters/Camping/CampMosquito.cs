@@ -12,6 +12,7 @@ namespace Assets.Scripts.Encounters.Camping
             Title = "Camp Mosquito";
             Description =
                 "The group happens upon an old campsite. During the night, they are attacked by swarms of thirsty mosquitoes and must leave before shutting an eye!";
+            CountsAsDayTraveled = true;
         }
 
         public override void Run()

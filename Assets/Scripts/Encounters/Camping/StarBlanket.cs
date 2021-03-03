@@ -10,6 +10,7 @@ namespace Assets.Scripts.Encounters.Camping
             EncounterType = EncounterType.Camping;
             Title = "Star Blanket";
             Description = "The party decides to setup camp and have a decent meal around the campfire. Nothing of note takes place and they spend a peaceful night sleeping under the stars.";
+            CountsAsDayTraveled = true;
         }
 
         public override void Run()

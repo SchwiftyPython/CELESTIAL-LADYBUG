@@ -29,6 +29,11 @@ namespace Assets.Scripts
 
         private void PlayOneShot(AudioClip clip)
         {
+            if (SoundSource == null)
+            {
+                SoundSource = gameObject.GetComponent<AudioSource>();
+            }
+
             SoundSource.PlayOneShot(clip, .5f);
         }
 
@@ -43,6 +48,11 @@ namespace Assets.Scripts
         private void UnsubscribeFromEvents()
         {
             EventMediator.Instance.UnsubscribeFromAllEvents(this);
+        }
+
+        private void OnDestroy()
+        {
+            UnsubscribeFromEvents();
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

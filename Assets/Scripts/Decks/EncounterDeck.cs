@@ -62,7 +62,7 @@ namespace Assets.Scripts.Decks
                     card = cardPool[Random.Range(0, cardPool.Count)];
                 }
 
-                Cards.Enqueue(card);
+                AddCard(card);
             }
         }
 

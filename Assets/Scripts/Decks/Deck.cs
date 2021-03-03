@@ -36,5 +36,10 @@ namespace Assets.Scripts.Decks
 
             Cards = new Queue<T>(cardList);
         }
+
+        public void AddCard(T card)
+        {
+            Cards.Enqueue(card);
+        }
     }
 }
