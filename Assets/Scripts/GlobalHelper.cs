@@ -42,6 +42,7 @@ namespace Assets.Scripts
         public const string MentalBreak = "MentalBreak";
         public const string SendMessageToConsole = "SendMessageToConsole";
         public const string GameOver = "GameOver";
+        public const string YouWon = "YouWon";
         public const string ButtonClick = "ButtonClick";
         public const string MeleeHit = "MeleeHit";
         public const string MeleeMiss = "MeleeMiss";

@@ -319,9 +319,14 @@ namespace Assets.Scripts.Travel
                     TravelDaysToDestination--;
                 }
 
-                //todo game won when travel days to destination == 0
-
-                StartNewDay();
+                if (TravelDaysToDestination <= 0)
+                {
+                    EventMediator.Instance.Broadcast(GlobalHelper.YouWon, this);
+                }
+                else
+                {
+                    StartNewDay();
+                }
             }
             else if (eventName.Equals(GlobalHelper.EntityDead))
             {
