@@ -308,6 +308,10 @@ namespace Assets.Scripts.Travel
         {
             if (eventName.Equals(GlobalHelper.CampingEncounterFinished))
             {
+                //todo need standard energy gain for camping events
+                //some bool that indicates standard energy gain
+                //if false, energy gain or loss handled elsewhere
+
                 Party.EatAndHeal();
 
                 _currentDayOfTravel++;

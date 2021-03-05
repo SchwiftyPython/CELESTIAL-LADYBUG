@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Travel;
 
-namespace Assets.Scripts.Encounters.Camping
+namespace Assets.Scripts.Encounters.DerpusStopWagon
 {
-    public class ConkOut : Encounter
+    public class DerpusNoEnergy : Encounter
     {
-        public ConkOut()
+        public DerpusNoEnergy()
         {
-            Rarity = Rarity.Common;
             EncounterType = EncounterType.Camping;
-            Title = "Conk out";
-            Description = "After a particularly long day on the trail, the weary crew sets up camp and falls asleep instantly.";
-            CountsAsDayTraveled = true;
+            Title = "Derpus Tired";
+            Description =
+                "The wagon slowly rolls to a stop. Derpus is too tired and has decided to nap the rest of the day.";
+            CountsAsDayTraveled = false;
         }
 
         public override void Run()

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Travel;
 
 namespace Assets.Scripts.Encounters.Camping
 {
@@ -15,7 +16,20 @@ namespace Assets.Scripts.Encounters.Camping
 
         public override void Run()
         {
-            var fullResultDescription = new List<string> {Description + "\n"};
+            Reward = new Reward();
+
+            Reward.AddEntityGain(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentEnergy, 10);
+
+            foreach (var companion in TravelManager.Instance.Party.GetCompanions())
+            {
+                Reward.AddEntityGain(companion, EntityStatTypes.CurrentEnergy, 10);
+            }
+
+            var fullResultDescription = new List<string> { Description + "\n" };
+
+            var rewardsText = TravelManager.Instance.ApplyEncounterReward(Reward);
+
+            fullResultDescription.AddRange(rewardsText);
 
             EventMediator.Instance.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
         }

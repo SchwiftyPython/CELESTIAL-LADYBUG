@@ -78,6 +78,11 @@ namespace Assets.Scripts.Entities
                 if (value < CurrentStatsMin)
                 {
                     _currentEnergy = CurrentStatsMin;
+
+                    if (_parent.IsDerpus())
+                    {
+                        EventMediator.Instance.Broadcast(GlobalHelper.DerpusNoEnergy, this);
+                    }
                 }
                 else if (value > MaxEnergy)
                 {

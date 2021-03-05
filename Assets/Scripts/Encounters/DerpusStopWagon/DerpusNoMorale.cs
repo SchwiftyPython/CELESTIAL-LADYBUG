@@ -1,24 +1,28 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Travel;
 
-namespace Assets.Scripts.Encounters.Camping
+namespace Assets.Scripts.Encounters.DerpusStopWagon
 {
-    public class ConkOut : Encounter
+    public class DerpusNoMorale : Encounter
     {
-        public ConkOut()
+        public DerpusNoMorale()
         {
-            Rarity = Rarity.Common;
             EncounterType = EncounterType.Camping;
-            Title = "Conk out";
-            Description = "After a particularly long day on the trail, the weary crew sets up camp and falls asleep instantly.";
-            CountsAsDayTraveled = true;
+            Title = "Derpus Sad";
+            Description =
+                "The wagon slowly rolls to a stop. Derpus droops to a sad squat and refuses to move for the rest of the day.";
+            CountsAsDayTraveled = false;
         }
 
         public override void Run()
         {
+            var derpus = TravelManager.Instance.Party.Derpus;
+
             Reward = new Reward();
 
-            Reward.AddEntityGain(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentEnergy, 10);
+            Reward.AddEntityGain(derpus, EntityStatTypes.CurrentEnergy, derpus.Stats.MaxMorale / 2);
+
+            Reward.AddEntityGain(derpus, EntityStatTypes.CurrentEnergy, 10);
 
             foreach (var companion in TravelManager.Instance.Party.GetCompanions())
             {

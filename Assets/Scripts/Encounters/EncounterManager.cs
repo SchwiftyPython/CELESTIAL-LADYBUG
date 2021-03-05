@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Decks;
+﻿using System.Collections.Generic;
+using Assets.Scripts.Decks;
 using Assets.Scripts.Entities;
 using UnityEngine;
 
@@ -14,9 +15,13 @@ namespace Assets.Scripts.Encounters
         private EncounterDeck _normalEncounterDeck;
         private EncounterDeck _campingDeck;
 
+        private Queue<Encounter> _encounterQueue;
+
         public float TimeTilNextEncounter;
 
         //todo need ui references 
+
+        //todo need some sort of encounter queue for pending encounters like for mental breaks
 
         public static EncounterManager Instance;
 
@@ -33,6 +38,7 @@ namespace Assets.Scripts.Encounters
             DontDestroyOnLoad(gameObject);
             
             EventMediator.Instance.SubscribeToEvent(MentalBreak, this);
+            EventMediator.Instance.SubscribeToEvent(GlobalHelper.DerpusNoEnergy, this);
 
             PauseTimer();
         }
@@ -72,7 +78,7 @@ namespace Assets.Scripts.Encounters
 
             var combatEncounters = EncounterStore.Instance.GetCombatEncounters();
 
-            _normalEncounterDeck.AddCard(combatEncounters[Random.Range(0, combatEncounters.Count)]);
+            //_normalEncounterDeck.AddCard(combatEncounters[Random.Range(0, combatEncounters.Count)]);
 
             _normalEncounterDeck.Shuffle();
 
@@ -98,6 +104,29 @@ namespace Assets.Scripts.Encounters
             EventMediator.Instance.SubscribeToEvent(EncounterFinished, this);
         }
 
+        private void AddToEncounterQueue(Encounter encounter)
+        {
+            if (_encounterQueue == null)
+            {
+                _encounterQueue = new Queue<Encounter>();
+            }
+
+            _encounterQueue.Enqueue(encounter);
+        }
+
+        private void RunQueuedEncounters()
+        {
+            if (_encounterQueue != null && _encounterQueue.Count > 0)
+            {
+                foreach (var encounter in _encounterQueue)
+                {
+                    encounter.Run();
+                }
+            }
+
+            _encounterQueue?.Clear();
+        }
+
         private void PauseTimer()
         {
             _timerPaused = true;
@@ -121,6 +150,8 @@ namespace Assets.Scripts.Encounters
                 ResetTimer();
 
                 EventMediator.Instance.UnsubscribeFromEvent(EncounterFinished, this);
+
+                RunQueuedEncounters();
             }
             else if (eventName.Equals(MentalBreak))
             {
@@ -129,8 +160,20 @@ namespace Assets.Scripts.Encounters
                     return;
                 }
 
-                //todo draw from the mental break deck
-                EncounterStore.Instance.GetRandomMentalBreakEncounter(companion).Run();
+                if (companion.IsDerpus())
+                {
+                    AddToEncounterQueue(EncounterStore.Instance.GetDerpusNoMoraleEncounter());
+                }
+                else
+                {
+                    //todo draw from the mental break deck
+                    //EncounterStore.Instance.GetRandomMentalBreakEncounter(companion).Run();
+                    AddToEncounterQueue(EncounterStore.Instance.GetRandomMentalBreakEncounter(companion));
+                }
+            }
+            else if (eventName.Equals(GlobalHelper.DerpusNoEnergy))
+            {
+                AddToEncounterQueue(EncounterStore.Instance.GetDerpusNoEnergyEncounter());
             }
 
             //todo events for pause timer, resume timer, reset timer, draw trigger encounter

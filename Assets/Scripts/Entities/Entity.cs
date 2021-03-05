@@ -88,6 +88,15 @@ namespace Assets.Scripts.Entities
             Attributes = new Attributes();
             Stats = new Stats(this, Attributes);
 
+            //todo testing for derpus low energy and low morale
+            if (IsDerpus())
+            {
+                Stats.MaxMorale = 5;
+                Stats.CurrentMorale = Stats.MaxMorale;
+                Stats.MaxEnergy = 5;
+                Stats.CurrentEnergy = Stats.MaxEnergy;
+            }
+
             _level = 1;
             _xp = 0;
 

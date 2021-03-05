@@ -52,12 +52,12 @@ namespace Assets.Scripts.UI
             gameObject.SetActive(false);
             GameManager.Instance.RemoveActiveWindow(gameObject);
 
-            EventMediator.Instance.Broadcast(EncounterFinished, this);
-
             if (_encounterType == EncounterType.Camping)
             {
                 EventMediator.Instance.Broadcast(CampingEncounterFinished, this, _countsAsDayTraveled);
             }
+
+            EventMediator.Instance.Broadcast(EncounterFinished, this);
         }
 
         private void OnDestroy()
