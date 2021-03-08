@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Assets.Scripts.Encounters;
 using Assets.Scripts.Entities;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -50,6 +50,8 @@ namespace Assets.Scripts.Travel
             NewParty();
             //END TESTING/////////////////////////////////
 
+            //todo this is getting called when we come back to travel scene -- was it always getting called? I don't think we tested with combat is why
+            // prob don't wanna call this in start method then
             StartNewDay();
         }
 
@@ -196,18 +198,26 @@ namespace Assets.Scripts.Travel
 
                             switch (gainType)
                             {
-                                case EntityAttributeTypes.Might:
-                                    companion.AddMorale(attributeGain.Value);
+                                case EntityAttributeTypes.Agility:
+                                    companion.Attributes.Agility += attributeGain.Value;
                                     break;
-                                case EntityAttributeTypes.Speed:
-                                    companion.AddHealth(attributeGain.Value);
+                                case EntityAttributeTypes.Coordination:
+                                    companion.Attributes.Coordination += attributeGain.Value;
+                                    break;
+                                case EntityAttributeTypes.Physique:
+                                    companion.Attributes.Physique += attributeGain.Value;
                                     break;
                                 case EntityAttributeTypes.Intellect:
-                                    companion.AddEnergy(attributeGain.Value);
+                                    companion.Attributes.Intellect += attributeGain.Value;
+                                    break;
+                                case EntityAttributeTypes.Acumen:
+                                    companion.Attributes.Acumen += attributeGain.Value;
+                                    break;
+                                case EntityAttributeTypes.Charisma:
+                                    companion.Attributes.Charisma += attributeGain.Value;
                                     break;
                                 default:
-                                    Debug.Log($"Invalid gain type! {gainType}");
-                                    break;
+                                    throw new ArgumentOutOfRangeException();
                             }
 
                             rewardsText.Add(BuildCompanionRewardTextItem(companion, attributeGain.Value, gainType));
@@ -316,7 +326,7 @@ namespace Assets.Scripts.Travel
 
                 _currentDayOfTravel++;
 
-                var countsAsDayTraveled = (bool) parameter;
+                var countsAsDayTraveled = parameter != null && (bool) parameter;
 
                 if (countsAsDayTraveled)
                 {

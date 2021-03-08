@@ -33,20 +33,20 @@ namespace Assets.Scripts.Encounters.Normal
             const int scaleSuccess = 10;
 
             //todo diceroller here
-            var speedCheck = chosenCompanion.Attributes.Speed + Random.Range(1, 21);
+            var agilityCheck = chosenCompanion.Attributes.Agility + Random.Range(1, 21);
 
             Debug.Log($"Value Needed: {scaleSuccess}");
             Debug.Log(
-                $"Rolled: {speedCheck - chosenCompanion.Attributes.Speed} + Speed: {chosenCompanion.Attributes.Speed} = Final Value {speedCheck}");
+                $"Rolled: {agilityCheck - chosenCompanion.Attributes.Agility} + Agility: {chosenCompanion.Attributes.Agility} = Final Value {agilityCheck}");
 
-            if (speedCheck > scaleSuccess)
+            if (agilityCheck > scaleSuccess)
             {
                 optionResultText = $"{chosenCompanion.FirstName()} runs up one of the crates and flips over the fence!";
 
                 optionOneReward = new Reward();
                 optionOneReward.AddEntityGain(chosenCompanion, EntityStatTypes.CurrentMorale, 30);
             }
-            else if (speedCheck == scaleSuccess)
+            else if (agilityCheck == scaleSuccess)
             {
                 optionResultText = $"{chosenCompanion.FirstName()} barely manages to escape over the fence unharmed!";
             }
@@ -71,13 +71,13 @@ namespace Assets.Scripts.Encounters.Normal
             const int throwSuccess = 20;
 
             //todo diceroller here
-            var mightCheck = chosenCompanion.Attributes.Might + Random.Range(1, 21);
+            var physiqueCheck = chosenCompanion.Attributes.Physique + Random.Range(1, 21);
 
             Debug.Log($"Value Needed: {throwSuccess}");
             Debug.Log(
-                $"Rolled: {mightCheck - chosenCompanion.Attributes.Might} + Might: {chosenCompanion.Attributes.Might} = Final Value {mightCheck}");
+                $"Rolled: {physiqueCheck - chosenCompanion.Attributes.Physique} + Physique: {chosenCompanion.Attributes.Physique} = Final Value {physiqueCheck}");
 
-            if (mightCheck >= throwSuccess)
+            if (physiqueCheck >= throwSuccess)
             {
                 optionResultText =
                     $"{chosenCompanion.FirstName()} knocks several guards to the ground with a well placed throw and escapes!";

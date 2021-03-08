@@ -4,11 +4,19 @@ namespace Assets.Scripts
 {
     public enum EntityAttributeTypes 
     {
-        [Description("Might")]
-        Might,
-        [Description("Speed")]
-        Speed,
+        [Description("Agility")]
+        Agility,
+        [Description("Coordination")]
+        Coordination,
+        [Description("Physique")]
+        Physique,
         [Description("Intellect")]
-        Intellect
+        Intellect,
+        [Description("Acumen")]
+        Acumen,
+        [Description("Charisma")]
+        Charisma,
+        // [Description("Magic")]
+        // Magic
     }
 }

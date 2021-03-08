@@ -34,6 +34,7 @@ namespace Assets.Scripts.Entities
         public Sex Sex { get; }
         public Attributes Attributes { get; }
         public Stats Stats { get; }
+        public Skills Skills { get; }
         public Sprite Portrait { get; private set; }
         public Weapon EquippedWeapon { get; private set; }
         public List<Ability> Abilities { get; private set; }
@@ -86,16 +87,17 @@ namespace Assets.Scripts.Entities
             }
 
             Attributes = new Attributes();
-            Stats = new Stats(this, Attributes);
+            Skills = new Skills();
+            Stats = new Stats(this, Attributes, Skills);
 
-            //todo testing for derpus low energy and low morale
-            if (IsDerpus())
-            {
-                Stats.MaxMorale = 5;
-                Stats.CurrentMorale = Stats.MaxMorale;
-                Stats.MaxEnergy = 5;
-                Stats.CurrentEnergy = Stats.MaxEnergy;
-            }
+            // //todo testing for derpus low energy and low morale
+            // if (IsDerpus())
+            // {
+            //     Stats.MaxMorale = 5;
+            //     Stats.CurrentMorale = Stats.MaxMorale;
+            //     Stats.MaxEnergy = 5;
+            //     Stats.CurrentEnergy = Stats.MaxEnergy;
+            // }
 
             _level = 1;
             _xp = 0;
@@ -354,12 +356,12 @@ namespace Assets.Scripts.Entities
 
         public void AddMight(int amount)
         {
-            Attributes.Might += amount;
+            Attributes.Physique += amount;
         }
 
         public void SubtractMight(int amount)
         {
-            Attributes.Might -= amount;
+            Attributes.Physique -= amount;
         }
 
         public void UseHealthPotion()

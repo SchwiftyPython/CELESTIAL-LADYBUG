@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using GoRogue.DiceNotation;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Entities
 {
@@ -7,8 +9,8 @@ namespace Assets.Scripts.Entities
         //todo just temp til we replace the text version of the stats in ui
         private const int PrototypeStatsCap = 99;
 
-        private const int SkillCap = 100;
-        private const int SkillMin = 11;
+        private const int StatCap = 100;
+        private const int StatMin = 1;
 
         private const int CurrentStatsMin = 0;
 
@@ -36,7 +38,7 @@ namespace Assets.Scripts.Entities
             get => _currentHealth;
             set
             {
-                if (value < CurrentStatsMin)
+                if (value <= CurrentStatsMin)
                 {
                     _currentHealth = CurrentStatsMin;
                     EventMediator.Instance.Broadcast(GlobalHelper.EntityDead, _parent);
@@ -181,13 +183,13 @@ namespace Assets.Scripts.Entities
             get => _meleeSkill;
             set
             {
-                if (value < SkillMin)
+                if (value < StatMin)
                 {
-                    _meleeSkill = SkillMin;
+                    _meleeSkill = StatMin;
                 }
-                else if (value > SkillCap)
+                else if (value > StatCap)
                 {
-                    _meleeSkill = SkillCap;
+                    _meleeSkill = StatCap;
                 }
                 else
                 {
@@ -202,13 +204,13 @@ namespace Assets.Scripts.Entities
             get => _rangedSkill;
             set 
             {
-                if (value < SkillMin)
+                if (value < StatMin)
                 {
-                    _rangedSkill = SkillMin;
+                    _rangedSkill = StatMin;
                 }
-                else if (value > SkillCap)
+                else if (value > StatCap)
                 {
-                    _rangedSkill = SkillCap;
+                    _rangedSkill = StatCap;
                 }
                 else
                 {
@@ -219,38 +221,36 @@ namespace Assets.Scripts.Entities
         public int Armor { get; set; } //todo maybe only for some types or can we "equip" natural armor in those cases?
         public int Critical { get; set; } //todo have this ignore damage reduction when implemented
         
-        public Stats(Entity parent, Attributes attributes)
+        public Stats(Entity parent, Attributes attributes, Skills skills)
         {
             _parent = parent;
-            GenerateStats(attributes);
+            GenerateStats(attributes, skills);
         }
 
-        private void GenerateStats(Attributes attributes)
+        private void GenerateStats(Attributes attributes, Skills skills)
         {
-            //todo these are arbitrary numbers - might need to tweak
-
-            MaxHealth = (int) (attributes.Might * 3.1f + RollD20());
+            MaxHealth =  RollD6(attributes.Physique) + 20;
             CurrentHealth = MaxHealth;
 
-            MaxEnergy = (int) (attributes.Might * 3.6f + RollD20());
+            MaxEnergy = RollD6(skills.Stamina) + 20;
             CurrentEnergy = MaxEnergy;
 
-            MaxMorale = (int) (RollD20() * 2.3f) + 30;
+            MaxMorale = RollD6(attributes.Charisma) + 20;
             CurrentMorale = MaxMorale;
 
-            Initiative = (int) (attributes.Speed * 2.1 + attributes.Intellect * 2.1 + RollD20());
+            Initiative = RollD6(attributes.Acumen) + 20;
 
-            Attack = (int) (attributes.Might * 4.3);
+            Attack = (int) Math.Ceiling(attributes.Physique / 2.0f);
 
-            MeleeSkill = RollD10() * 10 + RollD10();
+            MeleeSkill = RollD6(attributes.Agility) * 3 + 10;
 
-            RangedSkill = RollD10() * 10 + RollD10();
+            RangedSkill = RollD6(attributes.Coordination) * 3 + 10; 
 
             //Armor = RollD20() + 7;
 
-            Critical = (int)(attributes.Speed * 2.4 + attributes.Intellect * 2.4 + RollD20());
+            //Critical = (int)(attributes.Agility * 2.4 + attributes.Intellect * 2.4 + RollD20()); //todo use wild die for critical success or failures
 
-            MaxActionPoints = 10 - RollD20() / 5;
+            MaxActionPoints = 10;
             CurrentActionPoints = MaxActionPoints;
         }
 
@@ -262,22 +262,36 @@ namespace Assets.Scripts.Entities
             }
         }
 
-        private int RollD20()
+        private int RollD20(int numDice)
         {
-            //todo replace this with diceroller 
+            //todo replace this with diceroller
             return Random.Range(1, 21);
         }
 
-        private int RollD12()
+        private int RollD12(int numDice)
         {
             //todo replace this with diceroller 
             return Random.Range(1, 13);
         }
 
-        private int RollD10()
+        private int RollD10(int numDice)
         {
             //todo replace this with diceroller 
             return Random.Range(1, 11);
+        }
+
+        private int RollD6(int numDice)
+        {
+            //todo replace this with diceroller 
+
+            var total = 0;
+
+            for (var i = 0; i < numDice; i++)
+            {
+                total += Random.Range(1, 7);
+            }
+
+            return total;
         }
     }
 }

@@ -19,10 +19,6 @@ namespace Assets.Scripts.Encounters
 
         public float TimeTilNextEncounter;
 
-        //todo need ui references 
-
-        //todo need some sort of encounter queue for pending encounters like for mental breaks
-
         public static EncounterManager Instance;
 
         private void Start()
@@ -78,7 +74,7 @@ namespace Assets.Scripts.Encounters
 
             var combatEncounters = EncounterStore.Instance.GetCombatEncounters();
 
-            //_normalEncounterDeck.AddCard(combatEncounters[Random.Range(0, combatEncounters.Count)]);
+            _normalEncounterDeck.AddCard(combatEncounters[Random.Range(0, combatEncounters.Count)]);
 
             _normalEncounterDeck.Shuffle();
 

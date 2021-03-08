@@ -28,7 +28,7 @@ namespace Assets.Scripts.Encounters.Normal
             var optionReward = new Reward();
             Penalty optionPenalty = null;
 
-            optionReward.AddEntityGain(curiousCompanion, EntityAttributeTypes.Might, 1);
+            optionReward.AddEntityGain(curiousCompanion, EntityAttributeTypes.Physique, 1);
 
             var optionOne = new Option(optionTitle, optionResultText, optionReward, null, EncounterType);
 
@@ -52,7 +52,7 @@ namespace Assets.Scripts.Encounters.Normal
             optionResultText = $"The cauldron's bubbling grows violent and a discolored cloud envelopes {curiousCompanion.FirstName()}. The cloud clears and they feel... different. \n\n Faster? \n\n Faster.";
 
             optionReward = new Reward();
-            optionReward.AddEntityGain(curiousCompanion, EntityAttributeTypes.Speed, 1);
+            optionReward.AddEntityGain(curiousCompanion, EntityAttributeTypes.Agility, 1);
 
             var optionThree = new Option(optionTitle, optionResultText, optionReward, null, EncounterType);
 
