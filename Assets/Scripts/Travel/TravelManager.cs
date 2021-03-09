@@ -52,7 +52,7 @@ namespace Assets.Scripts.Travel
 
             //todo this is getting called when we come back to travel scene -- was it always getting called? I don't think we tested with combat is why
             // prob don't wanna call this in start method then
-            StartNewDay();
+            //StartNewDay();
         }
 
         public void NewParty()
@@ -312,6 +312,11 @@ namespace Assets.Scripts.Travel
             }
 
             return penaltiesText;
+        }
+
+        private void OnDestroy()
+        {
+            EventMediator.Instance.UnsubscribeFromAllEvents(this);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

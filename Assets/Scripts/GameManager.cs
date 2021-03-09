@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Travel;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -102,6 +103,13 @@ namespace Assets.Scripts
         public bool AnyActiveWindows()
         {
             return _activeWindows.Any();
+        }
+
+        public void StartNewGame()
+        {
+            LoadTravelScene();
+
+            TravelManager.Instance.StartNewDay();
         }
 
         public void LoadTravelScene()
