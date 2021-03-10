@@ -14,7 +14,7 @@ namespace Assets.Scripts.Entities
 
         public int Dodge { get; set; }
         public int Lockpicking { get; set; }
-        public int Stamina { get; set; }
+        public int Toughness { get; set; }
         public int Healing { get; set; }
         public int Survival { get; set; }
         public int Persuasion { get; set; }
@@ -30,7 +30,7 @@ namespace Assets.Scripts.Entities
             {
                 { EntitySkillTypes.Dodge, SkillMin },
                 { EntitySkillTypes.Lockpicking, SkillMin },
-                { EntitySkillTypes.Stamina, SkillMin },
+                { EntitySkillTypes.Toughness, SkillMin },
                 { EntitySkillTypes.Healing, SkillMin },
                 { EntitySkillTypes.Survival, SkillMin },
                 { EntitySkillTypes.Persuasion, SkillMin }
@@ -63,8 +63,8 @@ namespace Assets.Scripts.Entities
                     case EntitySkillTypes.Lockpicking:
                         Lockpicking = startingValue.Value;
                         break;
-                    case EntitySkillTypes.Stamina:
-                        Stamina = startingValue.Value;
+                    case EntitySkillTypes.Toughness:
+                        Toughness = startingValue.Value;
                         break;
                     case EntitySkillTypes.Healing:
                         Healing = startingValue.Value;

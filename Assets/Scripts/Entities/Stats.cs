@@ -232,7 +232,7 @@ namespace Assets.Scripts.Entities
             MaxHealth =  RollD6(attributes.Physique) + 20;
             CurrentHealth = MaxHealth;
 
-            MaxEnergy = RollD6(skills.Stamina) + 20;
+            MaxEnergy = RollD6(skills.Toughness) + 20;
             CurrentEnergy = MaxEnergy;
 
             MaxMorale = RollD6(attributes.Charisma) + 20;

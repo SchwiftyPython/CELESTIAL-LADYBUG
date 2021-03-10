@@ -8,8 +8,8 @@ namespace Assets.Scripts
         Dodge,
         [Description("Lockpicking")]
         Lockpicking,
-        [Description("Stamina")]
-        Stamina,
+        [Description("Toughness")]
+        Toughness,
         [Description("Healing")]
         Healing,
         [Description("Survival")]
