@@ -9,6 +9,8 @@ namespace Assets.Scripts.Encounters
     {
         private const string EncounterFinished = GlobalHelper.EncounterFinished;
         private const string MentalBreak = GlobalHelper.MentalBreak;
+        private const string PauseTimerEvent = GlobalHelper.PauseTimer;
+        private const string ResumeTimerEvent = GlobalHelper.ResumeTimer;
 
         private bool _timerPaused;
 
@@ -35,6 +37,8 @@ namespace Assets.Scripts.Encounters
             
             EventMediator.Instance.SubscribeToEvent(MentalBreak, this);
             EventMediator.Instance.SubscribeToEvent(GlobalHelper.DerpusNoEnergy, this);
+            EventMediator.Instance.SubscribeToEvent(PauseTimerEvent, this);
+            EventMediator.Instance.SubscribeToEvent(ResumeTimerEvent, this);
 
             PauseTimer();
         }
@@ -171,8 +175,18 @@ namespace Assets.Scripts.Encounters
             {
                 AddToEncounterQueue(EncounterStore.Instance.GetDerpusNoEnergyEncounter());
             }
+            else if (eventName.Equals(PauseTimerEvent))
+            {
+                PauseTimer();
+            }
+            else if (eventName.Equals(ResumeTimerEvent))
+            {
+                //todo need to check if an encounter is in progress
 
-            //todo events for pause timer, resume timer, reset timer, draw trigger encounter
+                ResumeTimer();
+            }
+
+            //todo events for reset timer, draw trigger encounter
         }
     }
 }

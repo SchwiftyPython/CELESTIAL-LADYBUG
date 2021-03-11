@@ -14,15 +14,12 @@ namespace Assets.Scripts.Entities
 {
     public class Entity : GameObject
     {
-        private Race _race;
-        private EntityClass _entityClass;
         private int _level;
         private int _xp;
         private bool _isPlayer;
 
         private List<Effect> _effects;
 
-        
         private Armor _equippedArmor;
 
         //todo use this instead of get component if possible
@@ -32,6 +29,8 @@ namespace Assets.Scripts.Entities
 
         public string Name { get; set; }
         public Sex Sex { get; }
+        public Race _race { get; }
+        public EntityClass _entityClass { get; }
         public Attributes Attributes { get; }
         public Stats Stats { get; }
         public Skills Skills { get; }
