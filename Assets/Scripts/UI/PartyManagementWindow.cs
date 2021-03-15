@@ -67,7 +67,6 @@ namespace Assets.Scripts.UI
 
         public void PreviousCompanion()
         {
-            //todo
             if (_companions == null || _companions.Count < 1)
             {
                 return;
