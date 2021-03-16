@@ -32,7 +32,7 @@ namespace Assets.Scripts.UI
             _apCost.text = $"{floorTile.ApCost} AP to cross";
 
             var position = Input.mousePosition;
-            gameObject.transform.position = new Vector2(position.x + 90f, position.y + 80f);
+            gameObject.transform.position = new Vector2(position.x + 120f, position.y + 110f);
 
             EventMediator.Instance.SubscribeToEvent(HidePopupEvent, this);
 

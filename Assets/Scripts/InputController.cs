@@ -26,11 +26,36 @@ namespace Assets.Scripts
             //game dev tv inventory course shows how
             if (Input.GetKeyDown(KeyCode.I))
             {
-                EventMediator.Instance.Broadcast(GlobalHelper.ManageParty, this);
+                var pauseMenu = GameObject.Find("PauseMenuMask");
+
+                if (GameManager.Instance.WindowActive(pauseMenu))
+                {
+                    return;
+                }
+
+                var partyWindow = GameObject.Find("PartyManagementWindowMask");
+
+                if (GameManager.Instance.WindowActive(partyWindow))
+                {
+                    EventMediator.Instance.Broadcast(GlobalHelper.HidePartyManagement, this);
+                }
+                else
+                {
+                    EventMediator.Instance.Broadcast(GlobalHelper.ManageParty, this);
+                }
             }
             else if (Input.GetKeyDown(KeyCode.Escape))
             {
-                EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
+                var pauseMenu = GameObject.Find("PauseMenuMask");
+
+                if (GameManager.Instance.WindowActive(pauseMenu))
+                {
+                    EventMediator.Instance.Broadcast(GlobalHelper.HidePauseMenu, this);
+                }
+                else
+                {
+                    EventMediator.Instance.Broadcast(GlobalHelper.ShowPauseMenu, this);
+                }
             }
         }
     }

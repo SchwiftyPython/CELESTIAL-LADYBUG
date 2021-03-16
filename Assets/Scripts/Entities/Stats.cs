@@ -139,7 +139,24 @@ namespace Assets.Scripts.Entities
         private int _maxActionPoints;
         public int MaxActionPoints
         {
-            get => _maxActionPoints;
+            get
+            {
+                //todo refactor to use modifiers or something
+
+                var energyPercentage = ((float)CurrentEnergy / MaxEnergy) * 100;
+
+                if (energyPercentage < 25)
+                {
+                    return _maxActionPoints - 2;
+                }
+
+                if (energyPercentage < 50)
+                {
+                    return _maxActionPoints - 1;
+                }
+
+                return _maxActionPoints;
+            }
             set
             {
                 if (value > PrototypeStatsCap)

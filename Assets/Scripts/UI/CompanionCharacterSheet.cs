@@ -31,7 +31,7 @@ namespace Assets.Scripts.UI
 
         //private Entity _companion;
 
-        private void Start()
+        private void Awake()
         {
             EventMediator.Instance.SubscribeToEvent(PopulateCharacterSheet, this);
         }

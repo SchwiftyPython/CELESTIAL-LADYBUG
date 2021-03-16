@@ -25,9 +25,9 @@ namespace Assets.Scripts
         {
             GenerateStartingParty();
 
-            Food = 50;
-            HealthPotions = 40;
-            Gold = 550;
+            Food = 12;
+            HealthPotions = 5;
+            Gold = 100;
         }
 
         //todo refactor

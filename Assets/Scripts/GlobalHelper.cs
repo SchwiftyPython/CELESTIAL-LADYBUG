@@ -35,6 +35,7 @@ namespace Assets.Scripts
         public const string AbilityHovered = "AbilityHovered";
         public const string HidePopup = "HidePopup";
         public const string ManageParty = "ManageParty";
+        public const string HidePartyManagement = "HidePartyManagement";
         public const string PopulateCharacterSheet = "PopulateCharacterSheet";
         public const string EndTurn = "EndTurn";
         public const string NextTarget = "NextTarget";
@@ -53,6 +54,8 @@ namespace Assets.Scripts
         public const string ActiveEntityMoved = "ActiveEntityMoved";
         public const string PauseTimer = "PauseTimer";
         public const string ResumeTimer = "ResumeTimer";
+        public const string ShowPauseMenu = "ShowPauseMenu";
+        public const string HidePauseMenu = "HidePauseMenu";
 
         #endregion EventNames
 

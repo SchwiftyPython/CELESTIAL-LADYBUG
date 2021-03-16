@@ -9,7 +9,7 @@ namespace Assets.Scripts.UI
     public class PartyManagementWindow : MonoBehaviour, ISubscriber
     {
         private const string ShowPopupEvent = GlobalHelper.ManageParty;
-        private const string HidePopupEvent = GlobalHelper.HidePopup;
+        private const string HidePopupEvent = GlobalHelper.HidePartyManagement;
 
         private List<Entity> _companions;
 
@@ -17,7 +17,7 @@ namespace Assets.Scripts.UI
 
         private void Start()
         {
-            EventMediator.Instance.SubscribeToEvent(ShowPopupEvent, this);
+            //EventMediator.Instance.SubscribeToEvent(ShowPopupEvent, this);
             Hide();
         }
 
@@ -27,6 +27,7 @@ namespace Assets.Scripts.UI
             EventMediator.Instance.Broadcast(GlobalHelper.PauseTimer, this);
 
             EventMediator.Instance.SubscribeToEvent(HidePopupEvent, this);
+            EventMediator.Instance.UnsubscribeFromEvent(ShowPopupEvent, this);
 
             gameObject.SetActive(true);
             GameManager.Instance.AddActiveWindow(gameObject);
@@ -34,6 +35,7 @@ namespace Assets.Scripts.UI
 
         private void Hide()
         {
+            EventMediator.Instance.SubscribeToEvent(ShowPopupEvent, this);
             EventMediator.Instance.UnsubscribeFromEvent(HidePopupEvent, this);
             EventMediator.Instance.Broadcast(GlobalHelper.ResumeTimer, this);
             gameObject.SetActive(false);

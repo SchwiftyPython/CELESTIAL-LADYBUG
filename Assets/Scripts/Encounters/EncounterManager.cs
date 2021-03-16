@@ -13,6 +13,7 @@ namespace Assets.Scripts.Encounters
         private const string ResumeTimerEvent = GlobalHelper.ResumeTimer;
 
         private bool _timerPaused;
+        private bool _encounterInProgress;
 
         private EncounterDeck _normalEncounterDeck;
         private EncounterDeck _campingDeck;
@@ -101,6 +102,8 @@ namespace Assets.Scripts.Encounters
 
             encounter.Run();
 
+            _encounterInProgress = true;
+
             EventMediator.Instance.SubscribeToEvent(EncounterFinished, this);
         }
 
@@ -152,6 +155,8 @@ namespace Assets.Scripts.Encounters
                 EventMediator.Instance.UnsubscribeFromEvent(EncounterFinished, this);
 
                 RunQueuedEncounters();
+
+                _encounterInProgress = false;
             }
             else if (eventName.Equals(MentalBreak))
             {
@@ -167,7 +172,6 @@ namespace Assets.Scripts.Encounters
                 else
                 {
                     //todo draw from the mental break deck
-                    //EncounterStore.Instance.GetRandomMentalBreakEncounter(companion).Run();
                     AddToEncounterQueue(EncounterStore.Instance.GetRandomMentalBreakEncounter(companion));
                 }
             }
@@ -181,7 +185,10 @@ namespace Assets.Scripts.Encounters
             }
             else if (eventName.Equals(ResumeTimerEvent))
             {
-                //todo need to check if an encounter is in progress
+                if (_encounterInProgress)
+                {
+                    return;
+                }
 
                 ResumeTimer();
             }

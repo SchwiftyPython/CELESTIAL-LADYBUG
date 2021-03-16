@@ -105,6 +105,19 @@ namespace Assets.Scripts
             return _activeWindows.Any();
         }
 
+        public bool WindowActive(GameObject window)
+        {
+            foreach (var activeWindow in _activeWindows)
+            {
+                if (ReferenceEquals(activeWindow, window))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public void StartNewGame()
         {
             LoadTravelScene();
