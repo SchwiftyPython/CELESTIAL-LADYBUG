@@ -120,6 +120,8 @@ namespace Assets.Scripts
 
         public void StartNewGame()
         {
+            //todo BUG this in fact does not start a new game lmao
+
             LoadTravelScene();
 
             TravelManager.Instance.StartNewDay();
@@ -128,11 +130,6 @@ namespace Assets.Scripts
         public void LoadTravelScene()
         {
             SceneManager.LoadScene(TravelSceneName);
-        }
-
-        public void QuitToDesktop()
-        {
-            Application.Quit();
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

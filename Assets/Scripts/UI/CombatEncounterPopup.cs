@@ -92,7 +92,7 @@ namespace Assets.Scripts.UI
                 //todo we want to make retreat not interactive for now -- refactor if clunky looking
                 if (encounter.Options[optionText] is RetreatCombatOption)
                 {
-                    button.MakeNonInteractive();
+                    button.gameObject.SetActive(false);
                 }
 
                 optionButtonIndex++;

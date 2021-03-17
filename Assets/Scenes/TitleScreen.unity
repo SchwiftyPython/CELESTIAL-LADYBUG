@@ -252,7 +252,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Build 3316
+  m_text: Build 3317
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}
@@ -342,6 +342,7 @@ GameObject:
   - component: {fileID: 293708782}
   - component: {fileID: 293708781}
   - component: {fileID: 293708784}
+  - component: {fileID: 293708785}
   m_Layer: 5
   m_Name: StartButton
   m_TagString: Untagged
@@ -412,7 +413,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 558385848}
+      - m_Target: {fileID: 293708785}
         m_MethodName: StartNewGame
         m_Mode: 1
         m_Arguments:
@@ -481,6 +482,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0478c67f840bd6c4d9c4edd0b1bde463, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &293708785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293708779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 016848409c1f3d94c93f674ccb21d7f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &329077954
@@ -2593,6 +2606,7 @@ GameObject:
   - component: {fileID: 2070665266}
   - component: {fileID: 2070665265}
   - component: {fileID: 2070665268}
+  - component: {fileID: 2070665269}
   m_Layer: 5
   m_Name: QuitButton
   m_TagString: Untagged
@@ -2674,7 +2688,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 558385848}
+      - m_Target: {fileID: 2070665269}
         m_MethodName: QuitToDesktop
         m_Mode: 1
         m_Arguments:
@@ -2732,6 +2746,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0478c67f840bd6c4d9c4edd0b1bde463, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2070665269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2070665263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c962fb3778f8244cbcef10e3708e17b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2118330212

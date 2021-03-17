@@ -45,14 +45,10 @@ namespace Assets.Scripts.Travel
 
             TravelDaysToDestination = DemoDaysToDestination;
 
-            //todo testing
+            //todo testing -- prevents new game from running on return to title screen
             //TESTING//////////////////////////////////////
             NewParty();
             //END TESTING/////////////////////////////////
-
-            //todo this is getting called when we come back to travel scene -- was it always getting called? I don't think we tested with combat is why
-            // prob don't wanna call this in start method then
-            //StartNewDay();
         }
 
         public void NewParty()

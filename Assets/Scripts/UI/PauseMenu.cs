@@ -10,7 +10,6 @@ namespace Assets.Scripts.UI
 
         private void Start()
         {
-            //EventMediator.Instance.SubscribeToEvent(ShowPopupEvent, this);
             Hide();
         }
 
