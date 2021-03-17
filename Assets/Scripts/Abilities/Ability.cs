@@ -9,13 +9,15 @@ namespace Assets.Scripts.Abilities
         public int ApCost { get; private set; }
         public int Range { get; private set; }
         public Entity AbilityOwner { get; private set; }
+        public bool HostileTargetsOnly { get; private set; }
 
-        public Ability(string name, int apCost, int range, Entity abilityOwner)
+        public Ability(string name, int apCost, int range, Entity abilityOwner, bool hostileTargetsOnly)
         {
             Name = name;
             ApCost = apCost;
             Range = range;
             AbilityOwner = abilityOwner;
+            HostileTargetsOnly = hostileTargetsOnly;
         }
 
         public void Use(Entity abilityOwner, Entity target)
@@ -41,11 +43,21 @@ namespace Assets.Scripts.Abilities
             abilityOwner.SubtractActionPoints(ApCost);
         }
 
-        public bool TargetInRange(Entity abilityOwner, Entity target)
+        public bool TargetInRange(Entity target)
         {
-            var distance = Distance.CHEBYSHEV.Calculate(abilityOwner.Position, target.Position);
+            var distance = Distance.CHEBYSHEV.Calculate(AbilityOwner.Position, target.Position);
 
             return Range >= distance;
+        }
+
+        public bool TargetValid(Entity target)
+        {
+            if (HostileTargetsOnly)
+            {
+                return AbilityOwner.IsPlayer() != target.IsPlayer();
+            }
+
+            return AbilityOwner.IsPlayer() == target.IsPlayer();
         }
     }
 }

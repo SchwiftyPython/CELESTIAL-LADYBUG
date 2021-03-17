@@ -104,7 +104,7 @@ namespace Assets.Scripts.Entities
             Abilities = new List<Ability>();
 
             //todo for testing need to remove
-            var testSlashAbility = new Ability("slash", 3, 1, this);
+            var testSlashAbility = new Ability("slash", 3, 1, this, true);
 
             Abilities.Add(testSlashAbility);
         }

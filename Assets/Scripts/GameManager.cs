@@ -124,6 +124,8 @@ namespace Assets.Scripts
 
             LoadTravelScene();
 
+            TravelManager.Instance.NewParty();
+
             TravelManager.Instance.StartNewDay();
         }
 

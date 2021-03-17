@@ -44,11 +44,6 @@ namespace Assets.Scripts.Travel
             _currentDayOfTravel = 0;
 
             TravelDaysToDestination = DemoDaysToDestination;
-
-            //todo testing -- prevents new game from running on return to title screen
-            //TESTING//////////////////////////////////////
-            NewParty();
-            //END TESTING/////////////////////////////////
         }
 
         public void NewParty()

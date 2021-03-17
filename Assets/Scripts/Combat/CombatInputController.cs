@@ -93,9 +93,10 @@ namespace Assets.Scripts.Combat
                     {
                         HighlightTileUnderMouse();
                     }
-                    else if(entity != null)
+                    else if (entity != null)
                     {
-                        if (_isAbilitySelected)
+                        if (_isAbilitySelected && _selectedAbility.TargetValid(entity) &&
+                            _selectedAbility.TargetInRange(entity))
                         {
                             ShowHitChance(entity);
                         }
@@ -122,7 +123,7 @@ namespace Assets.Scripts.Combat
 
                             var entity = (Entity)_map.Entities.GetItems(mouseCoord).FirstOrDefault();
 
-                            if (entity != null && _selectedAbility.TargetInRange(CombatManager.Instance.ActiveEntity, entity))
+                            if (entity != null && _selectedAbility.TargetValid(entity) && _selectedAbility.TargetInRange(entity))
                             {
                                 _selectedAbility.Use(CombatManager.Instance.ActiveEntity, entity);
 

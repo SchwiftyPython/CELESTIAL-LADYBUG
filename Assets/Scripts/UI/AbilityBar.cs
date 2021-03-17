@@ -64,7 +64,7 @@ namespace Assets.Scripts.UI
             //todo determine abilities from the entity
             //todo for each ability populate bar with an ability button prefab
 
-            var testSlashAbility = new Ability("slash", 3, 1, _activeEntity);
+            var testSlashAbility = new Ability("slash", 3, 1, _activeEntity, true);
 
             var testInstance = Instantiate(AbilityButtonPrefab, new Vector3(0, 0), Quaternion.identity);
 
