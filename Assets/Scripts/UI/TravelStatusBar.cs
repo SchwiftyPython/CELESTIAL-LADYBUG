@@ -99,9 +99,14 @@ namespace Assets.Scripts.UI
                     return;
                 }
 
-                ScrollPartyLeftButton.SetActive(false);
                 ScrollPartyRightButton.SetActive(true);
             }
+            else
+            {
+                ScrollPartyRightButton.SetActive(false);
+            }
+
+            ScrollPartyLeftButton.SetActive(false);
         }
 
         //todo maybe polish to keep from resetting party status list to first each time
