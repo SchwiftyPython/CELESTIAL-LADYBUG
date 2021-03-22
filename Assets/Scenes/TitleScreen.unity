@@ -1814,6 +1814,72 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1180150243
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1180150245}
+  - component: {fileID: 1180150244}
+  m_Layer: 0
+  m_Name: SpriteStore
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1180150244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180150243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50f878273bca7c04f90986d18c3b5f04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SkinSprites:
+  - {fileID: 21300000, guid: e01a0708307655442ab40f21ee7b47cf, type: 3}
+  EarSprites:
+  - {fileID: 21300000, guid: 9542cc760430f65409148ede153161c6, type: 3}
+  ChestSprites:
+  - {fileID: 21300000, guid: c47ebc3ceedfae04ea61261a90063074, type: 3}
+  - {fileID: 21300000, guid: 8ac7ea0761a0681449fe39a0896cdd3d, type: 3}
+  - {fileID: 21300000, guid: b322726debb83bc4891cda41d49ac897, type: 3}
+  FacialFairSprites:
+  - {fileID: 21300000, guid: 5c06541cc4da08f46a5c6c1b0119af65, type: 3}
+  - {fileID: 21300000, guid: bd6a60825000e784b9b21f7157fcf167, type: 3}
+  - {fileID: 21300000, guid: 26dad3767c30ea14485920be15eb4954, type: 3}
+  - {fileID: 21300000, guid: 360579ae60e4d5043a225092878ecc81, type: 3}
+  - {fileID: 21300000, guid: fd9cbc04a59be6040b9482084a862335, type: 3}
+  HairSprites:
+  - {fileID: 21300000, guid: 55c5abce2e400d543afe0eaaf73c4fc4, type: 3}
+  - {fileID: 21300000, guid: 995b73843a499394a8a23952cd929bca, type: 3}
+  - {fileID: 21300000, guid: 94d0c6141742a9c4f9943e12be8480f2, type: 3}
+  - {fileID: 21300000, guid: 2a22b65d9db5e434d99dcf6414a7b2ee, type: 3}
+  HelmetSprites:
+  - {fileID: 21300000, guid: 00cbfbf02f7bcb246aabfc82e51a9e95, type: 3}
+  - {fileID: 21300000, guid: e51347b0ac26dea469746c5459de4f87, type: 3}
+  - {fileID: 21300000, guid: 661e640015735904e9b8f4f79002ff15, type: 3}
+--- !u!4 &1180150245
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180150243}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 980.3539, y: 531.37006, z: -2581.1323}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1259350470
 GameObject:
   m_ObjectHideFlags: 0

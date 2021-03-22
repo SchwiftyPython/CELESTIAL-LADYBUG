@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -48,6 +49,16 @@ namespace Assets.Scripts.UI
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(slot), slot, null);
+            }
+        }
+
+        public void SetPortrait(Dictionary<Slot, Sprite> sprites)
+        {
+            foreach (Slot slot in Enum.GetValues(typeof(Slot)))
+            {
+                var sprite = sprites[slot];
+
+                SetSprite(slot, sprite);
             }
         }
 

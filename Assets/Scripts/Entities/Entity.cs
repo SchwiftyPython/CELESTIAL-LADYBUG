@@ -6,6 +6,7 @@ using Assets.Scripts.AI;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Entities.Names;
 using Assets.Scripts.Items;
+using Assets.Scripts.UI;
 using UnityEngine;
 using GameObject = GoRogue.GameFramework.GameObject;
 using Random = UnityEngine.Random;
@@ -34,7 +35,7 @@ namespace Assets.Scripts.Entities
         public Attributes Attributes { get; }
         public Stats Stats { get; }
         public Skills Skills { get; }
-        public Sprite Portrait { get; private set; }
+        public Dictionary<Portrait.Slot, string> Portrait { get; private set; }
         public Weapon EquippedWeapon { get; private set; }
         public List<Ability> Abilities { get; private set; }
 
@@ -89,14 +90,9 @@ namespace Assets.Scripts.Entities
             Skills = new Skills();
             Stats = new Stats(this, Attributes, Skills);
 
-            // //todo testing for derpus low energy and low morale
-            // if (IsDerpus())
-            // {
-            //     Stats.MaxMorale = 5;
-            //     Stats.CurrentMorale = Stats.MaxMorale;
-            //     Stats.MaxEnergy = 5;
-            //     Stats.CurrentEnergy = Stats.MaxEnergy;
-            // }
+            GenerateStartingEquipment();
+
+            GeneratePortrait();
 
             _level = 1;
             _xp = 0;
@@ -406,6 +402,20 @@ namespace Assets.Scripts.Entities
             }
 
             return NameStore.Instance.GenerateFullName(possibleNameFiles, sex);
+        }
+
+        private void GeneratePortrait()
+        {
+            Portrait = new Dictionary<Portrait.Slot, string>();
+
+            //todo base off of equipped items
+
+            foreach (Portrait.Slot slot in Enum.GetValues(typeof(Portrait.Slot)))
+            {
+                Portrait.Add(slot, SpriteStore.Instance.GetRandomSpriteKeyForSlot(slot));
+
+                //Portrait[slot] = SpriteStore.Instance.GetRandomSpriteKeyForSlot(slot);
+            }
         }
 
         private Sex PickSex()
