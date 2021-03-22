@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Entities;
+﻿using System.Collections.Generic;
+using Assets.Scripts.Entities;
 using TMPro;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace Assets.Scripts.UI
     {
         private const string PopulateCharacterSheet = GlobalHelper.PopulateCharacterSheet;
 
-        [SerializeField] private GameObject _portrait;
+        [SerializeField] private GameObject _portraitParent;
         [SerializeField] private TextMeshProUGUI _name;
         [SerializeField] private TextMeshProUGUI _raceClass;
 
@@ -29,7 +30,7 @@ namespace Assets.Scripts.UI
         [SerializeField] private TextMeshProUGUI _survival;
         [SerializeField] private TextMeshProUGUI _persuasion;
 
-        //private Entity _companion;
+        private Portrait _portrait;
 
         private void Awake()
         {
@@ -38,7 +39,8 @@ namespace Assets.Scripts.UI
 
         private void Populate(Entity companion)
         {
-            //todo set portrait
+            SetPortrait(companion.Portrait);
+
             _name.text = companion.Name;
             _raceClass.text = $"{companion._race}  {companion._entityClass}";
 
@@ -66,6 +68,24 @@ namespace Assets.Scripts.UI
             _intellect.text = attributes.Intellect.ToString();
             _acumen.text = attributes.Acumen.ToString();
             _charisma.text = attributes.Charisma.ToString();
+        }
+
+        private void SetPortrait(Dictionary<Portrait.Slot, string> portraitKeys)
+        {
+            var sprites = new Dictionary<Portrait.Slot, Sprite>();
+
+            foreach (var slot in portraitKeys.Keys)
+            {
+                var slotSprite = SpriteStore.Instance.GetSpriteForSlotByKey(slot, portraitKeys[slot]);
+                sprites.Add(slot, slotSprite);
+            }
+
+            if (_portrait == null)
+            {
+                _portrait = _portraitParent.GetComponent<Portrait>();
+            }
+
+            _portrait.SetPortrait(sprites);
         }
 
 
