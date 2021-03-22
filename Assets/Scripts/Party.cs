@@ -266,9 +266,7 @@ namespace Assets.Scripts
             for (var i = 0; i < StartSize; i++)
             {
                 var companion = new Entity(true);
-
-                //companion.GenerateStartingEquipment();
-
+                
                 AddCompanion(companion);
             }
         }
