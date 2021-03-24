@@ -39,7 +39,7 @@ namespace Assets.Scripts.UI
 
         public static Palette Instance;
 
-        private void Start()
+        private void Awake()
         {
             if (Instance == null)
             {
