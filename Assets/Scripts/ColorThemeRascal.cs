@@ -11,6 +11,10 @@ namespace Assets.Scripts
 
         public GameObject BigThiccyBodyBoi;
         public GameObject BigThiccyHands;
+        public GameObject BigThiccyHelmet;
+        public GameObject BigThiccyFeet;
+        public GameObject BigThiccyHead;
+        public GameObject BigThiccyWeapon;
 
         private int _index;
 
@@ -33,6 +37,10 @@ namespace Assets.Scripts
         {
             BigThiccyBodyBoi.GetComponent<ColorSwapper>().SwapColorsOnSprite(scheme);
             BigThiccyHands.GetComponent<ColorSwapper>().SwapColorsOnSprite(scheme);
+            BigThiccyHelmet.GetComponent<ColorSwapper>().SwapColorsOnSprite(scheme);
+            BigThiccyFeet.GetComponent<ColorSwapper>().SwapColorsOnSprite(scheme);
+            BigThiccyHead.GetComponent<ColorSwapper>().SwapColorsOnSprite(scheme);
+            BigThiccyWeapon.GetComponent<ColorSwapper>().SwapColorsOnSprite(scheme);
         }
 
         public void SelectNextColorScheme()
