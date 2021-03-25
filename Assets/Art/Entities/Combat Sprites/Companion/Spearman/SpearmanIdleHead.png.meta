@@ -14,6 +14,18 @@ TextureImporter:
   - first:
       213: 8311562728026479701
     second: SpearmanIdleHead_3
+  - first:
+      213: -5164007718292056123
+    second: SpearmanIdleHead_0
+  - first:
+      213: 647551780351126144
+    second: SpearmanIdleHead_1
+  - first:
+      213: 8955871603950598960
+    second: SpearmanIdleHead_2
+  - first:
+      213: -1491746968465660665
+    second: SpearmanIdleHead_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -130,15 +142,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 99585037985beeaf0800000000000000
-      internalID: -365154917825542759
+      spriteID: 5c793dd1752c558b0800000000000000
+      internalID: -5164007718292056123
       vertices: []
       indices: 
       edges: []
@@ -151,15 +163,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5f5ccb366e4c10c00800000000000000
-      internalID: 865189097226683893
+      spriteID: 08a2081d9e09cf800800000000000000
+      internalID: 647551780351126144
       vertices: []
       indices: 
       edges: []
@@ -172,15 +184,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 53f28dfdb8b64b500800000000000000
-      internalID: 411071714497670965
+      spriteID: 03bbb7706c5a94c70800000000000000
+      internalID: 8955871603950598960
       vertices: []
       indices: 
       edges: []
@@ -193,15 +205,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 55c156cb34a985370800000000000000
-      internalID: 8311562728026479701
+      spriteID: 705a6d929004c4be0800000000000000
+      internalID: -1491746968465660665
       vertices: []
       indices: 
       edges: []

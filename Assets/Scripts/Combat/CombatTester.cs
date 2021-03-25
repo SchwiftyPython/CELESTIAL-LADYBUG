@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Travel;
 using UnityEngine;
 
 namespace Assets.Scripts.Combat
@@ -18,6 +19,8 @@ namespace Assets.Scripts.Combat
                 return;
             }
 
+            TravelManager.Instance.NewParty();
+
             var numBandits = Random.Range(MinBandits, MaxBandits + 1);
 
             var bandits = new List<Entity>();
@@ -26,12 +29,12 @@ namespace Assets.Scripts.Combat
             {
                 var bandit = new Entity(false);
 
-                bandit.GenerateStartingEquipment();
-
                 bandits.Add(bandit);
             }
 
             CombatManager.Instance.Enemies = bandits;
+
+            CombatManager.Instance.Load();
         }
     }
 }
