@@ -22,7 +22,7 @@ namespace Assets.Scripts.Travel
 
         public static TravelManager Instance;
 
-        private void Start()
+        private void Awake()
         {
             if (Instance == null)
             {

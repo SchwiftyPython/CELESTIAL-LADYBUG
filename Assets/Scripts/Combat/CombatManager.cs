@@ -47,7 +47,7 @@ namespace Assets.Scripts.Combat
 
         public static CombatManager Instance;
 
-        private void Start()
+        private void Awake()
         {
             if (Instance == null)
             {
