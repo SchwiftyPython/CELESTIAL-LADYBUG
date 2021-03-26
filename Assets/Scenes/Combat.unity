@@ -5832,7 +5832,6 @@ GameObject:
   - component: {fileID: 1105397122}
   - component: {fileID: 1105397124}
   - component: {fileID: 1105397123}
-  - component: {fileID: 1105397125}
   m_Layer: 5
   m_Name: TurnOrderBar
   m_TagString: Untagged
@@ -5899,23 +5898,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1105397121}
   m_CullTransparentMesh: 0
---- !u!114 &1105397125
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1105397121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67d911aad10aafa4fad7d020bff36083, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerSprite: {fileID: 21300000, guid: bb392fdd99ea02d4884077af24a01aba, type: 3}
-  EnemySprite: {fileID: 21300000, guid: 7d57c8763509ddd46a9b65011f0d9c2c, type: 3}
-  TurnOrderSpritePrefab: {fileID: 7388256366387357661, guid: 2532820dd4466b542b4bec3473766902,
-    type: 3}
-  TurnOrderParent: {fileID: 1097098349}
 --- !u!1 &1117057276
 GameObject:
   m_ObjectHideFlags: 0
@@ -10403,6 +10385,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1985405118}
+  - component: {fileID: 1985405119}
   m_Layer: 0
   m_Name: TurnOrderBarQuad
   m_TagString: Untagged
@@ -10425,6 +10408,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1985405119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985405117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67d911aad10aafa4fad7d020bff36083, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerSprite: {fileID: 8726410407947978318, guid: 03909cb094f99554281613a2848ef171,
+    type: 3}
+  EnemySprite: {fileID: 3736600100793527761, guid: 5b9b420637ddd694cb4430d422cb0bee,
+    type: 3}
+  SlotOne: {fileID: 1623449672}
+  SlotTwo: {fileID: 978625912}
+  SlotThree: {fileID: 1265861565}
+  SlotFour: {fileID: 2003336906}
+  SlotFive: {fileID: 1559465942}
+  SlotSix: {fileID: 778423500}
+  SlotSeven: {fileID: 510449065}
 --- !u!1 &1989433864
 GameObject:
   m_ObjectHideFlags: 0

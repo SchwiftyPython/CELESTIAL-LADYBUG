@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Combat;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
@@ -10,15 +9,17 @@ namespace Assets.Scripts.UI
         private const string RefreshEvent = GlobalHelper.RefreshCombatUi;
         private const int MaxSprites = 7;
 
-        private Queue<GameObject> _sprites;
-
         //todo for prototype only - get from the UiSprite in Entity class later
-        public Sprite PlayerSprite;
-        public Sprite EnemySprite;
+        public GameObject PlayerSprite;
+        public GameObject EnemySprite;
 
-        public GameObject TurnOrderSpritePrefab;
-
-        public Transform TurnOrderParent;
+        public Transform SlotOne;
+        public Transform SlotTwo;
+        public Transform SlotThree;
+        public Transform SlotFour;
+        public Transform SlotFive;
+        public Transform SlotSix;
+        public Transform SlotSeven;
 
         private void Start()
         {
@@ -28,7 +29,22 @@ namespace Assets.Scripts.UI
         //todo refactor
         private void Populate()
         {
-            GlobalHelper.DestroyAllChildren(TurnOrderParent.gameObject);
+            var slotList = new List<Transform>
+            {
+                SlotOne,
+                SlotTwo,
+                SlotThree,
+                SlotFour,
+                SlotFive,
+                SlotSix,
+                SlotSeven
+            };
+
+            //todo for each slot
+            foreach (var slot in slotList)
+            {
+                GlobalHelper.DestroyAllChildren(slot.gameObject);
+            }
 
             var turnOrder = CombatManager.Instance.TurnOrder;
 
@@ -50,21 +66,25 @@ namespace Assets.Scripts.UI
                     continue;
                 }
 
-                var instance = Instantiate(TurnOrderSpritePrefab, new Vector3(0, 0), Quaternion.identity);
-
-                Sprite sprite;
+                GameObject spriteParentPrefab;
                 if (entity.IsPlayer())
                 {
-                    sprite = PlayerSprite;
+                    spriteParentPrefab = PlayerSprite;
                 }
                 else
                 {
-                    sprite = EnemySprite;
+                    spriteParentPrefab = EnemySprite;
                 }
 
-                instance.gameObject.GetComponent<Image>().sprite = sprite;
+                var instance = Instantiate(spriteParentPrefab, new Vector3(0, 0), Quaternion.identity);
 
-                instance.transform.SetParent(TurnOrderParent);
+                instance.gameObject.GetComponent<Animator>().enabled = false;
+
+                instance.transform.SetParent(slotList[count]);
+
+                instance.transform.localPosition = new Vector3(-0.075f, -0.3f);
+
+                instance.transform.localScale = new Vector3(0.15f, 0.8f);
 
                 count++;
             }
