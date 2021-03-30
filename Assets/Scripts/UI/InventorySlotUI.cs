@@ -1,26 +1,27 @@
 ﻿using Assets.Scripts.Items;
+using Assets.Scripts.Utilities.UI.Dragging;
 using UnityEngine;
 
 namespace Assets.Scripts.UI
 {
-    public class InventorySlotUI : MonoBehaviour, IItemHolder, IDragContainer<Item>
+    public class InventorySlotUi : MonoBehaviour, IItemHolder, IDragContainer<Item>
     {
-        [SerializeField] InventoryItemIcon icon = null;
+        [SerializeField] private InventoryItemIcon _icon = null;
 
-        int index;
-        Item item;
-        Inventory inventory;
+        private int _index;
+        private Item _item;
+        private Inventory _inventory;
 
         public void Setup(Inventory inventory, int index)
         {
-            this.inventory = inventory;
-            this.index = index;
-            icon.SetItem(inventory.GetItemInSlot(index), inventory.GetNumberInSlot(index));
+            _inventory = inventory;
+            _index = index;
+            _icon.SetItem(inventory.GetItemInSlot(index), inventory.GetNumberInSlot(index));
         }
 
         public int MaxAcceptable(Item item)
         {
-            if (inventory.HasSpaceFor(item))
+            if (_inventory.HasSpaceFor(item))
             {
                 return int.MaxValue;
             }
@@ -29,22 +30,22 @@ namespace Assets.Scripts.UI
 
         public void AddItems(Item item, int number)
         {
-            inventory.AddItemToSlot(index, item, number);
+            _inventory.AddItemToSlot(_index, item, number);
         }
 
         public Item GetItem()
         {
-            return inventory.GetItemInSlot(index);
+            return _inventory.GetItemInSlot(_index);
         }
 
         public int GetNumber()
         {
-            return inventory.GetNumberInSlot(index);
+            return _inventory.GetNumberInSlot(_index);
         }
 
         public void RemoveItems(int number)
         {
-            inventory.RemoveFromSlot(index, number);
+            _inventory.RemoveFromSlot(_index, number);
         }
     }
 }

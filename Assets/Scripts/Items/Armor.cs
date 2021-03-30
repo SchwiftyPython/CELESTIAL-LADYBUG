@@ -1,11 +1,12 @@
-﻿namespace Assets.Scripts.Items
+﻿using UnityEngine;
+
+namespace Assets.Scripts.Items
 {
-    public class Armor : Item
+    public class Armor : EquipableItem
     {
-        //todo going to try minecraft damage protection
         public int Toughness { get; private set; }
 
-        public Armor(string itemName, ItemType type, int toughness) : base(itemName, type)
+        public Armor(EquipLocation equipLocation, string itemName, ItemType type, int toughness, string description, Sprite icon, bool stackable) : base(equipLocation, itemName, type, description, icon, stackable)
         {
             Toughness = toughness;
         }

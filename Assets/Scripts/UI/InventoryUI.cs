@@ -6,16 +6,16 @@ namespace Assets.Scripts.UI
     /// To be placed on the root of the inventory UI. Handles spawning all the
     /// inventory slot prefabs.
     /// </summary>
-    public class InventoryUI : MonoBehaviour
+    public class InventoryUi : MonoBehaviour
     {
-        [SerializeField] InventorySlotUI InventoryItemPrefab = null;
-        
-        Inventory playerInventory;
+        [SerializeField] private InventorySlotUi _inventoryItemPrefab = null;
+
+        private Inventory _playerInventory;
 
         private void Awake()
         {
-            playerInventory = Inventory.GetPlayerInventory();
-            playerInventory.InventoryUpdated += Redraw;
+            _playerInventory = Inventory.GetPartyInventory();
+            _playerInventory.InventoryUpdated += Redraw;
         }
 
         private void Start()
@@ -30,10 +30,10 @@ namespace Assets.Scripts.UI
                 Destroy(child.gameObject);
             }
 
-            for (int i = 0; i < playerInventory.GetSize(); i++)
+            for (var i = 0; i < _playerInventory.GetSize(); i++)
             {
-                var itemUI = Instantiate(InventoryItemPrefab, transform);
-                itemUI.Setup(playerInventory, i);
+                var itemUi = Instantiate(_inventoryItemPrefab, transform);
+                itemUi.Setup(_playerInventory, i);
             }
         }
     }

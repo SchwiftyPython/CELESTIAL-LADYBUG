@@ -36,7 +36,7 @@ namespace Assets.Scripts.UI
             _abilityDescription.text = "Description not implemented yet"; //todo
             _apCost.text = ability.ApCost.ToString();
 
-            var (damageMin, damageMax) = CombatManager.Instance.ActiveEntity.EquippedWeapon.DamageRange;
+            var (damageMin, damageMax) = CombatManager.Instance.ActiveEntity.GetEquippedWeapon().DamageRange;
 
             _damageDescription.text = $"Deals {damageMin + baseDamage} - {damageMax + baseDamage} damage";
 

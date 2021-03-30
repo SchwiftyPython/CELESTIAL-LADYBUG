@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Assets.Scripts.Items
 {
     //todo inherit from GameObject or IGameobject to take advantage of components?
-    public class Item : ScriptableObject, ISerializationCallbackReceiver
+    public class Item : ISerializationCallbackReceiver
     {
         public enum ItemType
         {
@@ -48,7 +48,7 @@ namespace Assets.Scripts.Items
             if (ItemLookupCache == null)
             {
                 ItemLookupCache = new Dictionary<string, Item>();
-                var itemList = Resources.LoadAll<Item>("");
+                /*var itemList = Resources.LoadAll<Item>("");
                 foreach (var item in itemList)
                 {
                     if (ItemLookupCache.ContainsKey(item._itemId))
@@ -59,7 +59,7 @@ namespace Assets.Scripts.Items
                     }
 
                     ItemLookupCache[item._itemId] = item;
-                }
+                }*/
             }
 
             return itemId == null || !ItemLookupCache.ContainsKey(itemId) ? null : ItemLookupCache[itemId];
