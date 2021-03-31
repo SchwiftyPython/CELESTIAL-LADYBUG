@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Assets.Scripts.Items;
 using Assets.Scripts.Saving;
 using UnityEngine;
@@ -12,12 +11,21 @@ namespace Assets.Scripts
     /// </summary>
     public class Equipment : ISaveable
     {
-        private Dictionary<EquipLocation, EquipableItem> _equippedItems = new Dictionary<EquipLocation, EquipableItem>();
-        
-        /// <summary>
-        /// Broadcasts when the items in the slots are added/removed.
-        /// </summary>
-        public event Action EquipmentUpdated;
+        private Dictionary<EquipLocation, EquipableItem> _equippedItems;
+
+        public Equipment()
+        {
+            _equippedItems = new Dictionary<EquipLocation, EquipableItem>
+            {
+                {EquipLocation.Helmet, null},
+                {EquipLocation.Gloves, null},
+                {EquipLocation.Body, null},
+                {EquipLocation.Boots, null},
+                {EquipLocation.Ring, null},
+                {EquipLocation.Weapon, null},
+                {EquipLocation.Shield, null} //only some classes have shield available
+            };
+        }
 
         /// <summary>
         /// Return the item in the given equip location.
@@ -42,7 +50,7 @@ namespace Assets.Scripts
 
             _equippedItems[slot] = item;
 
-            EquipmentUpdated?.Invoke();
+            EventMediator.Instance.Broadcast(GlobalHelper.EquipmentUpdated, this);
         }
 
         /// <summary>
@@ -50,12 +58,15 @@ namespace Assets.Scripts
         /// </summary>
         public void RemoveItem(EquipLocation slot)
         {
-            _equippedItems.Remove(slot);
-            EquipmentUpdated?.Invoke();
+            //_equippedItems.Remove(slot);
+            _equippedItems[slot] = null;
+            EventMediator.Instance.Broadcast(GlobalHelper.EquipmentUpdated, this);
         }
 
         object ISaveable.CaptureState()
         {
+            //todo 
+
             var equippedItemsForSerialization = new Dictionary<EquipLocation, string>();
             foreach (var pair in _equippedItems)
             {
@@ -66,6 +77,8 @@ namespace Assets.Scripts
 
         void ISaveable.RestoreState(object state)
         {
+            //todo
+
             _equippedItems = new Dictionary<EquipLocation, EquipableItem>();
 
             var equippedItemsForSerialization = (Dictionary<EquipLocation, string>)state;

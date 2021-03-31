@@ -6,16 +6,18 @@ namespace Assets.Scripts.UI
     /// To be placed on the root of the inventory UI. Handles spawning all the
     /// inventory slot prefabs.
     /// </summary>
-    public class InventoryUi : MonoBehaviour
+    public class InventoryUi : MonoBehaviour, ISubscriber
     {
+        private const string RefreshEvent = GlobalHelper.InventoryUpdated;
+
         [SerializeField] private InventorySlotUi _inventoryItemPrefab = null;
 
-        private Inventory _playerInventory;
+        private Inventory _partyInventory;
 
         private void Awake()
         {
-            _playerInventory = Inventory.GetPartyInventory();
-            _playerInventory.InventoryUpdated += Redraw;
+            _partyInventory = Inventory.GetPartyInventory();
+            EventMediator.Instance.SubscribeToEvent(RefreshEvent, this);
         }
 
         private void Start()
@@ -30,10 +32,23 @@ namespace Assets.Scripts.UI
                 Destroy(child.gameObject);
             }
 
-            for (var i = 0; i < _playerInventory.GetSize(); i++)
+            if (_partyInventory == null)
+            {
+                _partyInventory = Inventory.GetPartyInventory();
+            }
+
+            for (var i = 0; i < _partyInventory.GetSize(); i++)
             {
                 var itemUi = Instantiate(_inventoryItemPrefab, transform);
-                itemUi.Setup(_playerInventory, i);
+                itemUi.Setup(_partyInventory, i);
+            }
+        }
+
+        public void OnNotify(string eventName, object broadcaster, object parameter = null)
+        {
+            if (eventName.Equals(RefreshEvent))
+            {
+                Redraw();
             }
         }
     }

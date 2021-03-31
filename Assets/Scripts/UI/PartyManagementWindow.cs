@@ -24,6 +24,7 @@ namespace Assets.Scripts.UI
         private void Show()
         {
             EventMediator.Instance.Broadcast(GlobalHelper.PopulateCharacterSheet, this, _companions.First());
+            EventMediator.Instance.Broadcast(GlobalHelper.EquipmentUpdated, this, _companions.First());
             EventMediator.Instance.Broadcast(GlobalHelper.PauseTimer, this);
 
             EventMediator.Instance.SubscribeToEvent(HidePopupEvent, this);
@@ -64,7 +65,7 @@ namespace Assets.Scripts.UI
             }
 
             EventMediator.Instance.Broadcast(GlobalHelper.PopulateCharacterSheet, this, _companions[_currentIndex]);
-
+            //EventMediator.Instance.Broadcast(GlobalHelper.EquipmentUpdated, this, _companions[_currentIndex]);
         }
 
         public void PreviousCompanion()
@@ -82,6 +83,7 @@ namespace Assets.Scripts.UI
             }
 
             EventMediator.Instance.Broadcast(GlobalHelper.PopulateCharacterSheet, this, _companions[_currentIndex]);
+            //EventMediator.Instance.Broadcast(GlobalHelper.EquipmentUpdated, this, _companions[_currentIndex]);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

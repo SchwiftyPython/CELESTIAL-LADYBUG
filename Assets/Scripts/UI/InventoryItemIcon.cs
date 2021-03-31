@@ -17,7 +17,7 @@ namespace Assets.Scripts.UI
         
         public void SetItem(Item item)
         {
-            SetItem(item, 0);
+            SetItem(item, 1);
         }
 
         public void SetItem(Item item, int number)

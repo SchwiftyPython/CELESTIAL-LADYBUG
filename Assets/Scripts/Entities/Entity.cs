@@ -173,13 +173,15 @@ namespace Assets.Scripts.Entities
 
             _equipment = new Equipment();
 
-            var testSword = new Weapon("Sword", Item.ItemType.Sword, (35, 40), 1, string.Empty, null, false);
+            var swordSprite = SpriteStore.Instance.GetRandomSwordSprite();
+
+            var testSword = new Weapon("Sword", Item.ItemType.Sword, (35, 40), 1, "Better than slapping someone with a frying pan", swordSprite, false);
 
             _equipment.AddItem(EquipLocation.Weapon, testSword);
 
-            var testArmor = new Armor(EquipLocation.Body, "Leather Armor", Item.ItemType.LeatherArmor, 3, string.Empty, null, false);
-
-            _equipment.AddItem(testArmor.GetAllowedEquipLocation(), testArmor);
+            // var testArmor = new Armor(EquipLocation.Body, "Leather Armor", Item.ItemType.LeatherArmor, 3, string.Empty, null, false);
+            //
+            // _equipment.AddItem(testArmor.GetAllowedEquipLocation(), testArmor);
         }
 
         public void Equip()
@@ -265,6 +267,11 @@ namespace Assets.Scripts.Entities
         public Weapon GetEquippedWeapon()
         {
             return (Weapon) _equipment.GetItemInSlot(EquipLocation.Weapon);
+        }
+
+        public Equipment GetEquipment()
+        {
+            return _equipment;
         }
 
         public bool TargetInRange(Entity target)

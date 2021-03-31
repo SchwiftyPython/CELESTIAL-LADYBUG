@@ -26,16 +26,11 @@ namespace Assets.Scripts
         }
 
         /// <summary>
-        /// Broadcasts when the items in the slots are added/removed.
-        /// </summary>
-        public event Action InventoryUpdated;
-
-        /// <summary>
         /// Convenience for getting the player's inventory.
         /// </summary>
         public static Inventory GetPartyInventory()
         {
-            var travelManager = GameObject.FindWithTag("TravelManager");
+            var travelManager = GameObject.Find("TravelManager");
             return travelManager.GetComponent<Inventory>();
         }
 
@@ -72,7 +67,7 @@ namespace Assets.Scripts
 
             _slots[i].Item = item;
             _slots[i].Number += number;
-            InventoryUpdated?.Invoke();
+            EventMediator.Instance.Broadcast(GlobalHelper.InventoryUpdated, this);
             return true;
         }
 
@@ -120,7 +115,7 @@ namespace Assets.Scripts
                 _slots[slot].Item = null;
             }
 
-            InventoryUpdated?.Invoke();
+            EventMediator.Instance.Broadcast(GlobalHelper.InventoryUpdated, this);
         }
 
         /// <summary>
@@ -147,7 +142,7 @@ namespace Assets.Scripts
 
             _slots[slot].Item = item;
             _slots[slot].Number += number;
-            InventoryUpdated?.Invoke();
+            EventMediator.Instance.Broadcast(GlobalHelper.InventoryUpdated, this);
             return true;
         }
 
@@ -216,6 +211,8 @@ namespace Assets.Scripts
 
         object ISaveable.CaptureState()
         {
+            //todo
+
             var slotStrings = new InventorySlotRecord[_inventorySize];
             for (var i = 0; i < _inventorySize; i++)
             {
@@ -230,6 +227,8 @@ namespace Assets.Scripts
 
         void ISaveable.RestoreState(object state)
         {
+            //todo
+
             var slotStrings = (InventorySlotRecord[])state;
             for (var i = 0; i < _inventorySize; i++)
             {
@@ -237,7 +236,7 @@ namespace Assets.Scripts
                 _slots[i].Number = slotStrings[i].Number;
             }
 
-            InventoryUpdated?.Invoke();
+            EventMediator.Instance.Broadcast(GlobalHelper.InventoryUpdated, this);
         }
     }
 }
