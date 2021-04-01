@@ -9,6 +9,8 @@ namespace Assets.Scripts
 {
     public class SpriteStore : MonoBehaviour
     {
+        #region PortraitSprites
+
         private Dictionary<string, Sprite> _skinDictionary;
         private Dictionary<string, Sprite> _earDictionary;
         private Dictionary<string, Sprite> _chestDictionary;
@@ -22,6 +24,16 @@ namespace Assets.Scripts
         public Sprite[] FacialFairSprites;
         public Sprite[] HairSprites;
         public Sprite[] HelmetSprites;
+
+        #endregion PortraitSprites
+
+        #region ItemSprites
+
+        private Dictionary<string, Sprite> _swordSpriteDictionary;
+
+        public Sprite[] SwordSprites;
+
+        #endregion ItemSprites
 
         public static SpriteStore Instance;
 
@@ -103,9 +115,17 @@ namespace Assets.Scripts
             }
         }
 
+        public Sprite GetRandomSwordSprite()
+        {
+            var index = Random.Range(0, _swordSpriteDictionary.Count);
+
+            return _swordSpriteDictionary.ElementAt(index).Value;
+        }
+
         private void PopulateSpriteDictionaries()
         {
             PopulatePortraitSprites();
+            PopulateItemSprites();
         }
 
         private void PopulatePortraitSprites()
@@ -177,6 +197,16 @@ namespace Assets.Scripts
                         throw new ArgumentOutOfRangeException(nameof(slot), slot, null);
                 }
             }
+        }
+
+        private void PopulateItemSprites()
+        {
+            _swordSpriteDictionary = new Dictionary<string, Sprite>
+            {
+                { "cutlass_1", null }
+            };
+
+            PopulateDictionaryFromArray(_swordSpriteDictionary, SwordSprites);
         }
 
         private static void PopulateDictionaryFromArray(Dictionary<string, Sprite> spriteDictionary, IReadOnlyList<Sprite> sprites)

@@ -37,6 +37,8 @@ namespace Assets.Scripts
         public const string ManageParty = "ManageParty";
         public const string HidePartyManagement = "HidePartyManagement";
         public const string PopulateCharacterSheet = "PopulateCharacterSheet";
+        public const string EquipmentUpdated = "EquipmentUpdated";
+        public const string InventoryUpdated = "InventoryUpdated";
         public const string EndTurn = "EndTurn";
         public const string NextTarget = "NextTarget";
         public const string EntityTargeted = "EntityTargeted";

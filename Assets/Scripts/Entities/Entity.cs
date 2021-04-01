@@ -21,7 +21,9 @@ namespace Assets.Scripts.Entities
 
         private List<Effect> _effects;
 
-        private Armor _equippedArmor;
+        private Equipment _equipment;
+
+        //private Armor _equippedArmor;
 
         //todo use this instead of get component if possible
         private AiController _aiController;
@@ -36,9 +38,9 @@ namespace Assets.Scripts.Entities
         public Stats Stats { get; }
         public Skills Skills { get; }
         public Dictionary<Portrait.Slot, string> Portrait { get; private set; }
-        public Weapon EquippedWeapon { get; private set; }
+        //public Weapon EquippedWeapon { get; private set; }
         public List<Ability> Abilities { get; private set; }
-
+        
         public UnityEngine.GameObject CombatSpritePrefab { get; private set; }
         public UnityEngine.GameObject CombatSpriteInstance { get; private set; }
         public Sprite UiSprite { get; private set; } //todo setup a sprite store that can give us the combat and ui sprites needed
@@ -169,43 +171,27 @@ namespace Assets.Scripts.Entities
         {
             //todo not implemented - temp for testing
 
-            var testSword = new Weapon("Sword", Item.ItemType.Sword, (35, 40), 1);
+            _equipment = new Equipment();
 
-            EquipWeapon(testSword);
+            var swordSprite = SpriteStore.Instance.GetRandomSwordSprite();
 
-            var testArmor = new Armor("Leather Armor", Item.ItemType.LeatherArmor, 3);
+            var testSword = new Weapon("Sword", Item.ItemType.Sword, (35, 40), 1, "Better than slapping someone with a frying pan", swordSprite, false);
 
-            EquipArmor(testArmor);
+            _equipment.AddItem(EquipLocation.Weapon, testSword);
+
+            // var testArmor = new Armor(EquipLocation.Body, "Leather Armor", Item.ItemType.LeatherArmor, 3, string.Empty, null, false);
+            //
+            // _equipment.AddItem(testArmor.GetAllowedEquipLocation(), testArmor);
         }
 
-        public void EquipWeapon(Weapon newWeapon)
+        public void Equip()
         {
-            if (EquippedWeapon != null)
-            {
-                UnEquipWeapon();
-            }
 
-            EquippedWeapon = newWeapon;
         }
 
-        public void UnEquipWeapon()
+        public void UnEquip()
         {
-            //todo
-        }
 
-        public void EquipArmor(Armor newArmor)
-        {
-            if (_equippedArmor != null)
-            {
-                UnEquipArmor();
-            }
-
-            _equippedArmor = newArmor;
-        }
-
-        public void UnEquipArmor()
-        {
-            //todo
         }
 
         public void MeleeAttack(Entity target)
@@ -214,11 +200,13 @@ namespace Assets.Scripts.Entities
 
             if (AttackHit(hitChance)) //todo handle damage in its own method since ranged will use this too
             {
-                var (minDamage, maxDamage) = EquippedWeapon.DamageRange;
+                var equippedWeapon = (Weapon) _equipment.GetItemInSlot(EquipLocation.Weapon);
+
+                var (minDamage, maxDamage) = equippedWeapon.DamageRange;
 
                 var damage = Random.Range(minDamage, maxDamage + 1) + Stats.Attack;
 
-                var targetArmor = target.GetArmorToughness();
+                var targetArmor = target.GetTotalArmorToughness();
 
                 var damageReduction = GetDamageReduction(damage, targetArmor);
 
@@ -252,14 +240,38 @@ namespace Assets.Scripts.Entities
             return true;
         }
 
-        public int GetArmorToughness()
+        public int GetTotalArmorToughness()
         {
-            if (_equippedArmor == null)
+            var toughnessTotal = 0;
+
+            foreach (EquipLocation location in Enum.GetValues(typeof(EquipLocation)))
             {
-                return 0;
+                if(location == EquipLocation.Weapon)
+                {
+                    continue;
+                }
+
+                Armor equippedArmor = (Armor) _equipment.GetItemInSlot(location);
+
+                if (equippedArmor == null)
+                {
+                    continue;
+                }
+
+                toughnessTotal += equippedArmor.Toughness;
             }
 
-            return _equippedArmor.Toughness;
+            return toughnessTotal;
+        }
+
+        public Weapon GetEquippedWeapon()
+        {
+            return (Weapon) _equipment.GetItemInSlot(EquipLocation.Weapon);
+        }
+
+        public Equipment GetEquipment()
+        {
+            return _equipment;
         }
 
         public bool TargetInRange(Entity target)
