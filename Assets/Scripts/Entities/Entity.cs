@@ -173,11 +173,11 @@ namespace Assets.Scripts.Entities
 
             _equipment = new Equipment();
 
-            var swordSprite = SpriteStore.Instance.GetRandomSwordSprite();
-
-            var testSword = new Weapon("Sword", Item.ItemType.Sword, (35, 40), 1, "Better than slapping someone with a frying pan", swordSprite, false);
-
-            _equipment.AddItem(EquipLocation.Weapon, testSword);
+            // var swordSprite = SpriteStore.Instance.GetRandomSwordSprite();
+            //
+            // var testSword = new Weapon("Sword", Item.ItemType.Sword, (35, 40), 1, "Better than slapping someone with a frying pan", swordSprite, false);
+            //
+            // _equipment.AddItem(EquipLocation.Weapon, testSword);
 
             // var testArmor = new Armor(EquipLocation.Body, "Leather Armor", Item.ItemType.LeatherArmor, 3, string.Empty, null, false);
             //
@@ -196,7 +196,7 @@ namespace Assets.Scripts.Entities
 
         public void MeleeAttack(Entity target)
         {
-            var hitChance = CalculateChanceToHit(target);
+            /*var hitChance = CalculateChanceToHit(target);
 
             if (AttackHit(hitChance)) //todo handle damage in its own method since ranged will use this too
             {
@@ -226,7 +226,7 @@ namespace Assets.Scripts.Entities
 
                     EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
                 }
-            }
+            }*/
         }
 
         public void RangedAttack(Entity target)
@@ -251,14 +251,14 @@ namespace Assets.Scripts.Entities
                     continue;
                 }
 
-                Armor equippedArmor = (Armor) _equipment.GetItemInSlot(location);
+                var  equippedArmor = _equipment.GetItemInSlot(location);
 
                 if (equippedArmor == null)
                 {
                     continue;
                 }
 
-                toughnessTotal += equippedArmor.Toughness;
+                //toughnessTotal += equippedArmor.Toughness;
             }
 
             return toughnessTotal;
@@ -266,7 +266,8 @@ namespace Assets.Scripts.Entities
 
         public Weapon GetEquippedWeapon()
         {
-            return (Weapon) _equipment.GetItemInSlot(EquipLocation.Weapon);
+            //return (Weapon) _equipment.GetItemInSlot(EquipLocation.Weapon);
+            return null;
         }
 
         public Equipment GetEquipment()

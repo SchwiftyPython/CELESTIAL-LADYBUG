@@ -12,7 +12,7 @@ namespace Assets.Scripts
     {
         private EquipLocation _allowedEquipLocation;
 
-        public EquipableItem(EquipLocation equipLocation, string itemName, ItemType type, string description, Sprite icon, bool stackable) : base(itemName, type, description, icon, stackable)
+        public EquipableItem(EquipLocation equipLocation, string itemName, string description, Sprite icon, bool stackable) : base()
         {
             _allowedEquipLocation = equipLocation;
         }

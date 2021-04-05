@@ -7,32 +7,24 @@ namespace Assets.Scripts.Items
     //todo inherit from GameObject or IGameobject to take advantage of components?
     public class Item : ISerializationCallbackReceiver
     {
-        public enum ItemType
-        {
-            [Description("Sword")]
-            Sword,
-            [Description("Leather Armor")]
-            LeatherArmor
-        }
-        
         [SerializeField] private string _itemId = null;
         [SerializeField] private string _displayName = null;
         [SerializeField] private string _description = null;
         [SerializeField] private Sprite _icon = null;
         [SerializeField] private bool _stackable = false;
 
-        public ItemType Type { get; private set; }
+        
 
         public static Dictionary<string, Item> ItemLookupCache;
 
-        public Item(string itemName, ItemType type, string description, Sprite icon, bool stackable)
-        {
-            _displayName = itemName;
-            Type = type;
-            _description = description;
-            _icon = icon;
-            _stackable = stackable;
-        }
+        // public Item(string itemName, ItemType type, string description, Sprite icon, bool stackable)
+        // {
+        //     _displayName = itemName;
+        //     Type = type;
+        //     _description = description;
+        //     _icon = icon;
+        //     _stackable = stackable;
+        // }
 
         /// <summary>
         /// Get the inventory item instance from its GUID.

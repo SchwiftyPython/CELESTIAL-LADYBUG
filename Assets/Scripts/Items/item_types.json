@@ -1,0 +1,105 @@
+{
+  "Sword":
+  {	 
+    "Parent": null,
+    "Melee": 
+    {
+      "MinDamage": 4,
+      "MaxDamage": 9
+    },
+    "Ranged": {},
+    "Defense": {},
+    "Abilities": 
+    [
+      "Slash",
+      "Thrust"
+    ],
+    "Sprite": "sword_1",
+    "Slot": "weapon"
+  },
+  "Short Sword":
+  {	
+    "Parent": "Sword",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": {},
+    "Abilities": [],
+    "Sprite": null,    
+    "Slot": null
+  },
+  "Flame Sword":
+  {	
+    "Parent": "Sword",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": {},
+    "Abilities": 
+    [
+      "Slash",
+      "Thurst",
+      "Ignite"
+    ],
+    "Sprite": "flaming_sword_1",     
+    "Slot": null
+  },
+  "Broad Sword":
+  {	
+    "Parent": "Sword",
+    "Melee": 
+    {
+      "MinDamage": 5,
+      "MaxDamage": 11
+    },
+    "Ranged": {},
+    "Defense": {},
+    "Abilities": 
+    [
+      "Slash",
+      "Swing",
+      "Split"
+    ],
+    "Sprite": "broad_sword_1",     
+    "Slot": null
+  },
+  "Robe":
+  {
+    "Parent": null,
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 0
+    },
+    "Abilities": [],
+    "Sprite": "robe_1",
+    "Slot": "body"
+  },
+  "Monk's Robe":
+  {
+    "Parent": "Robe",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 2
+    },
+    "Abilities": [],
+    "Sprite": "monk_robe_1",
+    "Slot": null
+  },
+  "Wizard's Robe":
+  {
+    "Parent": "Robe",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": {},
+    "Abilities": 
+    [
+      "Amplify"
+    ],
+    "Sprite": "wizard_robe_1",
+    "Slot": null
+  }
+}
