@@ -6,9 +6,8 @@ namespace Assets.Scripts
     public enum EquipLocation
     {
         Helmet,
-        Necklace,
+        Book,
         Body,
-        Trousers,
         Boots,
         Weapon,
         Shield,

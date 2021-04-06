@@ -76,7 +76,7 @@ namespace Assets.Scripts.UI
 
             foreach (var slot in portraitKeys.Keys)
             {
-                var slotSprite = SpriteStore.Instance.GetSpriteForSlotByKey(slot, portraitKeys[slot]);
+                var slotSprite = SpriteStore.Instance.GetPortraitSpriteForSlotByKey(slot, portraitKeys[slot]);
                 sprites.Add(slot, slotSprite);
             }
 

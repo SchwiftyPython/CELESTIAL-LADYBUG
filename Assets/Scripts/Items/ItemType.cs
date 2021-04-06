@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Items.Components;
+using UnityEngine;
 
 namespace Assets.Scripts.Items
 {
@@ -7,6 +8,7 @@ namespace Assets.Scripts.Items
     public class ItemType
     {
         public string Name;
+        public string Description;
         public string Parent;
 
         private Attack _melee;
@@ -79,14 +81,31 @@ namespace Assets.Scripts.Items
             }
         }
 
+        private int _range;
+        public int Range
+        {
+            get => _range;
+            set
+            {
+                if (!string.IsNullOrEmpty(Parent) && value <= 0)
+                {
+                    _range = ItemStore.Instance.GetItemTypeByName(Parent).Range;
+                }
+                else
+                {
+                    _range = value;
+                }
+            }
+        }
+
         //todo convert to Sprite
-        private string _sprite;
-        public string Sprite
+        private Sprite _sprite;
+        public Sprite Sprite
         {
             get => _sprite;
             set
             {
-                if (!string.IsNullOrEmpty(Parent) && string.IsNullOrEmpty(value))
+                if (!string.IsNullOrEmpty(Parent) && value == null)
                 {
                     _sprite = ItemStore.Instance.GetItemTypeByName(Parent).Sprite;
                 }
@@ -112,6 +131,23 @@ namespace Assets.Scripts.Items
                     _slot = value;
                 }
             }
+        }
+
+        public bool Stackable;
+
+        public Item NewItem()
+        {
+            if (!IsEquipable())
+            {
+                return new Item(this);
+            }
+
+            return new EquipableItem(this);
+        }
+
+        public bool IsEquipable()
+        {
+            return Slot != null;
         }
     }
 }

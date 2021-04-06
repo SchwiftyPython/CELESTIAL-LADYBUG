@@ -1,6 +1,7 @@
 {
   "Sword":
-  {	 
+  {
+	"Description": "A dang ol sword",  
     "Parent": null,
     "Melee": 
     {
@@ -14,21 +15,27 @@
       "Slash",
       "Thrust"
     ],
-    "Sprite": "sword_1",
-    "Slot": "weapon"
+	"Range": 1,
+    "Sprite": "cutlass_1",
+    "Slot": "weapon",
+	"Stackable": false
   },
   "Short Sword":
   {	
+    "Description": "A dang ol short sword",  
     "Parent": "Sword",
     "Melee": {},
     "Ranged": {},
     "Defense": {},
     "Abilities": [],
+	"Range": 1,
     "Sprite": null,    
-    "Slot": null
+    "Slot": null,
+	"Stackable": false
   },
   "Flame Sword":
   {	
+    "Description": "A dang ol hot sword",
     "Parent": "Sword",
     "Melee": {},
     "Ranged": {},
@@ -39,11 +46,14 @@
       "Thurst",
       "Ignite"
     ],
-    "Sprite": "flaming_sword_1",     
-    "Slot": null
+	"Range": 1,
+    "Sprite": null,     
+    "Slot": null,
+	"Stackable": false
   },
   "Broad Sword":
-  {	
+  {
+	"Description": "A dang ol broad sword",  
     "Parent": "Sword",
     "Melee": 
     {
@@ -58,11 +68,14 @@
       "Swing",
       "Split"
     ],
-    "Sprite": "broad_sword_1",     
-    "Slot": null
+	"Range": 1,
+    "Sprite": null,    
+    "Slot": null,
+	"Stackable": false
   },
   "Robe":
   {
+	"Description": "Some smelly robes",  
     "Parent": null,
     "Melee": {},
     "Ranged": {},
@@ -73,10 +86,13 @@
     },
     "Abilities": [],
     "Sprite": "robe_1",
-    "Slot": "body"
+	"Range": -1, 
+    "Slot": "body",
+	"Stackable": false
   },
   "Monk's Robe":
   {
+	"Description": "Robes with a kick",  
     "Parent": "Robe",
     "Melee": {},
     "Ranged": {},
@@ -84,13 +100,16 @@
     {
       "Toughness": 1,
       "DodgeMod": 2
-    },
+    },	
     "Abilities": [],
-    "Sprite": "monk_robe_1",
-    "Slot": null
+	"Range": -1,
+    "Sprite": null,	
+    "Slot": null,
+	"Stackable": false
   },
   "Wizard's Robe":
   {
+	"Description": "Magic pajamas",  
     "Parent": "Robe",
     "Melee": {},
     "Ranged": {},
@@ -99,7 +118,26 @@
     [
       "Amplify"
     ],
-    "Sprite": "wizard_robe_1",
-    "Slot": null
+	"Range": -1,
+    "Sprite": null,
+    "Slot": null,
+	"Stackable": false
+  },
+  "Leather Headband":
+  {
+	"Description": "A repurposed belt",  
+    "Parent": null,
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 1
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "leather_headband",
+    "Slot": "helmet",
+	"Stackable": false
   }
 }

@@ -173,20 +173,22 @@ namespace Assets.Scripts.Entities
 
             _equipment = new Equipment();
 
-            // var swordSprite = SpriteStore.Instance.GetRandomSwordSprite();
-            //
-            // var testSword = new Weapon("Sword", Item.ItemType.Sword, (35, 40), 1, "Better than slapping someone with a frying pan", swordSprite, false);
-            //
-            // _equipment.AddItem(EquipLocation.Weapon, testSword);
+            var testWeapon = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Weapon);
+            
+            Equip(testWeapon);
 
-            // var testArmor = new Armor(EquipLocation.Body, "Leather Armor", Item.ItemType.LeatherArmor, 3, string.Empty, null, false);
-            //
-            // _equipment.AddItem(testArmor.GetAllowedEquipLocation(), testArmor);
+            var testArmor = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Body);
+
+            Equip(testArmor);
+
+            var testHelmet = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Helmet);
+
+            Equip(testHelmet);
         }
 
-        public void Equip()
+        public void Equip(EquipableItem item)
         {
-
+            _equipment.AddItem(item.GetAllowedEquipLocation(), item);
         }
 
         public void UnEquip()
@@ -196,13 +198,13 @@ namespace Assets.Scripts.Entities
 
         public void MeleeAttack(Entity target)
         {
-            /*var hitChance = CalculateChanceToHit(target);
+            var hitChance = CalculateChanceToHit(target);
 
             if (AttackHit(hitChance)) //todo handle damage in its own method since ranged will use this too
             {
-                var equippedWeapon = (Weapon) _equipment.GetItemInSlot(EquipLocation.Weapon);
+                var equippedWeapon = _equipment.GetItemInSlot(EquipLocation.Weapon);
 
-                var (minDamage, maxDamage) = equippedWeapon.DamageRange;
+                var (minDamage, maxDamage) = equippedWeapon.GetMeleeDamageRange();
 
                 var damage = Random.Range(minDamage, maxDamage + 1) + Stats.Attack;
 
@@ -226,7 +228,7 @@ namespace Assets.Scripts.Entities
 
                     EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
                 }
-            }*/
+            }
         }
 
         public void RangedAttack(Entity target)
@@ -258,16 +260,15 @@ namespace Assets.Scripts.Entities
                     continue;
                 }
 
-                //toughnessTotal += equippedArmor.Toughness;
+                toughnessTotal += equippedArmor.GetToughness();
             }
 
             return toughnessTotal;
         }
 
-        public Weapon GetEquippedWeapon()
+        public EquipableItem GetEquippedWeapon()
         {
-            //return (Weapon) _equipment.GetItemInSlot(EquipLocation.Weapon);
-            return null;
+            return _equipment.GetItemInSlot(EquipLocation.Weapon);
         }
 
         public Equipment GetEquipment()

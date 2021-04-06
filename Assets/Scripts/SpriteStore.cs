@@ -9,6 +9,8 @@ namespace Assets.Scripts
 {
     public class SpriteStore : MonoBehaviour
     {
+        //todo need a struct to hold the sprite and the color scheme that goes with it
+
         #region PortraitSprites
 
         private Dictionary<string, Sprite> _skinDictionary;
@@ -29,9 +31,15 @@ namespace Assets.Scripts
 
         #region ItemSprites
 
+        private List<Dictionary<string, Sprite>> _allItemSprites;
+
         private Dictionary<string, Sprite> _swordSpriteDictionary;
+        private Dictionary<string, Sprite> _robeSpriteDictionary;
+        private Dictionary<string, Sprite> _headbandSpriteDictionary;
 
         public Sprite[] SwordSprites;
+        public Sprite[] RobeSprites;
+        public Sprite[] HeadBandSprites;
 
         #endregion ItemSprites
 
@@ -50,6 +58,8 @@ namespace Assets.Scripts
             DontDestroyOnLoad(gameObject);
             
             PopulateSpriteDictionaries();
+
+            EventMediator.Instance.Broadcast(GlobalHelper.SpritesLoaded, this);
         }
 
         public Sprite GetRandomSpriteForSlot(Portrait.Slot slot)
@@ -94,7 +104,7 @@ namespace Assets.Scripts
             }
         }
 
-        public Sprite GetSpriteForSlotByKey(Portrait.Slot slot, string key)
+        public Sprite GetPortraitSpriteForSlotByKey(Portrait.Slot slot, string key)
         {
             switch (slot)
             {
@@ -113,6 +123,26 @@ namespace Assets.Scripts
                 default:
                     throw new ArgumentOutOfRangeException(nameof(slot), slot, null);
             }
+        }
+
+        public Sprite GetItemSpriteByKey(string key)
+        {
+            if (string.IsNullOrEmpty(key))
+            {
+                return null;
+            }
+
+            foreach (var spriteDict in _allItemSprites)
+            {
+                if(spriteDict.ContainsKey(key))
+                {
+                    return spriteDict[key];
+                }
+            }
+
+            Debug.LogError($"Sprite key {key} not found!");
+
+            return null;
         }
 
         public Sprite GetRandomSwordSprite()
@@ -135,63 +165,22 @@ namespace Assets.Scripts
                 switch (slot)
                 {
                     case Portrait.Slot.Skin:
-                        _skinDictionary = new Dictionary<string, Sprite>
-                        {
-                            { "base", null }
-                        };
-
-                        PopulateDictionaryFromArray(_skinDictionary, SkinSprites);
+                        _skinDictionary = PopulateDictionaryFromArray(SkinSprites);
                         break;
                     case Portrait.Slot.Ears:
-                        _earDictionary = new Dictionary<string, Sprite>
-                        {
-                            { "human", null}
-                        };
-
-                        PopulateDictionaryFromArray(_earDictionary, EarSprites);
+                        _earDictionary = PopulateDictionaryFromArray(EarSprites);
                         break;
                     case Portrait.Slot.Chest:
-                        _chestDictionary = new Dictionary<string, Sprite>
-                        {
-                            { "padded", null },
-                            { "plate", null },
-                            { "robe", null }
-                        };
-
-                        PopulateDictionaryFromArray(_chestDictionary, ChestSprites);
+                        _chestDictionary = PopulateDictionaryFromArray(ChestSprites);
                         break;
                     case Portrait.Slot.FacialHair:
-                        _facialHairDictionary = new Dictionary<string, Sprite>
-                        {
-                            { "big beard", null },
-                            { "chinstrap", null },
-                            { "full", null },
-                            { "goatee", null },
-                            { "handlebar", null }
-                        };
-
-                        PopulateDictionaryFromArray(_facialHairDictionary, FacialFairSprites);
+                        _facialHairDictionary = PopulateDictionaryFromArray(FacialFairSprites);
                         break;
                     case Portrait.Slot.Hair:
-                        _hairDictionary = new Dictionary<string, Sprite>
-                        { 
-                            { "balding", null },
-                            { "long", null },
-                            { "medium", null },
-                            { "short", null }
-                        };
-
-                        PopulateDictionaryFromArray(_hairDictionary, HairSprites);
+                        _hairDictionary = PopulateDictionaryFromArray(HairSprites);
                         break;
                     case Portrait.Slot.Helmet:
-                        _helmetDictionary = new Dictionary<string, Sprite>
-                        {
-                            { "padded", null },
-                            { "plate", null },
-                            { "skullcap", null }
-                        };
-
-                        PopulateDictionaryFromArray(_helmetDictionary, HelmetSprites);
+                        _helmetDictionary = PopulateDictionaryFromArray(HelmetSprites);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(slot), slot, null);
@@ -201,22 +190,33 @@ namespace Assets.Scripts
 
         private void PopulateItemSprites()
         {
-            _swordSpriteDictionary = new Dictionary<string, Sprite>
-            {
-                { "cutlass_1", null }
-            };
+            _swordSpriteDictionary = PopulateDictionaryFromArray(SwordSprites);
 
-            PopulateDictionaryFromArray(_swordSpriteDictionary, SwordSprites);
+            _robeSpriteDictionary = PopulateDictionaryFromArray(RobeSprites);
+
+            _headbandSpriteDictionary = PopulateDictionaryFromArray(HeadBandSprites);
+
+            _allItemSprites = new List<Dictionary<string, Sprite>>();
+
+            _allItemSprites.AddRange(new List<Dictionary<string, Sprite>>
+                {
+                    _swordSpriteDictionary,
+                    _robeSpriteDictionary,
+                    _headbandSpriteDictionary
+                }
+            );
         }
 
-        private static void PopulateDictionaryFromArray(Dictionary<string, Sprite> spriteDictionary, IReadOnlyList<Sprite> sprites)
+        private static Dictionary<string, Sprite> PopulateDictionaryFromArray(IEnumerable<Sprite> sprites)
         {
-            var index = 0;
-            foreach (var spriteName in spriteDictionary.Keys.ToArray())
+            var spriteDictionary = new Dictionary<string, Sprite>();
+
+            foreach (var sprite in sprites)
             {
-                spriteDictionary[spriteName] = sprites[index];
-                index++;
+                spriteDictionary.Add(sprite.name, sprite);
             }
+
+            return spriteDictionary;
         }
     }
 }

@@ -59,5 +59,10 @@ namespace Assets.Scripts.Abilities
 
             return AbilityOwner.IsPlayer() == target.IsPlayer();
         }
+
+        public bool IsRanged()
+        {
+            return Range > 1;
+        }
     }
 }

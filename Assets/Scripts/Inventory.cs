@@ -232,7 +232,7 @@ namespace Assets.Scripts
             var slotStrings = (InventorySlotRecord[])state;
             for (var i = 0; i < _inventorySize; i++)
             {
-                _slots[i].Item = Item.GetFromId(slotStrings[i].ItemId);
+                //_slots[i].Item = Item.GetFromId(slotStrings[i].ItemId);
                 _slots[i].Number = slotStrings[i].Number;
             }
 

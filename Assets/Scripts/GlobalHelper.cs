@@ -58,6 +58,7 @@ namespace Assets.Scripts
         public const string ResumeTimer = "ResumeTimer";
         public const string ShowPauseMenu = "ShowPauseMenu";
         public const string HidePauseMenu = "HidePauseMenu";
+        public const string SpritesLoaded = "SpritesLoaded";
 
         #endregion EventNames
 

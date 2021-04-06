@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Items.Components;
 using Leguar.TotalJSON;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Items
 {
-    public class ItemStore : MonoBehaviour
+    public class ItemStore : MonoBehaviour, ISubscriber
     {
         private Dictionary<string, ItemType> _itemTypes;
 
@@ -14,7 +16,7 @@ namespace Assets.Scripts.Items
 
         public static ItemStore Instance;
 
-        private void Start()
+        private void Awake()
         {
             if (Instance == null)
             {
@@ -26,7 +28,7 @@ namespace Assets.Scripts.Items
             }
             DontDestroyOnLoad(gameObject);
 
-            DeserializeItemTypes();
+            EventMediator.Instance.SubscribeToEvent(GlobalHelper.SpritesLoaded, this);
         }
 
         public ItemType GetItemTypeByName(string typeName)
@@ -37,6 +39,43 @@ namespace Assets.Scripts.Items
             }
 
             return _itemTypes[typeName.ToLower()];
+        }
+
+        public Item GetRandomItem()
+        {
+            var itemTypeValues = _itemTypes.Values.ToArray();
+
+            return itemTypeValues[Random.Range(0, itemTypeValues.Length)].NewItem();
+        }
+
+        public EquipableItem GetRandomEquipableItem()
+        {
+            var itemTypeValues = new List<ItemType>();
+
+            foreach (var itemType in _itemTypes.Values)
+            {
+                if (itemType.IsEquipable())
+                {
+                    itemTypeValues.Add(itemType);
+                }
+            }
+
+            return (EquipableItem) itemTypeValues[Random.Range(0, itemTypeValues.Count)].NewItem();
+        }
+
+        public EquipableItem GetRandomEquipableItem(EquipLocation location)
+        {
+            var itemTypeValues = new List<ItemType>();
+
+            foreach (var itemType in _itemTypes.Values)
+            {
+                if (itemType.Slot == location)
+                {
+                    itemTypeValues.Add(itemType);
+                }
+            }
+
+            return (EquipableItem)itemTypeValues[Random.Range(0, itemTypeValues.Count)].NewItem();
         }
 
         private void DeserializeItemTypes()
@@ -55,6 +94,8 @@ namespace Assets.Scripts.Items
 
                 itemType.Name = key;
 
+                itemType.Description = itemTypeJson.GetString("Description")?.Trim();
+
                 itemType.Parent = itemTypeJson.GetString("Parent")?.Trim();
 
                 itemType.Melee = itemTypeJson.GetJSON("Melee").Deserialize<Attack>(settings);
@@ -65,9 +106,15 @@ namespace Assets.Scripts.Items
 
                 itemType.Abilities = new List<string>(itemTypeJson.GetJArray("Abilities").AsStringArray());
 
-                itemType.Sprite = itemTypeJson.GetString("Sprite")?.Trim();
+                itemType.Range = itemTypeJson.GetInt("Range");
+
+                var spriteKey = itemTypeJson.GetString("Sprite")?.Trim();
+
+                itemType.Sprite = SpriteStore.Instance.GetItemSpriteByKey(spriteKey);
 
                 var slotString = itemTypeJson.GetString("Slot")?.Trim();
+
+                itemType.Stackable = itemTypeJson.GetBool("Stackable");
 
                 if (string.IsNullOrEmpty(slotString))
                 {
@@ -79,6 +126,14 @@ namespace Assets.Scripts.Items
                 }
 
                 _itemTypes.Add(key.ToLower(), itemType);
+            }
+        }
+
+        public void OnNotify(string eventName, object broadcaster, object parameter = null)
+        {
+            if (eventName.Equals(GlobalHelper.SpritesLoaded))
+            {
+                DeserializeItemTypes();
             }
         }
     }
