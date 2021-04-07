@@ -18,7 +18,9 @@
 	"Range": 1,
     "Sprite": "cutlass_1",
     "Slot": "weapon",
-	"Stackable": false
+	"Stackable": false,
+	"Price": 10,
+	"TwoHanded" : false
   },
   "Short Sword":
   {	
@@ -31,13 +33,19 @@
 	"Range": 1,
     "Sprite": null,    
     "Slot": null,
-	"Stackable": false
+	"Stackable": false,
+	"Price": 15,
+	"TwoHanded" : false
   },
   "Flame Sword":
   {	
     "Description": "A dang ol hot sword",
     "Parent": "Sword",
-    "Melee": {},
+    "Melee": 
+	{
+		"MinDamage" : 7,
+		"MaxDamage" : 11
+	},
     "Ranged": {},
     "Defense": {},
     "Abilities": 
@@ -47,9 +55,34 @@
       "Ignite"
     ],
 	"Range": 1,
-    "Sprite": null,     
+    "Sprite": "flame_sword",     
     "Slot": null,
-	"Stackable": false
+	"Stackable": false,
+	"Price": 50,
+	"TwoHanded" : false
+  },
+  "Scimitar":
+  {	
+    "Description": "A dang ol curved sword",
+    "Parent": "Sword",
+    "Melee": 
+	{
+		"MinDamage" : 7,
+		"MaxDamage" : 11
+	},
+    "Ranged": {},
+    "Defense": {},
+    "Abilities": 
+    [
+      "Slash",      
+      "Wound"
+    ],
+	"Range": 1,
+    "Sprite": "scimitar",     
+    "Slot": null,
+	"Stackable": false,
+	"Price": 50,
+	"TwoHanded" : false
   },
   "Broad Sword":
   {
@@ -66,12 +99,61 @@
     [
       "Slash",
       "Swing",
-      "Split"
+      "Thrust"
     ],
 	"Range": 1,
     "Sprite": null,    
     "Slot": null,
-	"Stackable": false
+	"Stackable": false,
+	"Price": 20,
+	"TwoHanded" : false
+  },
+  "Warbrand":
+  {
+	"Description": "A big sword with no guard.",  
+    "Parent": "Sword",
+    "Melee": 
+    {
+      "MinDamage": 13,
+      "MaxDamage": 19
+    },
+    "Ranged": {},
+    "Defense": {},
+    "Abilities": 
+    [
+      "Slash",
+      "Swing",
+      "Cleave"
+    ],
+	"Range": 1,
+    "Sprite": "warbrand",    
+    "Slot": null,
+	"Stackable": false,
+	"Price": 40,
+	"TwoHanded" : true
+  },
+  "Falchion":
+  {
+	"Description": "Fancy machete.",  
+    "Parent": "Sword",
+    "Melee": 
+    {
+      "MinDamage": 6,
+      "MaxDamage": 8
+    },
+    "Ranged": {},
+    "Defense": {},
+    "Abilities": 
+    [
+      "Slash",
+      "Wound"
+    ],
+	"Range": 1,
+    "Sprite": "falchion",    
+    "Slot": null,
+	"Stackable": false,
+	"Price": 20,
+	"TwoHanded" : false
   },
   "Robe":
   {
@@ -88,7 +170,9 @@
     "Sprite": "robe_1",
 	"Range": -1, 
     "Slot": "body",
-	"Stackable": false
+	"Stackable": false,
+	"Price": 10,
+	"TwoHanded" : false
   },
   "Monk's Robe":
   {
@@ -105,7 +189,9 @@
 	"Range": -1,
     "Sprite": null,	
     "Slot": null,
-	"Stackable": false
+	"Stackable": false,
+	"Price": 15,
+	"TwoHanded" : false
   },
   "Wizard's Robe":
   {
@@ -121,7 +207,9 @@
 	"Range": -1,
     "Sprite": null,
     "Slot": null,
-	"Stackable": false
+	"Stackable": false,
+	"Price": 50,
+	"TwoHanded" : false
   },
   "Leather Headband":
   {
@@ -138,6 +226,208 @@
 	"Range": -1,
     "Sprite": "leather_headband",
     "Slot": "helmet",
-	"Stackable": false
+	"Stackable": false,
+	"Price": 10,
+	"TwoHanded" : false
+  },
+  "Leather Boots":
+  {
+	"Description": "Smelly, but better than being barefoot. Probably.",  
+    "Parent": null,
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 0
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "leather_boots",
+    "Slot": "boots",
+	"Stackable": false,
+	"Price": 10,
+	"TwoHanded" : false
+  },
+  "Leather Gloves":
+  {
+	"Description": "Great for lawncare and fighting goblins.",  
+    "Parent": null,
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 0
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "leather_gloves",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 10,
+	"TwoHanded" : false
+  },
+  "Old Wedding Ring":
+  {
+	"Description": "Repels potential mates.",  
+    "Parent": null,
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 0,
+      "DodgeMod": 1
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "old_wedding_ring",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 10,
+	"TwoHanded" : false
+  },
+  "Wooden Shield":
+  {
+	"Description": "Seen its share of battles.",  
+    "Parent": null,
+    "Melee": 
+    {
+      "MinDamage": 3,
+      "MaxDamage": 4
+    },
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 0
+    },
+    "Abilities": 
+	[
+	  "Shield Bash"  
+	],
+	"Range": 1,
+    "Sprite": "wooden_shield",
+    "Slot": "shield",
+	"Stackable": false,
+	"Price": 10,
+	"TwoHanded" : false
+  },
+  "Dagger":
+  {
+	"Description": "A letter opener moonlighting as a weapon.",  
+    "Parent": null,
+    "Melee": 
+    {
+      "MinDamage": 4,
+      "MaxDamage": 8
+    },
+    "Ranged": {},
+    "Defense":{},
+    "Abilities": 
+	[
+	  "Stab",
+      "Penetrate"	  
+	],
+	"Range": 1,
+    "Sprite": "dagger",
+    "Slot": "weapon",
+	"Stackable": false,
+	"Price": 10,
+	"TwoHanded" : false
+  },
+  "Stiletto":
+  {
+	"Description": "For stabbing.",  
+    "Parent": "Dagger",
+    "Melee": 
+    {
+      "MinDamage": 5,
+      "MaxDamage": 9
+    },
+    "Ranged": {},
+    "Defense":
+	{
+		"Toughness": 0,
+		"DodgeMod" : 1
+	},
+    "Abilities":[],
+	"Range": -1,
+    "Sprite": "stiletto",
+    "Slot": null,
+	"Stackable": false,
+	"Price": 30,
+	"TwoHanded" : false
+  },
+  "Hunting Dagger":
+  {
+	"Description": "Kind of on the fancy side. Kills things pretty well.",  
+    "Parent": "Dagger",
+    "Melee": 
+    {
+      "MinDamage": 5,
+      "MaxDamage": 9
+    },
+    "Ranged": {},
+    "Defense":{},
+    "Abilities":
+	[
+	  "Stab",
+	  "Slash"
+	],
+	"Range": -1,
+    "Sprite": "hunting_dagger",
+    "Slot": null,
+	"Stackable": false,
+	"Price": 15,
+	"TwoHanded" : false
+  },
+  "Hachiwari":
+  {
+	"Description": "Great for parrying attacks and prying armor apart.",  
+    "Parent": "Dagger",
+    "Melee": 
+    {
+      "MinDamage": 4,
+      "MaxDamage": 10
+    },
+    "Ranged": {},
+    "Defense":{},
+    "Abilities":
+	[
+	  "Stab",
+	  "Penetrate",
+	  "Parry"
+	],
+	"Range": -1,
+    "Sprite": "hachiwari",
+    "Slot": null,
+	"Stackable": false,
+	"Price": 50,
+	"TwoHanded" : false
+  },
+  "Knuckle Knife":
+  {
+	"Description": "For when you want to punch things and also stab them.",  
+    "Parent": "Dagger",
+    "Melee": 
+    {
+      "MinDamage": 9,
+      "MaxDamage": 15
+    },
+    "Ranged": {},
+    "Defense":{},
+    "Abilities":
+	[
+	  "Stab",
+	  "Penetrate",
+	  "Assassinate"
+	],
+	"Range": -1,
+    "Sprite": "knuckle_knife",
+    "Slot": null,
+	"Stackable": false,
+	"Price": 100,
+	"TwoHanded" : false
   }
 }

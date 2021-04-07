@@ -184,6 +184,22 @@ namespace Assets.Scripts.Entities
             var testHelmet = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Helmet);
 
             Equip(testHelmet);
+
+            var testBoots = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Boots);
+
+            Equip(testBoots);
+
+            var testGloves = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Gloves);
+
+            Equip(testGloves);
+
+            var testShield = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Shield);
+
+            Equip(testShield);
+
+            var testRing = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Ring);
+
+            Equip(testRing);
         }
 
         public void Equip(EquipableItem item)

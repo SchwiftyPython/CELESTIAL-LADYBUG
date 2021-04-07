@@ -135,6 +135,10 @@ namespace Assets.Scripts.Items
 
         public bool Stackable;
 
+        public int Price;
+
+        public bool TwoHanded;
+
         public Item NewItem()
         {
             if (!IsEquipable())

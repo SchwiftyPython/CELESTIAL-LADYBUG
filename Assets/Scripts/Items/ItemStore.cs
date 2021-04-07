@@ -116,6 +116,10 @@ namespace Assets.Scripts.Items
 
                 itemType.Stackable = itemTypeJson.GetBool("Stackable");
 
+                itemType.Price = itemTypeJson.GetInt("Price");
+
+                itemType.TwoHanded = itemTypeJson.GetBool("TwoHanded");
+
                 if (string.IsNullOrEmpty(slotString))
                 {
                     itemType.Slot = null;

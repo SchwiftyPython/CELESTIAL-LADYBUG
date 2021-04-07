@@ -1923,35 +1923,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50f878273bca7c04f90986d18c3b5f04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SkinSprites:
+  PortraitSkinSprites:
   - {fileID: 21300000, guid: e01a0708307655442ab40f21ee7b47cf, type: 3}
-  EarSprites:
+  PortraitEarSprites:
   - {fileID: 21300000, guid: 9542cc760430f65409148ede153161c6, type: 3}
-  ChestSprites:
+  PortraitChestSprites:
   - {fileID: 21300000, guid: c47ebc3ceedfae04ea61261a90063074, type: 3}
   - {fileID: 21300000, guid: 8ac7ea0761a0681449fe39a0896cdd3d, type: 3}
   - {fileID: 21300000, guid: b322726debb83bc4891cda41d49ac897, type: 3}
-  FacialFairSprites:
+  PortraitFacialFairSprites:
   - {fileID: 21300000, guid: 5c06541cc4da08f46a5c6c1b0119af65, type: 3}
   - {fileID: 21300000, guid: bd6a60825000e784b9b21f7157fcf167, type: 3}
   - {fileID: 21300000, guid: 26dad3767c30ea14485920be15eb4954, type: 3}
   - {fileID: 21300000, guid: 360579ae60e4d5043a225092878ecc81, type: 3}
   - {fileID: 21300000, guid: fd9cbc04a59be6040b9482084a862335, type: 3}
-  HairSprites:
+  PortraitHairSprites:
   - {fileID: 21300000, guid: 55c5abce2e400d543afe0eaaf73c4fc4, type: 3}
   - {fileID: 21300000, guid: 995b73843a499394a8a23952cd929bca, type: 3}
   - {fileID: 21300000, guid: 94d0c6141742a9c4f9943e12be8480f2, type: 3}
   - {fileID: 21300000, guid: 2a22b65d9db5e434d99dcf6414a7b2ee, type: 3}
-  HelmetSprites:
+  PortraitHelmetSprites:
   - {fileID: 21300000, guid: 00cbfbf02f7bcb246aabfc82e51a9e95, type: 3}
   - {fileID: 21300000, guid: e51347b0ac26dea469746c5459de4f87, type: 3}
   - {fileID: 21300000, guid: 661e640015735904e9b8f4f79002ff15, type: 3}
-  SwordSprites:
+  WeaponSprites:
+  - {fileID: 21300000, guid: 39eb2ce4472b51a47ad422c7f11a631e, type: 3}
+  - {fileID: 21300000, guid: 41de99a6a95ac4a4386d6ac316050460, type: 3}
+  - {fileID: 21300000, guid: c2db151f56d26014682200f6d39e2d5f, type: 3}
+  - {fileID: 21300000, guid: 35c07a9dd38b82a4ab66dd00ba9e97eb, type: 3}
+  - {fileID: 21300000, guid: 78dd4cf3f64923f4581c2aba581b0606, type: 3}
   - {fileID: 21300000, guid: 13643c5bea6735640a6474c797522baa, type: 3}
+  - {fileID: 21300000, guid: 21a427cdc8cfe874ca34c6cb9e98b81d, type: 3}
+  - {fileID: 21300000, guid: a81ecd2c5a5af834e8be88524b933698, type: 3}
+  - {fileID: 21300000, guid: 75bfd334144b39a4e97edccac45d638e, type: 3}
+  - {fileID: 21300000, guid: c0dcd078e938c024b88eac4b39905f78, type: 3}
   RobeSprites:
   - {fileID: 21300000, guid: 710dc223c70547845b0bdbad400c0b04, type: 3}
-  HeadBandSprites:
+  HeadwearSprites:
   - {fileID: 21300000, guid: a9822f57ab8e4d648b81c0688e1a8cbd, type: 3}
+  BootSprites:
+  - {fileID: 21300000, guid: 706a870a1b32f0e47ac0a0ef78a855eb, type: 3}
+  GloveSprites:
+  - {fileID: 21300000, guid: cfc8607916d8f214195e572695b396eb, type: 3}
+  ShieldSprites:
+  - {fileID: 21300000, guid: 8eb514a0ea654b647872402f879350fc, type: 3}
+  RingSprites:
+  - {fileID: 21300000, guid: 3c5bd109b82d85c4ea352eb17834f8f0, type: 3}
 --- !u!4 &1180150245
 Transform:
   m_ObjectHideFlags: 0

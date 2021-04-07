@@ -10,22 +10,21 @@ namespace Assets.Scripts
     public class SpriteStore : MonoBehaviour
     {
         //todo need a struct to hold the sprite and the color scheme that goes with it
-
         #region PortraitSprites
 
-        private Dictionary<string, Sprite> _skinDictionary;
-        private Dictionary<string, Sprite> _earDictionary;
-        private Dictionary<string, Sprite> _chestDictionary;
-        private Dictionary<string, Sprite> _facialHairDictionary;
-        private Dictionary<string, Sprite> _hairDictionary;
-        private Dictionary<string, Sprite> _helmetDictionary;
+        private Dictionary<string, Sprite> _pSkinDictionary;
+        private Dictionary<string, Sprite> _pEarDictionary;
+        private Dictionary<string, Sprite> _pChestDictionary;
+        private Dictionary<string, Sprite> _pFacialHairDictionary;
+        private Dictionary<string, Sprite> _pHairDictionary;
+        private Dictionary<string, Sprite> _pHelmetDictionary;
 
-        public Sprite[] SkinSprites;
-        public Sprite[] EarSprites;
-        public Sprite[] ChestSprites;
-        public Sprite[] FacialFairSprites;
-        public Sprite[] HairSprites;
-        public Sprite[] HelmetSprites;
+        public Sprite[] PortraitSkinSprites;
+        public Sprite[] PortraitEarSprites;
+        public Sprite[] PortraitChestSprites;
+        public Sprite[] PortraitFacialFairSprites;
+        public Sprite[] PortraitHairSprites;
+        public Sprite[] PortraitHelmetSprites;
 
         #endregion PortraitSprites
 
@@ -33,13 +32,21 @@ namespace Assets.Scripts
 
         private List<Dictionary<string, Sprite>> _allItemSprites;
 
-        private Dictionary<string, Sprite> _swordSpriteDictionary;
+        private Dictionary<string, Sprite> _weaponSpriteDictionary;
         private Dictionary<string, Sprite> _robeSpriteDictionary;
-        private Dictionary<string, Sprite> _headbandSpriteDictionary;
+        private Dictionary<string, Sprite> _headwearSpriteDictionary;
+        private Dictionary<string, Sprite> _bootSpriteDictionary;
+        private Dictionary<string, Sprite> _gloveSpriteDictionary;
+        private Dictionary<string, Sprite> _shieldSpriteDictionary;
+        private Dictionary<string, Sprite> _ringSpriteDictionary;
 
-        public Sprite[] SwordSprites;
+        public Sprite[] WeaponSprites;
         public Sprite[] RobeSprites;
-        public Sprite[] HeadBandSprites;
+        public Sprite[] HeadwearSprites;
+        public Sprite[] BootSprites;
+        public Sprite[] GloveSprites;
+        public Sprite[] ShieldSprites;
+        public Sprite[] RingSprites;
 
         #endregion ItemSprites
 
@@ -67,17 +74,17 @@ namespace Assets.Scripts
             switch (slot)
             {
                 case Portrait.Slot.Skin:
-                    return SkinSprites[Random.Range(0, SkinSprites.Length)];
+                    return PortraitSkinSprites[Random.Range(0, PortraitSkinSprites.Length)];
                 case Portrait.Slot.Ears:
-                    return EarSprites[Random.Range(0, EarSprites.Length)]; 
+                    return PortraitEarSprites[Random.Range(0, PortraitEarSprites.Length)]; 
                 case Portrait.Slot.Chest:
-                    return ChestSprites[Random.Range(0, ChestSprites.Length)];
+                    return PortraitChestSprites[Random.Range(0, PortraitChestSprites.Length)];
                 case Portrait.Slot.FacialHair:
-                    return FacialFairSprites[Random.Range(0, FacialFairSprites.Length)];
+                    return PortraitFacialFairSprites[Random.Range(0, PortraitFacialFairSprites.Length)];
                 case Portrait.Slot.Hair:
-                    return HairSprites[Random.Range(0, HairSprites.Length)];
+                    return PortraitHairSprites[Random.Range(0, PortraitHairSprites.Length)];
                 case Portrait.Slot.Helmet:
-                    return HelmetSprites[Random.Range(0, HelmetSprites.Length)];
+                    return PortraitHelmetSprites[Random.Range(0, PortraitHelmetSprites.Length)];
                 default:
                     throw new ArgumentOutOfRangeException(nameof(slot), slot, null);
             }
@@ -88,17 +95,17 @@ namespace Assets.Scripts
             switch (slot)
             {
                 case Portrait.Slot.Skin:
-                    return _skinDictionary.ElementAt(Random.Range(0, _skinDictionary.Count)).Key;
+                    return _pSkinDictionary.ElementAt(Random.Range(0, _pSkinDictionary.Count)).Key;
                 case Portrait.Slot.Ears:
-                    return _earDictionary.ElementAt(Random.Range(0, _earDictionary.Count)).Key;
+                    return _pEarDictionary.ElementAt(Random.Range(0, _pEarDictionary.Count)).Key;
                 case Portrait.Slot.Chest:
-                    return _chestDictionary.ElementAt(Random.Range(0, _chestDictionary.Count)).Key;
+                    return _pChestDictionary.ElementAt(Random.Range(0, _pChestDictionary.Count)).Key;
                 case Portrait.Slot.FacialHair:
-                    return _facialHairDictionary.ElementAt(Random.Range(0, _facialHairDictionary.Count)).Key;
+                    return _pFacialHairDictionary.ElementAt(Random.Range(0, _pFacialHairDictionary.Count)).Key;
                 case Portrait.Slot.Hair:
-                    return _hairDictionary.ElementAt(Random.Range(0, _hairDictionary.Count)).Key;
+                    return _pHairDictionary.ElementAt(Random.Range(0, _pHairDictionary.Count)).Key;
                 case Portrait.Slot.Helmet:
-                    return _helmetDictionary.ElementAt(Random.Range(0, _helmetDictionary.Count)).Key;
+                    return _pHelmetDictionary.ElementAt(Random.Range(0, _pHelmetDictionary.Count)).Key;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(slot), slot, null);
             }
@@ -109,17 +116,17 @@ namespace Assets.Scripts
             switch (slot)
             {
                 case Portrait.Slot.Skin:
-                    return _skinDictionary[key];
+                    return _pSkinDictionary[key];
                 case Portrait.Slot.Ears:
-                    return _earDictionary[key];
+                    return _pEarDictionary[key];
                 case Portrait.Slot.Chest:
-                    return _chestDictionary[key];
+                    return _pChestDictionary[key];
                 case Portrait.Slot.FacialHair:
-                    return _facialHairDictionary[key];
+                    return _pFacialHairDictionary[key];
                 case Portrait.Slot.Hair:
-                    return _hairDictionary[key];
+                    return _pHairDictionary[key];
                 case Portrait.Slot.Helmet:
-                    return _helmetDictionary[key];
+                    return _pHelmetDictionary[key];
                 default:
                     throw new ArgumentOutOfRangeException(nameof(slot), slot, null);
             }
@@ -147,9 +154,9 @@ namespace Assets.Scripts
 
         public Sprite GetRandomSwordSprite()
         {
-            var index = Random.Range(0, _swordSpriteDictionary.Count);
+            var index = Random.Range(0, _weaponSpriteDictionary.Count);
 
-            return _swordSpriteDictionary.ElementAt(index).Value;
+            return _weaponSpriteDictionary.ElementAt(index).Value;
         }
 
         private void PopulateSpriteDictionaries()
@@ -165,22 +172,22 @@ namespace Assets.Scripts
                 switch (slot)
                 {
                     case Portrait.Slot.Skin:
-                        _skinDictionary = PopulateDictionaryFromArray(SkinSprites);
+                        _pSkinDictionary = PopulateDictionaryFromArray(PortraitSkinSprites);
                         break;
                     case Portrait.Slot.Ears:
-                        _earDictionary = PopulateDictionaryFromArray(EarSprites);
+                        _pEarDictionary = PopulateDictionaryFromArray(PortraitEarSprites);
                         break;
                     case Portrait.Slot.Chest:
-                        _chestDictionary = PopulateDictionaryFromArray(ChestSprites);
+                        _pChestDictionary = PopulateDictionaryFromArray(PortraitChestSprites);
                         break;
                     case Portrait.Slot.FacialHair:
-                        _facialHairDictionary = PopulateDictionaryFromArray(FacialFairSprites);
+                        _pFacialHairDictionary = PopulateDictionaryFromArray(PortraitFacialFairSprites);
                         break;
                     case Portrait.Slot.Hair:
-                        _hairDictionary = PopulateDictionaryFromArray(HairSprites);
+                        _pHairDictionary = PopulateDictionaryFromArray(PortraitHairSprites);
                         break;
                     case Portrait.Slot.Helmet:
-                        _helmetDictionary = PopulateDictionaryFromArray(HelmetSprites);
+                        _pHelmetDictionary = PopulateDictionaryFromArray(PortraitHelmetSprites);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(slot), slot, null);
@@ -190,19 +197,31 @@ namespace Assets.Scripts
 
         private void PopulateItemSprites()
         {
-            _swordSpriteDictionary = PopulateDictionaryFromArray(SwordSprites);
+            _weaponSpriteDictionary = PopulateDictionaryFromArray(WeaponSprites);
 
             _robeSpriteDictionary = PopulateDictionaryFromArray(RobeSprites);
 
-            _headbandSpriteDictionary = PopulateDictionaryFromArray(HeadBandSprites);
+            _headwearSpriteDictionary = PopulateDictionaryFromArray(HeadwearSprites);
+
+            _bootSpriteDictionary = PopulateDictionaryFromArray(BootSprites);
+
+            _gloveSpriteDictionary = PopulateDictionaryFromArray(GloveSprites);
+
+            _shieldSpriteDictionary = PopulateDictionaryFromArray(ShieldSprites);
+
+            _ringSpriteDictionary = PopulateDictionaryFromArray(RingSprites);
 
             _allItemSprites = new List<Dictionary<string, Sprite>>();
 
             _allItemSprites.AddRange(new List<Dictionary<string, Sprite>>
                 {
-                    _swordSpriteDictionary,
+                    _weaponSpriteDictionary,
                     _robeSpriteDictionary,
-                    _headbandSpriteDictionary
+                    _headwearSpriteDictionary,
+                    _bootSpriteDictionary,
+                    _gloveSpriteDictionary,
+                    _shieldSpriteDictionary,
+                    _ringSpriteDictionary
                 }
             );
         }
