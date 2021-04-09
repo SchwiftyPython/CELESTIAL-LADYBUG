@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Assets.Scripts.Items
 {
-    //todo maybe make constructor for items here so we can define an Equippable item, armor, weapon, etc based on what fields are populated. Like the Breed.NewMonster example
     public class ItemType
     {
         public string Name;

@@ -51,7 +51,7 @@
     "Abilities": 
     [
       "Slash",
-      "Thurst",
+      "Thrust",
       "Ignite"
     ],
 	"Range": 1,
@@ -429,5 +429,75 @@
 	"Stackable": false,
 	"Price": 100,
 	"TwoHanded" : false
+  },
+  "Spear":
+  {
+	"Description": "Long pokey boi.",  
+    "Parent": null,
+    "Melee": 
+    {
+      "MinDamage": 5,
+      "MaxDamage": 7
+    },
+    "Ranged": {},
+    "Defense":{},
+    "Abilities":
+	[
+	  "Thrust",
+	  "Corkscrew"	  
+	],
+	"Range": 2,
+    "Sprite": "spear",
+    "Slot": "weapon",
+	"Stackable": false,
+	"Price": 10,
+	"TwoHanded" : false
+  },
+  "Lance":
+  {
+	"Description": "Long pokey boi for horses people.",  
+    "Parent": "Spear",
+    "Melee": 
+    {
+      "MinDamage": 7,
+      "MaxDamage": 8
+    },
+    "Ranged": {},
+    "Defense":{},
+    "Abilities":
+	[
+	  "Thrust",
+	  "Charge"	  
+	],
+	"Range": 2,
+    "Sprite": "lance",
+    "Slot": "weapon",
+	"Stackable": false,
+	"Price": 20,
+	"TwoHanded" : false
+  },
+  "Naginata":
+  {
+	"Description": "Long slashy boi.",  
+    "Parent": "Spear",
+    "Melee": 
+    {
+      "MinDamage": 7,
+      "MaxDamage": 8
+    },
+    "Ranged": {},
+    "Defense":{},
+    "Abilities":
+	[
+	  "Thrust",
+	  "Slash",
+      "Hook"	  
+	],
+	"Range": 2,
+    "Sprite": "naginata",
+    "Slot": "weapon",
+	"Stackable": false,
+	"Price": 20,
+	"TwoHanded" : true
   }
 }
