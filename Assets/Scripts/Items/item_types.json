@@ -249,6 +249,176 @@
 	"Price": 10,
 	"TwoHanded" : false
   },
+  "Premium Leather Boots":
+  {
+	"Description": "Stylish!",  
+    "Parent": "Leather Boots",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 1
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "leather_boots_2",
+    "Slot": "boots",
+	"Stackable": false,
+	"Price": 15,
+	"TwoHanded" : false
+  },
+  "Worn Leather Boots":
+  {
+	"Description": "Not many miles left on these fellers.",  
+    "Parent": "Leather Boots",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 0,
+      "DodgeMod": 1
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "leather_boots_3",
+    "Slot": "boots",
+	"Stackable": false,
+	"Price": 5,
+	"TwoHanded" : false
+  },
+  "Designer Boots":
+  {
+	"Description": "Better for the runway than battle probably.",  
+    "Parent": "Leather Boots",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 0,
+      "DodgeMod": 2
+    },
+    "Abilities": 
+	[
+	    "Distract"
+	],
+	"Range": -1,
+    "Sprite": "sexy_boots",
+    "Slot": "boots",
+	"Stackable": false,
+	"Price": 50,
+	"TwoHanded" : false
+  },
+  "Quick Boots":
+  {
+	"Description": "Lighter on your feet in these.",  
+    "Parent": "Leather Boots",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 3
+    },
+    "Abilities": 
+	[
+	    "Hard To Hit"
+	],
+	"Range": -1,
+    "Sprite": "speed_boots",
+    "Slot": "boots",
+	"Stackable": false,
+	"Price": 160,
+	"TwoHanded" : false
+  },
+  "Demon Feet":
+  {
+	"Description": "Looks like someone just hollowed out some demon feet.",  
+    "Parent": "Leather Boots",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 3,
+      "DodgeMod": 3
+    },
+    "Abilities": 
+	[
+	    "Soulbound"
+	],
+	"Range": -1,
+    "Sprite": "demon_feet",
+    "Slot": "boots",
+	"Stackable": false,
+	"Price": 75,
+	"TwoHanded" : false
+  },
+  "Frost Boots":
+  {
+	"Description": "Ice cube loafers.",  
+    "Parent": "Leather Boots",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 2,
+      "DodgeMod": 0
+    },
+    "Abilities": 
+	[
+	    "Cold Resistance"
+	],
+	"Range": -1,
+    "Sprite": "frost_boots",
+    "Slot": "boots",
+	"Stackable": false,
+	"Price": 70,
+	"TwoHanded" : false
+  },
+  "Grass Boots":
+  {
+	"Description": "They're normal boots except for the grass wrapped around them.",  
+    "Parent": "Leather Boots",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 2,
+      "DodgeMod": 1
+    },
+    "Abilities": 
+	[
+	    "Rooted"
+	],
+	"Range": -1,
+    "Sprite": "grass_boots",
+    "Slot": "boots",
+	"Stackable": false,
+	"Price": 60,
+	"TwoHanded" : false
+  },
+  "Insect Boots":
+  {
+	"Description": "They're pretty gross.",  
+    "Parent": "Leather Boots",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 3,
+      "DodgeMod": 1
+    },
+    "Abilities": 
+	[
+	    "Icky"
+	],
+	"Range": -1,
+    "Sprite": "insect_boots",
+    "Slot": "boots",
+	"Stackable": false,
+	"Price": 60,
+	"TwoHanded" : false
+  },
   "Leather Gloves":
   {
 	"Description": "Great for lawncare and fighting goblins.",  

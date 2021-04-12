@@ -1969,6 +1969,14 @@ MonoBehaviour:
   - {fileID: 21300000, guid: a9822f57ab8e4d648b81c0688e1a8cbd, type: 3}
   BootSprites:
   - {fileID: 21300000, guid: 706a870a1b32f0e47ac0a0ef78a855eb, type: 3}
+  - {fileID: 21300000, guid: 3bdf1564a918a6041a629bf09a6447ee, type: 3}
+  - {fileID: 21300000, guid: 99af563af57165d4d888398565b7d3ea, type: 3}
+  - {fileID: 21300000, guid: bdffcfac815cae1468904fb82c638493, type: 3}
+  - {fileID: 21300000, guid: 38910367a4fa8e44b97d916dd2e0fffa, type: 3}
+  - {fileID: 21300000, guid: 731eed502f7959d4d95288998f40c637, type: 3}
+  - {fileID: 21300000, guid: 6cc2e03fade03b74791eb32139d9a8ad, type: 3}
+  - {fileID: 21300000, guid: b55c69467fef28948be2a1a09fc8a077, type: 3}
+  - {fileID: 21300000, guid: d5a98336967fc4241adcf4670dc54792, type: 3}
   GloveSprites:
   - {fileID: 21300000, guid: cfc8607916d8f214195e572695b396eb, type: 3}
   ShieldSprites:
