@@ -313,6 +313,165 @@
 	"Price": 10,
 	"TwoHanded" : false
   },
+  "Heater Shield":
+  {
+	"Description": "Provides no heat, but can sure block an arrow.",  
+    "Parent": "Wooden Shield",
+    "Melee": 
+    {
+      "MinDamage": 4,
+      "MaxDamage": 5
+    },
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 2,
+      "DodgeMod": 1
+    },
+    "Abilities": 
+	[
+	  "Shield Bash"	  
+	],
+	"Range": 1,
+    "Sprite": "heater_shield_1",
+    "Slot": "shield",
+	"Stackable": false,
+	"Price": 15,
+	"TwoHanded" : false
+  },
+  "Skull Shield":
+  {
+	"Description": "Intimidate your enemy with scary pictures.",  
+    "Parent": "Heater Shield",
+    "Melee": {},
+    "Ranged": {},
+    "Defense":{},
+    "Abilities": 
+	[
+	  "Shield Bash",
+      "Intimidate"	  
+	],
+	"Range": 1,
+    "Sprite": "heater_shield_2",
+    "Slot": "shield",
+	"Stackable": false,
+	"Price": 50,
+	"TwoHanded" : false
+  },
+  "Kite Shield":
+  {
+	"Description": "Does not fly very well.",  
+    "Parent": "Wooden Shield",
+    "Melee": {},
+    "Ranged": {},
+    "Defense":
+	{
+	  "Toughness": 3,
+      "DodgeMod": 0
+	},
+    "Abilities": 
+	[
+	  "Shield Bash",
+      "Shield Wall"	  
+	],
+	"Range": 1,
+    "Sprite": "kite_shield_1",
+    "Slot": "shield",
+	"Stackable": false,
+	"Price": 20,
+	"TwoHanded" : false
+  },
+  "Flame Shield":
+  {
+	"Description": "Repurposed space heater.",  
+    "Parent": "Kite Shield",
+    "Melee": {},
+    "Ranged": {},
+    "Defense":{},
+    "Abilities": 
+	[
+	  "Shield Bash",
+      "Shield Wall",
+      "Fire Circle"	  
+	],
+	"Range": 1,
+    "Sprite": "kite_shield_2",
+    "Slot": "shield",
+	"Stackable": false,
+	"Price": 40,
+	"TwoHanded" : false
+  },
+  "Knight's Shield":
+  {
+	"Description": "For honorable folk.",  
+    "Parent": "Wooden Shield",
+    "Melee": {},
+    "Ranged": {},
+    "Defense":
+	{
+	  "Toughness": 3,
+      "DodgeMod": 0
+	},
+    "Abilities": 
+	[
+	  "Shield Bash",
+      "Shield Wall"       
+	],
+	"Range": 1,
+    "Sprite": "fancy_shield_1",
+    "Slot": "shield",
+	"Stackable": false,
+	"Price": 40,
+	"TwoHanded" : false
+  },
+  "Bug Shield":
+  {
+	"Description": "Was once a large beetle. Probably.",  
+    "Parent": "Knight's Shield",
+    "Melee": {},
+    "Ranged": {},
+    "Defense":
+	{
+	  "Toughness": 2,
+      "DodgeMod": 2
+	},
+    "Abilities": 
+	[
+	  "Shield Bash",
+      "Shield Wall",
+      "Acid Defense"	  
+	],
+	"Range": 1,
+    "Sprite": "fancy_shield_2",
+    "Slot": "shield",
+	"Stackable": false,
+	"Price": 50,
+	"TwoHanded" : false
+  },
+  "Cursed Shield":
+  {
+	"Description": "You sure you want to use this? It has an eyeball on it.",  
+    "Parent": "Knight's Shield",
+    "Melee": {},
+    "Ranged": {},
+    "Defense":
+	{
+	  "Toughness": 1,
+      "DodgeMod": 3
+	},
+    "Abilities": 
+	[
+	  "Shield Bash",
+      "Shield Wall",
+      "Premonition"	  
+	],
+	"Range": 1,
+    "Sprite": "fancy_shield_3",
+    "Slot": "shield",
+	"Stackable": false,
+	"Price": 60,
+	"TwoHanded" : false
+  },
   "Dagger":
   {
 	"Description": "A letter opener moonlighting as a weapon.",  
@@ -498,6 +657,78 @@
     "Slot": "weapon",
 	"Stackable": false,
 	"Price": 20,
+	"TwoHanded" : true
+  },
+  "Crossbow":
+  {
+	"Description": "Convenient ranged damage.",  
+    "Parent": null,
+    "Melee": {},
+    "Ranged": 
+	{
+      "MinDamage": 7,
+      "MaxDamage": 8
+    },
+    "Defense":{},
+    "Abilities":
+	[
+	  "Shoot",
+	  "Aim",
+      "Reload"	  
+	],
+	"Range": 5,
+    "Sprite": "crossbow_1",
+    "Slot": "weapon",
+	"Stackable": false,
+	"Price": 30,
+	"TwoHanded" : true
+  },
+  "Light Crossbow":
+  {
+	"Description": "Convenient light ranged damage.",  
+    "Parent": "Crossbow",
+    "Melee": {},
+    "Ranged": 
+	{
+      "MinDamage": 5,
+      "MaxDamage": 6
+    },
+    "Defense":{},
+    "Abilities":
+	[
+	  "Shoot",
+	  "Snapshot",
+      "Reload"	  
+	],
+	"Range": 4,
+    "Sprite": "crossbow_3",
+    "Slot": "weapon",
+	"Stackable": false,
+	"Price": 50,
+	"TwoHanded" : true
+  },
+  "Heavy Crossbow":
+  {
+	"Description": "Convenient heavy ranged damage.",  
+    "Parent": "Crossbow",
+    "Melee": {},
+    "Ranged": 
+	{
+      "MinDamage": 9,
+      "MaxDamage": 10
+    },
+    "Defense":{},
+    "Abilities":
+	[
+	  "Shoot",
+	  "Knockback",
+      "Reload"	  
+	],
+	"Range": 6,
+    "Sprite": "crossbow_2",
+    "Slot": "weapon",
+	"Stackable": false,
+	"Price": 70,
 	"TwoHanded" : true
   }
 }

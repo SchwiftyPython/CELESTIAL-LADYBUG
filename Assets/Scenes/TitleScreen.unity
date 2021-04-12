@@ -1960,6 +1960,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: edc9e78e94133b740ac931acbadb11d2, type: 3}
   - {fileID: 21300000, guid: 035014bae7e78b04c9b18ec3ccf3686b, type: 3}
   - {fileID: 21300000, guid: 4521fc51979f3584eae76f5969dc3e6d, type: 3}
+  - {fileID: 21300000, guid: f940350c43627e34399590d78cee9886, type: 3}
+  - {fileID: 21300000, guid: 0310d520680f10844ab783a9ad21fa97, type: 3}
+  - {fileID: 21300000, guid: d6fa32a13a5df9d49ab9be0c0c91009e, type: 3}
   RobeSprites:
   - {fileID: 21300000, guid: 710dc223c70547845b0bdbad400c0b04, type: 3}
   HeadwearSprites:
@@ -1970,6 +1973,13 @@ MonoBehaviour:
   - {fileID: 21300000, guid: cfc8607916d8f214195e572695b396eb, type: 3}
   ShieldSprites:
   - {fileID: 21300000, guid: 8eb514a0ea654b647872402f879350fc, type: 3}
+  - {fileID: 21300000, guid: dfb205ff708fcc149b8e6d8bc96a2826, type: 3}
+  - {fileID: 21300000, guid: 03434a579778f8040a45f2e8a9eb9be2, type: 3}
+  - {fileID: 21300000, guid: bc01c729e49eac54fa2573fe629e2c53, type: 3}
+  - {fileID: 21300000, guid: 25cebf1d951c4d14ba15b6d5709f5ab0, type: 3}
+  - {fileID: 21300000, guid: 942adfef799e7314880c546f77e66e2f, type: 3}
+  - {fileID: 21300000, guid: 1b86bc59e9aef924eb73c9e8a996cb3e, type: 3}
+  - {fileID: 21300000, guid: 7c484048d7245404a8b95e200fdf23b6, type: 3}
   RingSprites:
   - {fileID: 21300000, guid: 3c5bd109b82d85c4ea352eb17834f8f0, type: 3}
 --- !u!4 &1180150245
