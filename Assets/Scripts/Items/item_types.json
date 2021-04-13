@@ -219,7 +219,7 @@
     "Ranged": {},
     "Defense": 
     {
-      "Toughness": 1,
+      "Toughness": 0,
       "DodgeMod": 1
     },
     "Abilities": [],
@@ -228,6 +228,182 @@
     "Slot": "helmet",
 	"Stackable": false,
 	"Price": 10,
+	"TwoHanded" : false
+  },
+  "Leather Helmet":
+  {
+	"Description": "Some tough noggin jerky.",  
+    "Parent": "Leather Headband",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 0
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "leather_helmet",
+    "Slot": "helmet",
+	"Stackable": false,
+	"Price": 10,
+	"TwoHanded" : false
+  },
+  "Ancient Stone Mask":
+  {
+	"Description": "This gives off an energy of some kind.",  
+    "Parent": "Leather Headband",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 5,
+      "DodgeMod": 4
+    },
+    "Abilities": 
+	[
+	  "Calculated",
+	  "Divine Intervention"
+	],
+	"Range": -1,
+    "Sprite": "stone_mask",
+    "Slot": "helmet",
+	"Stackable": false,
+	"Price": 170,
+	"TwoHanded" : false
+  },
+  "Unicorn Helmet":
+  {
+	"Description": "The helmet you can stab with.",  
+    "Parent": "Leather Headband",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 8,
+      "DodgeMod": 4
+    },
+    "Abilities": 
+	[
+	  "Eats Veggies",
+	  "Endangered Endurance",
+	  "Stabby"
+	],
+	"Range": -1,
+    "Sprite": "unicorn_helm",
+    "Slot": "helmet",
+	"Stackable": false,
+	"Price": 190,
+	"TwoHanded" : false
+  },
+  "Bear Head":
+  {
+	"Description": "It's exactly what it looks like.",  
+    "Parent": "Leather Headband",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 3,
+      "DodgeMod": 2
+    },
+    "Abilities": 
+	[
+	  "Eats Veggies"	  
+	],
+	"Range": -1,
+    "Sprite": "bear_head",
+    "Slot": "helmet",
+	"Stackable": false,
+	"Price": 165,
+	"TwoHanded" : false
+  },
+  "Bycocket":
+  {
+	"Description": "Eat the rich.",  
+    "Parent": "Leather Headband",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 4
+    },
+    "Abilities": 
+	[
+	  "Careful Aim",
+      "Snapshot"	  
+	],
+	"Range": -1,
+    "Sprite": "bycocket",
+    "Slot": "helmet",
+	"Stackable": false,
+	"Price": 165,
+	"TwoHanded" : false
+  },
+  "Close Helm":
+  {
+	"Description": "It's a metal bucket with a visor.",  
+    "Parent": "Leather Headband",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 2,
+      "DodgeMod": 1
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "close_helm",
+    "Slot": "helmet",
+	"Stackable": false,
+	"Price": 15,
+	"TwoHanded" : false
+  },
+  "Demon Helmet":
+  {
+	"Description": "This looks kinda scary, hoss.",  
+    "Parent": "Leather Headband",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 4,
+      "DodgeMod": 3
+    },
+    "Abilities": 
+	[
+	  "Demonic Intervention",
+	  "Eats Veggies",
+	  "Works Out"
+	],
+	"Range": -1,
+    "Sprite": "demon_helm",
+    "Slot": "helmet",
+	"Stackable": false,
+	"Price": 140,
+	"TwoHanded" : false
+  },
+  "Insect Helmet":
+  {
+	"Description": "Beetle but with a chinstrap.",  
+    "Parent": "Leather Headband",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 4,
+      "DodgeMod": 3
+    },
+    "Abilities": 
+	[	  
+	  "Eats Veggies"	  
+	],
+	"Range": -1,
+    "Sprite": "insect_helmet",
+    "Slot": "helmet",
+	"Stackable": false,
+	"Price": 110,
 	"TwoHanded" : false
   },
   "Leather Boots":
@@ -436,6 +612,200 @@
     "Slot": "gloves",
 	"Stackable": false,
 	"Price": 10,
+	"TwoHanded" : false
+  },
+  "Fitted Leather Gloves":
+  {
+	"Description": "Deliver deadly blows in comfort.",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 1
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "leather_gloves_2",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 30,
+	"TwoHanded" : false
+  },
+  "Hardened Leather Gloves":
+  {
+	"Description": "Stiffer, but tougher.",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 2,
+      "DodgeMod": 0
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "leather_gloves_3",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 30,
+	"TwoHanded" : false
+  },
+  "Metal Bracers":
+  {
+	"Description": "Soup can protection.",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 1
+    },
+    "Abilities": 
+	[
+	  "Careful Shooter"
+	],
+	"Range": -1,
+    "Sprite": "metal_bracer",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 35,
+	"TwoHanded" : false
+  },
+  "Decorative Bracers":
+  {
+	"Description": "Forearm protection with style.",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 2
+    },
+    "Abilities": 
+	[
+	  "Careful Shooter"
+	],
+	"Range": -1,
+    "Sprite": "fancy_bracer",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 45,
+	"TwoHanded" : false
+  },
+  "Dragon Gauntlets":
+  {
+	"Description": "Made with REAL dragon scales!",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 6,
+      "DodgeMod": 8
+    },
+    "Abilities": 
+	[
+	  "Bodybuilder",
+	  "Tank"
+	],
+	"Range": -1,
+    "Sprite": "fancy_gloves",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 145,
+	"TwoHanded" : false
+  },
+  "Destroyer Gauntlets":
+  {
+	"Description": "Punch your house down.",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 10,
+      "DodgeMod": 4
+    },
+    "Abilities": 
+	[
+	  "Massive Damage"	  
+	],
+	"Range": -1,
+    "Sprite": "fancy_gloves_2",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 145,
+	"TwoHanded" : false
+  },
+  "Battle-Mage Mittens":
+  {
+	"Description": "Magical boost with a tin can vibe.",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 4,
+      "DodgeMod": 4
+    },
+    "Abilities": 
+	[
+	  "Concentration",
+	  "Agile"
+	],
+	"Range": -1,
+    "Sprite": "fancy_gloves_3",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 145,
+	"TwoHanded" : false
+  },
+  "Plate Gauntlets":
+  {
+	"Description": "Tough armor, but hard to maneuver in.",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 4,
+      "DodgeMod": 0
+    },
+    "Abilities": 
+	[
+	  "Cumbersome"
+	],
+	"Range": -1,
+    "Sprite": "plate_gauntlets_1",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 45,
+	"TwoHanded" : false
+  },
+  "Mage Gloves":
+  {
+	"Description": "Stylish, with a magic touch.",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 0,
+      "DodgeMod": 1
+    },
+    "Abilities": 
+	[
+	  "Amplify"
+	],
+	"Range": -1,
+    "Sprite": "colorful_gloves",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 40,
 	"TwoHanded" : false
   },
   "Old Wedding Ring":
