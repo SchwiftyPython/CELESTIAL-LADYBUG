@@ -1,73 +1,23 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Items
 {
-    //todo inherit from GameObject or IGameobject to take advantage of components?
-    public class Item : ISerializationCallbackReceiver
+    public class Item
     {
-        public enum ItemType
+        [SerializeField] private string _itemId;
+
+        [SerializeField] protected ItemType ItemType;
+
+        public Item(ItemType itemType)
         {
-            [Description("Sword")]
-            Sword,
-            [Description("Leather Armor")]
-            LeatherArmor
-        }
-        
-        [SerializeField] private string _itemId = null;
-        [SerializeField] private string _displayName = null;
-        [SerializeField] private string _description = null;
-        [SerializeField] private Sprite _icon = null;
-        [SerializeField] private bool _stackable = false;
-
-        public ItemType Type { get; private set; }
-
-        public static Dictionary<string, Item> ItemLookupCache;
-
-        public Item(string itemName, ItemType type, string description, Sprite icon, bool stackable)
-        {
-            _displayName = itemName;
-            Type = type;
-            _description = description;
-            _icon = icon;
-            _stackable = stackable;
-        }
-
-        /// <summary>
-        /// Get the inventory item instance from its GUID.
-        /// </summary>
-        /// <param name="itemId">
-        /// String GUID that persists between game instances.
-        /// </param>
-        /// <returns>
-        /// Inventory item instance corresponding to the ID.
-        /// </returns>
-        public static Item GetFromId(string itemId)
-        {
-            if (ItemLookupCache == null)
-            {
-                ItemLookupCache = new Dictionary<string, Item>();
-                /*var itemList = Resources.LoadAll<Item>("");
-                foreach (var item in itemList)
-                {
-                    if (ItemLookupCache.ContainsKey(item._itemId))
-                    {
-                        Debug.LogError(
-                            $"Looks like there's a duplicate InventorySystem ID for objects: {ItemLookupCache[item._itemId]} and {item}");
-                        continue;
-                    }
-
-                    ItemLookupCache[item._itemId] = item;
-                }*/
-            }
-
-            return itemId == null || !ItemLookupCache.ContainsKey(itemId) ? null : ItemLookupCache[itemId];
+            ItemType = itemType;
+            _itemId = Guid.NewGuid().ToString();
         }
 
         public Sprite GetIcon()
         {
-            return _icon;
+            return ItemType.Sprite;
         }
 
         public string GetItemId()
@@ -77,31 +27,17 @@ namespace Assets.Scripts.Items
 
         public bool IsStackable()
         {
-            return _stackable;
+            return ItemType.Stackable;
         }
 
         public string GetDisplayName()
         {
-            return _displayName;
+            return ItemType.Name;
         }
 
         public string GetDescription()
         {
-            return _description;
-        }
-
-        public void OnBeforeSerialize()
-        {
-            if (string.IsNullOrWhiteSpace(_itemId))
-            {
-                _itemId = System.Guid.NewGuid().ToString();
-            }
-        }
-
-        public void OnAfterDeserialize()
-        {
-            // Require by the ISerializationCallbackReceiver but we don't need
-            // to do anything with it.
+            return ItemType.Description;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Assets.Scripts.UI
         private TextMeshProUGUI _apCost;
 
         [SerializeField]
-        private TextMeshProUGUI _damageDescription;
+        private TextMeshProUGUI _damageDescription; 
 
         private void Start()
         {
@@ -36,9 +36,22 @@ namespace Assets.Scripts.UI
             _abilityDescription.text = "Description not implemented yet"; //todo
             _apCost.text = ability.ApCost.ToString();
 
-            var (damageMin, damageMax) = CombatManager.Instance.ActiveEntity.GetEquippedWeapon().DamageRange;
+            //todo probably need bool for if ability damage is based on weapon
+            if (ability.HostileTargetsOnly)
+            {
+                int damageMin;
+                int damageMax;
+                if (ability.IsRanged())
+                {
+                    (damageMin, damageMax) = CombatManager.Instance.ActiveEntity.GetEquippedWeapon().GetRangedDamageRange();
+                }
+                else
+                {
+                    (damageMin, damageMax) = CombatManager.Instance.ActiveEntity.GetEquippedWeapon().GetMeleeDamageRange();
+                }
 
-            _damageDescription.text = $"Deals {damageMin + baseDamage} - {damageMax + baseDamage} damage";
+                _damageDescription.text = $"Deals {damageMin + baseDamage} - {damageMax + baseDamage} damage";
+            }
 
             var position = Input.mousePosition;
             gameObject.transform.position = new Vector2(position.x + 180f, position.y + 160f);

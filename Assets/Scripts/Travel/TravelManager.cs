@@ -51,6 +51,12 @@ namespace Assets.Scripts.Travel
             Party = new Party();
         }
 
+        public void NewInventory()
+        {
+            var inventory = Inventory.GetPartyInventory();
+            inventory.GenerateStartingItems();
+        }
+
         public void StartNewDay()
         {
             EncounterManager.Instance.BuildDecksForNewDay();

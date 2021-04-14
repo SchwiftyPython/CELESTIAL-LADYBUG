@@ -23,7 +23,8 @@ namespace Assets.Scripts
                 {EquipLocation.Boots, null},
                 {EquipLocation.Ring, null},
                 {EquipLocation.Weapon, null},
-                {EquipLocation.Shield, null} //only some classes have shield available
+                {EquipLocation.Shield, null}, //only some classes have shield available
+                {EquipLocation.Book, null} //only some classes have book available
             };
         }
 
@@ -85,11 +86,11 @@ namespace Assets.Scripts
 
             foreach (var pair in equippedItemsForSerialization)
             {
-                var item = (EquipableItem)Item.GetFromId(pair.Value);
-                if (item != null)
-                {
-                    _equippedItems[pair.Key] = item;
-                }
+                // var item = (EquipableItem)Item.GetFromId(pair.Value);
+                // if (item != null)
+                // {
+                //     _equippedItems[pair.Key] = item;
+                // }
             }
         }
     }

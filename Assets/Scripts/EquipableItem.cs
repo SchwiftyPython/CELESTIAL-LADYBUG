@@ -1,25 +1,55 @@
+using System;
 using Assets.Scripts.Items;
-using UnityEngine;
 
 namespace Assets.Scripts
 {
     /// <summary>
-    /// An inventory item that can be equipped to the player. Weapons could be a
-    /// subclass of this.
+    /// An item that can be equipped to the player.
     /// </summary>
-    [CreateAssetMenu(menuName = ("Equipable Item"))]
     public class EquipableItem : Item
     {
-        private EquipLocation _allowedEquipLocation;
-
-        public EquipableItem(EquipLocation equipLocation, string itemName, ItemType type, string description, Sprite icon, bool stackable) : base(itemName, type, description, icon, stackable)
+        public EquipableItem(ItemType itemType) : base(itemType)
         {
-            _allowedEquipLocation = equipLocation;
         }
 
         public EquipLocation GetAllowedEquipLocation()
         {
-            return _allowedEquipLocation;
+            if (ItemType.Slot == null)
+            {
+                throw new Exception($"Equipment location slot for {ItemType.Name} is null!");
+            }
+
+            return (EquipLocation) ItemType.Slot;
+        }
+
+        public int GetToughness()
+        {
+            if (ItemType.Defense == null)
+            {
+                return 0;
+            }
+
+            return ItemType.Defense.Toughness;
+        }
+
+        public (int, int) GetMeleeDamageRange()
+        {
+            if (ItemType.Melee == null)
+            {
+                return (0, 0);
+            }
+
+            return (ItemType.Melee.MinDamage, ItemType.Melee.MaxDamage);
+        }
+
+        public (int, int) GetRangedDamageRange()
+        {
+            if (ItemType.Ranged == null)
+            {
+                return (0, 0);
+            }
+
+            return (ItemType.Ranged.MinDamage, ItemType.Ranged.MaxDamage);
         }
     }
 }

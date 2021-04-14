@@ -883,9 +883,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bafc08bd0ee4ae64694293fe15dc0ce0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CompanionPrototypePrefab: {fileID: 989619495786686349, guid: 6a969eab0ae297d45b639ad181451963,
+  CompanionPrototypePrefab: {fileID: 8726410407947978318, guid: 03909cb094f99554281613a2848ef171,
     type: 3}
-  EnemyPrototypePrefab: {fileID: 3504136363019071409, guid: 44d89f74b1b2a814fa851ea73bdb1405,
+  EnemyPrototypePrefab: {fileID: 3736600100793527761, guid: 5b9b420637ddd694cb4430d422cb0bee,
     type: 3}
   DerpusPrototypePrefab: {fileID: 2458269009230534490, guid: 210d67d9172254a4eaf8207597a9b45d,
     type: 3}
@@ -1233,8 +1233,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 6}
+  m_SizeDelta: {x: 0, y: -12}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &609914987
 MonoBehaviour:
@@ -1595,8 +1595,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 6}
+  m_SizeDelta: {x: 0, y: -12}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &922087025
 MonoBehaviour:
@@ -1923,31 +1923,107 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50f878273bca7c04f90986d18c3b5f04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SkinSprites:
+  PortraitSkinSprites:
   - {fileID: 21300000, guid: e01a0708307655442ab40f21ee7b47cf, type: 3}
-  EarSprites:
+  PortraitEarSprites:
   - {fileID: 21300000, guid: 9542cc760430f65409148ede153161c6, type: 3}
-  ChestSprites:
+  PortraitChestSprites:
   - {fileID: 21300000, guid: c47ebc3ceedfae04ea61261a90063074, type: 3}
   - {fileID: 21300000, guid: 8ac7ea0761a0681449fe39a0896cdd3d, type: 3}
   - {fileID: 21300000, guid: b322726debb83bc4891cda41d49ac897, type: 3}
-  FacialFairSprites:
+  PortraitFacialFairSprites:
   - {fileID: 21300000, guid: 5c06541cc4da08f46a5c6c1b0119af65, type: 3}
   - {fileID: 21300000, guid: bd6a60825000e784b9b21f7157fcf167, type: 3}
   - {fileID: 21300000, guid: 26dad3767c30ea14485920be15eb4954, type: 3}
   - {fileID: 21300000, guid: 360579ae60e4d5043a225092878ecc81, type: 3}
   - {fileID: 21300000, guid: fd9cbc04a59be6040b9482084a862335, type: 3}
-  HairSprites:
+  PortraitHairSprites:
   - {fileID: 21300000, guid: 55c5abce2e400d543afe0eaaf73c4fc4, type: 3}
   - {fileID: 21300000, guid: 995b73843a499394a8a23952cd929bca, type: 3}
   - {fileID: 21300000, guid: 94d0c6141742a9c4f9943e12be8480f2, type: 3}
   - {fileID: 21300000, guid: 2a22b65d9db5e434d99dcf6414a7b2ee, type: 3}
-  HelmetSprites:
+  PortraitHelmetSprites:
   - {fileID: 21300000, guid: 00cbfbf02f7bcb246aabfc82e51a9e95, type: 3}
   - {fileID: 21300000, guid: e51347b0ac26dea469746c5459de4f87, type: 3}
   - {fileID: 21300000, guid: 661e640015735904e9b8f4f79002ff15, type: 3}
-  SwordSprites:
+  WeaponSprites:
+  - {fileID: 21300000, guid: 39eb2ce4472b51a47ad422c7f11a631e, type: 3}
+  - {fileID: 21300000, guid: 41de99a6a95ac4a4386d6ac316050460, type: 3}
+  - {fileID: 21300000, guid: c2db151f56d26014682200f6d39e2d5f, type: 3}
+  - {fileID: 21300000, guid: 35c07a9dd38b82a4ab66dd00ba9e97eb, type: 3}
+  - {fileID: 21300000, guid: 78dd4cf3f64923f4581c2aba581b0606, type: 3}
   - {fileID: 21300000, guid: 13643c5bea6735640a6474c797522baa, type: 3}
+  - {fileID: 21300000, guid: 21a427cdc8cfe874ca34c6cb9e98b81d, type: 3}
+  - {fileID: 21300000, guid: a81ecd2c5a5af834e8be88524b933698, type: 3}
+  - {fileID: 21300000, guid: 75bfd334144b39a4e97edccac45d638e, type: 3}
+  - {fileID: 21300000, guid: c0dcd078e938c024b88eac4b39905f78, type: 3}
+  - {fileID: 21300000, guid: edc9e78e94133b740ac931acbadb11d2, type: 3}
+  - {fileID: 21300000, guid: 035014bae7e78b04c9b18ec3ccf3686b, type: 3}
+  - {fileID: 21300000, guid: 4521fc51979f3584eae76f5969dc3e6d, type: 3}
+  - {fileID: 21300000, guid: f940350c43627e34399590d78cee9886, type: 3}
+  - {fileID: 21300000, guid: 0310d520680f10844ab783a9ad21fa97, type: 3}
+  - {fileID: 21300000, guid: d6fa32a13a5df9d49ab9be0c0c91009e, type: 3}
+  BodySprites:
+  - {fileID: 21300000, guid: c8212564da7d6054a89d6f7d83947ef1, type: 3}
+  - {fileID: 21300000, guid: 06152fcd0acc23c44ad02ecf029e9347, type: 3}
+  - {fileID: 21300000, guid: b6dfefa5a73a7b64aa73e84625f660f8, type: 3}
+  - {fileID: 21300000, guid: a655104884331f54eb04e838830536d9, type: 3}
+  - {fileID: 21300000, guid: 228f938606ee912408f4ef4dcfcf2648, type: 3}
+  - {fileID: 21300000, guid: 8556f82ab7e4ea747a91bdbd3c2e42a8, type: 3}
+  - {fileID: 21300000, guid: 7e6af69e7a5110f43a2f185d89d8b48b, type: 3}
+  - {fileID: 21300000, guid: 1f96303a4b0e0964ea5e3e92c12563f3, type: 3}
+  - {fileID: 21300000, guid: 710dc223c70547845b0bdbad400c0b04, type: 3}
+  HeadwearSprites:
+  - {fileID: 21300000, guid: a9822f57ab8e4d648b81c0688e1a8cbd, type: 3}
+  - {fileID: 21300000, guid: 07c9106fc925abd4d9b6847dc301fb56, type: 3}
+  - {fileID: 21300000, guid: 53e4832bd3d3192449c5afadb7816a82, type: 3}
+  - {fileID: 21300000, guid: bc22b97c40b72534184eb83222bbc9e6, type: 3}
+  - {fileID: 21300000, guid: 630c362270b97fd42a962cfc29a3940b, type: 3}
+  - {fileID: 21300000, guid: 2ade5b45e55dd7e4194d8c48fd44212f, type: 3}
+  - {fileID: 21300000, guid: e1d0cd97977c3a24c9777c26289cfcec, type: 3}
+  - {fileID: 21300000, guid: dfafd848d94501a47983ad20ef3a2a1d, type: 3}
+  - {fileID: 21300000, guid: a4dd5815815cfaa449e58e171b91af8f, type: 3}
+  BootSprites:
+  - {fileID: 21300000, guid: 706a870a1b32f0e47ac0a0ef78a855eb, type: 3}
+  - {fileID: 21300000, guid: 3bdf1564a918a6041a629bf09a6447ee, type: 3}
+  - {fileID: 21300000, guid: 99af563af57165d4d888398565b7d3ea, type: 3}
+  - {fileID: 21300000, guid: bdffcfac815cae1468904fb82c638493, type: 3}
+  - {fileID: 21300000, guid: 38910367a4fa8e44b97d916dd2e0fffa, type: 3}
+  - {fileID: 21300000, guid: 731eed502f7959d4d95288998f40c637, type: 3}
+  - {fileID: 21300000, guid: 6cc2e03fade03b74791eb32139d9a8ad, type: 3}
+  - {fileID: 21300000, guid: b55c69467fef28948be2a1a09fc8a077, type: 3}
+  - {fileID: 21300000, guid: d5a98336967fc4241adcf4670dc54792, type: 3}
+  GloveSprites:
+  - {fileID: 21300000, guid: cfc8607916d8f214195e572695b396eb, type: 3}
+  - {fileID: 21300000, guid: b31182581d626bb4c9668c276d4abee9, type: 3}
+  - {fileID: 21300000, guid: 45c8701b52c67e146945b28b77ec89a0, type: 3}
+  - {fileID: 21300000, guid: 2dc1ed3bbd128424f842002f77168dc8, type: 3}
+  - {fileID: 21300000, guid: 30d277aa733c4594a91d88156053aced, type: 3}
+  - {fileID: 21300000, guid: cbc92000693d8484dbfe1c523e47a59f, type: 3}
+  - {fileID: 21300000, guid: bff9fa00d3bf1d647b140041d44c9370, type: 3}
+  - {fileID: 21300000, guid: 450f16722e6b0384b801751e3be4185c, type: 3}
+  - {fileID: 21300000, guid: 275d87adb824c37479ebfb6be96646db, type: 3}
+  - {fileID: 21300000, guid: c89a341feeff2044485ccf44a96dc3be, type: 3}
+  ShieldSprites:
+  - {fileID: 21300000, guid: 8eb514a0ea654b647872402f879350fc, type: 3}
+  - {fileID: 21300000, guid: dfb205ff708fcc149b8e6d8bc96a2826, type: 3}
+  - {fileID: 21300000, guid: 03434a579778f8040a45f2e8a9eb9be2, type: 3}
+  - {fileID: 21300000, guid: bc01c729e49eac54fa2573fe629e2c53, type: 3}
+  - {fileID: 21300000, guid: 25cebf1d951c4d14ba15b6d5709f5ab0, type: 3}
+  - {fileID: 21300000, guid: 942adfef799e7314880c546f77e66e2f, type: 3}
+  - {fileID: 21300000, guid: 1b86bc59e9aef924eb73c9e8a996cb3e, type: 3}
+  - {fileID: 21300000, guid: 7c484048d7245404a8b95e200fdf23b6, type: 3}
+  RingSprites:
+  - {fileID: 21300000, guid: 3c5bd109b82d85c4ea352eb17834f8f0, type: 3}
+  - {fileID: 21300000, guid: 8c6f2d2c202d3e24bad7f17b1f43cb73, type: 3}
+  - {fileID: 21300000, guid: 549b5b25588cc5944a4b8c7d699787ef, type: 3}
+  - {fileID: 21300000, guid: 1659ae804877aa44f82b53d7255cae57, type: 3}
+  - {fileID: 21300000, guid: 1c317ee582e76b1459639b5e39f5a77b, type: 3}
+  - {fileID: 21300000, guid: fd787d75ae8996f4d947175d1e1a901d, type: 3}
+  - {fileID: 21300000, guid: 5cbfbfb8f12194b41868457a8f1043bb, type: 3}
+  - {fileID: 21300000, guid: 4d21a7ef111549947970d15c21f42240, type: 3}
+  - {fileID: 21300000, guid: 13d63e2fad0548b459620c41cb2ae8b1, type: 3}
+  - {fileID: 21300000, guid: 55446de60efc21a40982ac55cd59e8c2, type: 3}
 --- !u!4 &1180150245
 Transform:
   m_ObjectHideFlags: 0
@@ -2333,6 +2409,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1508758626
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1508758628}
+  - component: {fileID: 1508758627}
+  m_Layer: 0
+  m_Name: ItemStore
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1508758627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508758626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 947cb363b233028419c101f3cbe110ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemTypesFile: {fileID: 4900000, guid: c270c49939fa37a498cfd5d3d3599f2a, type: 3}
+--- !u!4 &1508758628
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508758626}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1088.6012, y: 458.38245, z: -2307}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1514711350
 GameObject:
@@ -3091,8 +3211,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 6}
+  m_SizeDelta: {x: 0, y: -12}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2119615970
 MonoBehaviour:

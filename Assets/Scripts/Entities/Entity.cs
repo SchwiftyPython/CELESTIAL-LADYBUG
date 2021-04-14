@@ -173,20 +173,38 @@ namespace Assets.Scripts.Entities
 
             _equipment = new Equipment();
 
-            var swordSprite = SpriteStore.Instance.GetRandomSwordSprite();
+            var testWeapon = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Weapon);
+            
+            Equip(testWeapon);
 
-            var testSword = new Weapon("Sword", Item.ItemType.Sword, (35, 40), 1, "Better than slapping someone with a frying pan", swordSprite, false);
+            var testArmor = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Body);
 
-            _equipment.AddItem(EquipLocation.Weapon, testSword);
+            Equip(testArmor);
 
-            // var testArmor = new Armor(EquipLocation.Body, "Leather Armor", Item.ItemType.LeatherArmor, 3, string.Empty, null, false);
-            //
-            // _equipment.AddItem(testArmor.GetAllowedEquipLocation(), testArmor);
+            var testHelmet = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Helmet);
+
+            Equip(testHelmet);
+
+            var testBoots = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Boots);
+
+            Equip(testBoots);
+
+            var testGloves = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Gloves);
+
+            Equip(testGloves);
+
+            var testShield = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Shield);
+
+            Equip(testShield);
+
+            var testRing = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Ring);
+
+            Equip(testRing);
         }
 
-        public void Equip()
+        public void Equip(EquipableItem item)
         {
-
+            _equipment.AddItem(item.GetAllowedEquipLocation(), item);
         }
 
         public void UnEquip()
@@ -200,9 +218,9 @@ namespace Assets.Scripts.Entities
 
             if (AttackHit(hitChance)) //todo handle damage in its own method since ranged will use this too
             {
-                var equippedWeapon = (Weapon) _equipment.GetItemInSlot(EquipLocation.Weapon);
+                var equippedWeapon = _equipment.GetItemInSlot(EquipLocation.Weapon);
 
-                var (minDamage, maxDamage) = equippedWeapon.DamageRange;
+                var (minDamage, maxDamage) = equippedWeapon.GetMeleeDamageRange();
 
                 var damage = Random.Range(minDamage, maxDamage + 1) + Stats.Attack;
 
@@ -251,22 +269,22 @@ namespace Assets.Scripts.Entities
                     continue;
                 }
 
-                Armor equippedArmor = (Armor) _equipment.GetItemInSlot(location);
+                var  equippedArmor = _equipment.GetItemInSlot(location);
 
                 if (equippedArmor == null)
                 {
                     continue;
                 }
 
-                toughnessTotal += equippedArmor.Toughness;
+                toughnessTotal += equippedArmor.GetToughness();
             }
 
             return toughnessTotal;
         }
 
-        public Weapon GetEquippedWeapon()
+        public EquipableItem GetEquippedWeapon()
         {
-            return (Weapon) _equipment.GetItemInSlot(EquipLocation.Weapon);
+            return _equipment.GetItemInSlot(EquipLocation.Weapon);
         }
 
         public Equipment GetEquipment()

@@ -22,16 +22,8 @@ namespace Assets.Scripts.UI
 
         private void Awake() 
         {
-            //var player = GameObject.FindGameObjectWithTag("Player");
-            //playerEquipment = player.GetComponent<Equipment>();
-            //_companionEquipment.EquipmentUpdated += RedrawUi;
             EventMediator.Instance.SubscribeToEvent(RefreshEvent, this);
             EventMediator.Instance.SubscribeToEvent(PopulateEvent, this);
-        }
-
-        private void Start() 
-        {
-            //RedrawUi();
         }
 
         public int MaxAcceptable(Item item)
@@ -90,7 +82,6 @@ namespace Assets.Scripts.UI
             _slotIcon.GetComponent<Image>().enabled = item == null;
         }
 
-        //todo subscribe to companion change event in party management window
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
         {
             if (eventName.Equals(PopulateEvent))

@@ -34,6 +34,18 @@ namespace Assets.Scripts
             return travelManager.GetComponent<Inventory>();
         }
 
+        public void GenerateStartingItems()
+        {
+            var numItems = _inventorySize / 2;
+
+            for (var i = 0; i < numItems; i++)
+            {
+                var item = ItemStore.Instance.GetRandomEquipableItem();
+
+                AddToFirstEmptySlot(item, 1);
+            }
+        }
+
         /// <summary>
         /// Could this item fit anywhere in the inventory?
         /// </summary>
@@ -232,7 +244,7 @@ namespace Assets.Scripts
             var slotStrings = (InventorySlotRecord[])state;
             for (var i = 0; i < _inventorySize; i++)
             {
-                _slots[i].Item = Item.GetFromId(slotStrings[i].ItemId);
+                //_slots[i].Item = Item.GetFromId(slotStrings[i].ItemId);
                 _slots[i].Number = slotStrings[i].Number;
             }
 
