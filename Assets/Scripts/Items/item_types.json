@@ -205,10 +205,171 @@
       "Amplify"
     ],
 	"Range": -1,
-    "Sprite": null,
+    "Sprite": "robe_2",
     "Slot": null,
 	"Stackable": false,
 	"Price": 50,
+	"TwoHanded" : false
+  },
+  "Mail Shirt":
+  {
+	"Description": "Protect thine organs!",  
+    "Parent": null,
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+	{
+	  "Toughness": 4,
+      "DodgeMod": 0
+	},
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "chainmail",
+    "Slot": "body",
+	"Stackable": false,
+	"Price": 100,
+	"TwoHanded" : false
+  },
+  "Worn Mail Shirt":
+  {
+	"Description": "Used, but still decent.",  
+    "Parent": "Mail Shirt",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+	{
+	  "Toughness": 2,
+      "DodgeMod": 0
+	},
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "chainmail",
+    "Slot": "body",
+	"Stackable": false,
+	"Price": 50,
+	"TwoHanded" : false
+  },
+  "Plate Armor":
+  {
+	"Description": "Tough, but not flexible.",  
+    "Parent": null,
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+	{
+	  "Toughness": 5,
+      "DodgeMod": 0
+	},
+    "Abilities": 
+	[
+	  "Tank",
+	  "Well Fed"
+	],
+	"Range": -1,
+    "Sprite": "plate_armor",
+    "Slot": "body",
+	"Stackable": false,
+	"Price": 145,
+	"TwoHanded" : false
+  },
+  "Bitey Plate":
+  {
+	"Description": "It's got some rough edges.",  
+    "Parent": "Plate Armor",
+    "Melee": 
+	{
+		"MinDamage": 1,
+		"MaxDamage": 4
+	},
+    "Ranged": {},
+    "Defense": {},
+    "Abilities": 
+	[
+	  "Bite Back"
+	],
+	"Range": -1,
+    "Sprite": "plate_armor_2",
+    "Slot": "body",
+	"Stackable": false,
+	"Price": 155,
+	"TwoHanded" : false
+  },
+  "Lion Plate":
+  {
+	"Description": "Sturdy and has a cool pic of a lion.",  
+    "Parent": "Plate Armor",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": {},
+    "Abilities": 
+	[
+	  "Quick Recovery"
+	],
+	"Range": -1,
+    "Sprite": "plate_armor_3",
+    "Slot": "body",
+	"Stackable": false,
+	"Price": 150,
+	"TwoHanded" : false
+  },
+  "Battle Plate":
+  {
+	"Description": "For whoopin'.",  
+    "Parent": "Plate Armor",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": {},
+    "Abilities": 
+	[
+	  "Well Fed",
+	  "Guided Strikes"
+	],
+	"Range": -1,
+    "Sprite": "plate_armor_4",
+    "Slot": "body",
+	"Stackable": false,
+	"Price": 215,
+	"TwoHanded" : false
+  },
+  "Nimble Demon Plate":
+  {
+	"Description": "This might not be plate. It might be demon skin?",  
+    "Parent": "Plate Armor",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+	{
+	  "Toughness": 3,
+      "DodgeMod": 4
+	},
+    "Abilities": 
+	[
+	  "Unnatural Dodge"
+	],
+	"Range": -1,
+    "Sprite": "demon",
+    "Slot": "body",
+	"Stackable": false,
+	"Price": 130,
+	"TwoHanded" : false
+  },
+  "Leather Armor":
+  {
+	"Description": "Standard fare.",  
+    "Parent": null,
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+	{
+	  "Toughness": 3,
+      "DodgeMod": 1
+	},
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "leather",
+    "Slot": "body",
+	"Stackable": false,
+	"Price": 35,
 	"TwoHanded" : false
   },
   "Leather Headband":
@@ -825,6 +986,186 @@
     "Slot": "ring",
 	"Stackable": false,
 	"Price": 10,
+	"TwoHanded" : false
+  },
+  "Skull Ring":
+  {
+	"Description": "Look like a badass!",  
+    "Parent": "Old Wedding Ring",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 0,
+      "DodgeMod": 1
+    },
+    "Abilities": 
+	[
+	  "Intimidate"
+	],
+	"Range": -1,
+    "Sprite": "skull_ring",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 20,
+	"TwoHanded" : false
+  },
+  "Overachiever Ring":
+  {
+	"Description": "Someone good at schoolin' won this fair and square.",  
+    "Parent": "Old Wedding Ring",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 0,
+      "DodgeMod": 1
+    },
+    "Abilities": 
+	[
+	  "Knowledgeable"
+	],
+	"Range": -1,
+    "Sprite": "wing_ring",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 40,
+	"TwoHanded" : false
+  },
+  "Yin Yang Ring":
+  {
+	"Description": "Protects against non-magic damage, but you take more damage form magic attacks.",  
+    "Parent": "Old Wedding Ring",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 0,
+      "DodgeMod": 2
+    },
+    "Abilities": 
+	[
+	  "Hardskin",
+	  "Conductive"
+	],
+	"Range": -1,
+    "Sprite": "yin_yang_ring",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 70,
+	"TwoHanded" : false
+  },
+  "Ancient Ring":
+  {
+	"Description": "Left over from a dead civilization. Possibly cursed.",  
+    "Parent": "Old Wedding Ring",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 4
+    },
+    "Abilities": 
+	[
+	  "Immunity",
+	  "Charismatic"
+	],
+	"Range": -1,
+    "Sprite": "ancient_ring",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 210,
+	"TwoHanded" : false
+  },
+  "Flower Ring":
+  {
+	"Description": "Wook trinket.",  
+    "Parent": "Old Wedding Ring",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 0,
+      "DodgeMod": 1
+    },
+    "Abilities": 
+	[
+	  "Earthy"
+	],
+	"Range": -1,
+    "Sprite": "flower_ring",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 25,
+	"TwoHanded" : false
+  },
+  "Unbreakable Ring":
+  {
+	"Description": "This thing is built tough. Dwarf tough.",  
+    "Parent": "Old Wedding Ring",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 3,
+      "DodgeMod": 1
+    },
+    "Abilities": 
+	[
+	  "Immunity",
+	  "Stone Skin"
+	],
+	"Range": -1,
+    "Sprite": "jeweled_ring",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 280,
+	"TwoHanded" : false
+  },
+  "Mammoth Ring":
+  {
+	"Description": "Not hairy, but tough.",  
+    "Parent": "Old Wedding Ring",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 5,
+      "DodgeMod": 2
+    },
+    "Abilities": 
+	[
+	  "Unstunnable"	  
+	],
+	"Range": -1,
+    "Sprite": "jeweled_ring_2",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 330,
+	"TwoHanded" : false
+  },
+  "Plunder Ring":
+  {
+	"Description": "This ring seems to make the wearer wealthier somehow.",  
+    "Parent": "Old Wedding Ring",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 0,
+      "DodgeMod": 1
+    },
+    "Abilities": 
+	[
+	  "Wealthy",
+      "Charismatic"	  
+	],
+	"Range": -1,
+    "Sprite": "jeweled_ring_3",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 100,
 	"TwoHanded" : false
   },
   "Wooden Shield":

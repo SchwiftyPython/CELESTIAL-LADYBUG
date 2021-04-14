@@ -33,7 +33,7 @@ namespace Assets.Scripts
         private List<Dictionary<string, Sprite>> _allItemSprites;
 
         private Dictionary<string, Sprite> _weaponSpriteDictionary;
-        private Dictionary<string, Sprite> _robeSpriteDictionary;
+        private Dictionary<string, Sprite> _bodySpriteDictionary;
         private Dictionary<string, Sprite> _headwearSpriteDictionary;
         private Dictionary<string, Sprite> _bootSpriteDictionary;
         private Dictionary<string, Sprite> _gloveSpriteDictionary;
@@ -41,7 +41,7 @@ namespace Assets.Scripts
         private Dictionary<string, Sprite> _ringSpriteDictionary;
 
         public Sprite[] WeaponSprites;
-        public Sprite[] RobeSprites;
+        public Sprite[] BodySprites;
         public Sprite[] HeadwearSprites;
         public Sprite[] BootSprites;
         public Sprite[] GloveSprites;
@@ -199,7 +199,7 @@ namespace Assets.Scripts
         {
             _weaponSpriteDictionary = PopulateDictionaryFromArray(WeaponSprites);
 
-            _robeSpriteDictionary = PopulateDictionaryFromArray(RobeSprites);
+            _bodySpriteDictionary = PopulateDictionaryFromArray(BodySprites);
 
             _headwearSpriteDictionary = PopulateDictionaryFromArray(HeadwearSprites);
 
@@ -216,7 +216,7 @@ namespace Assets.Scripts
             _allItemSprites.AddRange(new List<Dictionary<string, Sprite>>
                 {
                     _weaponSpriteDictionary,
-                    _robeSpriteDictionary,
+                    _bodySpriteDictionary,
                     _headwearSpriteDictionary,
                     _bootSpriteDictionary,
                     _gloveSpriteDictionary,

@@ -34,6 +34,18 @@ namespace Assets.Scripts
             return travelManager.GetComponent<Inventory>();
         }
 
+        public void GenerateStartingItems()
+        {
+            var numItems = _inventorySize / 2;
+
+            for (var i = 0; i < numItems; i++)
+            {
+                var item = ItemStore.Instance.GetRandomEquipableItem();
+
+                AddToFirstEmptySlot(item, 1);
+            }
+        }
+
         /// <summary>
         /// Could this item fit anywhere in the inventory?
         /// </summary>

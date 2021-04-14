@@ -126,6 +126,8 @@ namespace Assets.Scripts
 
             TravelManager.Instance.NewParty();
 
+            TravelManager.Instance.NewInventory();
+
             TravelManager.Instance.StartNewDay();
         }
 
