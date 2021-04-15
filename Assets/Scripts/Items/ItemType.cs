@@ -138,6 +138,8 @@ namespace Assets.Scripts.Items
 
         public bool TwoHanded;
 
+        public ItemGroup Group;
+
         public Item NewItem()
         {
             if (!IsEquipable())
