@@ -1,0 +1,219 @@
+{
+"Robe":
+  {
+	"Description": "Some smelly robes",  
+    "Parent": null,
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 0
+    },
+    "Abilities": [],
+    "Sprite": "robe_1",
+	"Range": -1, 
+    "Slot": "body",
+	"Stackable": false,
+	"Price": 10,
+	"TwoHanded" : false
+  },
+  "Monk's Robe":
+  {
+	"Description": "Robes with a kick",  
+    "Parent": "Robe",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 2
+    },	
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": null,	
+    "Slot": null,
+	"Stackable": false,
+	"Price": 15,
+	"TwoHanded" : false
+  },
+  "Wizard's Robe":
+  {
+	"Description": "Magic pajamas",  
+    "Parent": "Robe",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": {},
+    "Abilities": 
+    [
+      "Amplify"
+    ],
+	"Range": -1,
+    "Sprite": "robe_2",
+    "Slot": null,
+	"Stackable": false,
+	"Price": 50,
+	"TwoHanded" : false
+  },
+  "Mail Shirt":
+  {
+	"Description": "Protect thine organs!",  
+    "Parent": null,
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+	{
+	  "Toughness": 4,
+      "DodgeMod": 0
+	},
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "chainmail",
+    "Slot": "body",
+	"Stackable": false,
+	"Price": 100,
+	"TwoHanded" : false
+  },
+  "Worn Mail Shirt":
+  {
+	"Description": "Used, but still decent.",  
+    "Parent": "Mail Shirt",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+	{
+	  "Toughness": 2,
+      "DodgeMod": 0
+	},
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "chainmail",
+    "Slot": "body",
+	"Stackable": false,
+	"Price": 50,
+	"TwoHanded" : false
+  },
+  "Plate Armor":
+  {
+	"Description": "Tough, but not flexible.",  
+    "Parent": null,
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+	{
+	  "Toughness": 5,
+      "DodgeMod": 0
+	},
+    "Abilities": 
+	[
+	  "Tank",
+	  "Well Fed"
+	],
+	"Range": -1,
+    "Sprite": "plate_armor",
+    "Slot": "body",
+	"Stackable": false,
+	"Price": 145,
+	"TwoHanded" : false
+  },
+  "Bitey Plate":
+  {
+	"Description": "It's got some rough edges.",  
+    "Parent": "Plate Armor",
+    "Melee": 
+	{
+		"MinDamage": 1,
+		"MaxDamage": 4
+	},
+    "Ranged": {},
+    "Defense": {},
+    "Abilities": 
+	[
+	  "Bite Back"
+	],
+	"Range": -1,
+    "Sprite": "plate_armor_2",
+    "Slot": "body",
+	"Stackable": false,
+	"Price": 155,
+	"TwoHanded" : false
+  },
+  "Lion Plate":
+  {
+	"Description": "Sturdy and has a cool pic of a lion.",  
+    "Parent": "Plate Armor",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": {},
+    "Abilities": 
+	[
+	  "Quick Recovery"
+	],
+	"Range": -1,
+    "Sprite": "plate_armor_3",
+    "Slot": "body",
+	"Stackable": false,
+	"Price": 150,
+	"TwoHanded" : false
+  },
+  "Battle Plate":
+  {
+	"Description": "For whoopin'.",  
+    "Parent": "Plate Armor",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": {},
+    "Abilities": 
+	[
+	  "Well Fed",
+	  "Guided Strikes"
+	],
+	"Range": -1,
+    "Sprite": "plate_armor_4",
+    "Slot": "body",
+	"Stackable": false,
+	"Price": 215,
+	"TwoHanded" : false
+  },
+  "Nimble Demon Plate":
+  {
+	"Description": "This might not be plate. It might be demon skin?",  
+    "Parent": "Plate Armor",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+	{
+	  "Toughness": 3,
+      "DodgeMod": 4
+	},
+    "Abilities": 
+	[
+	  "Unnatural Dodge"
+	],
+	"Range": -1,
+    "Sprite": "demon",
+    "Slot": "body",
+	"Stackable": false,
+	"Price": 130,
+	"TwoHanded" : false
+  },
+  "Leather Armor":
+  {
+	"Description": "Standard fare.",  
+    "Parent": null,
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+	{
+	  "Toughness": 3,
+      "DodgeMod": 1
+	},
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "leather",
+    "Slot": "body",
+	"Stackable": false,
+	"Price": 35,
+	"TwoHanded" : false
+  }
+}

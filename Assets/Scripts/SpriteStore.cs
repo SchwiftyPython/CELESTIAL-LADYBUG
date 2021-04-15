@@ -48,6 +48,12 @@ namespace Assets.Scripts
         public Sprite[] ShieldSprites;
         public Sprite[] RingSprites;
 
+        public List<string> CrossbowSpriteNames { get; private set; }
+        public List<string> DaggerSpriteNames { get; private set; }
+        public List<string> ShieldSpriteNames { get; private set; }
+        public List<string> SpearSpriteNames { get; private set; }
+        public List<string> SwordSpriteNames { get; private set; }
+
         #endregion ItemSprites
 
         public static SpriteStore Instance;
@@ -65,6 +71,12 @@ namespace Assets.Scripts
             DontDestroyOnLoad(gameObject);
             
             PopulateSpriteDictionaries();
+
+            CrossbowSpriteNames = new List<string>();
+            DaggerSpriteNames = new List<string>();
+            ShieldSpriteNames = new List<string>();
+            SpearSpriteNames = new List<string>();
+            SwordSpriteNames = new List<string>();
 
             EventMediator.Instance.Broadcast(GlobalHelper.SpritesLoaded, this);
         }

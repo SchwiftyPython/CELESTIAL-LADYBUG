@@ -2439,7 +2439,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 947cb363b233028419c101f3cbe110ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemTypesFile: {fileID: 4900000, guid: c270c49939fa37a498cfd5d3d3599f2a, type: 3}
+  ItemTypesFiles:
+  - {fileID: 4900000, guid: a5b0d07d0b5047e4d9281d414d406975, type: 3}
+  - {fileID: 4900000, guid: f0aa2fbda3394354abda5207eac598cc, type: 3}
+  - {fileID: 4900000, guid: 298b6cca56647374ba8c26491b8571e2, type: 3}
+  - {fileID: 4900000, guid: 27b469320f0abcd4db5141deca07f3b7, type: 3}
+  - {fileID: 4900000, guid: 27c3a1750768fae4db7240a8ee6852c5, type: 3}
+  - {fileID: 4900000, guid: 56f5d5913b349aa46a359ee467a7e784, type: 3}
+  - {fileID: 4900000, guid: 33bded712aa51aa46b19ec8704fa438b, type: 3}
+  - {fileID: 4900000, guid: 0bc6b6aa647b75348b0c686ceff0cfde, type: 3}
+  - {fileID: 4900000, guid: 60dedb4282e0b7345960d12fd6411d58, type: 3}
+  - {fileID: 4900000, guid: 10449495123b0d54fb1b163cfcd3e03e, type: 3}
 --- !u!4 &1508758628
 Transform:
   m_ObjectHideFlags: 0

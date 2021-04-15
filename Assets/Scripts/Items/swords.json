@@ -1,0 +1,139 @@
+{
+	"Sword": {
+		"Description": "A dang ol sword",
+		"Parent": null,
+		"Melee": {
+			"MinDamage": 4,
+			"MaxDamage": 9
+		},
+		"Ranged": {},
+		"Defense": {},
+		"Abilities": [
+			"Slash",
+			"Thrust"
+		],
+		"Range": 1,
+		"Sprite": "cutlass_1",
+		"Slot": "weapon",
+		"Stackable": false,
+		"Price": 10,
+		"TwoHanded": false
+	},
+	"Short Sword": {
+		"Description": "A dang ol short sword",
+		"Parent": "Sword",
+		"Melee": {},
+		"Ranged": {},
+		"Defense": {},
+		"Abilities": [],
+		"Range": 1,
+		"Sprite": null,
+		"Slot": null,
+		"Stackable": false,
+		"Price": 15,
+		"TwoHanded": false
+	},
+	"Flame Sword": {
+		"Description": "A dang ol hot sword",
+		"Parent": "Sword",
+		"Melee": {
+			"MinDamage": 7,
+			"MaxDamage": 11
+		},
+		"Ranged": {},
+		"Defense": {},
+		"Abilities": [
+			"Slash",
+			"Thrust",
+			"Ignite"
+		],
+		"Range": 1,
+		"Sprite": "flame_sword",
+		"Slot": null,
+		"Stackable": false,
+		"Price": 50,
+		"TwoHanded": false
+	},
+	"Scimitar": {
+		"Description": "A dang ol curved sword",
+		"Parent": "Sword",
+		"Melee": {
+			"MinDamage": 7,
+			"MaxDamage": 11
+		},
+		"Ranged": {},
+		"Defense": {},
+		"Abilities": [
+			"Slash",
+			"Wound"
+		],
+		"Range": 1,
+		"Sprite": "scimitar",
+		"Slot": null,
+		"Stackable": false,
+		"Price": 50,
+		"TwoHanded": false
+	},
+	"Broad Sword": {
+		"Description": "A dang ol broad sword",
+		"Parent": "Sword",
+		"Melee": {
+			"MinDamage": 5,
+			"MaxDamage": 11
+		},
+		"Ranged": {},
+		"Defense": {},
+		"Abilities": [
+			"Slash",
+			"Swing",
+			"Thrust"
+		],
+		"Range": 1,
+		"Sprite": null,
+		"Slot": null,
+		"Stackable": false,
+		"Price": 20,
+		"TwoHanded": false
+	},
+	"Warbrand": {
+		"Description": "A big sword with no guard.",
+		"Parent": "Sword",
+		"Melee": {
+			"MinDamage": 13,
+			"MaxDamage": 19
+		},
+		"Ranged": {},
+		"Defense": {},
+		"Abilities": [
+			"Slash",
+			"Swing",
+			"Cleave"
+		],
+		"Range": 1,
+		"Sprite": "warbrand",
+		"Slot": null,
+		"Stackable": false,
+		"Price": 40,
+		"TwoHanded": true
+	},
+	"Falchion": {
+		"Description": "Fancy machete.",
+		"Parent": "Sword",
+		"Melee": {
+			"MinDamage": 6,
+			"MaxDamage": 8
+		},
+		"Ranged": {},
+		"Defense": {},
+		"Abilities": [
+			"Slash",
+			"Wound"
+		],
+		"Range": 1,
+		"Sprite": "falchion",
+		"Slot": null,
+		"Stackable": false,
+		"Price": 20,
+		"TwoHanded": false
+	}
+}

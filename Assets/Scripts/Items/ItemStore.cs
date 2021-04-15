@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Assets.Scripts.Items.Components;
 using Leguar.TotalJSON;
@@ -12,7 +13,7 @@ namespace Assets.Scripts.Items
     {
         private Dictionary<string, ItemType> _itemTypes;
 
-        public TextAsset ItemTypesFile;
+        public TextAsset[] ItemTypesFiles;
 
         public static ItemStore Instance;
 
@@ -80,56 +81,135 @@ namespace Assets.Scripts.Items
 
         private void DeserializeItemTypes()
         {
+            //todo store the sprite names associated with the item types in a dictionary for easy access
+
             _itemTypes = new Dictionary<string, ItemType>();
 
             var settings = new DeserializeSettings {RequireAllFieldsArePopulated = false};
 
-            var json = JSON.ParseString(ItemTypesFile.text);
-
-            foreach (var key in json.Keys)
+            foreach (var itemTypesFile in ItemTypesFiles)
             {
-                var itemTypeJson = json.GetJSON(key);
+                var json = JSON.ParseString(itemTypesFile.text);
 
-                var itemType = new ItemType();
-
-                itemType.Name = key;
-
-                itemType.Description = itemTypeJson.GetString("Description")?.Trim();
-
-                itemType.Parent = itemTypeJson.GetString("Parent")?.Trim();
-
-                itemType.Melee = itemTypeJson.GetJSON("Melee").Deserialize<Attack>(settings);
-
-                itemType.Ranged = itemTypeJson.GetJSON("Ranged").Deserialize<Attack>(settings);
-
-                itemType.Defense = itemTypeJson.GetJSON("Defense").Deserialize<Defense>(settings);
-
-                itemType.Abilities = new List<string>(itemTypeJson.GetJArray("Abilities").AsStringArray());
-
-                itemType.Range = itemTypeJson.GetInt("Range");
-
-                var spriteKey = itemTypeJson.GetString("Sprite")?.Trim();
-
-                itemType.Sprite = SpriteStore.Instance.GetItemSpriteByKey(spriteKey);
-
-                var slotString = itemTypeJson.GetString("Slot")?.Trim();
-
-                itemType.Stackable = itemTypeJson.GetBool("Stackable");
-
-                itemType.Price = itemTypeJson.GetInt("Price");
-
-                itemType.TwoHanded = itemTypeJson.GetBool("TwoHanded");
-
-                if (string.IsNullOrEmpty(slotString))
+                foreach (var key in json.Keys)
                 {
-                    itemType.Slot = null;
-                }
-                else
-                {
-                    itemType.Slot = (EquipLocation)Enum.Parse(typeof(EquipLocation), slotString, true);
-                }
+                    var itemTypeJson = json.GetJSON(key);
 
-                _itemTypes.Add(key.ToLower(), itemType);
+                    var itemType = new ItemType();
+
+                    itemType.Name = key;
+
+                    itemType.Description = itemTypeJson.GetString("Description")?.Trim();
+
+                    itemType.Parent = itemTypeJson.GetString("Parent")?.Trim();
+
+                    itemType.Melee = itemTypeJson.GetJSON("Melee").Deserialize<Attack>(settings);
+
+                    itemType.Ranged = itemTypeJson.GetJSON("Ranged").Deserialize<Attack>(settings);
+
+                    itemType.Defense = itemTypeJson.GetJSON("Defense").Deserialize<Defense>(settings);
+
+                    itemType.Abilities = new List<string>(itemTypeJson.GetJArray("Abilities").AsStringArray());
+
+                    itemType.Range = itemTypeJson.GetInt("Range");
+
+                    var spriteKey = itemTypeJson.GetString("Sprite")?.Trim();
+
+                    itemType.Sprite = SpriteStore.Instance.GetItemSpriteByKey(spriteKey);
+
+                    var slotString = itemTypeJson.GetString("Slot")?.Trim();
+
+                    itemType.Stackable = itemTypeJson.GetBool("Stackable");
+
+                    itemType.Price = itemTypeJson.GetInt("Price");
+
+                    itemType.TwoHanded = itemTypeJson.GetBool("TwoHanded");
+
+                    itemType.Group = GetItemGroupFromFilename(itemTypesFile.name);
+
+                    AddSpriteNameForGroup(itemType.Group, spriteKey);
+
+                    if (string.IsNullOrEmpty(slotString))
+                    {
+                        itemType.Slot = null;
+                    }
+                    else
+                    {
+                        itemType.Slot = (EquipLocation) Enum.Parse(typeof(EquipLocation), slotString, true);
+                    }
+
+                    _itemTypes.Add(key.ToLower(), itemType);
+                }
+            }
+        }
+
+        private static ItemGroup GetItemGroupFromFilename(string filename)
+        {
+            switch (filename.ToLower())
+            {
+                case "body":
+                    return ItemGroup.Body;
+                case "crossbows":
+                    return ItemGroup.Crossbow;
+                case "daggers":
+                    return ItemGroup.Dagger;
+                case "feet":
+                    return ItemGroup.Feet;
+                case "gloves":
+                    return ItemGroup.Glove;
+                case "helmets":
+                    return ItemGroup.Helmet;
+                case "rings":
+                    return ItemGroup.Ring;
+                case "shields":
+                    return ItemGroup.Shield;
+                case "spears":
+                    return ItemGroup.Spear;
+                case "swords":
+                    return ItemGroup.Sword;
+                default:
+                    Debug.LogError($"{filename} has no valid ItemGroup!");
+                    throw new InvalidEnumArgumentException($"{filename} has no valid ItemGroup!");
+            }
+        }
+
+        private void AddSpriteNameForGroup(ItemGroup group, string spriteName)
+        {
+            switch(group)
+            {
+                case ItemGroup.Body:
+                    break;
+                case ItemGroup.Feet:
+                    break;
+                case ItemGroup.Glove:
+                    break;
+                case ItemGroup.Helmet:
+                    break;
+                case ItemGroup.Ring:
+                    break;
+                case ItemGroup.Shield:
+                    SpriteStore.Instance.ShieldSpriteNames.Add(spriteName);
+                    break;
+                case ItemGroup.Axe:
+                    //todo
+                    break;
+                case ItemGroup.Crossbow:
+                    SpriteStore.Instance.CrossbowSpriteNames.Add(spriteName);
+                    break;
+                case ItemGroup.Dagger:
+                    SpriteStore.Instance.DaggerSpriteNames.Add(spriteName);
+                    break;
+                case ItemGroup.Spear:
+                    SpriteStore.Instance.SpearSpriteNames.Add(spriteName);
+                    break;
+                case ItemGroup.Book:
+                    //todo
+                    break;
+                case ItemGroup.Sword:
+                    SpriteStore.Instance.SwordSpriteNames.Add(spriteName);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(@group), @group, null);
             }
         }
 
