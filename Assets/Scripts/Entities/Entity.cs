@@ -32,8 +32,8 @@ namespace Assets.Scripts.Entities
 
         public string Name { get; set; }
         public Sex Sex { get; }
-        public Race _race { get; }
-        public EntityClass _entityClass { get; }
+        public Race Race { get; }
+        public EntityClass EntityClass { get; }
         public Attributes Attributes { get; }
         public Stats Stats { get; }
         public Skills Skills { get; }
@@ -50,26 +50,26 @@ namespace Assets.Scripts.Entities
         {
             if (isDerpus)
             {
-                _race = Race.Derpus;
-                _entityClass = EntityClass.Derpus;
+                Race = Race.Derpus;
+                EntityClass = EntityClass.Derpus;
                 Sex = Sex.Male;
                 Name = "Derpus";
                 CombatSpritePrefab = EntityPrefabStore.Instance.DerpusPrototypePrefab;
             }
             else
             {
-                _race = PickRace();
+                Race = PickRace();
 
-                while (_race == Race.Derpus)
+                while (Race == Race.Derpus)
                 {
-                    _race = PickRace();
+                    Race = PickRace();
                 }
 
-                _entityClass = PickEntityClass();
+                EntityClass = PickEntityClass();
 
-                while (_entityClass == EntityClass.Derpus)
+                while (EntityClass == EntityClass.Derpus)
                 {
-                    _entityClass = PickEntityClass();
+                    EntityClass = PickEntityClass();
                 }
 
                 Sex = PickSex();
@@ -134,7 +134,7 @@ namespace Assets.Scripts.Entities
 
         public bool IsDerpus()
         {
-            return _entityClass == EntityClass.Derpus || _race == Race.Derpus;
+            return EntityClass == EntityClass.Derpus || Race == Race.Derpus;
         }
 
         public string FirstName()
