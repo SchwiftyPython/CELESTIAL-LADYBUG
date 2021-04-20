@@ -112,18 +112,6 @@ namespace Assets.Scripts
                         throw new ArgumentOutOfRangeException();
                 }
             }
-
-            // _equippedItems = new Dictionary<EquipLocation, EquipableItem>
-            // {
-            //     {EquipLocation.Helmet, null},
-            //     {EquipLocation.Gloves, null},
-            //     {EquipLocation.Body, null},
-            //     {EquipLocation.Boots, null},
-            //     {EquipLocation.Ring, null},
-            //     {EquipLocation.Weapon, null},
-            //     {EquipLocation.Shield, null}, //only some classes have shield available
-            //     {EquipLocation.Book, null} //only some classes have book available
-            // };
         }
 
         public bool HasSlot(EquipLocation equipLocation)
