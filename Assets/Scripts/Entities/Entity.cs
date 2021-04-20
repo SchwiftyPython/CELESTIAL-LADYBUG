@@ -171,7 +171,7 @@ namespace Assets.Scripts.Entities
         {
             //todo not implemented - temp for testing
 
-            _equipment = new Equipment();
+            _equipment = new Equipment(EntityClass);
 
             var testWeapon = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Weapon);
             
@@ -202,8 +202,13 @@ namespace Assets.Scripts.Entities
             Equip(testRing);
         }
 
-        public void Equip(EquipableItem item)
+        private void Equip(EquipableItem item)
         {
+            if (!_equipment.ItemValidForEntityClass(item))
+            {
+                return;
+            }
+
             _equipment.AddItem(item.GetAllowedEquipLocation(), item);
         }
 

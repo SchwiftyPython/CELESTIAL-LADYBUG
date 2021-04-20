@@ -33,6 +33,11 @@ namespace Assets.Scripts.UI
                 return 0;
             }
 
+            if (!_companionEquipment.ItemValidForEntityClass(equipableItem))
+            {
+                return 0;
+            }
+
             if (equipableItem.GetAllowedEquipLocation() != _equipLocation)
             {
                 return 0;
@@ -75,6 +80,15 @@ namespace Assets.Scripts.UI
 
         private void RedrawUi()
         {
+            if (_companionEquipment.HasSlot(_equipLocation))
+            {
+                gameObject.SetActive(true);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
+
             var item = GetItem();
 
             _itemIcon.SetItem(item);

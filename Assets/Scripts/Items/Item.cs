@@ -41,9 +41,14 @@ namespace Assets.Scripts.Items
             return ItemType.Description;
         }
 
-        public string GetItemGroup()
+        public ItemGroup GetItemGroup()
         {
-            return ItemType.Group.ToString();
+            return ItemType.Group;
+        }
+
+        public string GetItemGroupForDisplay()
+        {
+            return GlobalHelper.GetEnumDescription(ItemType.Group);
         }
 
         public string GetValue()
