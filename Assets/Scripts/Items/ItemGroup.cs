@@ -1,18 +1,23 @@
-﻿namespace Assets.Scripts.Items
+﻿using System.ComponentModel;
+
+namespace Assets.Scripts.Items
 {
     public enum ItemGroup 
     {
-        Body,
-        Feet,
-        Glove,
-        Helmet,
-        Ring,
-        Shield,
-        Axe,
-        Crossbow,
-        Dagger,
-        Spear,
-        Book,
-        Sword
+        [Description("Robe")] Robe,
+        [Description("Armor")] Armor,
+        [Description("Feet")] Feet,
+        [Description("Glove")] Glove,
+        [Description("Helmet")] Helmet,
+        [Description("Ring")] Ring,
+        [Description("Shield")] Shield,
+        [Description("Axe")] Axe,
+        [Description("Crossbow")] Crossbow,
+        [Description("Dagger")] Dagger,
+        [Description("Spear")] OneHandedSpear,
+        [Description("Spear")] TwoHandedSpear,
+        [Description("Book")] Book,
+        [Description("Sword")] OneHandedSword,
+        [Description("Sword")] TwoHandedSword
     }
 }

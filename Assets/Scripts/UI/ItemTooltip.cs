@@ -23,7 +23,7 @@ namespace Assets.Scripts.UI
             _titleText.text = item.GetDisplayName();
             _bodyText.text = item.GetDescription();
 
-            var itemGroup = item.GetItemGroup();
+            var itemGroup = item.GetItemGroupForDisplay();
 
             if (item.IsWeapon())
             {

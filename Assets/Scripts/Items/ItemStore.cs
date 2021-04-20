@@ -147,8 +147,10 @@ namespace Assets.Scripts.Items
         {
             switch (filename.ToLower())
             {
-                case "body":
-                    return ItemGroup.Body;
+                case "robes":
+                    return ItemGroup.Robe;
+                case "armor":
+                    return ItemGroup.Armor;
                 case "crossbows":
                     return ItemGroup.Crossbow;
                 case "daggers":
@@ -163,10 +165,14 @@ namespace Assets.Scripts.Items
                     return ItemGroup.Ring;
                 case "shields":
                     return ItemGroup.Shield;
-                case "spears":
-                    return ItemGroup.Spear;
-                case "swords":
-                    return ItemGroup.Sword;
+                case "one_handed_spears":
+                    return ItemGroup.OneHandedSpear;
+                case "two_handed_spears":
+                    return ItemGroup.TwoHandedSpear;
+                case "one_handed_swords":
+                    return ItemGroup.OneHandedSword;
+                case "two_handed_swords":
+                    return ItemGroup.TwoHandedSword;
                 default:
                     Debug.LogError($"{filename} has no valid ItemGroup!");
                     throw new InvalidEnumArgumentException($"{filename} has no valid ItemGroup!");
@@ -177,15 +183,23 @@ namespace Assets.Scripts.Items
         {
             switch(group)
             {
-                case ItemGroup.Body:
+                case ItemGroup.Robe:
+                    //todo
+                    break;
+                case ItemGroup.Armor:
+                    //todo
                     break;
                 case ItemGroup.Feet:
+                    //todo
                     break;
                 case ItemGroup.Glove:
+                    //todo
                     break;
                 case ItemGroup.Helmet:
+                    //todo
                     break;
                 case ItemGroup.Ring:
+                    //todo
                     break;
                 case ItemGroup.Shield:
                     SpriteStore.Instance.ShieldSpriteNames.Add(spriteName);
@@ -199,13 +213,15 @@ namespace Assets.Scripts.Items
                 case ItemGroup.Dagger:
                     SpriteStore.Instance.DaggerSpriteNames.Add(spriteName);
                     break;
-                case ItemGroup.Spear:
+                case ItemGroup.OneHandedSpear:
+                case ItemGroup.TwoHandedSpear:
                     SpriteStore.Instance.SpearSpriteNames.Add(spriteName);
                     break;
                 case ItemGroup.Book:
                     //todo
                     break;
-                case ItemGroup.Sword:
+                case ItemGroup.OneHandedSword:
+                case ItemGroup.TwoHandedSword:
                     SpriteStore.Instance.SwordSpriteNames.Add(spriteName);
                     break;
                 default:
