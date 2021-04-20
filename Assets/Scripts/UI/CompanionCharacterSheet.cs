@@ -42,7 +42,7 @@ namespace Assets.Scripts.UI
             SetPortrait(companion.Portrait);
 
             _name.text = companion.Name;
-            _raceClass.text = $"{companion._race}  {companion._entityClass}";
+            _raceClass.text = $"{companion.Race} {GlobalHelper.GetEnumDescription(companion.EntityClass)}";
 
             var stats = companion.Stats;
 
