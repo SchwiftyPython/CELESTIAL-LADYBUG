@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Items;
+﻿using Assets.Scripts.Entities;
+using Assets.Scripts.Items;
 using Assets.Scripts.Utilities.UI.Dragging;
 using UnityEngine;
 
@@ -12,11 +13,11 @@ namespace Assets.Scripts.UI
         private Item _item;
         private Inventory _inventory;
 
-        public void Setup(Inventory inventory, int index)
+        public void Setup(Inventory inventory, int index, Entity currentCompanion)
         {
             _inventory = inventory;
             _index = index;
-            _icon.SetItem(inventory.GetItemInSlot(index), inventory.GetNumberInSlot(index));
+            _icon.SetItem(inventory.GetItemInSlot(index), inventory.GetNumberInSlot(index), currentCompanion);
         }
 
         public int MaxAcceptable(Item item)

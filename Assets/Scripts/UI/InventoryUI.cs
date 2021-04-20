@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using Assets.Scripts.Entities;
+using UnityEngine;
 
 namespace Assets.Scripts.UI
 {
@@ -8,16 +10,23 @@ namespace Assets.Scripts.UI
     /// </summary>
     public class InventoryUi : MonoBehaviour, ISubscriber
     {
-        private const string RefreshEvent = GlobalHelper.InventoryUpdated;
+        private List<string> _refreshEvents = new List<string>
+            {GlobalHelper.InventoryUpdated, GlobalHelper.PopulateCharacterSheet};
 
         [SerializeField] private InventorySlotUi _inventoryItemPrefab = null;
 
         private Inventory _partyInventory;
 
+        private Entity _currentEntity;
+
         private void Awake()
         {
             _partyInventory = Inventory.GetPartyInventory();
-            EventMediator.Instance.SubscribeToEvent(RefreshEvent, this);
+
+            foreach (var eventName in _refreshEvents)
+            {
+                EventMediator.Instance.SubscribeToEvent(eventName, this);
+            }
         }
 
         private void Start()
@@ -40,14 +49,19 @@ namespace Assets.Scripts.UI
             for (var i = 0; i < _partyInventory.GetSize(); i++)
             {
                 var itemUi = Instantiate(_inventoryItemPrefab, transform);
-                itemUi.Setup(_partyInventory, i);
+                itemUi.Setup(_partyInventory, i, _currentEntity);
             }
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
         {
-            if (eventName.Equals(RefreshEvent))
+            if (_refreshEvents.Contains(eventName))
             {
+                if (parameter is Entity companion)
+                {
+                    _currentEntity = companion;
+                }
+
                 Redraw();
             }
         }

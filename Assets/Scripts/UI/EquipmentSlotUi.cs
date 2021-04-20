@@ -19,6 +19,7 @@ namespace Assets.Scripts.UI
         [SerializeField] private EquipLocation _equipLocation = EquipLocation.Weapon;
 
         private Equipment _companionEquipment;
+        private Entity _currentCompanion;
 
         private void Awake() 
         {
@@ -91,7 +92,7 @@ namespace Assets.Scripts.UI
 
             var item = GetItem();
 
-            _itemIcon.SetItem(item);
+            _itemIcon.SetItem(item, _currentCompanion);
 
             _slotIcon.GetComponent<Image>().enabled = item == null;
         }
@@ -105,6 +106,7 @@ namespace Assets.Scripts.UI
                     return;
                 }
 
+                _currentCompanion = companion;
                 _companionEquipment = companion.GetEquipment();
 
                 RedrawUi();
