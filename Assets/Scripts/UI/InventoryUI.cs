@@ -10,7 +10,7 @@ namespace Assets.Scripts.UI
     /// </summary>
     public class InventoryUi : MonoBehaviour, ISubscriber
     {
-        private List<string> _refreshEvents = new List<string>
+        private readonly List<string> _refreshEvents = new List<string>
             {GlobalHelper.InventoryUpdated, GlobalHelper.PopulateCharacterSheet};
 
         [SerializeField] private InventorySlotUi _inventoryItemPrefab = null;

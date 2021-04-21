@@ -15,7 +15,7 @@ namespace Assets.Scripts.UI
     public class InventoryItemIcon : MonoBehaviour
     {
         private Color _enabledColor = Color.white;
-        private Color _disabledColor = new Color32((byte) 104f, (byte)59f, (byte)59f, byte.MaxValue);
+        private Color _disabledColor = new Color32((byte) 69f, (byte)39f, (byte)49f, byte.MaxValue / 2);
 
         [SerializeField] private GameObject _textContainer = null;
         [SerializeField] private TextMeshProUGUI _itemNumber = null;
