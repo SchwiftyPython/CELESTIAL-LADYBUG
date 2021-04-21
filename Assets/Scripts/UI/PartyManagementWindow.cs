@@ -83,6 +83,11 @@ namespace Assets.Scripts.UI
             EventMediator.Instance.Broadcast(GlobalHelper.PopulateCharacterSheet, this, _companions[_currentIndex]);
         }
 
+        public Entity GetCurrentCompanion()
+        {
+            return _companions[_currentIndex];
+        }
+
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
         {
             if (eventName.Equals(ShowPopupEvent))

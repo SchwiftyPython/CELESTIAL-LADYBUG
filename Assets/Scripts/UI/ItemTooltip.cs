@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Items;
+﻿using Assets.Scripts.Entities;
+using Assets.Scripts.Items;
 using TMPro;
 using UnityEngine;
 
@@ -17,8 +18,9 @@ namespace Assets.Scripts.UI
         [SerializeField] private TextMeshProUGUI _rangedDamage = null;
         [SerializeField] private TextMeshProUGUI _toughness = null;
         [SerializeField] private TextMeshProUGUI _dodgeMod = null;
+        [SerializeField] private TextMeshProUGUI _cannotEquipMessage = null;
 
-        public void Setup(Item item)
+        public void Setup(Item item, Entity currentCompanion)
         {
             _titleText.text = item.GetDisplayName();
             _bodyText.text = item.GetDescription();
@@ -71,6 +73,18 @@ namespace Assets.Scripts.UI
 
                 _dodgeMod.text = $"Dodge Mod {defense.DodgeMod}";
                 _dodgeMod.gameObject.SetActive(true);
+            }
+
+            var equipment = currentCompanion.GetEquipment();
+
+            if (!equipment.ItemValidForEntityClass((EquipableItem) item))
+            {
+                _cannotEquipMessage.text = $"Cannot be equipped by {GlobalHelper.GetEnumDescription(currentCompanion.EntityClass)}";
+                _cannotEquipMessage.gameObject.SetActive(true);
+            }
+            else
+            {
+                _cannotEquipMessage.gameObject.SetActive(false);
             }
         }
     }
