@@ -100,11 +100,6 @@ namespace Assets.Scripts.Entities
             _xp = 0;
 
             Abilities = new List<Ability>();
-
-            //todo for testing need to remove
-            var testSlashAbility = new Ability("slash", 3, 1, this, true);
-
-            Abilities.Add(testSlashAbility);
         }
 
         public void SetSpriteInstance(UnityEngine.GameObject instance)
@@ -202,7 +197,7 @@ namespace Assets.Scripts.Entities
             Equip(testRing);
         }
 
-        private void Equip(EquipableItem item)
+        public void Equip(EquipableItem item)
         {
             if (!_equipment.ItemValidForEntityClass(item))
             {
@@ -210,11 +205,15 @@ namespace Assets.Scripts.Entities
             }
 
             _equipment.AddItem(item.GetAllowedEquipLocation(), item);
+
+            //todo add abilities from equipped item
         }
 
-        public void UnEquip()
+        public void UnEquip(EquipLocation slot)
         {
+            _equipment.RemoveItem(slot);
 
+            //todo remove abilities from unequipped item
         }
 
         public void MeleeAttack(Entity target)

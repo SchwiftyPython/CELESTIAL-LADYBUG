@@ -62,9 +62,36 @@ namespace Assets.Scripts.UI
             GlobalHelper.DestroyAllChildren(AbilityButtonParent.gameObject);
 
             //todo determine abilities from the entity
+            var abilities = activeEntity.Abilities;
+
             //todo for each ability populate bar with an ability button prefab
 
-            var testSlashAbility = new Ability("slash", 3, 1, _activeEntity, true);
+            foreach (var ability in abilities)
+            {
+                if (ability.IsPassive)
+                {
+                    continue;
+                }
+
+                var testInstance = Instantiate(AbilityButtonPrefab, new Vector3(0, 0), Quaternion.identity);
+
+                AssignAbilityToButton(ability, testInstance);
+
+                testInstance.transform.SetParent(AbilityButtonParent);
+
+                var buttonScript = testInstance.GetComponent<Button>().GetComponent<UseAbilityButton>();
+
+                if (AbilityIsUsable(ability))
+                {
+                    buttonScript.EnableButton();
+                }
+                else
+                {
+                    buttonScript.DisableButton();
+                }
+            }
+
+            /*var testSlashAbility = new Ability("slash", 3, 1, _activeEntity, true);
 
             var testInstance = Instantiate(AbilityButtonPrefab, new Vector3(0, 0), Quaternion.identity);
 
@@ -81,7 +108,7 @@ namespace Assets.Scripts.UI
             else
             {
                 buttonScript.DisableButton();
-            }
+            }*/
 
         }
 

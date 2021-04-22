@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using Assets.Scripts.Entities;
 using Assets.Scripts.Items.Components;
 using UnityEngine;
 
 namespace Assets.Scripts.Items
 {
-    public class Item
+    public class Item : IModifierProvider
     {
         [SerializeField] private string _itemId;
 
@@ -71,24 +73,29 @@ namespace Assets.Scripts.Items
             return ItemType.Defense;
         }
 
-        public string GetToughness()
+        public int GetToughness()
         {
             if (ItemType.Defense == null)
             {
-                return "0";
+                return 0;
             }
 
-            return ItemType.Defense.Toughness.ToString();
+            return ItemType.Defense.Toughness;
         }
 
-        public string GetDodgeMod()
+        private int GetDodgeMod()
         {
             if (ItemType.Defense == null)
             {
-                return "0";
+                return 0;
             }
 
-            return ItemType.Defense.DodgeMod.ToString();
+            return ItemType.Defense.DodgeMod;
+        }
+
+        public string GetDodgeModForDisplay()
+        {
+            return GetDodgeMod().ToString();
         }
 
         public bool IsTwoHanded()
@@ -105,6 +112,19 @@ namespace Assets.Scripts.Items
             }
 
             return true;
+        }
+
+        public IEnumerable<float> GetAdditiveModifiers<T>(T stat)
+        {
+            if ((EntitySkillTypes)(object)stat == EntitySkillTypes.Dodge)
+            {
+                yield return GetDodgeMod();
+            }
+        }
+
+        public IEnumerable<float> GetPercentageModifiers<T>(T stat)
+        {
+            yield return 0f;
         }
     }
 }

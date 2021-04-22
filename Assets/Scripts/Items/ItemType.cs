@@ -62,7 +62,6 @@ namespace Assets.Scripts.Items
             }
         }
 
-        //todo convert to List<Ability>
         private List<string> _abilities;
         public List<string> Abilities
         {

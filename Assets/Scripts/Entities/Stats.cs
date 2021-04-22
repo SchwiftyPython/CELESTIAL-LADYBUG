@@ -1,5 +1,5 @@
 ﻿using System;
-using GoRogue.DiceNotation;
+using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Entities
@@ -17,9 +17,10 @@ namespace Assets.Scripts.Entities
         private Entity _parent;
 
         private int _maxHealth;
+
         public int MaxHealth
         {
-            get => _maxHealth;
+            get => _maxHealth + GetAllModifiersForStat(EntityStatTypes.MaxHealth);
             set
             {
                 if (value > PrototypeStatsCap)
@@ -30,7 +31,8 @@ namespace Assets.Scripts.Entities
                 {
                     _maxHealth = value;
                 }
-            } }
+            }
+        }
 
         private int _currentHealth;
         public int CurrentHealth
@@ -306,6 +308,98 @@ namespace Assets.Scripts.Entities
             for (var i = 0; i < numDice; i++)
             {
                 total += Random.Range(1, 7);
+            }
+
+            return total;
+        }
+
+        /// <summary>
+        /// Returns all modifiers for the given StatType.
+        /// </summary>
+        private int GetAllModifiersForStat(EntityStatTypes stat)
+        {
+            return (int) (GetAdditiveModifiers(stat) * (1 + GetPercentageModifiers(stat) / 100));
+        }
+
+        /// <summary>
+        /// Returns all additive modifiers in equipment and abilities for the given StatType.
+        /// </summary>
+        private float GetAdditiveModifiers(EntityStatTypes stat)
+        {
+            float total = 0;
+
+            var equipment = _parent.GetEquipment();
+
+            foreach (EquipLocation slot in Enum.GetValues(typeof(EquipLocation)))
+            {
+                var item = equipment.GetItemInSlot(slot);
+
+                if (item == null)
+                {
+                    continue;
+                }
+
+                foreach (var modifier in item.GetAdditiveModifiers(stat))
+                {
+                    total += modifier;
+                }
+            }
+
+            var abilities = _parent.Abilities;
+
+            foreach (var ability in abilities)
+            {
+                if (!(ability is IModifierProvider provider))
+                {
+                    continue;
+                }
+
+                foreach (var modifier in provider.GetAdditiveModifiers(stat))
+                {
+                    total += modifier;
+                }
+            }
+
+            return total;
+        }
+
+        /// <summary>
+        /// Returns all percentage modifiers in equipment and abilities for the given StatType.
+        /// </summary>
+        private float GetPercentageModifiers(EntityStatTypes stat)
+        {
+            float total = 0;
+
+            var equipment = _parent.GetEquipment();
+
+            foreach (EquipLocation slot in Enum.GetValues(typeof(EquipLocation)))
+            {
+                var item = equipment.GetItemInSlot(slot);
+
+                if (item == null)
+                {
+                    continue;
+                }
+
+                foreach (var modifier in item.GetPercentageModifiers(stat))
+                {
+                    total += modifier;
+                }
+            }
+
+            var abilities = _parent.Abilities;
+
+            foreach (var ability in abilities)
+            {
+                if (!(ability is IModifierProvider provider))
+                {
+                    continue;
+                }
+
+                foreach (var modifier in provider.GetPercentageModifiers(stat))
+                {
+                    total += modifier;
+                }
             }
 
             return total;

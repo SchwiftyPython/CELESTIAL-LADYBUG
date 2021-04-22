@@ -155,6 +155,11 @@ namespace Assets.Scripts
         /// </summary>
         public void RemoveItem(EquipLocation slot)
         {
+            if (!_equippedItems.ContainsKey(slot))
+            {
+                return;
+            }
+
             _equippedItems[slot] = null;
             EventMediator.Instance.Broadcast(GlobalHelper.EquipmentUpdated, this);
         }

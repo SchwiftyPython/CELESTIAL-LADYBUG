@@ -56,6 +56,10 @@ namespace Assets.Scripts
 
         #endregion ItemSprites
 
+        private Dictionary<Type, Sprite> _abilitySpriteDictionary;
+
+        public Sprite[] AbilitySprites;
+
         public static SpriteStore Instance;
 
         private void Start()
@@ -169,6 +173,17 @@ namespace Assets.Scripts
             var index = Random.Range(0, _weaponSpriteDictionary.Count);
 
             return _weaponSpriteDictionary.ElementAt(index).Value;
+        }
+
+        public Sprite GetAbilitySprite(object ability)
+        {
+            if (_abilitySpriteDictionary == null || !_abilitySpriteDictionary.ContainsKey(ability.GetType()))
+            {
+                Debug.LogError($"Ability sprite for {ability.GetType()} does not exist!");
+                return null;
+            }
+
+            return _abilitySpriteDictionary[ability.GetType()];
         }
 
         private void PopulateSpriteDictionaries()

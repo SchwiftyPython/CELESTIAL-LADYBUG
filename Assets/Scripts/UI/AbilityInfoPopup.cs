@@ -1,6 +1,5 @@
 ﻿using Assets.Scripts.Abilities;
 using Assets.Scripts.Combat;
-using Assets.Scripts.Entities;
 using TMPro;
 using UnityEngine;
 

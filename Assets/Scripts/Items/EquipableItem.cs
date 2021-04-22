@@ -1,7 +1,6 @@
 using System;
-using Assets.Scripts.Items;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Items
 {
     /// <summary>
     /// An item that can be equipped to the player.
@@ -20,16 +19,6 @@ namespace Assets.Scripts
             }
 
             return (EquipLocation) ItemType.Slot;
-        }
-
-        public int GetToughness()
-        {
-            if (ItemType.Defense == null)
-            {
-                return 0;
-            }
-
-            return ItemType.Defense.Toughness;
         }
 
         public (int, int) GetMeleeDamageRange()
