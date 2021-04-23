@@ -55,8 +55,6 @@ namespace Assets.Scripts.UI
         public void AddItems(Item item, int number)
         {
             _currentCompanion.Equip((EquipableItem) item);
-
-            //_companionEquipment.AddItem(_equipLocation, (EquipableItem) item);
         }
 
         public Item GetItem()
@@ -79,8 +77,6 @@ namespace Assets.Scripts.UI
         public void RemoveItems(int number)
         {
             _currentCompanion.UnEquip(_equipLocation);
-
-            //_companionEquipment.RemoveItem(_equipLocation);
         }
 
         private void RedrawUi()

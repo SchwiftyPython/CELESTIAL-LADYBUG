@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Assets.Scripts.Abilities;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Items.Components;
 using UnityEngine;
@@ -98,6 +99,36 @@ namespace Assets.Scripts.Items
             return GetDodgeMod().ToString();
         }
 
+        public List<Ability> GetAbilities(Entity abilityOwner)
+        {
+            var abilities = new List<Ability>();
+
+            if (ItemType.Abilities == null || ItemType.Abilities.Count < 1)
+            {
+                return abilities;
+            }
+
+            foreach (var abilityName in ItemType.Abilities)
+            {
+                //todo just for testing
+                if (!abilityName.Equals("Tank"))
+                {
+                    continue;
+                }
+
+                var ability = AbilityStore.Instance.GetAbilityByName(abilityName, abilityOwner);
+
+                if (ability == null)
+                {
+                    continue;
+                }
+
+                abilities.Add(ability);
+            }
+
+            return abilities;
+        }
+
         public bool IsTwoHanded()
         {
             return ItemType.TwoHanded;
@@ -114,15 +145,36 @@ namespace Assets.Scripts.Items
             return true;
         }
 
-        public IEnumerable<float> GetAdditiveModifiers<T>(T stat)
+        public IEnumerable<float> GetAdditiveModifiers(Enum stat)
         {
-            if ((EntitySkillTypes)(object)stat == EntitySkillTypes.Dodge)
+            var total = 0;
+
+            try
             {
-                yield return GetDodgeMod();
+                if (!Enum.IsDefined(typeof(EntitySkillTypes), stat))
+                {
+                    total += 0;
+                }
+
+                if (!Enum.TryParse<EntitySkillTypes>(stat.ToString(), out var statType))
+                {
+                    total += 0;
+                }
+
+                if (statType == EntitySkillTypes.Dodge)
+                {
+                    total += GetDodgeMod();
+                }
             }
+            catch
+            {
+                total += 0;
+            }
+
+            yield return total;
         }
 
-        public IEnumerable<float> GetPercentageModifiers<T>(T stat)
+        public IEnumerable<float> GetPercentageModifiers(Enum stat)
         {
             yield return 0f;
         }

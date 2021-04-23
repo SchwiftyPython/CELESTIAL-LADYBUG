@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Assets.Scripts.Entities;
 
 namespace Assets.Scripts.Abilities
@@ -12,15 +13,20 @@ namespace Assets.Scripts.Abilities
             Icon = SpriteStore.Instance.GetAbilitySprite(this);
         }
 
-        public IEnumerable<float> GetAdditiveModifiers<T>(T stat)
+        public IEnumerable<float> GetAdditiveModifiers(Enum stat)
         {
-            if ((EntityStatTypes)(object)stat == EntityStatTypes.MaxHealth)
+            if (!Enum.TryParse(stat.ToString(), out EntityStatTypes statType))
+            {
+                yield return 0f;
+            }
+
+            if (statType == EntityStatTypes.MaxHealth)
             {
                 yield return MaxHealthMod;
             }
         }
 
-        public IEnumerable<float> GetPercentageModifiers<T>(T stat)
+        public IEnumerable<float> GetPercentageModifiers(Enum stat)
         {
             yield return 0f;
         }

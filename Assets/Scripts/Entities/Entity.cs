@@ -39,7 +39,7 @@ namespace Assets.Scripts.Entities
         public Skills Skills { get; }
         public Dictionary<Portrait.Slot, string> Portrait { get; private set; }
         //public Weapon EquippedWeapon { get; private set; }
-        public List<Ability> Abilities { get; private set; }
+        public Dictionary<Type, Ability> Abilities { get; private set; }
         
         public UnityEngine.GameObject CombatSpritePrefab { get; private set; }
         public UnityEngine.GameObject CombatSpriteInstance { get; private set; }
@@ -90,16 +90,21 @@ namespace Assets.Scripts.Entities
 
             Attributes = new Attributes();
             Skills = new Skills();
-            Stats = new Stats(this, Attributes, Skills);
+
+            Abilities = new Dictionary<Type, Ability>();
 
             GenerateStartingEquipment();
+
+            Stats = new Stats(this, Attributes, Skills);
 
             GeneratePortrait();
 
             _level = 1;
             _xp = 0;
 
-            Abilities = new List<Ability>();
+            //todo testing
+
+            Stats.CurrentHealth -= 1;
         }
 
         public void SetSpriteInstance(UnityEngine.GameObject instance)
@@ -174,7 +179,9 @@ namespace Assets.Scripts.Entities
 
             var testArmor = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Body);
 
-            Equip(testArmor);
+            var plateArmorType = ItemStore.Instance.GetItemTypeByName("Plate Armor"); //todo testing
+
+            Equip((EquipableItem) plateArmorType.NewItem());
 
             var testHelmet = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Helmet);
 
@@ -204,16 +211,37 @@ namespace Assets.Scripts.Entities
                 return;
             }
 
-            _equipment.AddItem(item.GetAllowedEquipLocation(), item);
+            if (Abilities == null)
+            {
+                Abilities = new Dictionary<Type, Ability>();
+            }
 
-            //todo add abilities from equipped item
+            foreach (var ability in item.GetAbilities(this))
+            {
+                if (!Abilities.ContainsKey(ability.GetType()))
+                {
+                    Abilities.Add(ability.GetType(), ability);
+                }
+            }
+
+            _equipment.AddItem(item.GetAllowedEquipLocation(), item);
         }
 
         public void UnEquip(EquipLocation slot)
         {
+            var item = _equipment.GetItemInSlot(slot);
+
             _equipment.RemoveItem(slot);
 
-            //todo remove abilities from unequipped item
+            foreach (var ability in item.GetAbilities(this))
+            {
+                if (!_equipment.AbilityEquipped(ability))
+                {
+                    Abilities.Remove(ability.GetType());
+                }
+            }
+
+            EventMediator.Instance.Broadcast(GlobalHelper.EquipmentUpdated, this);
         }
 
         public void MeleeAttack(Entity target)

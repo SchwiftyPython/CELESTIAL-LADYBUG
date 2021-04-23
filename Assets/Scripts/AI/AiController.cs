@@ -50,7 +50,7 @@ namespace Assets.Scripts.AI
 
                 var usableAbilities = new List<Ability>();
 
-                foreach (var ability in Self.Abilities)
+                foreach (var ability in Self.Abilities.Values)
                 {
                     if (ability.Range >= distance && Self.Stats.CurrentActionPoints >= ability.ApCost)
                     {

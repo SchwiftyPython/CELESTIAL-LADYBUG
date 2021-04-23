@@ -66,7 +66,7 @@ namespace Assets.Scripts.UI
 
             //todo for each ability populate bar with an ability button prefab
 
-            foreach (var ability in abilities)
+            foreach (var ability in abilities.Values)
             {
                 if (ability.IsPassive)
                 {

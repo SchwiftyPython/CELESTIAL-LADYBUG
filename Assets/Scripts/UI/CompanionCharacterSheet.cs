@@ -8,6 +8,7 @@ namespace Assets.Scripts.UI
     public class CompanionCharacterSheet : MonoBehaviour, ISubscriber
     {
         private const string PopulateCharacterSheet = GlobalHelper.PopulateCharacterSheet;
+        private const string EquipmentUpdated = GlobalHelper.EquipmentUpdated;
 
         [SerializeField] private GameObject _portraitParent;
         [SerializeField] private TextMeshProUGUI _name;
@@ -31,27 +32,29 @@ namespace Assets.Scripts.UI
         [SerializeField] private TextMeshProUGUI _persuasion;
 
         private Portrait _portrait;
+        private Entity _companion;
 
         private void Awake()
         {
             EventMediator.Instance.SubscribeToEvent(PopulateCharacterSheet, this);
+            EventMediator.Instance.SubscribeToEvent(EquipmentUpdated, this);
         }
 
-        private void Populate(Entity companion)
+        private void Populate()
         {
-            SetPortrait(companion.Portrait);
+            SetPortrait(_companion.Portrait);
 
-            _name.text = companion.Name;
-            _raceClass.text = $"{companion.Race} {GlobalHelper.GetEnumDescription(companion.EntityClass)}";
+            _name.text = _companion.Name;
+            _raceClass.text = $"{_companion.Race} {GlobalHelper.GetEnumDescription(_companion.EntityClass)}";
 
-            var stats = companion.Stats;
+            var stats = _companion.Stats;
 
             _health.text = $"{stats.CurrentHealth}/{stats.MaxHealth}";
             _energy.text = $"{stats.CurrentEnergy}/{stats.MaxEnergy}";
             _morale.text = $"{stats.CurrentMorale}/{stats.MaxMorale}";
             _attack.text = stats.Attack.ToString();
 
-            var skills = companion.Skills;
+            var skills = _companion.Skills;
 
             _dodge.text = skills.Dodge.ToString();
             _lockpick.text = skills.Lockpicking.ToString();
@@ -60,7 +63,7 @@ namespace Assets.Scripts.UI
             _survival.text = skills.Survival.ToString();
             _persuasion.text = skills.Persuasion.ToString();
 
-            var attributes = companion.Attributes;
+            var attributes = _companion.Attributes;
 
             _agility.text = attributes.Agility.ToString();
             _coordination.text = attributes.Coordination.ToString();
@@ -98,7 +101,13 @@ namespace Assets.Scripts.UI
                     return;
                 }
 
-                Populate(companion);
+                _companion = companion;
+
+                Populate();
+            }
+            else if(eventName.Equals(EquipmentUpdated))
+            {
+                Populate();
             }
         }
     }

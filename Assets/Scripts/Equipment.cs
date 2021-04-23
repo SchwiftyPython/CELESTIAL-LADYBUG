@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Assets.Scripts.Abilities;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Items;
 using Assets.Scripts.Saving;
@@ -161,7 +162,30 @@ namespace Assets.Scripts
             }
 
             _equippedItems[slot] = null;
-            EventMediator.Instance.Broadcast(GlobalHelper.EquipmentUpdated, this);
+            //EventMediator.Instance.Broadcast(GlobalHelper.EquipmentUpdated, this);
+        }
+
+        public bool AbilityEquipped(Ability ability)
+        {
+            foreach (var item in _equippedItems.Values)
+            {
+                if (item == null)
+                {
+                    continue;
+                }
+
+                var itemAbilities = item.GetAbilities(null);
+
+                foreach (var itemAbility in itemAbilities)
+                {
+                    if (itemAbility.GetType() == ability.GetType())
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public bool ItemValidForEntityClass(EquipableItem item)

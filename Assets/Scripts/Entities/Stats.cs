@@ -20,7 +20,10 @@ namespace Assets.Scripts.Entities
 
         public int MaxHealth
         {
-            get => _maxHealth + GetAllModifiersForStat(EntityStatTypes.MaxHealth);
+            get
+            {
+                return _maxHealth + GetAllModifiersForStat(EntityStatTypes.MaxHealth); 
+            } 
             set
             {
                 if (value > PrototypeStatsCap)
@@ -31,13 +34,24 @@ namespace Assets.Scripts.Entities
                 {
                     _maxHealth = value;
                 }
+
+                if (CurrentHealth > MaxHealth)
+                {
+                    CurrentHealth = MaxHealth;
+                }
             }
         }
 
         private int _currentHealth;
         public int CurrentHealth
         {
-            get => _currentHealth;
+            get
+            {
+                //todo we probably need to implement some undo kind of thing where if a player is equipping and unequipping we keep this the same until they exit the inventory
+                //let's see how other games handle this
+
+                return _currentHealth;
+            }
             set
             {
                 if (value <= CurrentStatsMin)
@@ -270,7 +284,7 @@ namespace Assets.Scripts.Entities
             //Critical = (int)(attributes.Agility * 2.4 + attributes.Intellect * 2.4 + RollD20()); //todo use wild die for critical success or failures
 
             MaxActionPoints = 10;
-            CurrentActionPoints = MaxActionPoints;
+            CurrentActionPoints = CurrentActionPoints;
         }
 
         private void EnforceStatCap(int stat)
@@ -330,6 +344,11 @@ namespace Assets.Scripts.Entities
 
             var equipment = _parent.GetEquipment();
 
+            if (equipment == null)
+            {
+                return total;
+            }
+
             foreach (EquipLocation slot in Enum.GetValues(typeof(EquipLocation)))
             {
                 var item = equipment.GetItemInSlot(slot);
@@ -347,7 +366,7 @@ namespace Assets.Scripts.Entities
 
             var abilities = _parent.Abilities;
 
-            foreach (var ability in abilities)
+            foreach (var ability in abilities.Values)
             {
                 if (!(ability is IModifierProvider provider))
                 {
@@ -372,6 +391,11 @@ namespace Assets.Scripts.Entities
 
             var equipment = _parent.GetEquipment();
 
+            if (equipment == null)
+            {
+                return total;
+            }
+
             foreach (EquipLocation slot in Enum.GetValues(typeof(EquipLocation)))
             {
                 var item = equipment.GetItemInSlot(slot);
@@ -389,7 +413,7 @@ namespace Assets.Scripts.Entities
 
             var abilities = _parent.Abilities;
 
-            foreach (var ability in abilities)
+            foreach (var ability in abilities.Values)
             {
                 if (!(ability is IModifierProvider provider))
                 {

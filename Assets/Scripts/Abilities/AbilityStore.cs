@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using Assets.Scripts.Entities;
 using UnityEngine;
 
 namespace Assets.Scripts.Abilities
 {
     public class AbilityStore : MonoBehaviour
     {
-        private Dictionary<string, Ability> _allAbilities;
+        private Dictionary<string, Func<Entity, Ability>> _allAbilities = new Dictionary<string, Func<Entity, Ability>>
+        {
+            {"tank", abilityOwner => new Tank(abilityOwner)}
+        };
+
 
         public static AbilityStore Instance;
 
@@ -24,15 +29,17 @@ namespace Assets.Scripts.Abilities
             DontDestroyOnLoad(gameObject);
         }
 
-        public Ability GetAbilityByName(string abilityName)
+        public Ability GetAbilityByName(string abilityName, Entity abilityOwner)
         {
+            abilityName = abilityName.ToLower();
+
             if (!_allAbilities.ContainsKey(abilityName))
             {
                 Debug.LogError($"Ability {abilityName} does not exist!");
                 return null;
             }
 
-            return _allAbilities[abilityName];
+            return _allAbilities[abilityName].Invoke(abilityOwner);
         }
     }
 }

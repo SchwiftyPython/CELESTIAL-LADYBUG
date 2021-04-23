@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Abilities;
 using Assets.Scripts.UI;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -56,7 +57,7 @@ namespace Assets.Scripts
 
         #endregion ItemSprites
 
-        private Dictionary<Type, Sprite> _abilitySpriteDictionary;
+        private Dictionary<string, Sprite> _abilitySpriteDictionary;
 
         public Sprite[] AbilitySprites;
 
@@ -175,21 +176,22 @@ namespace Assets.Scripts
             return _weaponSpriteDictionary.ElementAt(index).Value;
         }
 
-        public Sprite GetAbilitySprite(object ability)
+        public Sprite GetAbilitySprite(Ability ability)
         {
-            if (_abilitySpriteDictionary == null || !_abilitySpriteDictionary.ContainsKey(ability.GetType()))
+            if (_abilitySpriteDictionary == null || !_abilitySpriteDictionary.ContainsKey(ability.Name.ToLower()))
             {
                 Debug.LogError($"Ability sprite for {ability.GetType()} does not exist!");
                 return null;
             }
 
-            return _abilitySpriteDictionary[ability.GetType()];
+            return _abilitySpriteDictionary[ability.Name.ToLower()];
         }
 
         private void PopulateSpriteDictionaries()
         {
             PopulatePortraitSprites();
             PopulateItemSprites();
+            PopulateAbilitySprites();
         }
 
         private void PopulatePortraitSprites()
@@ -251,6 +253,11 @@ namespace Assets.Scripts
                     _ringSpriteDictionary
                 }
             );
+        }
+
+        private void PopulateAbilitySprites()
+        {
+            _abilitySpriteDictionary = PopulateDictionaryFromArray(AbilitySprites);
         }
 
         private static Dictionary<string, Sprite> PopulateDictionaryFromArray(IEnumerable<Sprite> sprites)
