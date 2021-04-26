@@ -9,7 +9,8 @@ namespace Assets.Scripts.Abilities
     {
         private Dictionary<string, Func<Entity, Ability>> _allAbilities = new Dictionary<string, Func<Entity, Ability>>
         {
-            {"tank", abilityOwner => new Tank(abilityOwner)}
+            {"tank", abilityOwner => new Tank(abilityOwner)},
+            {"well fed", abilityOwner => new WellFed(abilityOwner)}
         };
 
 

@@ -101,10 +101,6 @@ namespace Assets.Scripts.Entities
 
             _level = 1;
             _xp = 0;
-
-            //todo testing
-
-            Stats.CurrentHealth -= 1;
         }
 
         public void SetSpriteInstance(UnityEngine.GameObject instance)
@@ -227,7 +223,7 @@ namespace Assets.Scripts.Entities
             _equipment.AddItem(item.GetAllowedEquipLocation(), item);
         }
 
-        public void UnEquip(EquipLocation slot)
+        public void UnEquip(EquipLocation slot, bool swapAttempt)
         {
             var item = _equipment.GetItemInSlot(slot);
 
@@ -239,6 +235,11 @@ namespace Assets.Scripts.Entities
                 {
                     Abilities.Remove(ability.GetType());
                 }
+            }
+
+            if (swapAttempt)
+            {
+                return;
             }
 
             EventMediator.Instance.Broadcast(GlobalHelper.EquipmentUpdated, this);

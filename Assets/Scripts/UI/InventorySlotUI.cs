@@ -44,7 +44,7 @@ namespace Assets.Scripts.UI
             return _inventory.GetNumberInSlot(_index);
         }
 
-        public void RemoveItems(int number)
+        public void RemoveItems(int number, bool swapAttempt)
         {
             _inventory.RemoveFromSlot(_index, number);
         }

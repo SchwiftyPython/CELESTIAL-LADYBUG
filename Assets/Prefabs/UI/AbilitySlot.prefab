@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1361942239047269625}
   - component: {fileID: 1361942239047269626}
+  - component: {fileID: 272524643}
+  - component: {fileID: -6187057858405627043}
   m_Layer: 5
   m_Name: AbilitySlot
   m_TagString: Untagged
@@ -58,6 +60,33 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &272524643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361942239047269624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52424cca338654641bd2b5e91c7d8ed7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 4969693540419987134, guid: ef15ddd2a021e7f49b9e98b52ee7d430,
+    type: 3}
+--- !u!114 &-6187057858405627043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361942239047269624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9bf8efdd58107e44ad0d2a797ba0f7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  iconImageParent: {fileID: 1361942239975578256}
 --- !u!1 &1361942239910486372
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,7 +172,6 @@ GameObject:
   - component: {fileID: 1361942239975578257}
   - component: {fileID: 1361942239975578260}
   - component: {fileID: 1361942239975578259}
-  - component: {fileID: 1361942239975578258}
   m_Layer: 5
   m_Name: SlotIcon
   m_TagString: Untagged
@@ -207,15 +235,3 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &1361942239975578258
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1361942239975578256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9bf8efdd58107e44ad0d2a797ba0f7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -2144,6 +2144,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 55446de60efc21a40982ac55cd59e8c2, type: 3}
   AbilitySprites:
   - {fileID: 21300000, guid: a9812ed049e19704389dd690d8b41953, type: 3}
+  - {fileID: 21300000, guid: 1a5b75fcb171fcc44b3deceb27bb49d2, type: 3}
 --- !u!4 &1180150245
 Transform:
   m_ObjectHideFlags: 0

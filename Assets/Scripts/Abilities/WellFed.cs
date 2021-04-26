@@ -4,11 +4,11 @@ using Assets.Scripts.Entities;
 
 namespace Assets.Scripts.Abilities
 {
-    public class Tank : Ability, IModifierProvider
+    public class WellFed : Ability, IModifierProvider
     {
-        private const float MaxHealthMod = 20f;
+        private const int MaxApMod = 1;
 
-        public Tank(Entity abilityOwner) : base("Tank", $"+{MaxHealthMod} Max Health" ,-1, -1, abilityOwner, false, true)
+        public WellFed(Entity abilityOwner) : base("Well Fed", $"+{MaxApMod} Max Action Points", -1, -1, abilityOwner, false, true)
         {
             Icon = SpriteStore.Instance.GetAbilitySprite(this);
         }
@@ -20,9 +20,9 @@ namespace Assets.Scripts.Abilities
                 yield return 0f;
             }
 
-            if (statType == EntityStatTypes.MaxHealth)
+            if (statType == EntityStatTypes.MaxActionPoints)
             {
-                yield return MaxHealthMod;
+                yield return MaxApMod;
             }
         }
 

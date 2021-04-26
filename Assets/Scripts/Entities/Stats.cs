@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Entities
@@ -34,11 +33,6 @@ namespace Assets.Scripts.Entities
                 {
                     _maxHealth = value;
                 }
-
-                if (CurrentHealth > MaxHealth)
-                {
-                    CurrentHealth = MaxHealth;
-                }
             }
         }
 
@@ -47,8 +41,10 @@ namespace Assets.Scripts.Entities
         {
             get
             {
-                //todo we probably need to implement some undo kind of thing where if a player is equipping and unequipping we keep this the same until they exit the inventory
-                //let's see how other games handle this
+                if (_currentHealth > MaxHealth)
+                {
+                    _currentHealth = MaxHealth;
+                }
 
                 return _currentHealth;
             }
@@ -155,24 +151,7 @@ namespace Assets.Scripts.Entities
         private int _maxActionPoints;
         public int MaxActionPoints
         {
-            get
-            {
-                //todo refactor to use modifiers or something
-
-                var energyPercentage = ((float)CurrentEnergy / MaxEnergy) * 100;
-
-                if (energyPercentage < 25)
-                {
-                    return _maxActionPoints - 2;
-                }
-
-                if (energyPercentage < 50)
-                {
-                    return _maxActionPoints - 1;
-                }
-
-                return _maxActionPoints;
-            }
+            get => _maxActionPoints + GetAllModifiersForStat(EntityStatTypes.MaxActionPoints);
             set
             {
                 if (value > PrototypeStatsCap)
@@ -189,7 +168,15 @@ namespace Assets.Scripts.Entities
         private int _currentActionPoints;
         public int CurrentActionPoints
         {
-            get => _currentActionPoints;
+            get
+            {
+                if (_currentActionPoints > MaxActionPoints)
+                {
+                    _currentActionPoints = MaxActionPoints;
+                }
+
+                return _currentActionPoints;
+            }
             set
             {
                 if (value < CurrentStatsMin)
@@ -332,7 +319,7 @@ namespace Assets.Scripts.Entities
         /// </summary>
         private int GetAllModifiersForStat(EntityStatTypes stat)
         {
-            return (int) (GetAdditiveModifiers(stat) * (1 + GetPercentageModifiers(stat) / 100));
+            return (int)(GetAdditiveModifiers(stat) * (1 + GetPercentageModifiers(stat) / 100));
         }
 
         /// <summary>
@@ -377,6 +364,11 @@ namespace Assets.Scripts.Entities
                 {
                     total += modifier;
                 }
+            }
+
+            if (stat == EntityStatTypes.MaxActionPoints)
+            {
+                total += GetMaxActionPointsModifier();
             }
 
             return total;
@@ -427,6 +419,23 @@ namespace Assets.Scripts.Entities
             }
 
             return total;
+        }
+
+        private int GetMaxActionPointsModifier()
+        {
+            var energyPercentage = ((float)CurrentEnergy / MaxEnergy) * 100;
+
+            if (energyPercentage < 25)
+            {
+                return _maxActionPoints - 2;
+            }
+
+            if (energyPercentage < 50)
+            {
+                return _maxActionPoints - 1;
+            }
+
+            return 0;
         }
     }
 }

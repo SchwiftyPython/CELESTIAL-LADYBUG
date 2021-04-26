@@ -74,9 +74,9 @@ namespace Assets.Scripts.UI
             }
         }
 
-        public void RemoveItems(int number)
+        public void RemoveItems(int number, bool swapAttempt)
         {
-            _currentCompanion.UnEquip(_equipLocation);
+            _currentCompanion.UnEquip(_equipLocation, swapAttempt);
         }
 
         private void RedrawUi()

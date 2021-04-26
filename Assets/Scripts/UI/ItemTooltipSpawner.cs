@@ -41,7 +41,7 @@ namespace Assets.Scripts.UI
             itemTooltip.Setup(item, _currentCompanion);
         }
 
-        private Entity GetCurrentCompanion()
+        private static Entity GetCurrentCompanion()
         {
             var partyManagementWindow = GameObject.Find("PartyManagementWindowMask");
             var windowScript = partyManagementWindow.GetComponent<PartyManagementWindow>();

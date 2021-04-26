@@ -110,12 +110,6 @@ namespace Assets.Scripts.Items
 
             foreach (var abilityName in ItemType.Abilities)
             {
-                //todo just for testing
-                if (!abilityName.Equals("Tank"))
-                {
-                    continue;
-                }
-
                 var ability = AbilityStore.Instance.GetAbilityByName(abilityName, abilityOwner);
 
                 if (ability == null)
