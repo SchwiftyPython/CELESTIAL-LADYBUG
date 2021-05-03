@@ -26,26 +26,26 @@ namespace Assets.Scripts.Abilities
             IsPassive = passive;
         }
 
-        public void Use(Entity abilityOwner, Entity target)
+        public virtual void Use(Entity target)
         {
             //todo testing for prototype - assumes combat ability
 
             //todo message assumes combat ability
-            var message = $"{abilityOwner.Name} attacks {target.Name} with {GlobalHelper.CapitalizeAllWords(Name)}!";
+            var message = $"{AbilityOwner.Name} attacks {target.Name} with {GlobalHelper.CapitalizeAllWords(Name)}!";
 
             EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
             //todo if range < 0 then use equipped item's range
             if (Range < 2)
             {
-                abilityOwner.MeleeAttack(target);
+                AbilityOwner.MeleeAttack(target);
             }
             else
             {
-                abilityOwner.RangedAttack(target);
+                AbilityOwner.RangedAttack(target);
             }
 
-            abilityOwner.SubtractActionPoints(ApCost);
+            AbilityOwner.SubtractActionPoints(ApCost);
         }
 
         public bool TargetInRange(Entity target)

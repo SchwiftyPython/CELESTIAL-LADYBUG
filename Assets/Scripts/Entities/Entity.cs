@@ -175,7 +175,7 @@ namespace Assets.Scripts.Entities
 
             var testArmor = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Body);
 
-            var plateArmorType = ItemStore.Instance.GetItemTypeByName("Plate Armor"); //todo testing
+            var plateArmorType = ItemStore.Instance.GetItemTypeByName("Bitey Plate"); //todo testing
 
             Equip((EquipableItem) plateArmorType.NewItem());
 
@@ -245,37 +245,44 @@ namespace Assets.Scripts.Entities
             EventMediator.Instance.Broadcast(GlobalHelper.EquipmentUpdated, this);
         }
 
+        public bool HasAbility(Type abilityType)
+        {
+            foreach (var ability in Abilities)
+            {
+                if (abilityType == ability.Key)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public void MeleeAttack(Entity target)
         {
             var hitChance = CalculateChanceToHit(target);
 
             if (AttackHit(hitChance)) //todo handle damage in its own method since ranged will use this too
             {
-                var equippedWeapon = _equipment.GetItemInSlot(EquipLocation.Weapon);
-
-                var (minDamage, maxDamage) = equippedWeapon.GetMeleeDamageRange();
-
-                var damage = Random.Range(minDamage, maxDamage + 1) + Stats.Attack;
-
-                var targetArmor = target.GetTotalArmorToughness();
-
-                var damageReduction = GetDamageReduction(damage, targetArmor);
-
-                damage -= (int) (damage * damageReduction);
-
-                target.SubtractHealth(damage);
-
-                var message = $"{Name} dealt {damage} damage to {target.Name}!";
-
-                EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                ApplyDamage(target);
 
                 if (target.IsDead())
                 {
                     //todo sound for dying peep
 
-                    message = $"{Name} killed {target.Name}!";
+                    var message = $"{Name} killed {target.Name}!";
 
                     EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                }
+                else
+                {
+                    //todo check for abilities that respond to attack hit
+
+                    if (target.HasAbility(typeof(Riposte))) //todo hail mary not sure if this will work
+                    {
+                        target.Abilities[typeof(Riposte)].Use(this);
+                    }
+
                 }
             }
         }
@@ -283,6 +290,27 @@ namespace Assets.Scripts.Entities
         public void RangedAttack(Entity target)
         {
             throw new NotImplementedException();
+        }
+
+        public void ApplyDamage(Entity target)
+        {
+            var equippedWeapon = _equipment.GetItemInSlot(EquipLocation.Weapon);
+
+            var (minDamage, maxDamage) = equippedWeapon.GetMeleeDamageRange();
+
+            var damage = Random.Range(minDamage, maxDamage + 1) + Stats.Attack;
+
+            var targetArmor = target.GetTotalArmorToughness();
+
+            var damageReduction = GetDamageReduction(damage, targetArmor);
+
+            damage -= (int)(damage * damageReduction);
+
+            target.SubtractHealth(damage);
+
+            var message = $"{Name} dealt {damage} damage to {target.Name}!";
+
+            EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
         }
 
         public bool HasMissileWeaponEquipped()

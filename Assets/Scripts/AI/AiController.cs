@@ -104,7 +104,7 @@ namespace Assets.Scripts.AI
         {
             //todo choose an ability at random and do it
 
-            usableAbilities[Random.Range(0, usableAbilities.Count)].Use(Self, Target);
+            usableAbilities[Random.Range(0, usableAbilities.Count)].Use(Target);
         }
 
         private Entity FindTarget()

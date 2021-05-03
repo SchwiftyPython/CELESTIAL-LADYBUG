@@ -64,16 +64,12 @@
   {
 	"Description": "It's got some rough edges.",  
     "Parent": "Plate Armor",
-    "Melee": 
-	{
-		"MinDamage": 1,
-		"MaxDamage": 4
-	},
+    "Melee": {},
     "Ranged": {},
     "Defense": {},
     "Abilities": 
 	[
-	  "Bite Back"
+	  "Riposte"
 	],
 	"Range": -1,
     "Sprite": "plate_armor_2",

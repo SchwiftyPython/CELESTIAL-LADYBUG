@@ -125,7 +125,7 @@ namespace Assets.Scripts.Combat
 
                             if (entity != null && _selectedAbility.TargetValid(entity) && _selectedAbility.TargetInRange(entity))
                             {
-                                _selectedAbility.Use(CombatManager.Instance.ActiveEntity, entity);
+                                _selectedAbility.Use(entity);
 
                                 _selectedAbility = null;
 
