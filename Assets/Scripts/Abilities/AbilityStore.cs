@@ -11,7 +11,12 @@ namespace Assets.Scripts.Abilities
         {
             {"tank", abilityOwner => new Tank(abilityOwner)},
             {"well fed", abilityOwner => new WellFed(abilityOwner)},
-            {"riposte", abilityOwner => new Riposte(abilityOwner)}
+            {"riposte", abilityOwner => new Riposte(abilityOwner)},
+            {"quick recovery", abilityOwner => new QuickRecovery(abilityOwner)},
+            {"guided strikes", abilityOwner => new GuidedStrikes(abilityOwner)},
+            {"uncanny dodge", abilityOwner => new UncannyDodge(abilityOwner)},
+            {"calculated", abilityOwner => new Calculated(abilityOwner)},
+            {"divine intervention", abilityOwner => new DivineIntervention(abilityOwner)},
         };
 
 

@@ -220,7 +220,7 @@ namespace Assets.Scripts.Combat
 
             HighlightTileUnderAbilityTarget(_selectedAbilityTarget);
 
-            var hitChance = CombatManager.Instance.ActiveEntity.CalculateChanceToHit(_selectedAbilityTarget);
+            var hitChance = CombatManager.Instance.ActiveEntity.CalculateChanceToHitMelee(_selectedAbilityTarget);
 
             //todo we'll need some kind of DTO to hold the hit chance and modifiers
             EventMediator.Instance.Broadcast(GlobalHelper.EntityTargeted, _selectedAbilityTarget, hitChance);
@@ -251,7 +251,7 @@ namespace Assets.Scripts.Combat
 
             HighlightTileUnderAbilityTarget(_selectedAbilityTarget);
 
-            var hitChance = CombatManager.Instance.ActiveEntity.CalculateChanceToHit(_selectedAbilityTarget);
+            var hitChance = CombatManager.Instance.ActiveEntity.CalculateChanceToHitMelee(_selectedAbilityTarget);
 
             //todo we'll need some kind of DTO to hold the hit chance and modifiers
             EventMediator.Instance.Broadcast(GlobalHelper.EntityTargeted, _selectedAbilityTarget, hitChance);
@@ -438,7 +438,7 @@ namespace Assets.Scripts.Combat
 
             HighlightTileUnderAbilityTarget(_selectedAbilityTarget);
 
-            var hitChance = CombatManager.Instance.ActiveEntity.CalculateChanceToHit(_selectedAbilityTarget);
+            var hitChance = CombatManager.Instance.ActiveEntity.CalculateChanceToHitMelee(_selectedAbilityTarget);
 
             //todo we'll need some kind of DTO to hold the hit chance and modifiers
             EventMediator.Instance.Broadcast(GlobalHelper.EntityTargeted, _selectedAbilityTarget, hitChance);

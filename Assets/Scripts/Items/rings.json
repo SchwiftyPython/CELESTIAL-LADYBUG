@@ -8,7 +8,7 @@
     "Defense": 
     {
       "Toughness": 0,
-      "DodgeMod": 1
+      "DodgeMod": 0
     },
     "Abilities": [],
 	"Range": -1,
@@ -27,7 +27,7 @@
     "Defense": 
     {
       "Toughness": 0,
-      "DodgeMod": 1
+      "DodgeMod": 0
     },
     "Abilities": 
 	[
@@ -49,7 +49,7 @@
     "Defense": 
     {
       "Toughness": 0,
-      "DodgeMod": 1
+      "DodgeMod": 0
     },
     "Abilities": 
 	[
@@ -71,7 +71,7 @@
     "Defense": 
     {
       "Toughness": 0,
-      "DodgeMod": 2
+      "DodgeMod": 0
     },
     "Abilities": 
 	[
@@ -94,7 +94,7 @@
     "Defense": 
     {
       "Toughness": 1,
-      "DodgeMod": 4
+      "DodgeMod": 1
     },
     "Abilities": 
 	[
@@ -139,7 +139,7 @@
     "Defense": 
     {
       "Toughness": 3,
-      "DodgeMod": 1
+      "DodgeMod": 0
     },
     "Abilities": 
 	[
@@ -162,7 +162,7 @@
     "Defense": 
     {
       "Toughness": 5,
-      "DodgeMod": 2
+      "DodgeMod": 0
     },
     "Abilities": 
 	[
@@ -184,7 +184,7 @@
     "Defense": 
     {
       "Toughness": 0,
-      "DodgeMod": 1
+      "DodgeMod": 0
     },
     "Abilities": 
 	[

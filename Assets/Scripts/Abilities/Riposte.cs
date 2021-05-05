@@ -8,7 +8,6 @@ namespace Assets.Scripts.Abilities
 
         public Riposte(Entity abilityOwner) : base("Riposte", "Automatically counter-attack with equipped weapon.", -1, 1, abilityOwner, true, true)
         {
-            Icon = SpriteStore.Instance.GetAbilitySprite(this);
         }
 
         public override void Use(Entity target)

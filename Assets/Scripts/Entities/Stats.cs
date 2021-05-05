@@ -13,17 +13,14 @@ namespace Assets.Scripts.Entities
 
         private const int CurrentStatsMin = 0;
 
-        private Entity _parent;
+        private readonly Entity _parent;
 
         private int _maxHealth;
 
         public int MaxHealth
         {
-            get
-            {
-                return _maxHealth + GetAllModifiersForStat(EntityStatTypes.MaxHealth); 
-            } 
-            set
+            get => _maxHealth + GetAllModifiersForStat(EntityStatTypes.MaxHealth);
+            private set
             {
                 if (value > PrototypeStatsCap)
                 {
@@ -50,6 +47,13 @@ namespace Assets.Scripts.Entities
             }
             set
             {
+                if (value > _currentHealth)
+                {
+                    var moddedValue = ModifyNewValueForStat(EntityStatTypes.CurrentHealth, value - _currentHealth);
+
+                    value =  _currentHealth + moddedValue;
+                }
+
                 if (value <= CurrentStatsMin)
                 {
                     _currentHealth = CurrentStatsMin;
@@ -320,6 +324,14 @@ namespace Assets.Scripts.Entities
         private int GetAllModifiersForStat(EntityStatTypes stat)
         {
             return (int)(GetAdditiveModifiers(stat) * (1 + GetPercentageModifiers(stat) / 100));
+        }
+
+        /// <summary>
+        /// Applies all modifiers to a new value for the given StatType.
+        /// </summary>
+        private int ModifyNewValueForStat(EntityStatTypes stat, int value)
+        {
+            return (int) (GetAdditiveModifiers(stat) + value * (1 + GetPercentageModifiers(stat) / 100));
         }
 
         /// <summary>

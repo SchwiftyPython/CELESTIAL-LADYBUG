@@ -65,7 +65,7 @@
     "Defense": 
     {
       "Toughness": 1,
-      "DodgeMod": 1
+      "DodgeMod": 0
     },
     "Abilities": 
 	[
@@ -87,7 +87,7 @@
     "Defense": 
     {
       "Toughness": 1,
-      "DodgeMod": 2
+      "DodgeMod": 0
     },
     "Abilities": 
 	[
@@ -109,7 +109,7 @@
     "Defense": 
     {
       "Toughness": 6,
-      "DodgeMod": 8
+      "DodgeMod": 0
     },
     "Abilities": 
 	[
@@ -132,7 +132,7 @@
     "Defense": 
     {
       "Toughness": 10,
-      "DodgeMod": 4
+      "DodgeMod": 0
     },
     "Abilities": 
 	[
@@ -154,7 +154,7 @@
     "Defense": 
     {
       "Toughness": 4,
-      "DodgeMod": 4
+      "DodgeMod": 0
     },
     "Abilities": 
 	[

@@ -10,7 +10,6 @@ namespace Assets.Scripts.Abilities
 
         public Tank(Entity abilityOwner) : base("Tank", $"+{MaxHealthMod} Max Health" ,-1, -1, abilityOwner, false, true)
         {
-            Icon = SpriteStore.Instance.GetAbilitySprite(this);
         }
 
         public IEnumerable<float> GetAdditiveModifiers(Enum stat)

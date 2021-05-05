@@ -147,23 +147,24 @@ namespace Assets.Scripts.Travel
                         {
                             var gainType = statGain.Key;
 
+                            var moddedGain = 0;
                             switch (gainType)
                             {
                                 case EntityStatTypes.CurrentMorale:
-                                    companion.AddMorale(statGain.Value);
+                                    moddedGain = companion.AddMorale(statGain.Value);
                                     break;
                                 case EntityStatTypes.CurrentHealth:
-                                    companion.AddHealth(statGain.Value);
+                                    moddedGain = companion.AddHealth(statGain.Value);
                                     break;
                                 case EntityStatTypes.CurrentEnergy:
-                                    companion.AddEnergy(statGain.Value);
+                                    moddedGain = companion.AddEnergy(statGain.Value);
                                     break;
                                 default:
                                     Debug.Log($"Invalid gain type! {gainType}");
                                     break;
                             }
 
-                            rewardsText.Add(BuildCompanionRewardTextItem(companion, statGain.Value, gainType));
+                            rewardsText.Add(BuildCompanionRewardTextItem(companion, moddedGain, gainType));
                         }
                     }
                 }

@@ -124,11 +124,11 @@
     "Defense": 
 	{
 	  "Toughness": 3,
-      "DodgeMod": 4
+      "DodgeMod": 2
 	},
     "Abilities": 
 	[
-	  "Unnatural Dodge"
+	  "Uncanny Dodge"
 	],
 	"Range": -1,
     "Sprite": "demon",

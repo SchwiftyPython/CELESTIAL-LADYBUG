@@ -24,6 +24,8 @@ namespace Assets.Scripts.Abilities
             AbilityOwner = abilityOwner;
             HostileTargetsOnly = hostileTargetsOnly;
             IsPassive = passive;
+
+            GetIconForAbility(this);
         }
 
         public virtual void Use(Entity target)
@@ -48,6 +50,11 @@ namespace Assets.Scripts.Abilities
             AbilityOwner.SubtractActionPoints(ApCost);
         }
 
+        public virtual int Use()
+        {
+            return 0;
+        }
+
         public bool TargetInRange(Entity target)
         {
             var distance = Distance.CHEBYSHEV.Calculate(AbilityOwner.Position, target.Position);
@@ -68,6 +75,11 @@ namespace Assets.Scripts.Abilities
         public bool IsRanged()
         {
             return Range > 1;
+        }
+
+        protected void GetIconForAbility(Ability ability)
+        {
+            Icon = SpriteStore.Instance.GetAbilitySprite(ability);
         }
     }
 }

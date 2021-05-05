@@ -89,7 +89,7 @@ namespace Assets.Scripts.Entities
             }
 
             Attributes = new Attributes();
-            Skills = new Skills();
+            Skills = new Skills(this);
 
             Abilities = new Dictionary<Type, Ability>();
 
@@ -175,13 +175,13 @@ namespace Assets.Scripts.Entities
 
             var testArmor = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Body);
 
-            var plateArmorType = ItemStore.Instance.GetItemTypeByName("Bitey Plate"); //todo testing
-
-            Equip((EquipableItem) plateArmorType.NewItem());
+            Equip(testArmor);
 
             var testHelmet = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Helmet);
 
-            Equip(testHelmet);
+            var stoneFaceType = ItemStore.Instance.GetItemTypeByName("Ancient Stone Mask"); //todo testing
+
+            Equip((EquipableItem) stoneFaceType.NewItem());
 
             var testBoots = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Boots);
 
@@ -260,9 +260,9 @@ namespace Assets.Scripts.Entities
 
         public void MeleeAttack(Entity target)
         {
-            var hitChance = CalculateChanceToHit(target);
+            var hitChance = CalculateChanceToHitMelee(target);
 
-            if (AttackHit(hitChance)) //todo handle damage in its own method since ranged will use this too
+            if (AttackHit(hitChance, target)) 
             {
                 ApplyDamage(target);
 
@@ -359,11 +359,32 @@ namespace Assets.Scripts.Entities
             throw new NotImplementedException();
         }
 
-        public int CalculateChanceToHit(Entity target)
+        public int CalculateChanceToHitMelee(Entity target)
         {
-            //todo need to add modifiers
+            //todo might need enums for to hit and damage etc so we can use modifier providers.
 
-            return CalculateBaseChanceToHit(target);
+            var total = CalculateBaseChanceToHit(target);
+
+            if (HasAbility(typeof(GuidedStrikes)))
+            {
+                total += GuidedStrikes.GetToHitBonus();
+            }
+
+            return total;
+        }
+
+        public int CalculateChanceToHitRanged(Entity target)
+        {
+            //todo might need enums for to hit and damage etc so we can use modifier providers.
+
+            var total = CalculateBaseChanceToHit(target);
+
+            if (HasAbility(typeof(Calculated)))
+            {
+                total += Calculated.GetToHitBonus();
+            }
+
+            return total;
         }
 
         public int CalculateBaseChanceToHit(Entity target)
@@ -374,7 +395,7 @@ namespace Assets.Scripts.Entities
             return Stats.MeleeSkill - target.Stats.MeleeSkill / 10;
         }
 
-        public bool AttackHit(int chanceToHit)
+        public bool AttackHit(int chanceToHit, Entity target)
         {
             //todo diceroller
             var roll = Random.Range(1, 101);
@@ -382,7 +403,19 @@ namespace Assets.Scripts.Entities
             string message;
             if (roll <= chanceToHit)
             {
-                message = $"Attack hit! Rolled: {roll} Needed: {chanceToHit}";
+                if (target.HasAbility(typeof(DivineIntervention)))
+                {
+                    if (DivineIntervention.Intervened())
+                    {
+                        message = $"Divine Intervention! Attack missed!";
+
+                        EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+
+                        return false;
+                    }
+                }
+
+                message = $"Attack hit!";
 
                 EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
@@ -391,7 +424,7 @@ namespace Assets.Scripts.Entities
                 return true;
             }
 
-            message = $"Attack missed! Rolled: {roll} Needed: {chanceToHit}";
+            message = $"Attack missed!";
 
             EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
@@ -400,9 +433,13 @@ namespace Assets.Scripts.Entities
             return false;
         }
 
-        public void AddHealth(int amount)
+        public int AddHealth(int amount)
         {
+            var startingHealth = Stats.CurrentHealth;
+
             Stats.CurrentHealth += amount;
+
+            return Stats.CurrentHealth - startingHealth;
         }
 
         public void SubtractHealth(int amount)
@@ -410,9 +447,13 @@ namespace Assets.Scripts.Entities
             Stats.CurrentHealth -= amount;
         }
 
-        public void AddEnergy(int amount)
+        public int AddEnergy(int amount)
         {
+            var startingEnergy = Stats.CurrentEnergy;
+
             Stats.CurrentEnergy += amount;
+
+            return Stats.CurrentEnergy - startingEnergy;
         }
 
         public void SubtractEnergy(int amount)
@@ -420,9 +461,13 @@ namespace Assets.Scripts.Entities
             Stats.CurrentEnergy -= amount;
         }
 
-        public void AddMorale(int amount)
+        public int AddMorale(int amount)
         {
+            var startingMorale = Stats.CurrentMorale;
+
             Stats.CurrentMorale += amount;
+
+            return Stats.CurrentMorale - startingMorale;
         }
 
         public void SubtractMorale(int amount)
@@ -452,7 +497,12 @@ namespace Assets.Scripts.Entities
 
         public void UseHealthPotion()
         {
-            AddHealth(40); //todo make a constant somewhere
+            Heal(40); //todo make a constant somewhere
+        }
+
+        public void Heal(int amount)
+        {
+            AddHealth(amount);
         }
 
         public void ApplyEffect(Effect effect)

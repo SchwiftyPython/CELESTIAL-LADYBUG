@@ -12,15 +12,48 @@ namespace Assets.Scripts.Entities
 
         private const int StartingSkillDice = 7;
 
-        public int Dodge { get; set; }
+        private Entity _parent;
+
+        private int _dodge;
+        public int Dodge 
+        {
+            get
+            {
+                var moddedDodge = _dodge + GetAllModifiersForStat(EntitySkillTypes.Dodge);
+
+                if (moddedDodge > SkillMax)
+                {
+                    return SkillMax;
+                }
+
+                return moddedDodge;
+            }
+            private set
+            {
+                if (value < SkillMin)
+                {
+                    _dodge = SkillMin;
+                }
+                else if (value > SkillMax)
+                {
+                    _dodge = SkillMax;
+                }
+                else
+                {
+                    _dodge = value;
+                }
+            }
+        }
         public int Lockpicking { get; set; }
         public int Toughness { get; set; }
         public int Healing { get; set; }
         public int Survival { get; set; }
         public int Persuasion { get; set; }
 
-        public Skills()
+        public Skills(Entity parent)
         {
+            _parent = parent;
+
             GenerateSkillValues();
         }
 
@@ -79,6 +112,116 @@ namespace Assets.Scripts.Entities
                         throw new ArgumentOutOfRangeException();
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns all modifiers for the given StatType.
+        /// </summary>
+        private int GetAllModifiersForStat(EntitySkillTypes stat)
+        {
+            return (int)(GetAdditiveModifiers(stat) * (1 + GetPercentageModifiers(stat) / 100));
+        }
+
+        /// <summary>
+        /// Applies all modifiers to a new value for the given StatType.
+        /// </summary>
+        private int ModifyNewValueForStat(EntitySkillTypes stat, int value)
+        {
+            return (int)(GetAdditiveModifiers(stat) + value * (1 + GetPercentageModifiers(stat) / 100));
+        }
+
+        /// <summary>
+        /// Returns all additive modifiers in equipment and abilities for the given StatType.
+        /// </summary>
+        private float GetAdditiveModifiers(EntitySkillTypes stat)
+        {
+            float total = 0;
+
+            var equipment = _parent.GetEquipment();
+
+            if (equipment == null)
+            {
+                return total;
+            }
+
+            foreach (EquipLocation slot in Enum.GetValues(typeof(EquipLocation)))
+            {
+                var item = equipment.GetItemInSlot(slot);
+
+                if (item == null)
+                {
+                    continue;
+                }
+
+                foreach (var modifier in item.GetAdditiveModifiers(stat))
+                {
+                    total += modifier;
+                }
+            }
+
+            var abilities = _parent.Abilities;
+
+            foreach (var ability in abilities.Values)
+            {
+                if (!(ability is IModifierProvider provider))
+                {
+                    continue;
+                }
+
+                foreach (var modifier in provider.GetAdditiveModifiers(stat))
+                {
+                    total += modifier;
+                }
+            }
+
+            return total;
+        }
+
+        /// <summary>
+        /// Returns all percentage modifiers in equipment and abilities for the given StatType.
+        /// </summary>
+        private float GetPercentageModifiers(EntitySkillTypes stat)
+        {
+            float total = 0;
+
+            var equipment = _parent.GetEquipment();
+
+            if (equipment == null)
+            {
+                return total;
+            }
+
+            foreach (EquipLocation slot in Enum.GetValues(typeof(EquipLocation)))
+            {
+                var item = equipment.GetItemInSlot(slot);
+
+                if (item == null)
+                {
+                    continue;
+                }
+
+                foreach (var modifier in item.GetPercentageModifiers(stat))
+                {
+                    total += modifier;
+                }
+            }
+
+            var abilities = _parent.Abilities;
+
+            foreach (var ability in abilities.Values)
+            {
+                if (!(ability is IModifierProvider provider))
+                {
+                    continue;
+                }
+
+                foreach (var modifier in provider.GetPercentageModifiers(stat))
+                {
+                    total += modifier;
+                }
+            }
+
+            return total;
         }
     }
 }

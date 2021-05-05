@@ -8,7 +8,7 @@
     "Defense": 
     {
       "Toughness": 1,
-      "DodgeMod": 0
+      "DodgeMod": 1
     },
     "Abilities": [],
     "Sprite": "robe_1",
@@ -27,7 +27,7 @@
     "Defense": 
     {
       "Toughness": 1,
-      "DodgeMod": 2
+      "DodgeMod": 1
     },	
     "Abilities": [],
 	"Range": -1,
