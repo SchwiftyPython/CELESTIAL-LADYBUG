@@ -64,7 +64,11 @@
   {
 	"Description": "The helmet you can stab with.",  
     "Parent": "Leather Headband",
-    "Melee": {},
+    "Melee": 
+	{
+	  "MinDamage": 5,
+      "MaxDamage": 6
+	},
     "Ranged": {},
     "Defense": 
     {
@@ -72,10 +76,9 @@
       "DodgeMod": 0
     },
     "Abilities": 
-	[
-	  "Eats Veggies",
+	[	  
 	  "Endangered Endurance",
-	  "Stabby"
+	  "Helmet Charge"
 	],
 	"Range": -1,
     "Sprite": "unicorn_helm",

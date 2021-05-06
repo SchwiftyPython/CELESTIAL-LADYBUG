@@ -179,7 +179,7 @@ namespace Assets.Scripts.Entities
 
             var testHelmet = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Helmet);
 
-            var stoneFaceType = ItemStore.Instance.GetItemTypeByName("Ancient Stone Mask"); //todo testing
+            var stoneFaceType = ItemStore.Instance.GetItemTypeByName("Unicorn Helmet"); //todo testing
 
             Equip((EquipableItem) stoneFaceType.NewItem());
 
@@ -258,6 +258,16 @@ namespace Assets.Scripts.Entities
             return false;
         }
 
+        public void ResetOneUseCombatAbilities()
+        {
+            if (HasAbility(typeof(EndangeredEndurance)) &&
+                !((EndangeredEndurance)Abilities[typeof(EndangeredEndurance)])
+                    .SavedFromDeathThisBattle())
+            {
+                ((EndangeredEndurance)Abilities[typeof(EndangeredEndurance)]).Reset();
+            }
+        }
+
         public void MeleeAttack(Entity target)
         {
             var hitChance = CalculateChanceToHitMelee(target);
@@ -285,6 +295,11 @@ namespace Assets.Scripts.Entities
 
                 }
             }
+        }
+
+        public void MeleeAttackWithSlot(Entity target, EquipLocation slot)
+        {
+            //todo attack with item in slot
         }
 
         public void RangedAttack(Entity target)

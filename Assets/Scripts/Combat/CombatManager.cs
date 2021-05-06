@@ -161,6 +161,11 @@ namespace Assets.Scripts.Combat
                     }
                     else
                     {
+                        foreach (var combatant in TurnOrder)
+                        {
+                            combatant.ResetOneUseCombatAbilities();
+                        }
+
                         if (!SceneManager.GetSceneByName(GlobalHelper.TravelScene).isLoaded)
                         {
                             SceneManager.LoadScene(GlobalHelper.TravelScene);

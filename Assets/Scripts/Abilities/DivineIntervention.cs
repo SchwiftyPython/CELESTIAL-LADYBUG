@@ -15,7 +15,7 @@ namespace Assets.Scripts.Abilities
         {
             var roll = Random.Range(1, 101);
 
-            return roll < InterventionChance;
+            return roll <= InterventionChance;
         }
     }
 }

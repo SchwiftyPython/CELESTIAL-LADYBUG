@@ -118,6 +118,11 @@ namespace Assets.Scripts
             return false;
         }
 
+        public bool InCombat()
+        {
+            return SceneManager.GetActiveScene().name.Equals(CombatSceneName);
+        }
+
         public void StartNewGame()
         {
             //todo BUG this in fact does not start a new game lmao

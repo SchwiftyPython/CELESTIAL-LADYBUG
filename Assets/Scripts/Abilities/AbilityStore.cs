@@ -17,8 +17,8 @@ namespace Assets.Scripts.Abilities
             {"uncanny dodge", abilityOwner => new UncannyDodge(abilityOwner)},
             {"calculated", abilityOwner => new Calculated(abilityOwner)},
             {"divine intervention", abilityOwner => new DivineIntervention(abilityOwner)},
+            {"endangered endurance", abilityOwner => new EndangeredEndurance(abilityOwner)},
         };
-
 
         public static AbilityStore Instance;
 

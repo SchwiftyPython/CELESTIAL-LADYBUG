@@ -1,6 +1,10 @@
-﻿using Assets.Scripts.Entities;
+﻿using System.Linq;
+using Assets.Scripts.Combat;
+using Assets.Scripts.Entities;
 using GoRogue;
+using GoRogue.GameFramework;
 using UnityEngine;
+using GameObject = UnityEngine.GameObject;
 
 namespace Assets.Scripts.Abilities
 {
@@ -64,6 +68,13 @@ namespace Assets.Scripts.Abilities
 
         public bool TargetValid(Entity target)
         {
+            //todo might need to have a boolean for if ability uses line of sight
+
+            if (IsRanged() && !HasLineOfSight(target))
+            {
+                return false;
+            }
+
             if (HostileTargetsOnly)
             {
                 return AbilityOwner.IsPlayer() != target.IsPlayer();
@@ -77,7 +88,29 @@ namespace Assets.Scripts.Abilities
             return Range > 1;
         }
 
-        protected void GetIconForAbility(Ability ability)
+        private bool HasLineOfSight(IGameObject target)
+        {
+            var line = Lines.Get(AbilityOwner.Position, target.Position).ToList();
+
+            var map = CombatManager.Instance.Map;
+
+            foreach (var coord in line)
+            {
+                if (coord == line.First() || coord == line.Last())
+                {
+                    continue;
+                }
+
+                if (!map.GetTileAt(coord).IsWalkable)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void GetIconForAbility(Ability ability)
         {
             Icon = SpriteStore.Instance.GetAbilitySprite(ability);
         }

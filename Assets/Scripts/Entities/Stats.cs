@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.Scripts.Abilities;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Entities
@@ -51,13 +52,23 @@ namespace Assets.Scripts.Entities
                 {
                     var moddedValue = ModifyNewValueForStat(EntityStatTypes.CurrentHealth, value - _currentHealth);
 
-                    value =  _currentHealth + moddedValue;
+                    value = _currentHealth + moddedValue;
                 }
 
                 if (value <= CurrentStatsMin)
                 {
-                    _currentHealth = CurrentStatsMin;
-                    EventMediator.Instance.Broadcast(GlobalHelper.EntityDead, _parent);
+                    //todo need to encapsulate this if we add another will not die ability
+                    if (GameManager.Instance.InCombat() && _parent.HasAbility(typeof(EndangeredEndurance)) &&
+                        !((EndangeredEndurance) _parent.Abilities[typeof(EndangeredEndurance)])
+                            .SavedFromDeathThisBattle())
+                    {
+                        _parent.Abilities[typeof(EndangeredEndurance)].Use();
+                    }
+                    else
+                    {
+                        _currentHealth = CurrentStatsMin;
+                        EventMediator.Instance.Broadcast(GlobalHelper.EntityDead, _parent);
+                    }
                 }
                 else if(value > MaxHealth)
                 {

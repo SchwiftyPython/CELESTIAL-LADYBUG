@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GoRogue;
 using GoRogue.GameFramework;
 using GameObject = GoRogue.GameFramework.GameObject;
@@ -62,6 +63,13 @@ namespace Assets.Scripts.Combat
         public void SetSpriteInstance(UnityEngine.GameObject instance)
         {
             SpriteInstance = instance;
+        }
+
+        public Tile GetAdjacentTileByDirection(Direction direction)
+        {
+            var neighbors = AdjacencyRule.EIGHT_WAY.NeighborsClockwise(Position, direction);
+
+            return ((CombatMap)CurrentMap).GetTileAt(neighbors.First());
         }
 
         public void AddComponent(object component)
