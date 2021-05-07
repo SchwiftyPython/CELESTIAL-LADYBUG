@@ -49,15 +49,17 @@ namespace Assets.Scripts.UI
 
         private void SubscribeToEvents()
         {
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
             foreach (var eventName in _refreshEvents)
             {
-                EventMediator.Instance.SubscribeToEvent(eventName, this);
+                eventMediator.SubscribeToEvent(eventName, this);
             }
         }
 
         private void UnsubscribeFromEvents()
         {
-            EventMediator.Instance.UnsubscribeFromAllEvents(this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.UnsubscribeFromAllEvents(this);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

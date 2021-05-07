@@ -30,10 +30,10 @@ namespace Assets.Scripts.Encounters
         {
             {"camp mosquito", () => new CampMosquito()},
             {"comfy inn", () => new ComfyInn()},
-            // {"holy inferno", () => new HolyInferno()},
-            // {"star blanket", () => new StarBlanket()},
-            // {"conk out", () => new ConkOut()},
-            // {"peaceful village", () => new PeacefulVillage()}
+            {"holy inferno", () => new HolyInferno()},
+            {"star blanket", () => new StarBlanket()},
+            {"conk out", () => new ConkOut()},
+            {"peaceful village", () => new PeacefulVillage()}
         };
 
         private readonly Dictionary<string, Func<Encounter>> _combatEncounters = new Dictionary<string, Func<Encounter>>
@@ -52,7 +52,7 @@ namespace Assets.Scripts.Encounters
             {"no morale", () => new DerpusNoMorale()}
         };
 
-        public static EncounterStore Instance;
+        /*public static EncounterStore Instance;
 
         private void Start()
         {
@@ -65,7 +65,7 @@ namespace Assets.Scripts.Encounters
                 Destroy(gameObject);
             }
             DontDestroyOnLoad(gameObject);
-        }
+        }*/
 
         public List<Encounter> GetNormalEncounters()
         {

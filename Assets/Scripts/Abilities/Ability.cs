@@ -4,7 +4,6 @@ using Assets.Scripts.Entities;
 using GoRogue;
 using GoRogue.GameFramework;
 using UnityEngine;
-using GameObject = UnityEngine.GameObject;
 
 namespace Assets.Scripts.Abilities
 {
@@ -39,7 +38,9 @@ namespace Assets.Scripts.Abilities
             //todo message assumes combat ability
             var message = $"{AbilityOwner.Name} attacks {target.Name} with {GlobalHelper.CapitalizeAllWords(Name)}!";
 
-            EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
             //todo if range < 0 then use equipped item's range
             if (Range < 2)
@@ -88,11 +89,31 @@ namespace Assets.Scripts.Abilities
             return Range > 1;
         }
 
+        public virtual (int, int) GetAbilityDamageRange()
+        {
+            var combatManager = Object.FindObjectOfType<CombatManager>();
+
+            int damageMin;
+            int damageMax;
+            if (IsRanged())
+            {
+                (damageMin, damageMax) = combatManager.ActiveEntity.GetEquippedWeapon().GetRangedDamageRange();
+            }
+            else
+            {
+                (damageMin, damageMax) = combatManager.ActiveEntity.GetEquippedWeapon().GetMeleeDamageRange();
+            }
+
+            return (damageMin, damageMax);
+        }
+
         private bool HasLineOfSight(IGameObject target)
         {
             var line = Lines.Get(AbilityOwner.Position, target.Position).ToList();
 
-            var map = CombatManager.Instance.Map;
+            var combatManager = Object.FindObjectOfType<CombatManager>();
+
+            var map = combatManager.Map;
 
             foreach (var coord in line)
             {
@@ -112,7 +133,9 @@ namespace Assets.Scripts.Abilities
 
         private void GetIconForAbility(Ability ability)
         {
-            Icon = SpriteStore.Instance.GetAbilitySprite(ability);
+            var spriteStore = Object.FindObjectOfType<SpriteStore>();
+
+            Icon = spriteStore.GetAbilitySprite(ability);
         }
     }
 }

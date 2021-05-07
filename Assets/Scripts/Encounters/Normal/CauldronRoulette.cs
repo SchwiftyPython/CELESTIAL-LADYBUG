@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Travel;
+using UnityEngine;
 
 namespace Assets.Scripts.Encounters.Normal
 {
@@ -14,7 +15,8 @@ namespace Assets.Scripts.Encounters.Normal
 
         public override void Run()
         {
-            var curiousCompanion = TravelManager.Instance.Party.GetRandomCompanion();
+            var travelManager = Object.FindObjectOfType<TravelManager>();
+            var curiousCompanion = travelManager.Party.GetRandomCompanion();
 
             Description = "The party happens upon an odd sight: A bubbling cauldron smack dab in the middle of a clearing. \n\n";
             Description += $"Four items sit on a table next to the cauldron. {curiousCompanion.Name} thinks they should cast one of the items in. They approach the cauldron and toss in: ";
@@ -39,7 +41,7 @@ namespace Assets.Scripts.Encounters.Normal
 
             optionPenalty = new Penalty();
 
-            foreach (var companion in TravelManager.Instance.Party.GetCompanions())
+            foreach (var companion in travelManager.Party.GetCompanions())
             {
                 optionPenalty.AddEntityLoss(companion, EntityStatTypes.CurrentHealth, 5);
             }
@@ -71,7 +73,8 @@ namespace Assets.Scripts.Encounters.Normal
 
             SubscribeToOptionSelectedEvent();
 
-            EventMediator.Instance.Broadcast(GlobalHelper.FourOptionEncounter, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.Broadcast(GlobalHelper.FourOptionEncounter, this);
         }
     }
 }

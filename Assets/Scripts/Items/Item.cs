@@ -4,6 +4,7 @@ using Assets.Scripts.Abilities;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Items.Components;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Items
 {
@@ -110,7 +111,8 @@ namespace Assets.Scripts.Items
 
             foreach (var abilityName in ItemType.Abilities)
             {
-                var ability = AbilityStore.Instance.GetAbilityByName(abilityName, abilityOwner);
+                var abilityStore = Object.FindObjectOfType<AbilityStore>();
+                var ability = abilityStore.GetAbilityByName(abilityName, abilityOwner);
 
                 if (ability == null)
                 {

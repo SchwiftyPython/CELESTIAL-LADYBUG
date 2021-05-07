@@ -5,6 +5,7 @@ using Assets.Scripts.Entities;
 using Assets.Scripts.Items;
 using Assets.Scripts.Saving;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts
 {
@@ -148,7 +149,9 @@ namespace Assets.Scripts
 
             _equippedItems[slot] = item;
 
-            EventMediator.Instance.Broadcast(GlobalHelper.EquipmentUpdated, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this);
         }
 
         /// <summary>
@@ -162,7 +165,7 @@ namespace Assets.Scripts
             }
 
             _equippedItems[slot] = null;
-            //EventMediator.Instance.Broadcast(GlobalHelper.EquipmentUpdated, this);
+            //eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this);
         }
 
         public bool AbilityEquipped(Ability ability)

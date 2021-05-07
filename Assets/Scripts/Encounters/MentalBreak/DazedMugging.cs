@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Travel;
+using UnityEngine;
 
 namespace Assets.Scripts.Encounters.MentalBreak
 {
@@ -26,11 +27,14 @@ namespace Assets.Scripts.Encounters.MentalBreak
 
             var fullResultDescription = new List<string> { Description + "\n" };
 
-            var penaltiesText = TravelManager.Instance.ApplyEncounterPenalty(Penalty);
+            var travelManager = Object.FindObjectOfType<TravelManager>();
+            var penaltiesText = travelManager.ApplyEncounterPenalty(Penalty);
 
             fullResultDescription.AddRange(penaltiesText);
 
-            EventMediator.Instance.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
 
             _companion.Stats.CurrentMorale = _companion.Stats.MaxMorale;
         }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Assets.Scripts.Travel;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.UI
@@ -77,7 +79,8 @@ namespace Assets.Scripts.UI
 
             foreach (Slot slot in Enum.GetValues(typeof(Slot)))
             {
-                var sprite = SpriteStore.Instance.GetRandomSpriteForSlot(slot);
+                var spriteStore = Object.FindObjectOfType<SpriteStore>();
+                var sprite = spriteStore.GetRandomSpriteForSlot(slot);
 
                 SetSprite(slot, sprite);
             }

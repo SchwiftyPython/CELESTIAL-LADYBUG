@@ -29,7 +29,8 @@ namespace Assets.Scripts.UI
                 OptionButtonFour
             };
 
-            EventMediator.Instance.SubscribeToEvent(PopupEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(PopupEvent, this);
             Hide();
         }
 
@@ -80,7 +81,8 @@ namespace Assets.Scripts.UI
 
         private void OnDestroy()
         {
-            EventMediator.Instance.UnsubscribeFromEvent(PopupEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.UnsubscribeFromEvent(PopupEvent, this);
             GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 

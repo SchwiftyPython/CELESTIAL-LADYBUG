@@ -9,6 +9,7 @@ using Assets.Scripts.Items;
 using Assets.Scripts.UI;
 using UnityEngine;
 using GameObject = GoRogue.GameFramework.GameObject;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Entities
@@ -160,42 +161,46 @@ namespace Assets.Scripts.Entities
 
             CombatSpriteInstance.transform.position = new Vector3(Position.X, Position.Y);
 
-            EventMediator.Instance.Broadcast(GlobalHelper.ActiveEntityMoved, this);
+            EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.ActiveEntityMoved, this);
         }
 
         public void GenerateStartingEquipment()
         {
+            ItemStore itemStore = Object.FindObjectOfType<ItemStore>();
+
             //todo not implemented - temp for testing
 
             _equipment = new Equipment(EntityClass);
 
-            var testWeapon = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Weapon);
+            var testWeapon = itemStore.GetRandomEquipableItem(EquipLocation.Weapon);
             
             Equip(testWeapon);
 
-            var testArmor = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Body);
+            var testArmor = itemStore.GetRandomEquipableItem(EquipLocation.Body);
 
             Equip(testArmor);
 
-            var testHelmet = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Helmet);
+            var testHelmet = itemStore.GetRandomEquipableItem(EquipLocation.Helmet);
 
-            var stoneFaceType = ItemStore.Instance.GetItemTypeByName("Unicorn Helmet"); //todo testing
+            var stoneFaceType = itemStore.GetItemTypeByName("Unicorn Helmet"); //todo testing
 
             Equip((EquipableItem) stoneFaceType.NewItem());
 
-            var testBoots = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Boots);
+            var testBoots = itemStore.GetRandomEquipableItem(EquipLocation.Boots);
 
             Equip(testBoots);
 
-            var testGloves = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Gloves);
+            var testGloves = itemStore.GetRandomEquipableItem(EquipLocation.Gloves);
 
             Equip(testGloves);
 
-            var testShield = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Shield);
+            var testShield = itemStore.GetRandomEquipableItem(EquipLocation.Shield);
 
             Equip(testShield);
 
-            var testRing = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Ring);
+            var testRing = itemStore.GetRandomEquipableItem(EquipLocation.Ring);
 
             Equip(testRing);
         }
@@ -242,7 +247,9 @@ namespace Assets.Scripts.Entities
                 return;
             }
 
-            EventMediator.Instance.Broadcast(GlobalHelper.EquipmentUpdated, this);
+            EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this);
         }
 
         public bool HasAbility(Type abilityType)
@@ -282,7 +289,9 @@ namespace Assets.Scripts.Entities
 
                     var message = $"{Name} killed {target.Name}!";
 
-                    EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                    EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+
+                    eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
                 }
                 else
                 {
@@ -325,7 +334,9 @@ namespace Assets.Scripts.Entities
 
             var message = $"{Name} dealt {damage} damage to {target.Name}!";
 
-            EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+            EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
         }
 
         public bool HasMissileWeaponEquipped()
@@ -361,6 +372,11 @@ namespace Assets.Scripts.Entities
         public EquipableItem GetEquippedWeapon()
         {
             return _equipment.GetItemInSlot(EquipLocation.Weapon);
+        }
+
+        public EquipableItem GetEquippedItemInSlot(EquipLocation slot)
+        {
+            return _equipment.GetItemInSlot(slot);
         }
 
         public Equipment GetEquipment()
@@ -412,6 +428,8 @@ namespace Assets.Scripts.Entities
 
         public bool AttackHit(int chanceToHit, Entity target)
         {
+            EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+
             //todo diceroller
             var roll = Random.Range(1, 101);
 
@@ -424,7 +442,7 @@ namespace Assets.Scripts.Entities
                     {
                         message = $"Divine Intervention! Attack missed!";
 
-                        EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                        eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
                         return false;
                     }
@@ -432,18 +450,18 @@ namespace Assets.Scripts.Entities
 
                 message = $"Attack hit!";
 
-                EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
-                EventMediator.Instance.Broadcast(GlobalHelper.MeleeHit, this);
+                eventMediator.Broadcast(GlobalHelper.MeleeHit, this);
 
                 return true;
             }
 
             message = $"Attack missed!";
 
-            EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+            eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
-            EventMediator.Instance.Broadcast(GlobalHelper.MeleeMiss, this);
+            eventMediator.Broadcast(GlobalHelper.MeleeMiss, this);
 
             return false;
         }
@@ -566,9 +584,11 @@ namespace Assets.Scripts.Entities
 
             //todo base off of equipped items
 
+            SpriteStore spriteStore = Object.FindObjectOfType<SpriteStore>();
+
             foreach (Portrait.Slot slot in Enum.GetValues(typeof(Portrait.Slot)))
             {
-                Portrait.Add(slot, SpriteStore.Instance.GetRandomSpriteKeyForSlot(slot));
+                Portrait.Add(slot, spriteStore.GetRandomSpriteKeyForSlot(slot));
 
                 //Portrait[slot] = SpriteStore.Instance.GetRandomSpriteKeyForSlot(slot);
             }

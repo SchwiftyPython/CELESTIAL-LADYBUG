@@ -70,8 +70,8 @@ namespace Assets.Scripts.AI
                 }
             }
 
-            //todo end turn
-            EventMediator.Instance.Broadcast(GlobalHelper.EndTurn, this);
+            var eventMediator = FindObjectOfType<EventMediator>();
+            eventMediator.Broadcast(GlobalHelper.EndTurn, this);
         }
 
         public void Move()
@@ -81,7 +81,8 @@ namespace Assets.Scripts.AI
 
             _pathToTarget = new List<Tile>();
 
-            var map = CombatManager.Instance.Map;
+            var combatManager = FindObjectOfType<CombatManager>();
+            var map = combatManager.Map;
 
             //todo either we have to get a tile adjacent to the target or stop from moving onto the target's tile
             //todo not sure how that is happening - thought GoRogue would prevent that -- The sprite is moving but not the entity?
@@ -109,7 +110,8 @@ namespace Assets.Scripts.AI
 
         private Entity FindTarget()
         {
-            var targets = CombatManager.Instance.TurnOrder.ToList();
+            var combatManager = FindObjectOfType<CombatManager>();
+            var targets = combatManager.TurnOrder.ToList();
 
             foreach (var target in targets.ToArray())
             {

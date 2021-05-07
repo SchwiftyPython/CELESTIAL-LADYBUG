@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assets.Scripts.Entities;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Abilities
 {
@@ -10,7 +11,8 @@ namespace Assets.Scripts.Abilities
 
         public UncannyDodge(Entity abilityOwner) : base("Uncanny Dodge", $"+{DodgeMod} to dodge.", -1, -1, abilityOwner, false, true)
         {
-            Icon = SpriteStore.Instance.GetAbilitySprite(this);
+            var spriteStore = Object.FindObjectOfType<SpriteStore>();
+            Icon = spriteStore.GetAbilitySprite(this);
         }
 
         public IEnumerable<float> GetAdditiveModifiers(Enum stat)

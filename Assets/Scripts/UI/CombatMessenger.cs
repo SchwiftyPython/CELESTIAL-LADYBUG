@@ -21,7 +21,8 @@ namespace Assets.Scripts.UI
         {
             _messagesOnScreen = new Queue<GameObject>();
 
-            EventMediator.Instance.SubscribeToEvent(GlobalHelper.SendMessageToConsole, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(GlobalHelper.SendMessageToConsole, this);
         }
 
         private void ClearExcessOnScreenMessages()

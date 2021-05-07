@@ -15,7 +15,8 @@ namespace Assets.Scripts.Encounters.Normal
 
         public override void Run()
         {
-            var chosenCompanion = TravelManager.Instance.Party.GetRandomCompanion();
+            var travelManager = Object.FindObjectOfType<TravelManager>();
+            var chosenCompanion = travelManager.Party.GetRandomCompanion();
 
             Description =
                 $"While taking a whizz {chosenCompanion.Name} notices a black bottle sticking out from under a bush. They pick it up and inspect it, but they can't quite make out the contents. Curiosity gets the best of {chosenCompanion.FirstName()} and they open the bottle. Black smoke erupts from the bottle and forms into a genie! \n\nMAKE A WISH!";
@@ -63,7 +64,8 @@ namespace Assets.Scripts.Encounters.Normal
 
             SubscribeToOptionSelectedEvent();
 
-            EventMediator.Instance.Broadcast(GlobalHelper.FourOptionEncounter, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.Broadcast(GlobalHelper.FourOptionEncounter, this);
         }
     }
 }

@@ -14,7 +14,8 @@ namespace Assets.Scripts.UI
 
         private void Start()
         {
-            EventMediator.Instance.SubscribeToEvent(GlobalHelper.PopulateCharacterSheet, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(GlobalHelper.PopulateCharacterSheet, this);
         }
 
         public override bool CanCreateTooltip()

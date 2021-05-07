@@ -9,25 +9,30 @@ namespace Assets.Scripts
     {
         private Dictionary<string, List<ISubscriber>> _eventSubscriptions;
 
-        public static EventMediator Instance;
+        //public static EventMediator Instance;
 
         private void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else if (Instance != this)
-            {
-                Destroy(gameObject);
-            }
-            DontDestroyOnLoad(gameObject);
+            // if (Instance == null)
+            // {
+            //     Instance = this;
+            // }
+            // else if (Instance != this)
+            // {
+            //     Destroy(gameObject);
+            // }
+            // DontDestroyOnLoad(gameObject);
 
             _eventSubscriptions = new Dictionary<string, List<ISubscriber>> ();
         }
 
         public void SubscribeToEvent(string eventName, ISubscriber subscriber)
         {
+            if (_eventSubscriptions == null)
+            {
+                _eventSubscriptions = new Dictionary<string, List<ISubscriber>>();
+            }
+
             if (_eventSubscriptions.ContainsKey(eventName))
             {
                 _eventSubscriptions[eventName].Add(subscriber);

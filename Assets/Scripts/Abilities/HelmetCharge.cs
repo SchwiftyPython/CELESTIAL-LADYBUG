@@ -3,6 +3,7 @@ using Assets.Scripts.Combat;
 using Assets.Scripts.Entities;
 using GoRogue;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Abilities
 {
@@ -16,11 +17,15 @@ namespace Assets.Scripts.Abilities
         {
             var message = $"{AbilityOwner.Name} attacks {target.Name} with {GlobalHelper.CapitalizeAllWords(Name)}!";
 
-            EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
             var chargeDirection = Direction.GetDirection(AbilityOwner.Position, target.Position);
 
-            var map = CombatManager.Instance.Map;
+            var combatManager = Object.FindObjectOfType<CombatManager>();
+
+            var map = combatManager.Map;
 
             var targetTile = map.GetTileAt(target.Position);
 
@@ -59,9 +64,23 @@ namespace Assets.Scripts.Abilities
                     throw new ArgumentOutOfRangeException();
             }
 
-            AbilityOwner.MoveTo(destination, 0);
+            AbilityOwner.MoveTo(destination, 0); //todo might look goofy with default walk animation
 
             AbilityOwner.MeleeAttackWithSlot(target, EquipLocation.Helmet);
+
+            AbilityOwner.SubtractActionPoints(ApCost);
+        }
+
+        public override (int, int) GetAbilityDamageRange()
+        {
+            var helmet = AbilityOwner.GetEquippedItemInSlot(EquipLocation.Helmet);
+
+            int damageMin;
+            int damageMax;
+
+            (damageMin, damageMax) = helmet.GetMeleeDamageRange();
+
+            return (damageMin, damageMax);
         }
     }
 }

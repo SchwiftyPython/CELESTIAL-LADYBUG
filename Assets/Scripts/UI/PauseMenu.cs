@@ -15,10 +15,12 @@ namespace Assets.Scripts.UI
 
         public void Show()
         {
-            EventMediator.Instance.SubscribeToEvent(HidePopupEvent, this);
-            EventMediator.Instance.UnsubscribeFromEvent(ShowPopupEvent, this);
+            EventMediator eventMediator = FindObjectOfType<EventMediator>();
 
-            EventMediator.Instance.Broadcast(GlobalHelper.PauseTimer, this);
+            eventMediator.SubscribeToEvent(HidePopupEvent, this);
+            eventMediator.UnsubscribeFromEvent(ShowPopupEvent, this);
+
+            eventMediator.Broadcast(GlobalHelper.PauseTimer, this);
 
             gameObject.SetActive(true);
             GameManager.Instance.AddActiveWindow(gameObject);
@@ -26,10 +28,12 @@ namespace Assets.Scripts.UI
 
         public void Hide()
         {
-            EventMediator.Instance.UnsubscribeFromEvent(HidePopupEvent, this);
-            EventMediator.Instance.SubscribeToEvent(ShowPopupEvent, this);
+            EventMediator eventMediator = FindObjectOfType<EventMediator>();
 
-            EventMediator.Instance.Broadcast(GlobalHelper.ResumeTimer, this);
+            eventMediator.UnsubscribeFromEvent(HidePopupEvent, this);
+            eventMediator.SubscribeToEvent(ShowPopupEvent, this);
+
+            eventMediator.Broadcast(GlobalHelper.ResumeTimer, this);
 
             gameObject.SetActive(false);
             GameManager.Instance.RemoveActiveWindow(gameObject);

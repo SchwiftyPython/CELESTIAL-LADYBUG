@@ -23,8 +23,9 @@ namespace Assets.Scripts.UI
 
         private void Awake() 
         {
-            EventMediator.Instance.SubscribeToEvent(RefreshEvent, this);
-            EventMediator.Instance.SubscribeToEvent(PopulateEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(RefreshEvent, this);
+            eventMediator.SubscribeToEvent(PopulateEvent, this);
         }
 
         public int MaxAcceptable(Item item)

@@ -4,6 +4,7 @@ using Assets.Scripts.Encounters;
 using Assets.Scripts.Entities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Travel
 {
@@ -20,26 +21,28 @@ namespace Assets.Scripts.Travel
 
         public TravelNode CurrentNode { get; private set; }
 
-        public static TravelManager Instance;
+        //public static TravelManager Instance;
 
         private void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else if (Instance != this)
-            {
-                Destroy(gameObject);
-            }
-            DontDestroyOnLoad(gameObject);
+            // if (Instance == null)
+            // {
+            //     Instance = this;
+            // }
+            // else if (Instance != this)
+            // {
+            //     Destroy(gameObject);
+            // }
+            // DontDestroyOnLoad(gameObject);
+
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
 
             if (!SceneManager.GetActiveScene().name.Equals(GlobalHelper.CombatScene))
             {
-                EventMediator.Instance.SubscribeToEvent(GlobalHelper.CampingEncounterFinished, this);
+                eventMediator.SubscribeToEvent(GlobalHelper.CampingEncounterFinished, this);
             }
 
-            EventMediator.Instance.SubscribeToEvent(GlobalHelper.EntityDead, this);
+            eventMediator.SubscribeToEvent(GlobalHelper.EntityDead, this);
 
             _currentDayOfTravel = 0;
 
@@ -59,7 +62,8 @@ namespace Assets.Scripts.Travel
 
         public void StartNewDay()
         {
-            EncounterManager.Instance.BuildDecksForNewDay();
+            var encounterManager = Object.FindObjectOfType<EncounterManager>();
+            encounterManager.BuildDecksForNewDay();
         }
 
         public string BuildPartyRewardTextItem(int value, PartySupplyTypes gainType)
@@ -314,7 +318,8 @@ namespace Assets.Scripts.Travel
 
         private void OnDestroy()
         {
-            EventMediator.Instance.UnsubscribeFromAllEvents(this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator?.UnsubscribeFromAllEvents(this);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
@@ -338,7 +343,8 @@ namespace Assets.Scripts.Travel
 
                 if (TravelDaysToDestination <= 0)
                 {
-                    EventMediator.Instance.Broadcast(GlobalHelper.YouWon, this);
+                    var eventMediator = Object.FindObjectOfType<EventMediator>();
+                    eventMediator.Broadcast(GlobalHelper.YouWon, this);
                 }
                 else
                 {

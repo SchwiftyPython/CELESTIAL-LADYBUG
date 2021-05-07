@@ -13,7 +13,7 @@ namespace Assets.Scripts.UI
     {
         private const string RefreshEvent = GlobalHelper.RefreshCombatUi;
 
-        private static Dictionary<string, Sprite> _abilityIcons;
+        //private static Dictionary<string, Sprite> _abilityIcons;
 
         private Entity _activeEntity;
 
@@ -29,12 +29,9 @@ namespace Assets.Scripts.UI
 
         private void Start()
         {
-            _abilityIcons = new Dictionary<string, Sprite>
-            {
-                {"slash", SlashIcon}
-            };
+            EventMediator eventMediator = FindObjectOfType<EventMediator>();
 
-            EventMediator.Instance.SubscribeToEvent(RefreshEvent, this);
+            eventMediator.SubscribeToEvent(RefreshEvent, this);
         }
 
         public static void AssignAbilityToButton(Ability ability, GameObject buttonParent)
@@ -61,10 +58,7 @@ namespace Assets.Scripts.UI
 
             GlobalHelper.DestroyAllChildren(AbilityButtonParent.gameObject);
 
-            //todo determine abilities from the entity
             var abilities = activeEntity.Abilities;
-
-            //todo for each ability populate bar with an ability button prefab
 
             foreach (var ability in abilities.Values)
             {
@@ -90,26 +84,6 @@ namespace Assets.Scripts.UI
                     buttonScript.DisableButton();
                 }
             }
-
-            /*var testSlashAbility = new Ability("slash", 3, 1, _activeEntity, true);
-
-            var testInstance = Instantiate(AbilityButtonPrefab, new Vector3(0, 0), Quaternion.identity);
-
-            AssignAbilityToButton(testSlashAbility, testInstance);
-
-            testInstance.transform.SetParent(AbilityButtonParent);
-
-            var buttonScript = testInstance.GetComponent<Button>().GetComponent<UseAbilityButton>();
-
-            if (AbilityIsUsable(testSlashAbility))
-            {
-                buttonScript.EnableButton();
-            }
-            else
-            {
-                buttonScript.DisableButton();
-            }*/
-
         }
 
         private void Refresh()
@@ -138,7 +112,9 @@ namespace Assets.Scripts.UI
                 return false;
             }
 
-            var allEntities = CombatManager.Instance.TurnOrder.ToList();
+            CombatManager combatManager = FindObjectOfType<CombatManager>();
+
+            var allEntities = combatManager.TurnOrder.ToList();
 
             foreach (var entity in allEntities)
             {
@@ -166,7 +142,9 @@ namespace Assets.Scripts.UI
                 return null;
             }
 
-            return !_abilityIcons.ContainsKey(ability.Name) ? null : _abilityIcons[ability.Name];
+            var spriteStore = FindObjectOfType<SpriteStore>();
+
+            return spriteStore.GetAbilitySprite(ability);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

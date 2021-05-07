@@ -80,25 +80,27 @@ namespace Assets.Scripts.Encounters.Normal
 
             Options.Add(optionTitle, optionTwo);
 
-            var restCost = TravelManager.Instance.Party.GetCompanions().Count * 10;
+            var travelManager = Object.FindObjectOfType<TravelManager>();
 
-            if (TravelManager.Instance.Party.Gold >= restCost)
+            var restCost = travelManager.Party.GetCompanions().Count * 10;
+
+            if (travelManager.Party.Gold >= restCost)
             {
                 optionTitle = $"Rest for a day ({restCost} gold)";
                 optionResultText = $"The party stays at the local inn and gets some good shut-eye.";
 
                 optionReward = new Reward();
 
-                optionReward.AddEntityGain(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentEnergy, 10);
+                optionReward.AddEntityGain(travelManager.Party.Derpus, EntityStatTypes.CurrentEnergy, 10);
 
-                foreach (var companion in TravelManager.Instance.Party.GetCompanions())
+                foreach (var companion in travelManager.Party.GetCompanions())
                 {
                     optionReward.AddEntityGain(companion, EntityStatTypes.CurrentEnergy, 10);
                 }
 
-                optionReward.AddEntityGain(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentMorale, 10);
+                optionReward.AddEntityGain(travelManager.Party.Derpus, EntityStatTypes.CurrentMorale, 10);
 
-                foreach (var companion in TravelManager.Instance.Party.GetCompanions())
+                foreach (var companion in travelManager.Party.GetCompanions())
                 {
                     optionReward.AddEntityGain(companion, EntityStatTypes.CurrentMorale, 10);
                 }
@@ -118,7 +120,8 @@ namespace Assets.Scripts.Encounters.Normal
 
             SubscribeToOptionSelectedEvent();
 
-            EventMediator.Instance.Broadcast(GlobalHelper.FourOptionEncounter, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.Broadcast(GlobalHelper.FourOptionEncounter, this);
         }
     }
 }

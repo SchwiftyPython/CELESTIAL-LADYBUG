@@ -61,7 +61,7 @@ namespace Assets.Scripts
 
         public Sprite[] AbilitySprites;
 
-        public static SpriteStore Instance;
+        /*public static SpriteStore Instance;
 
         private void Start()
         {
@@ -83,7 +83,22 @@ namespace Assets.Scripts
             SpearSpriteNames = new List<string>();
             SwordSpriteNames = new List<string>();
 
-            EventMediator.Instance.Broadcast(GlobalHelper.SpritesLoaded, this);
+            eventMediator.Broadcast(GlobalHelper.SpritesLoaded, this);
+        }*/
+
+        public void Setup()
+        {
+            PopulateSpriteDictionaries();
+
+            CrossbowSpriteNames = new List<string>();
+            DaggerSpriteNames = new List<string>();
+            ShieldSpriteNames = new List<string>();
+            SpearSpriteNames = new List<string>();
+            SwordSpriteNames = new List<string>();
+
+            EventMediator eventMediator = FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.SpritesLoaded, this);
         }
 
         public Sprite GetRandomSpriteForSlot(Portrait.Slot slot)

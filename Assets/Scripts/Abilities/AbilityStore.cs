@@ -18,11 +18,12 @@ namespace Assets.Scripts.Abilities
             {"calculated", abilityOwner => new Calculated(abilityOwner)},
             {"divine intervention", abilityOwner => new DivineIntervention(abilityOwner)},
             {"endangered endurance", abilityOwner => new EndangeredEndurance(abilityOwner)},
+            {"helmet charge", abilityOwner => new HelmetCharge(abilityOwner)},
         };
 
-        public static AbilityStore Instance;
+        //public static AbilityStore Instance;
 
-        private void Start()
+        /*private void Start()
         {
             if (Instance == null)
             {
@@ -34,7 +35,7 @@ namespace Assets.Scripts.Abilities
             }
 
             DontDestroyOnLoad(gameObject);
-        }
+        }*/
 
         public Ability GetAbilityByName(string abilityName, Entity abilityOwner)
         {

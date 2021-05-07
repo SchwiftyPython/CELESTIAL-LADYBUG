@@ -36,8 +36,9 @@ namespace Assets.Scripts.UI
 
         private void Awake()
         {
-            EventMediator.Instance.SubscribeToEvent(PopulateCharacterSheet, this);
-            EventMediator.Instance.SubscribeToEvent(EquipmentUpdated, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(PopulateCharacterSheet, this);
+            eventMediator.SubscribeToEvent(EquipmentUpdated, this);
         }
 
         private void Populate()
@@ -79,7 +80,8 @@ namespace Assets.Scripts.UI
 
             foreach (var slot in portraitKeys.Keys)
             {
-                var slotSprite = SpriteStore.Instance.GetPortraitSpriteForSlotByKey(slot, portraitKeys[slot]);
+                var spriteStore = Object.FindObjectOfType<SpriteStore>();
+                var slotSprite = spriteStore.GetPortraitSpriteForSlotByKey(slot, portraitKeys[slot]);
                 sprites.Add(slot, slotSprite);
             }
 

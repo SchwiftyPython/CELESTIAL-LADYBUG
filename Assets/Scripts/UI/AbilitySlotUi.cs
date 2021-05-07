@@ -8,13 +8,13 @@ namespace Assets.Scripts.UI
     {
         private Ability _ability;
 
-        public GameObject iconImageParent;
+        public GameObject IconImageParent;
 
         public void SetAbility(Ability ability)
         {
             _ability = ability;
 
-            var iconImage = iconImageParent.GetComponent<Image>();
+            var iconImage = IconImageParent.GetComponent<Image>();
 
             iconImage.sprite = ability.Icon;
         }

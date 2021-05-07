@@ -17,15 +17,17 @@ namespace Assets.Scripts.UI
         {
             _tileSelected = false;
 
-            EventMediator.Instance.SubscribeToEvent(TileSelectedEvent, this);
-            EventMediator.Instance.SubscribeToEvent(TileDeselectedEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(TileSelectedEvent, this);
+            eventMediator.SubscribeToEvent(TileDeselectedEvent, this);
         }
 
         private void OnMouseEnter()
         {
             if (!_tileSelected)
             {
-                EventMediator.Instance.Broadcast(GlobalHelper.TileHovered, Tile);
+                var eventMediator = Object.FindObjectOfType<EventMediator>();
+                eventMediator.Broadcast(GlobalHelper.TileHovered, Tile);
             }
         }
 
@@ -33,7 +35,8 @@ namespace Assets.Scripts.UI
         {
             if (!_tileSelected)
             {
-                EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
+                var eventMediator = Object.FindObjectOfType<EventMediator>();
+                eventMediator.Broadcast(GlobalHelper.HidePopup, this);
             }
         }
 
@@ -52,7 +55,8 @@ namespace Assets.Scripts.UI
             {
                 _tileSelected = false;
 
-                EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
+                var eventMediator = Object.FindObjectOfType<EventMediator>();
+                eventMediator.Broadcast(GlobalHelper.HidePopup, this);
             }
         }
     }

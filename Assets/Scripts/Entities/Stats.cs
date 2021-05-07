@@ -1,5 +1,6 @@
 ﻿using System;
 using Assets.Scripts.Abilities;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Entities
@@ -67,7 +68,9 @@ namespace Assets.Scripts.Entities
                     else
                     {
                         _currentHealth = CurrentStatsMin;
-                        EventMediator.Instance.Broadcast(GlobalHelper.EntityDead, _parent);
+
+                        var eventMediator = Object.FindObjectOfType<EventMediator>();
+                        eventMediator.Broadcast(GlobalHelper.EntityDead, _parent);
                     }
                 }
                 else if(value > MaxHealth)
@@ -110,7 +113,8 @@ namespace Assets.Scripts.Entities
 
                     if (_parent.IsDerpus())
                     {
-                        EventMediator.Instance.Broadcast(GlobalHelper.DerpusNoEnergy, this);
+                        var eventMediator = Object.FindObjectOfType<EventMediator>();
+                        eventMediator.Broadcast(GlobalHelper.DerpusNoEnergy, this);
                     }
                 }
                 else if (value > MaxEnergy)
@@ -150,7 +154,9 @@ namespace Assets.Scripts.Entities
                 if (value < CurrentStatsMin)
                 {
                     _currentMorale = CurrentStatsMin;
-                    EventMediator.Instance.Broadcast(GlobalHelper.MentalBreak, _parent);
+
+                    var eventMediator = Object.FindObjectOfType<EventMediator>();
+                    eventMediator.Broadcast(GlobalHelper.MentalBreak, _parent);
                 }
                 else if (value > MaxMorale)
                 {

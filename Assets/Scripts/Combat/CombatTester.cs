@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Items;
 using Assets.Scripts.Travel;
 using UnityEngine;
 
@@ -19,7 +20,15 @@ namespace Assets.Scripts.Combat
                 return;
             }
 
-            TravelManager.Instance.NewParty();
+            var spriteStore = Object.FindObjectOfType<SpriteStore>();
+            spriteStore.Setup();
+
+            var itemStore = Object.FindObjectOfType<ItemStore>();
+            itemStore.Setup();
+
+            var travelManager = Object.FindObjectOfType<TravelManager>();
+
+            travelManager.NewParty();
 
             var numBandits = Random.Range(MinBandits, MaxBandits + 1);
 
@@ -32,9 +41,11 @@ namespace Assets.Scripts.Combat
                 bandits.Add(bandit);
             }
 
-            CombatManager.Instance.Enemies = bandits;
+            var combatManager = Object.FindObjectOfType<CombatManager>();
 
-            CombatManager.Instance.Load();
+            combatManager.Enemies = bandits;
+
+            combatManager.Load();
         }
     }
 }

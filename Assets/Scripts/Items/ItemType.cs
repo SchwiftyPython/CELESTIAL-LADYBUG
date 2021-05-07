@@ -18,7 +18,9 @@ namespace Assets.Scripts.Items
             {
                 if (!string.IsNullOrEmpty(Parent) && value.MinDamage <= 0 && value.MaxDamage <= 0)
                 {
-                    _melee = ItemStore.Instance.GetItemTypeByName(Parent).Melee;
+                    ItemStore itemStore = Object.FindObjectOfType<ItemStore>();
+
+                    _melee = itemStore.GetItemTypeByName(Parent).Melee;
                 }
                 else
                 {
@@ -36,7 +38,9 @@ namespace Assets.Scripts.Items
             {
                 if (!string.IsNullOrEmpty(Parent) && value.MinDamage <= 0 && value.MaxDamage <= 0)
                 {
-                    _ranged = ItemStore.Instance.GetItemTypeByName(Parent).Ranged;
+                    ItemStore itemStore = Object.FindObjectOfType<ItemStore>();
+
+                    _ranged = itemStore.GetItemTypeByName(Parent).Ranged;
                 }
                 else
                 {
@@ -53,7 +57,9 @@ namespace Assets.Scripts.Items
             {
                 if (!string.IsNullOrEmpty(Parent) && value.Toughness <= 0 && value.DodgeMod <= 0)
                 {
-                    _defense = ItemStore.Instance.GetItemTypeByName(Parent).Defense;
+                    ItemStore itemStore = Object.FindObjectOfType<ItemStore>();
+
+                    _defense = itemStore.GetItemTypeByName(Parent).Defense;
                 }
                 else
                 {
@@ -70,7 +76,9 @@ namespace Assets.Scripts.Items
             {
                 if (!string.IsNullOrEmpty(Parent) && value == null || value.Count <= 0)
                 {
-                    _abilities = ItemStore.Instance.GetItemTypeByName(Parent)?.Abilities;
+                    ItemStore itemStore = Object.FindObjectOfType<ItemStore>();
+
+                    _abilities = itemStore.GetItemTypeByName(Parent)?.Abilities;
                 }
                 else
                 {
@@ -87,7 +95,9 @@ namespace Assets.Scripts.Items
             {
                 if (!string.IsNullOrEmpty(Parent) && value <= 0)
                 {
-                    _range = ItemStore.Instance.GetItemTypeByName(Parent).Range;
+                    ItemStore itemStore = Object.FindObjectOfType<ItemStore>();
+
+                    _range = itemStore.GetItemTypeByName(Parent).Range;
                 }
                 else
                 {
@@ -105,7 +115,9 @@ namespace Assets.Scripts.Items
             {
                 if (!string.IsNullOrEmpty(Parent) && value == null)
                 {
-                    _sprite = ItemStore.Instance.GetItemTypeByName(Parent).Sprite;
+                    ItemStore itemStore = Object.FindObjectOfType<ItemStore>();
+
+                    _sprite = itemStore.GetItemTypeByName(Parent).Sprite;
                 }
                 else
                 {
@@ -122,7 +134,9 @@ namespace Assets.Scripts.Items
             {
                 if (!string.IsNullOrEmpty(Parent) && value == null)
                 {
-                    _slot = ItemStore.Instance.GetItemTypeByName(Parent).Slot;
+                    ItemStore itemStore = Object.FindObjectOfType<ItemStore>();
+
+                    _slot = itemStore.GetItemTypeByName(Parent).Slot;
                 }
                 else
                 {

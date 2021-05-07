@@ -12,7 +12,9 @@ namespace Assets.Scripts.UI
         {
             var optionText = transform.GetComponentInChildren<TextMeshProUGUI>().text;
 
-            EventMediator.Instance.Broadcast(GlobalHelper.EncounterOptionSelected, this, optionText);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.EncounterOptionSelected, this, optionText);
         }
 
         public void SetOptionText(string text)

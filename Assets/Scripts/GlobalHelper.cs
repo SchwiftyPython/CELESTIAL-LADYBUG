@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts
@@ -204,6 +205,11 @@ namespace Assets.Scripts
             }
 
             return lowerCase ? builder.ToString().ToLower() : builder.ToString();
+        }
+
+        public static Object GetObjectOfType(Type objectType)
+        {
+            return FindObjectOfType(objectType);
         }
     }
 }

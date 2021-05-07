@@ -23,9 +23,10 @@ namespace Assets.Scripts.UI
         {
             _partyInventory = Inventory.GetPartyInventory();
 
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
             foreach (var eventName in _refreshEvents)
             {
-                EventMediator.Instance.SubscribeToEvent(eventName, this);
+                eventMediator.SubscribeToEvent(eventName, this);
             }
         }
 
