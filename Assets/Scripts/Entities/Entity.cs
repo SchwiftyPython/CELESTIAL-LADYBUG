@@ -66,7 +66,8 @@ namespace Assets.Scripts.Entities
                     Race = PickRace();
                 }
 
-                EntityClass = PickEntityClass();
+                //EntityClass = PickEntityClass(); //todo testing
+                EntityClass = EntityClass.Crossbowman;
 
                 while (EntityClass == EntityClass.Derpus)
                 {
@@ -144,6 +145,11 @@ namespace Assets.Scripts.Entities
             return currentTurn - _lastTurnMoved <= 1;
         }
 
+        public void RefillActionPoints()
+        {
+            Stats.CurrentActionPoints = Stats.MaxActionPoints;
+        }
+
         //todo refactor this so the sprite moves through each square and doesn't just teleport
         public void MoveTo(Tile tile, int apMovementCost)
         {
@@ -174,19 +180,17 @@ namespace Assets.Scripts.Entities
 
             _equipment = new Equipment(EntityClass);
 
-            var testWeapon = itemStore.GetRandomEquipableItem(EquipLocation.Weapon);
+            var testWeapon = itemStore.GetItemTypeByName("Crossbow");
             
-            Equip(testWeapon);
+            Equip((EquipableItem) testWeapon.NewItem());
 
             var testArmor = itemStore.GetRandomEquipableItem(EquipLocation.Body);
 
             Equip(testArmor);
 
-            var testHelmet = itemStore.GetRandomEquipableItem(EquipLocation.Helmet);
+            var testHelmet = itemStore.GetItemTypeByName("Bycocket"); //todo testing
 
-            var stoneFaceType = itemStore.GetItemTypeByName("Unicorn Helmet"); //todo testing
-
-            Equip((EquipableItem) stoneFaceType.NewItem());
+            Equip((EquipableItem)testHelmet.NewItem());
 
             var testBoots = itemStore.GetRandomEquipableItem(EquipLocation.Boots);
 
@@ -281,7 +285,7 @@ namespace Assets.Scripts.Entities
 
             if (AttackHit(hitChance, target)) 
             {
-                ApplyDamage(target);
+                ApplyDamage(target, false);
 
                 if (target.IsDead())
                 {
@@ -308,19 +312,80 @@ namespace Assets.Scripts.Entities
 
         public void MeleeAttackWithSlot(Entity target, EquipLocation slot)
         {
-            //todo attack with item in slot
+            var hitChance = CalculateChanceToHitMelee(target);
+
+            if (AttackHit(hitChance, target))
+            {
+                ApplyDamage(target, false, slot);
+
+                if (target.IsDead())
+                {
+                    //todo sound for dying peep
+
+                    var message = $"{Name} killed {target.Name}!";
+
+                    EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+
+                    eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                }
+                else
+                {
+                    //todo check for abilities that respond to attack hit
+
+                    if (target.HasAbility(typeof(Riposte))) //todo hail mary not sure if this will work
+                    {
+                        target.Abilities[typeof(Riposte)].Use(this);
+                    }
+
+                }
+            }
         }
 
         public void RangedAttack(Entity target)
         {
-            throw new NotImplementedException();
+            var hitChance = CalculateChanceToHitRanged(target);
+
+            if (AttackHit(hitChance, target))
+            {
+                ApplyDamage(target, true);
+
+                if (target.IsDead())
+                {
+                    //todo sound for dying peep
+
+                    var message = $"{Name} killed {target.Name}!";
+
+                    EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+
+                    eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                }
+                else
+                {
+                    //todo check for abilities that respond to attack hit
+
+                    if (target.HasAbility(typeof(Riposte))) //todo hail mary not sure if this will work
+                    {
+                        target.Abilities[typeof(Riposte)].Use(this);
+                    }
+
+                }
+            }
         }
 
-        public void ApplyDamage(Entity target)
+        public void ApplyDamage(Entity target, bool ranged, EquipLocation slot = EquipLocation.Weapon)
         {
-            var equippedWeapon = _equipment.GetItemInSlot(EquipLocation.Weapon);
+            var equippedItem = _equipment.GetItemInSlot(slot);
 
-            var (minDamage, maxDamage) = equippedWeapon.GetMeleeDamageRange();
+            int minDamage;
+            int maxDamage;
+            if (ranged)
+            {
+                (minDamage, maxDamage) = equippedItem.GetRangedDamageRange();
+            }
+            else
+            {
+                (minDamage, maxDamage) = equippedItem.GetMeleeDamageRange();
+            }
 
             var damage = Random.Range(minDamage, maxDamage + 1) + Stats.Attack;
 
@@ -341,8 +406,16 @@ namespace Assets.Scripts.Entities
 
         public bool HasMissileWeaponEquipped()
         {
-            //todo
-            return true;
+            var equippedWeapon = _equipment.GetItemInSlot(EquipLocation.Weapon);
+
+            if (equippedWeapon == null)
+            {
+                return false;
+            }
+
+            var (min, max) = equippedWeapon.GetRangedDamageRange();
+
+            return min > 0 && max > 0;
         }
 
         public int GetTotalArmorToughness()
@@ -392,28 +465,28 @@ namespace Assets.Scripts.Entities
 
         public int CalculateChanceToHitMelee(Entity target)
         {
-            //todo might need enums for to hit and damage etc so we can use modifier providers.
-
             var total = CalculateBaseChanceToHit(target);
 
-            if (HasAbility(typeof(GuidedStrikes)))
-            {
-                total += GuidedStrikes.GetToHitBonus();
-            }
+            total += (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.MeleeToHit);
+
+            // if (HasAbility(typeof(GuidedStrikes)))
+            // {
+            //     total += GuidedStrikes.GetToHitBonus();
+            // }
 
             return total;
         }
 
         public int CalculateChanceToHitRanged(Entity target)
         {
-            //todo might need enums for to hit and damage etc so we can use modifier providers.
-
             var total = CalculateBaseChanceToHit(target);
 
-            if (HasAbility(typeof(Calculated)))
-            {
-                total += Calculated.GetToHitBonus();
-            }
+            total += (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.RangedToHit);
+
+            // if (HasAbility(typeof(Calculated)))
+            // {
+            //     total += Calculated.GetToHitBonus();
+            // }
 
             return total;
         }

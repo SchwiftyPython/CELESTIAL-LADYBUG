@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Assets.Scripts.Entities;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -189,6 +190,100 @@ namespace Assets.Scripts
             var arr = (T[])Enum.GetValues(src.GetType());
             var j = Array.IndexOf(arr, src) + 1;
             return arr.Length == j ? arr[0] : arr[j];
+        }
+
+        /// <summary>
+        /// Returns all additive modifiers in equipment and abilities for the given ModType.
+        /// </summary>
+        public static float GetAdditiveModifiers(Entity parent, Enum modType)
+        {
+            float total = 0;
+
+            var equipment = parent.GetEquipment();
+
+            if (equipment == null)
+            {
+                return total;
+            }
+
+            foreach (EquipLocation slot in Enum.GetValues(typeof(EquipLocation)))
+            {
+                var item = equipment.GetItemInSlot(slot);
+
+                if (item == null)
+                {
+                    continue;
+                }
+
+                foreach (var modifier in item.GetAdditiveModifiers(modType))
+                {
+                    total += modifier;
+                }
+            }
+
+            var abilities = parent.Abilities;
+
+            foreach (var ability in abilities.Values)
+            {
+                if (!(ability is IModifierProvider provider))
+                {
+                    continue;
+                }
+
+                foreach (var modifier in provider.GetAdditiveModifiers(modType))
+                {
+                    total += modifier;
+                }
+            }
+
+            return total;
+        }
+
+        /// <summary>
+        /// Returns all percentage modifiers in equipment and abilities for the given ModType.
+        /// </summary>
+        public static float GetPercentageModifiers(Entity parent, Enum modType)
+        {
+            float total = 0;
+
+            var equipment = parent.GetEquipment();
+
+            if (equipment == null)
+            {
+                return total;
+            }
+
+            foreach (EquipLocation slot in Enum.GetValues(typeof(EquipLocation)))
+            {
+                var item = equipment.GetItemInSlot(slot);
+
+                if (item == null)
+                {
+                    continue;
+                }
+
+                foreach (var modifier in item.GetPercentageModifiers(modType))
+                {
+                    total += modifier;
+                }
+            }
+
+            var abilities = parent.Abilities;
+
+            foreach (var ability in abilities.Values)
+            {
+                if (!(ability is IModifierProvider provider))
+                {
+                    continue;
+                }
+
+                foreach (var modifier in provider.GetPercentageModifiers(modType))
+                {
+                    total += modifier;
+                }
+            }
+
+            return total;
         }
 
         public static string RandomString(int size, bool lowerCase = false)

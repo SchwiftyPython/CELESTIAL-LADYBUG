@@ -101,6 +101,8 @@ namespace Assets.Scripts.Combat
 
                     ActiveEntity = TurnOrder.Peek();
 
+                    ActiveEntity.RefillActionPoints();
+
                     HighlightActiveEntitySprite();
 
                     if (ActiveEntityPlayerControlled())
@@ -137,8 +139,7 @@ namespace Assets.Scripts.Combat
                     {
                         ActiveEntity = GetNextInTurnOrder();
 
-                        //todo make a method for this in Entity
-                        ActiveEntity.Stats.CurrentActionPoints = ActiveEntity.Stats.MaxActionPoints;
+                        ActiveEntity.RefillActionPoints();
 
                         HighlightActiveEntitySprite();
 

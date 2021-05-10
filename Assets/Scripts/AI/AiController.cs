@@ -31,7 +31,6 @@ namespace Assets.Scripts.AI
         {
             _actionAvailable = true;
 
-            //todo this if should probably be a while loop
             while (Self.Stats.CurrentActionPoints > 0 && _actionAvailable)
             {
                 if (Target == null || Target.IsDead())
@@ -45,14 +44,18 @@ namespace Assets.Scripts.AI
                     continue;
                 }
 
-                //todo find distance to target
                 var distance = Distance.CHEBYSHEV.Calculate(Self.Position, Target.Position);
 
                 var usableAbilities = new List<Ability>();
 
                 foreach (var ability in Self.Abilities.Values)
                 {
-                    if (ability.Range >= distance && Self.Stats.CurrentActionPoints >= ability.ApCost)
+                    if (ability.IsPassive || ability.Range < distance)
+                    {
+                        continue;
+                    }
+
+                    if ((ability.Range == 1 || ability.Range > 1 && Self.HasMissileWeaponEquipped()) && Self.Stats.CurrentActionPoints >= ability.ApCost)
                     {
                         usableAbilities.Add(ability);
                     }

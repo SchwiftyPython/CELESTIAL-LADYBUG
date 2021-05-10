@@ -5,17 +5,17 @@ using Assets.Scripts.Entities;
 
 namespace Assets.Scripts.Abilities
 {
-    public class Calculated : Ability
+    public class Snapshot : Ability, IModifierProvider
     {
-        private const int ToHitBonus = 3;
+        private const int ToHitMod = -4;
 
-        public Calculated(Entity abilityOwner) : base("Calculated", $"+{ToHitBonus} to hit on ranged attacks.", -1, -1, abilityOwner, false, true)
+        public Snapshot(Entity abilityOwner) : base("Snapshot", $"Take a quick shot at the cost of accuracy.\n{ToHitMod}% chance to hit", 4, 5, abilityOwner, true, false)
         {
         }
 
-        public static int GetToHitBonus()
+        public static int GetToHitMod()
         {
-            return ToHitBonus;
+            return ToHitMod;
         }
 
         public IEnumerable<float> GetAdditiveModifiers(Enum stat)
@@ -27,7 +27,7 @@ namespace Assets.Scripts.Abilities
 
             if (statType == CombatModifierTypes.RangedToHit)
             {
-                yield return ToHitBonus;
+                yield return ToHitMod;
             }
         }
 

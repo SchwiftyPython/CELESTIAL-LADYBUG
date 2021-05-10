@@ -1,14 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Xml;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Entities;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.UI
 {
     public class UseAbilityButton : MonoBehaviour, ISubscriber, IAbilityHolder
     {
+        private Color EnabledColor = Color.white;
+        private Color DisabledColor = new Color32((byte) 4F, (byte) 4F, (byte) 4F, byte.MaxValue);
+        
         private Button _button;
 
         private Queue<Entity> _targets;
@@ -53,11 +59,19 @@ namespace Assets.Scripts.UI
         public void EnableButton()
         {
             _button.interactable = true;
+
+            var iconImage = IconImageParent.GetComponent<Image>();
+
+            iconImage.color = EnabledColor;
         }
 
         public void DisableButton()
         {
-            _button.interactable = false; 
+            _button.interactable = false;
+
+            var iconImage = IconImageParent.GetComponent<Image>();
+
+            iconImage.color = DisabledColor;
         }
 
         public void OnClick()

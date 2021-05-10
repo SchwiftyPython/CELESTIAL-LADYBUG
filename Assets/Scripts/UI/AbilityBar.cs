@@ -112,7 +112,7 @@ namespace Assets.Scripts.UI
                 return false;
             }
 
-            CombatManager combatManager = FindObjectOfType<CombatManager>();
+            var combatManager = FindObjectOfType<CombatManager>();
 
             var allEntities = combatManager.TurnOrder.ToList();
 
@@ -128,7 +128,8 @@ namespace Assets.Scripts.UI
 
                 if (ability.Range >= distance)
                 {
-                    return true;
+                    //todo going to have to check book slot too for spells
+                    return ability.Range <= 1 || ability.AbilityOwner.HasMissileWeaponEquipped();
                 }
             }
 

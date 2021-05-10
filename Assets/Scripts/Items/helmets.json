@@ -100,7 +100,7 @@
     },
     "Abilities": 
 	[
-	  "Eats Veggies"	  
+	  "Well Fed"	  
 	],
 	"Range": -1,
     "Sprite": "bear_head",
@@ -122,7 +122,7 @@
     },
     "Abilities": 
 	[
-	  "Careful Aim",
+	  "Calculated",
       "Snapshot"	  
 	],
 	"Range": -1,

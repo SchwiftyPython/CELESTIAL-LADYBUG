@@ -178,7 +178,7 @@ namespace Assets.Scripts.Combat
                             return;
                         }
 
-                        if (_selectedTile == targetTile)
+                        if (ReferenceEquals(_selectedTile, targetTile))
                         {
                             var activeEntity = _combatManager.ActiveEntity;
 

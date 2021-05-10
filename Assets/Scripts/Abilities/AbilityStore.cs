@@ -19,23 +19,8 @@ namespace Assets.Scripts.Abilities
             {"divine intervention", abilityOwner => new DivineIntervention(abilityOwner)},
             {"endangered endurance", abilityOwner => new EndangeredEndurance(abilityOwner)},
             {"helmet charge", abilityOwner => new HelmetCharge(abilityOwner)},
+            {"snapshot", abilityOwner => new Snapshot(abilityOwner)},
         };
-
-        //public static AbilityStore Instance;
-
-        /*private void Start()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else if (Instance != this)
-            {
-                Destroy(gameObject);
-            }
-
-            DontDestroyOnLoad(gameObject);
-        }*/
 
         public Ability GetAbilityByName(string abilityName, Entity abilityOwner)
         {
