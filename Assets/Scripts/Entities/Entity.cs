@@ -66,8 +66,8 @@ namespace Assets.Scripts.Entities
                     Race = PickRace();
                 }
 
-                //EntityClass = PickEntityClass(); //todo testing
-                EntityClass = EntityClass.Crossbowman;
+                //EntityClass = PickEntityClass();
+                EntityClass = EntityClass.Crossbowman; //todo testing
 
                 while (EntityClass == EntityClass.Derpus)
                 {
@@ -90,7 +90,7 @@ namespace Assets.Scripts.Entities
                 }
             }
 
-            Attributes = new Attributes();
+            Attributes = new Attributes(this);
             Skills = new Skills(this);
 
             Abilities = new Dictionary<Type, Ability>();
@@ -180,7 +180,7 @@ namespace Assets.Scripts.Entities
 
             _equipment = new Equipment(EntityClass);
 
-            var testWeapon = itemStore.GetItemTypeByName("Crossbow");
+            var testWeapon = itemStore.GetItemTypeByName("Heavy Crossbow");
             
             Equip((EquipableItem) testWeapon.NewItem());
 
@@ -188,7 +188,7 @@ namespace Assets.Scripts.Entities
 
             Equip(testArmor);
 
-            var testHelmet = itemStore.GetItemTypeByName("Bycocket"); //todo testing
+            var testHelmet = itemStore.GetItemTypeByName("Demon Helmet"); //todo testing
 
             Equip((EquipableItem)testHelmet.NewItem());
 
@@ -399,7 +399,23 @@ namespace Assets.Scripts.Entities
 
             var message = $"{Name} dealt {damage} damage to {target.Name}!";
 
-            EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+
+            if (!target.HasAbility(typeof(DemonicIntervention)))
+            {
+                return;
+            }
+
+            if (!DemonicIntervention.Intervened())
+            {
+                return;
+            }
+
+            SubtractHealth(damage);
+
+            message = $"Demonic Intervention! {target.Name} dealt {damage} damage to {Name}!";
 
             eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
         }
@@ -418,7 +434,7 @@ namespace Assets.Scripts.Entities
             return min > 0 && max > 0;
         }
 
-        public int GetTotalArmorToughness()
+        private int GetTotalArmorToughness()
         {
             var toughnessTotal = 0;
 
@@ -491,7 +507,7 @@ namespace Assets.Scripts.Entities
             return total;
         }
 
-        public int CalculateBaseChanceToHit(Entity target)
+        private int CalculateBaseChanceToHit(Entity target)
         {
             Debug.Log($"Attacker Melee Skill: {Stats.MeleeSkill}");
             Debug.Log($"Defender Melee Skill: {target.Stats.MeleeSkill}");
@@ -499,9 +515,9 @@ namespace Assets.Scripts.Entities
             return Stats.MeleeSkill - target.Stats.MeleeSkill / 10;
         }
 
-        public bool AttackHit(int chanceToHit, Entity target)
+        private bool AttackHit(int chanceToHit, Entity target)
         {
-            EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
 
             //todo diceroller
             var roll = Random.Range(1, 101);
@@ -525,7 +541,7 @@ namespace Assets.Scripts.Entities
 
                 eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
-                eventMediator.Broadcast(GlobalHelper.MeleeHit, this);
+                eventMediator.Broadcast(GlobalHelper.TargetHit, this, target);
 
                 return true;
             }
@@ -534,7 +550,7 @@ namespace Assets.Scripts.Entities
 
             eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
-            eventMediator.Broadcast(GlobalHelper.MeleeMiss, this);
+            eventMediator.Broadcast(GlobalHelper.TargetMiss, this);
 
             return false;
         }

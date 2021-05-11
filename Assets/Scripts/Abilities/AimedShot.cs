@@ -5,11 +5,12 @@ using Assets.Scripts.Entities;
 
 namespace Assets.Scripts.Abilities
 {
-    public class Snapshot : Ability, IModifierProvider
+    public class AimedShot : Ability, IModifierProvider
     {
-        private const int ToHitMod = -4;
+        private const int ToHitBonus = 10;
 
-        public Snapshot(Entity abilityOwner) : base("Snapshot", $"Take a quick shot at the cost of accuracy.\n{ToHitMod}% chance to hit", 4, 5, abilityOwner, true, false)
+        public AimedShot(Entity abilityOwner) : base("Aimed Shot", $"+{ToHitBonus}% to hit.", 7, 7, abilityOwner, true,
+            false)
         {
         }
 
@@ -22,7 +23,7 @@ namespace Assets.Scripts.Abilities
 
             if (statType == CombatModifierTypes.RangedToHit)
             {
-                yield return ToHitMod;
+                yield return ToHitBonus;
             }
         }
 

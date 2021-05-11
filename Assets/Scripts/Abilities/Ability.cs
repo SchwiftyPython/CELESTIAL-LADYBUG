@@ -97,11 +97,11 @@ namespace Assets.Scripts.Abilities
             int damageMax;
             if (IsRanged())
             {
-                (damageMin, damageMax) = combatManager.ActiveEntity.GetEquippedWeapon().GetRangedDamageRange();
+                (damageMin, damageMax) = AbilityOwner.GetEquippedWeapon().GetRangedDamageRange();
             }
             else
             {
-                (damageMin, damageMax) = combatManager.ActiveEntity.GetEquippedWeapon().GetMeleeDamageRange();
+                (damageMin, damageMax) = AbilityOwner.GetEquippedWeapon().GetMeleeDamageRange();
             }
 
             return (damageMin, damageMax);
@@ -109,6 +109,8 @@ namespace Assets.Scripts.Abilities
 
         private bool HasLineOfSight(IGameObject target)
         {
+            //todo need to allow for some objects to be shot around at a penalty, but some objects should completely block los
+
             var line = Lines.Get(AbilityOwner.Position, target.Position).ToList();
 
             var combatManager = Object.FindObjectOfType<CombatManager>();

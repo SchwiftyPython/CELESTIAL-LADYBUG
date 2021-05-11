@@ -20,6 +20,11 @@ namespace Assets.Scripts.Abilities
             {"endangered endurance", abilityOwner => new EndangeredEndurance(abilityOwner)},
             {"helmet charge", abilityOwner => new HelmetCharge(abilityOwner)},
             {"snapshot", abilityOwner => new Snapshot(abilityOwner)},
+            {"demonic intervention", abilityOwner => new DemonicIntervention(abilityOwner)},
+            {"works out", abilityOwner => new WorksOut(abilityOwner)},
+            {"shoot", abilityOwner => new Shoot(abilityOwner)},
+            {"aimed shot", abilityOwner => new AimedShot(abilityOwner)},
+            {"knockback", abilityOwner => new Knockback(abilityOwner)},
         };
 
         public Ability GetAbilityByName(string abilityName, Entity abilityOwner)

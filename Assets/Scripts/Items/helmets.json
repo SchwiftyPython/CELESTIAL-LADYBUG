@@ -165,7 +165,7 @@
     "Abilities": 
 	[
 	  "Demonic Intervention",
-	  "Eats Veggies",
+	  "Well Fed",
 	  "Works Out"
 	],
 	"Range": -1,
@@ -188,7 +188,7 @@
     },
     "Abilities": 
 	[	  
-	  "Eats Veggies"	  
+	  "Well Fed"	  
 	],
 	"Range": -1,
     "Sprite": "insect_helmet",

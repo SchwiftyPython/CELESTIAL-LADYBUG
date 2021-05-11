@@ -61,8 +61,6 @@ namespace Assets.Scripts.AI
                     }
                 }
 
-                //todo if greater than any combat ability range, move
-                //todo else attack
                 if (usableAbilities.Count < 1)
                 {
                     Move();
@@ -77,7 +75,7 @@ namespace Assets.Scripts.AI
             eventMediator.Broadcast(GlobalHelper.EndTurn, this);
         }
 
-        public void Move()
+        private void Move()
         {
             //todo if path is not null and target hasn't moved don't calc new path
             //todo get path to target
@@ -104,14 +102,14 @@ namespace Assets.Scripts.AI
             Self.MoveTo(tileStep, tileStep.ApCost);
         }
 
-        public void Attack(List<Ability> usableAbilities)
+        private void Attack(List<Ability> usableAbilities)
         {
             //todo choose an ability at random and do it
 
             usableAbilities[Random.Range(0, usableAbilities.Count)].Use(Target);
         }
 
-        private Entity FindTarget()
+        private static Entity FindTarget()
         {
             var combatManager = FindObjectOfType<CombatManager>();
             var targets = combatManager.TurnOrder.ToList();
