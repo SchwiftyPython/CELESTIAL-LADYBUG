@@ -58,7 +58,7 @@
   },
   "Designer Boots":
   {
-	"Description": "Better for the runway than battle probably.",  
+	"Description": "Better for the runway than battle probably. Their shininess is distracting!",  
     "Parent": "Leather Boots",
     "Melee": {},
     "Ranged": {},
@@ -69,13 +69,13 @@
     },
     "Abilities": 
 	[
-	    "Distract"
+	    "Distracting"
 	],
 	"Range": -1,
     "Sprite": "sexy_boots",
     "Slot": "boots",
 	"Stackable": false,
-	"Price": 50,
+	"Price": 505,
 	"TwoHanded" : false
   },
   "Quick Boots":

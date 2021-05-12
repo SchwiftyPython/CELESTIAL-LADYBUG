@@ -20,9 +20,6 @@ namespace Assets.Scripts.UI
             if (ability.IsPassive)
             {
                 _apDamageParent.SetActive(false);
-
-                // _apCostText.gameObject.SetActive(false);
-                // _damageText.gameObject.SetActive(false);
             }
             else
             {
@@ -33,9 +30,6 @@ namespace Assets.Scripts.UI
                 _damageText.text = $"Deals {damageMin} - {damageMax} damage";
 
                 _apDamageParent.SetActive(true);
-
-                // _apCostText.gameObject.SetActive(true);
-                // _damageText.gameObject.SetActive(true);
             }
         }
     }

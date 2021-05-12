@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Effects;
 using GoRogue;
 using GoRogue.GameFramework;
 using GameObject = GoRogue.GameFramework.GameObject;
@@ -12,6 +13,8 @@ namespace Assets.Scripts.Combat
         private IGameObject _backingField;
 
         private string _prefabName;
+
+        private List<Effect> _effects;
 
         public UnityEngine.GameObject PrefabTexture { get; private set; }
 
@@ -72,6 +75,27 @@ namespace Assets.Scripts.Combat
             return ((CombatMap)CurrentMap).GetTileAt(neighbors.First());
         }
 
+        public List<Tile> GetAdjacentTiles()
+        {
+            var neighbors = AdjacencyRule.EIGHT_WAY.NeighborsClockwise(Position);
+
+            var tiles = new List<Tile>();
+
+            foreach (var coord in neighbors)
+            {
+                var tile = ((CombatMap)CurrentMap).GetTileAt(coord);
+
+                if (tile == null)
+                {
+                    continue;
+                }
+
+                tiles.Add(tile);
+            }
+
+            return tiles;
+        }
+
         public void AddComponent(object component)
         {
             _backingField.AddComponent(component);
@@ -110,6 +134,44 @@ namespace Assets.Scripts.Combat
         public void RemoveComponents(params object[] components)
         {
             _backingField.RemoveComponents(components);
+        }
+
+        public void AddEffect(Effect effect)
+        {
+            if (_effects == null)
+            {
+                _effects = new List<Effect>();
+            }
+
+            _effects.Add(effect);
+        }
+
+        public void RemoveEffect(Effect effect)
+        {
+            _effects.Remove(effect);
+        }
+
+        public bool HasEffect(Effect effect)
+        {
+            if (_effects == null || _effects.Count < 1)
+            {
+                return false;
+            }
+
+            foreach (var activeEffect in _effects)
+            {
+                if (ReferenceEquals(activeEffect, effect))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public List<Effect> GetEffects()
+        {
+            return _effects;
         }
 
         public bool MoveIn(Direction direction)

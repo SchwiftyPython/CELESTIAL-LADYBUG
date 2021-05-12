@@ -60,6 +60,10 @@ namespace Assets.Scripts.Abilities
             return 0;
         }
 
+        public virtual void SetupForCombat()
+        {
+        }
+
         public bool TargetInRange(Entity target)
         {
             var distance = Distance.CHEBYSHEV.Calculate(AbilityOwner.Position, target.Position);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -195,7 +196,7 @@ namespace Assets.Scripts
         }
 
         /// <summary>
-        /// Returns all additive modifiers in equipment and abilities for the given ModType.
+        /// Returns all additive modifiers in equipment, abilities, and effects for the given ModType.
         /// </summary>
         public static float GetAdditiveModifiers(Entity parent, Enum modType)
         {
@@ -217,32 +218,19 @@ namespace Assets.Scripts
                     continue;
                 }
 
-                foreach (var modifier in item.GetAdditiveModifiers(modType))
-                {
-                    total += modifier;
-                }
+                total += item.GetAdditiveModifiers(modType).Sum();
             }
 
             var abilities = parent.Abilities;
 
-            foreach (var ability in abilities.Values)
-            {
-                if (!(ability is IModifierProvider provider))
-                {
-                    continue;
-                }
-
-                foreach (var modifier in provider.GetAdditiveModifiers(modType))
-                {
-                    total += modifier;
-                }
-            }
+            total += GetAdditiveModifiersInCollection(abilities.Values, modType);
+            total += GetAdditiveModifiersInCollection(parent.Effects, modType);
 
             return total;
         }
 
         /// <summary>
-        /// Returns all percentage modifiers in equipment and abilities for the given ModType.
+        /// Returns all percentage modifiers in equipment, abilities, and effects for the given ModType.
         /// </summary>
         public static float GetPercentageModifiers(Entity parent, Enum modType)
         {
@@ -264,28 +252,59 @@ namespace Assets.Scripts
                     continue;
                 }
 
-                foreach (var modifier in item.GetPercentageModifiers(modType))
-                {
-                    total += modifier;
-                }
+                total += item.GetPercentageModifiers(modType).Sum();
             }
 
             var abilities = parent.Abilities;
 
-            foreach (var ability in abilities.Values)
+            total += GetPercentageModifiersInCollection(abilities.Values, modType);
+            total += GetPercentageModifiersInCollection(parent.Effects, modType);
+
+            return total;
+        }
+
+        private static int GetAdditiveModifiersInCollection<T>(IReadOnlyCollection<T> collection, Enum modType)
+        {
+            var total = 0f;
+
+            if (collection == null || !collection.Any())
             {
-                if (!(ability is IModifierProvider provider))
+                return (int) total;
+            }
+
+            foreach (var item in collection)
+            {
+                if (!(item is IModifierProvider provider))
                 {
                     continue;
                 }
 
-                foreach (var modifier in provider.GetPercentageModifiers(modType))
-                {
-                    total += modifier;
-                }
+                total += provider.GetAdditiveModifiers(modType).Sum();
             }
 
-            return total;
+            return (int) total;
+        }
+
+        private static int GetPercentageModifiersInCollection<T>(IReadOnlyCollection<T> collection, Enum modType)
+        {
+            var total = 0f;
+
+            if (collection == null || !collection.Any())
+            {
+                return (int)total;
+            }
+
+            foreach (var item in collection)
+            {
+                if (!(item is IModifierProvider provider))
+                {
+                    continue;
+                }
+
+                total += provider.GetPercentageModifiers(modType).Sum();
+            }
+
+            return (int)total;
         }
 
         public static string RandomString(int size, bool lowerCase = false)

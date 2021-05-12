@@ -104,7 +104,7 @@ namespace Assets.Scripts.AI
 
         private void Attack(List<Ability> usableAbilities)
         {
-            //todo choose an ability at random and do it
+            //todo choose a hostile ability at random and do it
 
             usableAbilities[Random.Range(0, usableAbilities.Count)].Use(Target);
         }

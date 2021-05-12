@@ -1,8 +1,6 @@
-﻿using System;
-using Assets.Scripts.Combat;
+﻿using Assets.Scripts.Combat;
 using Assets.Scripts.Entities;
 using GoRogue;
-using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Abilities

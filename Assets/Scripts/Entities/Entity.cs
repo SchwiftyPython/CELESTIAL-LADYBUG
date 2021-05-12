@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.AI;
 using Assets.Scripts.Combat;
+using Assets.Scripts.Effects;
 using Assets.Scripts.Entities.Names;
 using Assets.Scripts.Items;
 using Assets.Scripts.UI;
@@ -19,8 +21,6 @@ namespace Assets.Scripts.Entities
         private int _level;
         private int _xp;
         private bool _isPlayer;
-
-        private List<Effect> _effects;
 
         private Equipment _equipment;
 
@@ -41,7 +41,9 @@ namespace Assets.Scripts.Entities
         public Dictionary<Portrait.Slot, string> Portrait { get; private set; }
         //public Weapon EquippedWeapon { get; private set; }
         public Dictionary<Type, Ability> Abilities { get; private set; }
-        
+
+        public List<Effect> Effects { get; set; }
+
         public UnityEngine.GameObject CombatSpritePrefab { get; private set; }
         public UnityEngine.GameObject CombatSpriteInstance { get; private set; }
         public Sprite UiSprite { get; private set; } //todo setup a sprite store that can give us the combat and ui sprites needed
@@ -98,6 +100,8 @@ namespace Assets.Scripts.Entities
             GenerateStartingEquipment();
 
             Stats = new Stats(this, Attributes, Skills);
+
+            Effects = new List<Effect>();
 
             GeneratePortrait();
 
@@ -167,14 +171,53 @@ namespace Assets.Scripts.Entities
 
             CombatSpriteInstance.transform.position = new Vector3(Position.X, Position.Y);
 
-            EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
 
             eventMediator.Broadcast(GlobalHelper.ActiveEntityMoved, this);
+
+            //var tileEffects = tile.GetComponents<Effect>().ToList();
+            var tileEffects = tile.GetEffects();
+
+            if (Effects.Count > 0)
+            {
+                foreach (var effect in Effects.ToArray())
+                {
+                    if (!effect.IsLocationDependent())
+                    {
+                        continue;
+                    }
+
+                    if (tileEffects.Any())
+                    {
+                        foreach (var tileEffect in tileEffects)
+                        {
+                            if (ReferenceEquals(tileEffect, effect))
+                            {
+                                continue;
+                            }
+
+                            RemoveEffect(effect);
+                        }
+                    }
+                    else
+                    {
+                        RemoveEffect(effect);
+                    }
+                }
+            }
+
+            if (tileEffects.Any())
+            {
+                foreach (var effect in tileEffects)
+                {
+                    ApplyEffect(effect);
+                }
+            }
         }
 
         public void GenerateStartingEquipment()
         {
-            ItemStore itemStore = Object.FindObjectOfType<ItemStore>();
+            var itemStore = Object.FindObjectOfType<ItemStore>();
 
             //todo not implemented - temp for testing
 
@@ -192,9 +235,9 @@ namespace Assets.Scripts.Entities
 
             Equip((EquipableItem)testHelmet.NewItem());
 
-            var testBoots = itemStore.GetRandomEquipableItem(EquipLocation.Boots);
+            var testBoots = itemStore.GetItemTypeByName("Designer Boots");
 
-            Equip(testBoots);
+            Equip((EquipableItem) testBoots.NewItem());
 
             var testGloves = itemStore.GetRandomEquipableItem(EquipLocation.Gloves);
 
@@ -251,7 +294,7 @@ namespace Assets.Scripts.Entities
                 return;
             }
 
-            EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
 
             eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this);
         }
@@ -293,7 +336,7 @@ namespace Assets.Scripts.Entities
 
                     var message = $"{Name} killed {target.Name}!";
 
-                    EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+                    var eventMediator = Object.FindObjectOfType<EventMediator>();
 
                     eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
                 }
@@ -324,7 +367,7 @@ namespace Assets.Scripts.Entities
 
                     var message = $"{Name} killed {target.Name}!";
 
-                    EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+                    var eventMediator = Object.FindObjectOfType<EventMediator>();
 
                     eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
                 }
@@ -355,7 +398,7 @@ namespace Assets.Scripts.Entities
 
                     var message = $"{Name} killed {target.Name}!";
 
-                    EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+                    var eventMediator = Object.FindObjectOfType<EventMediator>();
 
                     eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
                 }
@@ -485,11 +528,6 @@ namespace Assets.Scripts.Entities
 
             total += (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.MeleeToHit);
 
-            // if (HasAbility(typeof(GuidedStrikes)))
-            // {
-            //     total += GuidedStrikes.GetToHitBonus();
-            // }
-
             return total;
         }
 
@@ -498,11 +536,6 @@ namespace Assets.Scripts.Entities
             var total = CalculateBaseChanceToHit(target);
 
             total += (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.RangedToHit);
-
-            // if (HasAbility(typeof(Calculated)))
-            // {
-            //     total += Calculated.GetToHitBonus();
-            // }
 
             return total;
         }
@@ -629,12 +662,33 @@ namespace Assets.Scripts.Entities
 
         public void ApplyEffect(Effect effect)
         {
-            //todo
+            if (Effects == null)
+            {
+                Effects = new List<Effect>();
+            }
+
+            if (!effect.CanStack())
+            {
+                foreach (var existingEffect in Effects)
+                {
+                    if (existingEffect.GetType() == effect.GetType())
+                    {
+                        return;
+                    }
+                }
+            }
+
+            Effects.Add(effect);
         }
 
         public void RemoveEffect(Effect effect)
         {
-            //todo
+            if (Effects == null || Effects.Count < 1)
+            {
+                return;
+            }
+
+            Effects.Remove(effect);
         }
 
         public int RollForInitiative()
@@ -673,7 +727,7 @@ namespace Assets.Scripts.Entities
 
             //todo base off of equipped items
 
-            SpriteStore spriteStore = Object.FindObjectOfType<SpriteStore>();
+            var spriteStore = Object.FindObjectOfType<SpriteStore>();
 
             foreach (Portrait.Slot slot in Enum.GetValues(typeof(Portrait.Slot)))
             {

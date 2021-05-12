@@ -4,6 +4,7 @@ using System.Linq;
 using Assets.Scripts.AI;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Travel;
+using GoRogue;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -36,6 +37,8 @@ namespace Assets.Scripts.Combat
         private EventMediator _eventMediator;
         private TravelManager _travelManager;
 
+        private List<EffectTrigger<EffectArgs>> _effectTriggers;
+
         public CombatMap Map { get; private set; }
 
         public Entity ActiveEntity { get; private set; }
@@ -48,20 +51,8 @@ namespace Assets.Scripts.Combat
 
         public GameObject PrototypePawnHighlighterPrefab;
 
-        //public static CombatManager Instance;
-
         private void Awake()
         {
-            // if (Instance == null)
-            // {
-            //     Instance = this;
-            // }
-            // else if (Instance != this)
-            // {
-            //     Destroy(gameObject);
-            // }
-            // DontDestroyOnLoad(gameObject);
-
             _currentCombatState = CombatState.NotActive;
 
             _eventMediator = FindObjectOfType<EventMediator>();
@@ -96,6 +87,14 @@ namespace Assets.Scripts.Combat
                     Map = GenerateMap(combatants);
 
                     DrawMap();
+
+                    foreach (var combatant in combatants)
+                    {
+                        foreach (var ability in combatant.Abilities.Values)
+                        {
+                            ability.SetupForCombat();
+                        }
+                    }
 
                     TurnOrder = DetermineTurnOrder(combatants);
 
