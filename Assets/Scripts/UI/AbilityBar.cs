@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Entities;
@@ -13,15 +12,7 @@ namespace Assets.Scripts.UI
     {
         private const string RefreshEvent = GlobalHelper.RefreshCombatUi;
 
-        //private static Dictionary<string, Sprite> _abilityIcons;
-
         private Entity _activeEntity;
-
-        #region AbilityIcons
-
-        public Sprite SlashIcon;
-
-        #endregion
 
         public Transform AbilityButtonParent;
 
@@ -29,23 +20,14 @@ namespace Assets.Scripts.UI
 
         private void Start()
         {
-            EventMediator eventMediator = FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
 
             eventMediator.SubscribeToEvent(RefreshEvent, this);
         }
 
-        public static void AssignAbilityToButton(Ability ability, GameObject buttonParent)
+        private static void AssignAbilityToButton(Ability ability, GameObject buttonParent)
         {
             var buttonScript = buttonParent.GetComponent<Button>().GetComponent<UseAbilityButton>();
-
-            var icon = GetIconForAbility(ability);
-
-            buttonScript.AssignAbility(ability, icon);
-        }
-
-        public static void AssignAbilityToButton(Ability ability, Button button)
-        {
-            var buttonScript = button.GetComponent<UseAbilityButton>();
 
             var icon = GetIconForAbility(ability);
 

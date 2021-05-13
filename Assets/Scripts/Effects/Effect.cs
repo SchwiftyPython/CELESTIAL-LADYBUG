@@ -16,6 +16,8 @@ namespace Assets.Scripts.Effects
             Description = description;
             LocationDependent = locationDependent;
             Stacks = stacks;
+
+            GetIconForEffect(this);
         }
 
         public bool IsLocationDependent()
@@ -28,8 +30,20 @@ namespace Assets.Scripts.Effects
             return Stacks;
         }
 
+        public string GetDescription()
+        {
+            return Description;
+        }
+
         protected override void OnTrigger(EffectArgs e)
         {
+        }
+
+        private void GetIconForEffect(Effect effect)
+        {
+            var spriteStore = Object.FindObjectOfType<SpriteStore>();
+
+            Icon = spriteStore.GetEffectSprite(effect);
         }
     }
 }

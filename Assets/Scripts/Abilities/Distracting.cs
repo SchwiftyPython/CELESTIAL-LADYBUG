@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Effects;
 using Assets.Scripts.Entities;
@@ -10,7 +9,7 @@ namespace Assets.Scripts.Abilities
     public class Distracting : Ability, ISubscriber
     {
         private List<Tile> _blindedTiles;
-        private Blinded _blindedEffect;
+        private readonly Blinded _blindedEffect;
 
         public Distracting(Entity abilityOwner) : base("Distracting", $"Anyone adjacent is Blinded.", -1, 1, abilityOwner, false, true)
         {
@@ -31,26 +30,9 @@ namespace Assets.Scripts.Abilities
         {
             foreach (var tile in _blindedTiles.ToArray())
             {
-                //tile.RemoveComponent(_blindedEffect);
-
                 tile.RemoveEffect(_blindedEffect);
 
                 _blindedTiles.Remove(tile);
-
-                var presentEntity = (Entity)tile.CurrentMap.Entities.GetItems(tile.Position).FirstOrDefault();
-
-                if (presentEntity == null)
-                {
-                    continue;
-                }
-
-                foreach (var effect in presentEntity.Effects.ToArray())
-                {
-                    if (ReferenceEquals(_blindedEffect, effect))
-                    {
-                        presentEntity.RemoveEffect(effect);
-                    }
-                }
             }
 
             var ownerPosition = AbilityOwner.Position;
@@ -64,10 +46,16 @@ namespace Assets.Scripts.Abilities
                 }
 
                 _blindedTiles.Add(tile);
+            }
+        }
 
-                var presentEntity = (Entity)tile.CurrentMap.Entities.GetItems(tile.Position).FirstOrDefault();
+        public override void Terminate()
+        {
+            foreach (var tile in _blindedTiles.ToArray())
+            {
+                tile.RemoveEffect(_blindedEffect);
 
-                presentEntity?.ApplyEffect(_blindedEffect);
+                _blindedTiles.Remove(tile);
             }
         }
 

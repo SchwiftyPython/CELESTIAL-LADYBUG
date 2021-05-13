@@ -15,7 +15,7 @@ namespace Assets.Scripts.UI
 
         private void Awake()
         {
-            EventMediator eventMediator = FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
 
             eventMediator.SubscribeToEvent(RefreshEvent, this);
             eventMediator.SubscribeToEvent(PopulateEvent, this);

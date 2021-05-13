@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Effects;
+using Assets.Scripts.Entities;
 using GoRogue;
 using GoRogue.GameFramework;
 using GameObject = GoRogue.GameFramework.GameObject;
@@ -144,11 +145,40 @@ namespace Assets.Scripts.Combat
             }
 
             _effects.Add(effect);
+
+            var presentEntity = (Entity)CurrentMap.Entities.GetItems(Position).FirstOrDefault();
+
+            presentEntity?.ApplyEffect(effect);
         }
 
         public void RemoveEffect(Effect effect)
         {
             _effects.Remove(effect);
+
+            var presentEntity = (Entity)CurrentMap.Entities.GetItems(Position).FirstOrDefault();
+
+            if (presentEntity == null)
+            {
+                return;
+            }
+
+            foreach (var entityEffect in presentEntity.Effects.ToArray())
+            {
+                if (ReferenceEquals(entityEffect, effect))
+                {
+                    presentEntity.RemoveEffect(effect);
+                }
+            }
+
+            //this is to account for more than one instance of a location based effect that doesn't stack
+            foreach (var tileEffect in _effects)
+            {
+                if (!tileEffect.CanStack() && tileEffect.GetType() == effect.GetType())
+                {
+                    presentEntity.ApplyEffect(tileEffect);
+                    break;
+                }
+            }
         }
 
         public bool HasEffect(Effect effect)

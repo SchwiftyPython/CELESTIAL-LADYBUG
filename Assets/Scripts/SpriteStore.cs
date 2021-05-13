@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Abilities;
+using Assets.Scripts.Effects;
 using Assets.Scripts.UI;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -58,33 +59,10 @@ namespace Assets.Scripts
         #endregion ItemSprites
 
         private Dictionary<string, Sprite> _abilitySpriteDictionary;
+        private Dictionary<string, Sprite> _effectSpriteDictionary;
 
         public Sprite[] AbilitySprites;
-
-        /*public static SpriteStore Instance;
-
-        private void Start()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else if (Instance != this)
-            {
-                Destroy(gameObject);
-            }
-            DontDestroyOnLoad(gameObject);
-            
-            PopulateSpriteDictionaries();
-
-            CrossbowSpriteNames = new List<string>();
-            DaggerSpriteNames = new List<string>();
-            ShieldSpriteNames = new List<string>();
-            SpearSpriteNames = new List<string>();
-            SwordSpriteNames = new List<string>();
-
-            eventMediator.Broadcast(GlobalHelper.SpritesLoaded, this);
-        }*/
+        public Sprite[] EffectSprites;
 
         public void Setup()
         {
@@ -96,7 +74,7 @@ namespace Assets.Scripts
             SpearSpriteNames = new List<string>();
             SwordSpriteNames = new List<string>();
 
-            EventMediator eventMediator = FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
 
             eventMediator.Broadcast(GlobalHelper.SpritesLoaded, this);
         }
@@ -202,11 +180,23 @@ namespace Assets.Scripts
             return _abilitySpriteDictionary[ability.Name.ToLower()];
         }
 
+        public Sprite GetEffectSprite(Effect effect)
+        {
+            if (_effectSpriteDictionary == null || !_effectSpriteDictionary.ContainsKey(effect.Name.ToLower()))
+            {
+                Debug.LogError($"Effect sprite for {effect.GetType()} does not exist!");
+                return null;
+            }
+
+            return _effectSpriteDictionary[effect.Name.ToLower()];
+        }
+
         private void PopulateSpriteDictionaries()
         {
             PopulatePortraitSprites();
             PopulateItemSprites();
             PopulateAbilitySprites();
+            PopulateEffectSprites();
         }
 
         private void PopulatePortraitSprites()
@@ -273,6 +263,11 @@ namespace Assets.Scripts
         private void PopulateAbilitySprites()
         {
             _abilitySpriteDictionary = PopulateDictionaryFromArray(AbilitySprites);
+        }
+
+        private void PopulateEffectSprites()
+        {
+            _effectSpriteDictionary = PopulateDictionaryFromArray(EffectSprites);
         }
 
         private static Dictionary<string, Sprite> PopulateDictionaryFromArray(IEnumerable<Sprite> sprites)

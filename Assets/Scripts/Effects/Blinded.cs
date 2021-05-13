@@ -9,9 +9,9 @@ namespace Assets.Scripts.Effects
     public class Blinded : Effect, IModifierProvider
     {
         private const int BlindDuration = 4;
-        private const int ToHitPenalty = -50;
+        private const int ToHitPenalty = -25;
 
-        public Blinded(bool locationDependent, int duration = BlindDuration) : base("Blinded", $"To hit chance reduced by {ToHitPenalty}%.",
+        public Blinded(bool locationDependent, int duration = BlindDuration) : base("Blinded", $"To hit chance reduced by {Math.Abs(ToHitPenalty)}%.",
             duration, locationDependent, false)
         {
         }

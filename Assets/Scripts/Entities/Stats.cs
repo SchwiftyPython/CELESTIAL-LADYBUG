@@ -69,6 +69,11 @@ namespace Assets.Scripts.Entities
                     {
                         _currentHealth = CurrentStatsMin;
 
+                        foreach (var ability in _parent.Abilities.Values) //todo might make a Die method lol
+                        {
+                            ability.Terminate();
+                        }
+
                         var eventMediator = Object.FindObjectOfType<EventMediator>();
                         eventMediator.Broadcast(GlobalHelper.EntityDead, _parent);
                     }

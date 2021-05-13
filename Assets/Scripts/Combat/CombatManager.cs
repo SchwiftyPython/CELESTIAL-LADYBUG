@@ -270,7 +270,7 @@ namespace Assets.Scripts.Combat
 
             Destroy(deadEntity.CombatSpriteInstance);
 
-            //todo remove from turn order display if refresh doesn't handle it
+            //todo remove effects that originate from player
         }
 
         private bool ActiveEntityPlayerControlled()

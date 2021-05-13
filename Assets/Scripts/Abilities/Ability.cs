@@ -111,6 +111,10 @@ namespace Assets.Scripts.Abilities
             return (damageMin, damageMax);
         }
 
+        public virtual void Terminate()
+        {
+        }
+
         private bool HasLineOfSight(IGameObject target)
         {
             //todo need to allow for some objects to be shot around at a penalty, but some objects should completely block los
