@@ -44,6 +44,8 @@ namespace Assets.Scripts.Combat
 
                     instance.transform.SetParent(transform);
 
+                    instance.GetComponent<TerrainSlotUi>().SetTile(tile);
+
                     var entity = map.GetEntity<Entity>(coord);
 
                     if (entity != null)
@@ -59,6 +61,8 @@ namespace Assets.Scripts.Combat
                             instance.AddComponent<AiController>();
                             instance.GetComponent<AiController>().SetSelf(entity);
                         }
+
+                        instance.GetComponent<TerrainSlotUi>().SetEntity(entity);
                     }
                 }
             }

@@ -12,7 +12,7 @@ namespace Assets.Scripts.Combat
         private const int MapWidth = 12;
         private const int MapHeight = 7;
 
-        public GameObject TestGrassTilePrefab; //todo move to some kind of terrain store
+        public GameObject TerrainSlotPrefab; //todo move to some kind of terrain store
 
         public static MapGenerator Instance;
 
@@ -49,7 +49,7 @@ namespace Assets.Scripts.Combat
             foreach (var position in terrainMap.Positions())
             {
                 //all floors for prototype first pass
-                map.SetTerrain(new Floor(TileType.Grass, TestGrassTilePrefab, position));
+                map.SetTerrain(new Floor(TileType.Grass, TerrainSlotPrefab, position));
             }
 
             return map;

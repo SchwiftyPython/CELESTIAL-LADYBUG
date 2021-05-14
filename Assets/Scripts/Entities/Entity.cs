@@ -165,11 +165,17 @@ namespace Assets.Scripts.Entities
 
             Stats.CurrentActionPoints -= apMovementCost;
 
+            var currentTile = ((CombatMap) CurrentMap).GetTileAt(Position);
+
+            currentTile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(null);
+
             //todo this will not update the position if blocked
             //we could make a method to encapsulate this and check if position was updated to make it more clear
             Position = tile.Position;
 
             CombatSpriteInstance.transform.position = new Vector3(Position.X, Position.Y);
+
+            tile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(this);
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 
