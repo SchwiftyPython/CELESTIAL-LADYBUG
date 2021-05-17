@@ -78,40 +78,15 @@ namespace Assets.Scripts.Combat
         {
             if (_isPlayerTurn)
             {
-                //todo need to block when an entity is selected by an ability
                 if (!_isTileSelected)
                 {
-                    //todo highlight tile or show entity info if entity present
-
                     if (MouseHitUi())
                     {
                         ClearHighlights();
                         return;
                     }
 
-                    var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-                    var mouseCoord = new Coord((int)mousePosition.x, (int)mousePosition.y);
-
-                    var entity = (Entity) _map.Entities.GetItems(mouseCoord).FirstOrDefault();
-
-                    //todo clean up
-                    if (entity == null && !_isAbilitySelected)
-                    {
-                        HighlightTileUnderMouse();
-                    }
-                    else if (entity != null)
-                    {
-                        if (_isAbilitySelected && _selectedAbility.TargetValid(entity) &&
-                            _selectedAbility.TargetInRange(entity))
-                        {
-                            ShowHitChance(entity);
-                        }
-                        else
-                        {
-                            ShowEntityInfo(entity);
-                        }
-                    }
+                    HighlightTileUnderMouse();
                 }
 
                 if (Input.GetMouseButtonDown(0))
@@ -237,6 +212,33 @@ namespace Assets.Scripts.Combat
         {
             _selectedAbility = selectedAbility;
             _isAbilitySelected = true;
+        }
+
+        public bool AbilitySelected()
+        {
+            return _isAbilitySelected;
+        }
+
+        public bool TargetInRange(Entity target)
+        {
+            return _selectedAbility.TargetInRange(target);
+        }
+
+        public bool TargetValid(Entity target)
+        {
+            return _selectedAbility.TargetValid(target);
+        }
+
+        public int GetHitChance(Entity targetEntity)
+        {
+            _selectedAbilityTarget = targetEntity;
+
+            if (_selectedAbility.IsRanged())
+            {
+                return _combatManager.ActiveEntity.CalculateChanceToHitRanged(_selectedAbilityTarget);
+            }
+
+            return _combatManager.ActiveEntity.CalculateChanceToHitMelee(_selectedAbilityTarget);
         }
 
         private void NextTarget()

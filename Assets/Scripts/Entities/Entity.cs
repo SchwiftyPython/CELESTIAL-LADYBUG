@@ -181,7 +181,6 @@ namespace Assets.Scripts.Entities
 
             eventMediator.Broadcast(GlobalHelper.ActiveEntityMoved, this);
 
-            //var tileEffects = tile.GetComponents<Effect>().ToList();
             var tileEffects = tile.GetEffects();
 
             if (Effects.Count > 0)
@@ -193,7 +192,7 @@ namespace Assets.Scripts.Entities
                         continue;
                     }
 
-                    if (tileEffects.Any())
+                    if (tileEffects != null && tileEffects.Any())
                     {
                         foreach (var tileEffect in tileEffects)
                         {
@@ -212,7 +211,7 @@ namespace Assets.Scripts.Entities
                 }
             }
 
-            if (tileEffects.Any())
+            if (tileEffects != null && tileEffects.Any())
             {
                 foreach (var effect in tileEffects)
                 {
@@ -241,7 +240,7 @@ namespace Assets.Scripts.Entities
 
             Equip((EquipableItem)testHelmet.NewItem());
 
-            var testBoots = itemStore.GetItemTypeByName("Designer Boots");
+            var testBoots = itemStore.GetItemTypeByName("Demon Feet");
 
             Equip((EquipableItem) testBoots.NewItem());
 

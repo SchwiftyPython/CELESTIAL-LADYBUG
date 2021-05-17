@@ -1,18 +1,37 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.Utilities.Tooltips;
 using UnityEngine;
 
-public class TerrainTooltipSpawner : MonoBehaviour
+namespace Assets.Scripts.UI
 {
-    // Start is called before the first frame update
-    void Start()
+    [RequireComponent(typeof(ITileHolder))]
+    [RequireComponent(typeof(IEntityHolder))]
+    public class TerrainTooltipSpawner : TooltipSpawner
     {
-        
-    }
+        public override void UpdateTooltip(GameObject tooltip)
+        {
+            var terrainTooltip = tooltip.GetComponent<TerrainTooltip>();
+            if (!terrainTooltip)
+            {
+                return;
+            }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+            var tile = GetComponent<ITileHolder>().GetTile();
+
+            terrainTooltip.Setup(tile);
+        }
+
+        public override bool CanCreateTooltip()
+        {
+            var entity = GetComponent<IEntityHolder>().GetEntity();
+
+            if (entity != null)
+            {
+                return false;
+            }
+
+            var tile = GetComponent<ITileHolder>().GetTile();
+
+            return tile != null;
+        }
     }
 }

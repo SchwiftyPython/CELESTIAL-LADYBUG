@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.UI;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.Utilities.UI.Dragging
@@ -82,7 +83,20 @@ namespace Assets.Scripts.Utilities.UI.Dragging
 
         private void DropItemIntoContainer(IDragDestination<T> destination)
         {
-            if (object.ReferenceEquals(destination, _source)) return;
+            if (ReferenceEquals(destination, _source))
+            {
+                return;
+            }
+
+            if (_source is EquipmentSlotUi sourceEquipmentSlot && sourceEquipmentSlot.IsLocked())
+            {
+                return;
+            }
+
+            if (destination is EquipmentSlotUi destEquipmentSlot && destEquipmentSlot.IsLocked())
+            {
+                return;
+            }
 
             var destinationContainer = destination as IDragContainer<T>;
             var sourceContainer = _source as IDragContainer<T>;

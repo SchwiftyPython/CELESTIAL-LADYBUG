@@ -46,6 +46,11 @@ namespace Assets.Scripts.Utilities.Tooltips
         {
             var parentCanvas = GetComponentInParent<Canvas>();
 
+            if (parentCanvas == null)
+            {
+                parentCanvas = FindObjectOfType<Canvas>();
+            }
+
             if (_tooltip && !CanCreateTooltip())
             {
                 ClearTooltip();
@@ -71,7 +76,24 @@ namespace Assets.Scripts.Utilities.Tooltips
             var tooltipCorners = new Vector3[4];
             _tooltip.GetComponent<RectTransform>().GetWorldCorners(tooltipCorners);
             var slotCorners = new Vector3[4];
-            GetComponent<RectTransform>().GetWorldCorners(slotCorners);
+
+            if (GetComponent<RectTransform>() != null)
+            {
+                GetComponent<RectTransform>().GetWorldCorners(slotCorners);
+            }
+            else
+            {
+                var position = GetComponent<Transform>().position;
+
+                position = Camera.main.WorldToScreenPoint(position);
+
+                const int offset = 90;
+
+                slotCorners[0] = new Vector3(position.x - offset, position.y - offset);
+                slotCorners[1] = new Vector3(position.x + offset, position.y - offset);
+                slotCorners[2] = new Vector3(position.x + offset, position.y + offset);
+                slotCorners[3] = new Vector3(position.x - offset, position.y + offset);
+            }
 
             var below = transform.position.y > Screen.height / 2;
             var right = transform.position.x < Screen.width / 2;

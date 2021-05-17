@@ -26,6 +26,7 @@ namespace Assets.Scripts.Abilities
             {"aimed shot", abilityOwner => new AimedShot(abilityOwner)},
             {"knockback", abilityOwner => new Knockback(abilityOwner)},
             {"distracting", abilityOwner => new Distracting(abilityOwner)},
+            {"soulbound", abilityOwner => new Soulbound(abilityOwner)},
         };
 
         public Ability GetAbilityByName(string abilityName, Entity abilityOwner)

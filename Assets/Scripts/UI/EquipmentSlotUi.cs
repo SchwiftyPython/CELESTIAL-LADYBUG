@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.Entities;
+﻿using System.Linq;
+using Assets.Scripts.Abilities;
+using Assets.Scripts.Entities;
 using Assets.Scripts.Items;
 using Assets.Scripts.Utilities.UI.Dragging;
 using UnityEngine;
@@ -78,6 +80,26 @@ namespace Assets.Scripts.UI
         public void RemoveItems(int number, bool swapAttempt)
         {
             _currentCompanion.UnEquip(_equipLocation, swapAttempt);
+        }
+
+        public bool IsLocked()
+        {
+            var itemAbilities = _companionEquipment.GetItemInSlot(_equipLocation)?.GetAbilities(_currentCompanion);
+
+            if (itemAbilities == null || !itemAbilities.Any())
+            {
+                return false;
+            }
+
+            foreach (var ability in itemAbilities)
+            {
+                if (ability.GetType() == typeof(Soulbound))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void RedrawUi()
