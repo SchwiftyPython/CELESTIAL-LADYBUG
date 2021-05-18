@@ -196,6 +196,14 @@ namespace Assets.Scripts
         }
 
         /// <summary>
+        /// Applies all modifiers to a new value for the given ModType.
+        /// </summary>
+        public static int ModifyNewValueForStat(Entity parent, Enum modType, int value)
+        {
+            return (int)(GetAdditiveModifiers(parent, modType) + value * (1 + GetPercentageModifiers(parent, modType) / 100));
+        }
+
+        /// <summary>
         /// Returns all additive modifiers in equipment, abilities, and effects for the given ModType.
         /// </summary>
         public static float GetAdditiveModifiers(Entity parent, Enum modType)

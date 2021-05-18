@@ -27,6 +27,8 @@ namespace Assets.Scripts.Abilities
             {"knockback", abilityOwner => new Knockback(abilityOwner)},
             {"distracting", abilityOwner => new Distracting(abilityOwner)},
             {"soulbound", abilityOwner => new Soulbound(abilityOwner)},
+            {"massive damage", abilityOwner => new MassiveDamage(abilityOwner)},
+            {"cumbersome", abilityOwner => new Cumbersome(abilityOwner)}
         };
 
         public Ability GetAbilityByName(string abilityName, Entity abilityOwner)

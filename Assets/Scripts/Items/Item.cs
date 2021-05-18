@@ -100,6 +100,11 @@ namespace Assets.Scripts.Items
             return GetDodgeMod().ToString();
         }
 
+        public List<string> GetAbilityNames()
+        {
+            return ItemType.Abilities;
+        }
+
         public List<Ability> GetAbilities(Entity abilityOwner)
         {
             var abilities = new List<Ability>();

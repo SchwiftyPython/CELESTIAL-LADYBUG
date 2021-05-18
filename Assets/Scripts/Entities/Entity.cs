@@ -228,25 +228,25 @@ namespace Assets.Scripts.Entities
 
             _equipment = new Equipment(EntityClass);
 
-            var testWeapon = itemStore.GetItemTypeByName("Heavy Crossbow");
-            
-            Equip((EquipableItem) testWeapon.NewItem());
+            var testWeapon = itemStore.GetRandomEquipableItem(EquipLocation.Weapon);
+
+            Equip(testWeapon);
 
             var testArmor = itemStore.GetRandomEquipableItem(EquipLocation.Body);
 
             Equip(testArmor);
 
-            var testHelmet = itemStore.GetItemTypeByName("Demon Helmet"); //todo testing
+            var testHelmet = itemStore.GetRandomEquipableItem(EquipLocation.Helmet);
 
-            Equip((EquipableItem)testHelmet.NewItem());
+            Equip(testHelmet);
 
-            var testBoots = itemStore.GetItemTypeByName("Demon Feet");
+            var testBoots = itemStore.GetRandomEquipableItem(EquipLocation.Boots);
 
-            Equip((EquipableItem) testBoots.NewItem());
+            Equip(testBoots);
 
-            var testGloves = itemStore.GetRandomEquipableItem(EquipLocation.Gloves);
+            var testGloves = itemStore.GetItemTypeByName("Plate Gauntlets");
 
-            Equip(testGloves);
+            Equip((EquipableItem) testGloves.NewItem());
 
             var testShield = itemStore.GetRandomEquipableItem(EquipLocation.Shield);
 
@@ -436,6 +436,8 @@ namespace Assets.Scripts.Entities
             }
 
             var damage = Random.Range(minDamage, maxDamage + 1) + Stats.Attack;
+
+            damage = GlobalHelper.ModifyNewValueForStat(this, CombatModifierTypes.Damage, damage);
 
             var targetArmor = target.GetTotalArmorToughness();
 

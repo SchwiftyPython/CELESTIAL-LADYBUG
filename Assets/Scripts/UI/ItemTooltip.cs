@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Entities;
+﻿using System.Linq;
+using Assets.Scripts.Entities;
 using Assets.Scripts.Items;
 using TMPro;
 using UnityEngine;
@@ -18,6 +19,7 @@ namespace Assets.Scripts.UI
         [SerializeField] private TextMeshProUGUI _rangedDamage = null;
         [SerializeField] private TextMeshProUGUI _toughness = null;
         [SerializeField] private TextMeshProUGUI _dodgeMod = null;
+        [SerializeField] private TextMeshProUGUI _abilities = null;
         [SerializeField] private TextMeshProUGUI _cannotEquipMessage = null;
 
         public void Setup(Item item, Entity currentCompanion)
@@ -74,6 +76,31 @@ namespace Assets.Scripts.UI
                 _dodgeMod.text = $"Dodge Mod {defense.DodgeMod}";
                 _dodgeMod.gameObject.SetActive(true);
             }
+
+            var abilities = item.GetAbilityNames();
+
+            if (abilities == null || !abilities.Any())
+            {
+                _abilities.gameObject.SetActive(false);
+            }
+            else
+            {
+                var abilitiesText = string.Empty;
+
+                foreach (var abilityName in abilities)
+                {
+                    abilitiesText += abilityName;
+
+                    if (!abilityName.Equals(abilities.Last()))
+                    {
+                        abilitiesText += "\n";
+                    }
+                }
+
+                _abilities.text = abilitiesText;
+                _abilities.gameObject.SetActive(true);
+            }
+
 
             var equipment = currentCompanion.GetEquipment();
 

@@ -67,10 +67,7 @@
       "Toughness": 1,
       "DodgeMod": 0
     },
-    "Abilities": 
-	[
-	  "Careful Shooter"
-	],
+    "Abilities": [],
 	"Range": -1,
     "Sprite": "metal_bracer",
     "Slot": "gloves",
@@ -91,7 +88,7 @@
     },
     "Abilities": 
 	[
-	  "Careful Shooter"
+	  "Calculated"
 	],
 	"Range": -1,
     "Sprite": "fancy_bracer",
@@ -113,7 +110,7 @@
     },
     "Abilities": 
 	[
-	  "Bodybuilder",
+	  "Works Out",
 	  "Tank"
 	],
 	"Range": -1,
@@ -156,11 +153,7 @@
       "Toughness": 4,
       "DodgeMod": 0
     },
-    "Abilities": 
-	[
-	  "Concentration",
-	  "Agile"
-	],
+    "Abilities": [],
 	"Range": -1,
     "Sprite": "fancy_gloves_3",
     "Slot": "gloves",

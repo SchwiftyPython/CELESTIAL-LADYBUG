@@ -18,6 +18,7 @@ namespace Assets.Scripts.UI
 
         [SerializeField] private InventoryItemIcon _itemIcon = null;
         [SerializeField] private GameObject _slotIcon = null;
+        [SerializeField] private GameObject _lockedIcon = null;
         [SerializeField] private EquipLocation _equipLocation = EquipLocation.Weapon;
 
         private Equipment _companionEquipment;
@@ -118,6 +119,8 @@ namespace Assets.Scripts.UI
             _itemIcon.SetItem(item, _currentCompanion);
 
             _slotIcon.GetComponent<Image>().enabled = item == null;
+
+            _lockedIcon.SetActive(IsLocked());
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
