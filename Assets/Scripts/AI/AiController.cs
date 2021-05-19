@@ -11,6 +11,8 @@ namespace Assets.Scripts.AI
     //todo this is just prototype dumb dumb ai - but if it works then don't fix it :)
     public class AiController : MonoBehaviour
     {
+        private const int MaxTries = 2;
+
         private List<Tile> _pathToTarget;
         private bool _actionAvailable;
 
@@ -31,7 +33,9 @@ namespace Assets.Scripts.AI
         {
             _actionAvailable = true;
 
-            while (Self.Stats.CurrentActionPoints > 0 && _actionAvailable)
+            var currentTry = 0;
+
+            while (Self.Stats.CurrentActionPoints > 0 && _actionAvailable && currentTry < MaxTries)
             {
                 if (Target == null || Target.IsDead())
                 {
@@ -69,6 +73,8 @@ namespace Assets.Scripts.AI
                 {
                     Attack(usableAbilities);
                 }
+
+                currentTry++;
             }
 
             var eventMediator = FindObjectOfType<EventMediator>();

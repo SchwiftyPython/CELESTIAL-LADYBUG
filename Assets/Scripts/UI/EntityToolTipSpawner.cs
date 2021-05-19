@@ -23,6 +23,11 @@ namespace Assets.Scripts.UI
         {
             var entity = GetComponent<IEntityHolder>().GetEntity();
 
+            if (entity == null)
+            {
+                Debug.Log($"No Entity! Can't Spawn Entity Tooltip");
+            }
+
             return entity != null;
         }
     }

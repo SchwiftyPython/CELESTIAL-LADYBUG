@@ -162,15 +162,7 @@ namespace Assets.Scripts.Combat
                 return;
             }
 
-            // foreach (var entityEffect in presentEntity.Effects.ToArray())
-            // {
-            //     if (ReferenceEquals(entityEffect, effect))
-            //     {
-            //         presentEntity.RemoveEffect(effect);
-            //     }
-            // }
-
-            foreach (var entityEffect in presentEntity.EffectTriggers.Effects.ToArray())
+            foreach (var entityEffect in presentEntity.Effects.ToArray())
             {
                 if (ReferenceEquals(entityEffect, effect))
                 {

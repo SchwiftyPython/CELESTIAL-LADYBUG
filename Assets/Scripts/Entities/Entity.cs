@@ -46,7 +46,7 @@ namespace Assets.Scripts.Entities
 
         public List<Effect> Effects { get; set; }
 
-        public EffectTrigger<EffectArgs> EffectTriggers { get; set; }
+        //public EffectTrigger<EffectArgs> EffectTriggers { get; set; }
 
         public UnityEngine.GameObject CombatSpritePrefab { get; private set; }
         public UnityEngine.GameObject CombatSpriteInstance { get; private set; }
@@ -105,9 +105,9 @@ namespace Assets.Scripts.Entities
 
             Stats = new Stats(this, Attributes, Skills);
 
-            //Effects = new List<Effect>();
+            Effects = new List<Effect>();
 
-            EffectTriggers = new EffectTrigger<EffectArgs>();
+            //EffectTriggers = new EffectTrigger<EffectArgs>();
 
             GeneratePortrait();
 
@@ -169,89 +169,96 @@ namespace Assets.Scripts.Entities
                 return;
             }
 
-            Stats.CurrentActionPoints -= apMovementCost;
-
-            var currentTile = ((CombatMap) CurrentMap).GetTileAt(Position);
-
-            currentTile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(null);
-
-            //todo this will not update the position if blocked
-            //we could make a method to encapsulate this and check if position was updated to make it more clear
+            //this will not update the position if blocked
             Position = tile.Position;
 
-            CombatSpriteInstance.transform.position = new Vector3(Position.X, Position.Y);
-
-            tile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(this);
-
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
-
-            eventMediator.Broadcast(GlobalHelper.ActiveEntityMoved, this);
-
-            var tileEffects = tile.GetEffects();
-
-            /*if (Effects.Count > 0)
+            if (Position == tile.Position)
             {
-                foreach (var effect in Effects.ToArray())
+                Stats.CurrentActionPoints -= apMovementCost;
+
+                var currentTile = ((CombatMap)CurrentMap).GetTileAt(Position);
+
+                currentTile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(null);
+
+                CombatSpriteInstance.transform.position = new Vector3(Position.X, Position.Y);
+
+                tile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(this);
+
+                var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+                eventMediator.Broadcast(GlobalHelper.ActiveEntityMoved, this);
+
+                var tileEffects = tile.GetEffects();
+
+                if (Effects.Count > 0)
                 {
-                    if (!effect.IsLocationDependent())
+                    foreach (var effect in Effects.ToArray())
                     {
-                        continue;
-                    }
-
-                    if (tileEffects != null && tileEffects.Any())
-                    {
-                        foreach (var tileEffect in tileEffects)
+                        if (!effect.IsLocationDependent())
                         {
-                            if (ReferenceEquals(tileEffect, effect))
-                            {
-                                continue;
-                            }
+                            continue;
+                        }
 
+                        if (tileEffects != null && tileEffects.Any())
+                        {
+                            foreach (var tileEffect in tileEffects)
+                            {
+                                if (ReferenceEquals(tileEffect, effect))
+                                {
+                                    continue;
+                                }
+
+                                RemoveEffect(effect);
+                            }
+                        }
+                        else
+                        {
                             RemoveEffect(effect);
                         }
                     }
-                    else
-                    {
-                        RemoveEffect(effect);
-                    }
                 }
-            }*/
 
-            if (EffectTriggers.Effects.Count > 0)
-            {
-                foreach (var effect in EffectTriggers.Effects.ToArray())
+                /*if (EffectTriggers.Effects.Count > 0)
                 {
-                    if (!((Effect)effect).IsLocationDependent())
+                    foreach (var effect in EffectTriggers.Effects.ToArray())
                     {
-                        continue;
-                    }
-
-                    if (tileEffects != null && tileEffects.Any())
-                    {
-                        foreach (var tileEffect in tileEffects)
+                        if (!((Effect)effect).IsLocationDependent())
                         {
-                            if (ReferenceEquals(tileEffect, effect))
-                            {
-                                continue;
-                            }
+                            continue;
+                        }
 
+                        if (tileEffects != null && tileEffects.Any())
+                        {
+                            foreach (var tileEffect in tileEffects)
+                            {
+                                if (ReferenceEquals(tileEffect, effect))
+                                {
+                                    continue;
+                                }
+
+                                RemoveEffect((Effect) effect);
+                            }
+                        }
+                        else
+                        {
                             RemoveEffect((Effect) effect);
                         }
                     }
-                    else
+                }*/
+
+                if (tileEffects != null && tileEffects.Any())
+                {
+                    foreach (var effect in tileEffects)
                     {
-                        RemoveEffect((Effect) effect);
+                        ApplyEffect(effect);
                     }
                 }
             }
-
-            if (tileEffects != null && tileEffects.Any())
+            else
             {
-                foreach (var effect in tileEffects)
-                {
-                    ApplyEffect(effect);
-                }
+                Debug.Log($"Movement Blocked for {Name}");
             }
+
         }
 
         public void GenerateStartingEquipment()
@@ -707,30 +714,19 @@ namespace Assets.Scripts.Entities
 
         public void ApplyEffect(Effect effect)
         {
-            // if (Effects == null)
-            // {
-            //     Effects = new List<Effect>();
-            // }
-
-            if (EffectTriggers == null)
+            if (Effects == null)
             {
-                EffectTriggers = new EffectTrigger<EffectArgs>();
+                Effects = new List<Effect>();
             }
 
-            // if (!effect.CanStack())
+            // if (EffectTriggers == null)
             // {
-            //     foreach (var existingEffect in Effects)
-            //     {
-            //         if (existingEffect.GetType() == effect.GetType())
-            //         {
-            //             return;
-            //         }
-            //     }
+            //     EffectTriggers = new EffectTrigger<EffectArgs>();
             // }
 
             if (!effect.CanStack())
             {
-                foreach (var existingEffect in EffectTriggers.Effects)
+                foreach (var existingEffect in Effects)
                 {
                     if (existingEffect.GetType() == effect.GetType())
                     {
@@ -739,37 +735,58 @@ namespace Assets.Scripts.Entities
                 }
             }
 
-            //Effects.Add(effect);
+            // if (!effect.CanStack())
+            // {
+            //     foreach (var existingEffect in EffectTriggers.Effects)
+            //     {
+            //         if (existingEffect.GetType() == effect.GetType())
+            //         {
+            //             return;
+            //         }
+            //     }
+            // }
 
-            EffectTriggers.Add(effect);
+            Effects.Add(effect);
+
+            //EffectTriggers.Add(effect);
         }
 
         public void RemoveEffect(Effect effect)
         {
-            // if (Effects == null || Effects.Count < 1)
+            if (Effects == null || Effects.Count < 1)
+            {
+                return;
+            }
+
+            // if (EffectTriggers == null)
             // {
             //     return;
             // }
 
-            if (EffectTriggers == null)
-            {
-                return;
-            }
+            Effects.Remove(effect);
 
-            //Effects.Remove(effect);
-
-            EffectTriggers.Remove(effect);
+            //EffectTriggers.Remove(effect);
         }
 
         public void TriggerEffects()
         {
-            if (EffectTriggers == null)
+            if (Effects == null)
             {
                 return;
             }
 
-            //todo getting an enumeration modified error from this sometimes
-            EffectTriggers.TriggerEffects(new BasicEffectArgs(this));
+            foreach (var effect in Effects.ToArray())
+            {
+                if (effect.Duration != Effect.INFINITE && effect.Duration < 1)
+                {
+                    Effects.Remove(effect);
+                }
+
+                effect.Trigger(new BasicEffectArgs(this));
+            }
+
+            //getting an enumeration modified error from this sometimes -- might be better off triggering our own way
+            //EffectTriggers.TriggerEffects(new BasicEffectArgs(this));
         }
 
         public int RollForInitiative()

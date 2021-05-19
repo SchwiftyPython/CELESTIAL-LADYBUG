@@ -35,6 +35,10 @@ namespace Assets.Scripts.Effects
             return Description;
         }
 
+        public virtual void Trigger(EffectArgs args)
+        {
+        }
+
         protected override void OnTrigger(EffectArgs e)
         {
         }

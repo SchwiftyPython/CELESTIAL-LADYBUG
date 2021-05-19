@@ -23,7 +23,7 @@ namespace Assets.Scripts.UI
         {
             GlobalHelper.DestroyAllChildren(gameObject);
 
-            foreach (var effect in _activeEntity.EffectTriggers.Effects)
+            foreach (var effect in _activeEntity.Effects)
             {
                 var effectSlot = Instantiate(_effectPrefab, Vector3.zero, Quaternion.identity);
 

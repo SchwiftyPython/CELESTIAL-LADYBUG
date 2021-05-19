@@ -16,6 +16,58 @@ namespace Assets.Scripts.Effects
         {
         }
 
+        public override void Trigger(EffectArgs args)
+        {
+            var basicEffectArgs = args as BasicEffectArgs;
+
+            if (basicEffectArgs == null)
+            {
+                return;
+            }
+
+            if (Random.Range(1, 101) > PanicChance)
+            {
+                return;
+            }
+
+            var message = $"{basicEffectArgs.Target.Name} panics!";
+
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+
+            var combatManager = Object.FindObjectOfType<CombatManager>();
+            var targets = combatManager.TurnOrder.ToList();
+
+            targets.Remove(basicEffectArgs.Target);
+
+            targets = GlobalHelper.ShuffleList(targets);
+
+            bool attackUsed = false;
+
+            foreach (var target in targets.ToArray())
+            {
+                foreach (var ability in basicEffectArgs.Target.Abilities.Values)
+                {
+                    if (ability.IsPassive || !ability.TargetInRange(target) ||
+                        ability.ApCost > basicEffectArgs.Target.Stats.CurrentActionPoints)
+                    {
+                        continue;
+                    }
+
+                    ability.Use(target);
+                    attackUsed = true;
+                    break;
+                }
+
+                if (attackUsed)
+                {
+                    break;
+                }
+            }
+
+            eventMediator.Broadcast(GlobalHelper.EndTurn, this);
+        }
+
         protected override void OnTrigger(EffectArgs args)
         {
             var basicEffectArgs = args as BasicEffectArgs;
