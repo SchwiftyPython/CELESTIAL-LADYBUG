@@ -113,20 +113,22 @@ namespace Assets.Scripts.Combat
                         _currentCombatState = CombatState.AiTurn;
                     }
 
+                    _eventMediator.SubscribeToEvent(EndTurnEvent, this);
                     _eventMediator.SubscribeToEvent(GlobalHelper.EntityDead, this);
                     _eventMediator.SubscribeToEvent(GlobalHelper.ActiveEntityMoved, this);
                     _eventMediator.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
                     _eventMediator.Broadcast(RefreshUi, this, ActiveEntity);
+
                     break;
                 case CombatState.PlayerTurn:
                     UpdateActiveEntityInfoPanel();
 
                     _eventMediator.Broadcast(GlobalHelper.PlayerTurn, this);
-                    _eventMediator.SubscribeToEvent(EndTurnEvent, this);
+                    //_eventMediator.SubscribeToEvent(EndTurnEvent, this);
                     break;
                 case CombatState.AiTurn:
                     _eventMediator.Broadcast(GlobalHelper.AiTurn, this);
-                    _eventMediator.SubscribeToEvent(EndTurnEvent, this);
+                    //_eventMediator.SubscribeToEvent(EndTurnEvent, this);
                     ActiveEntity.CombatSpriteInstance.GetComponent<AiController>().TakeTurn();
                     break;
                 case CombatState.EndTurn:
@@ -142,6 +144,8 @@ namespace Assets.Scripts.Combat
 
                         HighlightActiveEntitySprite();
 
+                        //_eventMediator.SubscribeToEvent(EndTurnEvent, this);
+
                         if (ActiveEntityPlayerControlled())
                         {
                             _currentCombatState = CombatState.PlayerTurn;
@@ -154,9 +158,13 @@ namespace Assets.Scripts.Combat
                         CurrentTurnNumber++;
 
                         _eventMediator.Broadcast(RefreshUi, this, ActiveEntity);
+
+                        ActiveEntity.TriggerEffects();
                     }
                     break;
                 case CombatState.EndCombat:
+                    _eventMediator.UnsubscribeFromAllEvents(this);
+
                     DisplayPostCombatPopup();
 
                     //todo maybe move this portion to the post combat popup
@@ -361,7 +369,7 @@ namespace Assets.Scripts.Combat
         {
             if (eventName.Equals(EndTurnEvent))
             {
-                _eventMediator.UnsubscribeFromEvent(EndTurnEvent, this);
+                //_eventMediator.UnsubscribeFromEvent(EndTurnEvent, this);
 
                 _currentCombatState = CombatState.EndTurn;
             }

@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Entities;
+﻿using Assets.Scripts.Effects;
+using Assets.Scripts.Entities;
 using UnityEngine;
 
 namespace Assets.Scripts.UI
@@ -22,7 +23,7 @@ namespace Assets.Scripts.UI
         {
             GlobalHelper.DestroyAllChildren(gameObject);
 
-            foreach (var effect in _activeEntity.Effects)
+            foreach (var effect in _activeEntity.EffectTriggers.Effects)
             {
                 var effectSlot = Instantiate(_effectPrefab, Vector3.zero, Quaternion.identity);
 
@@ -32,7 +33,7 @@ namespace Assets.Scripts.UI
 
                 if (script != null)
                 {
-                    script.SetEffect(effect);
+                    script.SetEffect((Effect) effect);
                 }
             }
         }

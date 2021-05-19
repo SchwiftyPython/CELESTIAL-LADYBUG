@@ -194,10 +194,7 @@
       "Toughness": 0,
       "DodgeMod": 1
     },
-    "Abilities": 
-	[
-	  "Amplify"
-	],
+    "Abilities": [],
 	"Range": -1,
     "Sprite": "colorful_gloves",
     "Slot": "gloves",

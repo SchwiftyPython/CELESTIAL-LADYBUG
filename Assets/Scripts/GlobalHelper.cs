@@ -232,7 +232,8 @@ namespace Assets.Scripts
             var abilities = parent.Abilities;
 
             total += GetAdditiveModifiersInCollection(abilities.Values, modType);
-            total += GetAdditiveModifiersInCollection(parent.Effects, modType);
+            //total += GetAdditiveModifiersInCollection(parent.Effects, modType);
+            total += GetAdditiveModifiersInCollection(parent.EffectTriggers?.Effects, modType);
 
             return total;
         }
@@ -266,7 +267,8 @@ namespace Assets.Scripts
             var abilities = parent.Abilities;
 
             total += GetPercentageModifiersInCollection(abilities.Values, modType);
-            total += GetPercentageModifiersInCollection(parent.Effects, modType);
+            //total += GetPercentageModifiersInCollection(parent.Effects, modType);
+            total += GetPercentageModifiersInCollection(parent.EffectTriggers?.Effects, modType);
 
             return total;
         }
@@ -313,6 +315,19 @@ namespace Assets.Scripts
             }
 
             return (int)total;
+        }
+
+        public static List<T> ShuffleList<T>(List<T> list)
+        {
+            for (var i = list.Count - 1; i > 0; i--)
+            {
+                var n = Random.Range(0, i + 1);
+                var temp = list[i];
+                list[i] = list[n];
+                list[n] = temp;
+            }
+
+            return list;
         }
 
         public static string RandomString(int size, bool lowerCase = false)

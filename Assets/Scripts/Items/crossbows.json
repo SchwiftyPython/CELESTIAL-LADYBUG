@@ -13,7 +13,7 @@
     "Abilities":
 	[
 	  "Shoot",
-	  "Aim"	  
+	  "Aimed Shot"	  
 	],
 	"Range": 5,
     "Sprite": "crossbow_1",

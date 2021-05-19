@@ -6,15 +6,15 @@ using UnityEngine;
 
 namespace Assets.Scripts.Abilities
 {
-    public class Distracting : Ability, ISubscriber
+    public class Intimidate : Ability, ISubscriber
     {
-        private List<Tile> _blindedTiles;
-        private readonly Blinded _blindedEffect;
+        private List<Tile> _fearTiles;
+        private readonly Fear _fearEffect;
 
-        public Distracting(Entity abilityOwner) : base("Distracting", "Anyone adjacent is Blinded.", -1, 1, abilityOwner, false, true)
+        public Intimidate(Entity abilityOwner) : base("Intimidate", "Anyone adjacent gains Fear effect.", -1, 1, abilityOwner, true, true)
         {
-            _blindedTiles = new List<Tile>();
-            _blindedEffect = new Blinded(true, Blinded.INFINITE);
+            _fearTiles = new List<Tile>();
+            _fearEffect = new Fear(true, Fear.INFINITE);
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 
@@ -28,34 +28,34 @@ namespace Assets.Scripts.Abilities
 
         private void UpdateTiles()
         {
-            foreach (var tile in _blindedTiles.ToArray())
+            foreach (var tile in _fearTiles.ToArray())
             {
-                tile.RemoveEffect(_blindedEffect);
+                tile.RemoveEffect(_fearEffect);
 
-                _blindedTiles.Remove(tile);
+                _fearTiles.Remove(tile);
             }
 
             var ownerPosition = AbilityOwner.Position;
-            var ownerTile = ((CombatMap) AbilityOwner.CurrentMap).GetTileAt(ownerPosition);
+            var ownerTile = ((CombatMap)AbilityOwner.CurrentMap).GetTileAt(ownerPosition);
 
             foreach (var tile in ownerTile.GetAdjacentTiles())
             {
-                if (!tile.HasEffect(_blindedEffect))
+                if (!tile.HasEffect(_fearEffect))
                 {
-                    tile.AddEffect(_blindedEffect);
+                    tile.AddEffect(_fearEffect);
                 }
 
-                _blindedTiles.Add(tile);
+                _fearTiles.Add(tile);
             }
         }
 
         public override void Terminate()
         {
-            foreach (var tile in _blindedTiles.ToArray())
+            foreach (var tile in _fearTiles.ToArray())
             {
-                tile.RemoveEffect(_blindedEffect);
+                tile.RemoveEffect(_fearEffect);
 
-                _blindedTiles.Remove(tile);
+                _fearTiles.Remove(tile);
             }
         }
 

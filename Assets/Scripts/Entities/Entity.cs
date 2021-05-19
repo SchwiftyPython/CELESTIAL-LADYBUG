@@ -6,9 +6,11 @@ using Assets.Scripts.Abilities;
 using Assets.Scripts.AI;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Effects;
+using Assets.Scripts.Effects.Args;
 using Assets.Scripts.Entities.Names;
 using Assets.Scripts.Items;
 using Assets.Scripts.UI;
+using GoRogue;
 using UnityEngine;
 using GameObject = GoRogue.GameFramework.GameObject;
 using Object = UnityEngine.Object;
@@ -43,6 +45,8 @@ namespace Assets.Scripts.Entities
         public Dictionary<Type, Ability> Abilities { get; private set; }
 
         public List<Effect> Effects { get; set; }
+
+        public EffectTrigger<EffectArgs> EffectTriggers { get; set; }
 
         public UnityEngine.GameObject CombatSpritePrefab { get; private set; }
         public UnityEngine.GameObject CombatSpriteInstance { get; private set; }
@@ -101,7 +105,9 @@ namespace Assets.Scripts.Entities
 
             Stats = new Stats(this, Attributes, Skills);
 
-            Effects = new List<Effect>();
+            //Effects = new List<Effect>();
+
+            EffectTriggers = new EffectTrigger<EffectArgs>();
 
             GeneratePortrait();
 
@@ -183,7 +189,7 @@ namespace Assets.Scripts.Entities
 
             var tileEffects = tile.GetEffects();
 
-            if (Effects.Count > 0)
+            /*if (Effects.Count > 0)
             {
                 foreach (var effect in Effects.ToArray())
                 {
@@ -207,6 +213,34 @@ namespace Assets.Scripts.Entities
                     else
                     {
                         RemoveEffect(effect);
+                    }
+                }
+            }*/
+
+            if (EffectTriggers.Effects.Count > 0)
+            {
+                foreach (var effect in EffectTriggers.Effects.ToArray())
+                {
+                    if (!((Effect)effect).IsLocationDependent())
+                    {
+                        continue;
+                    }
+
+                    if (tileEffects != null && tileEffects.Any())
+                    {
+                        foreach (var tileEffect in tileEffects)
+                        {
+                            if (ReferenceEquals(tileEffect, effect))
+                            {
+                                continue;
+                            }
+
+                            RemoveEffect((Effect) effect);
+                        }
+                    }
+                    else
+                    {
+                        RemoveEffect((Effect) effect);
                     }
                 }
             }
@@ -244,17 +278,17 @@ namespace Assets.Scripts.Entities
 
             Equip(testBoots);
 
-            var testGloves = itemStore.GetItemTypeByName("Plate Gauntlets");
+            var testGloves = itemStore.GetRandomEquipableItem(EquipLocation.Gloves);
 
-            Equip((EquipableItem) testGloves.NewItem());
+            Equip(testGloves);
 
             var testShield = itemStore.GetRandomEquipableItem(EquipLocation.Shield);
 
             Equip(testShield);
 
-            var testRing = itemStore.GetRandomEquipableItem(EquipLocation.Ring);
+            var testRing = itemStore.GetItemTypeByName("Skull Ring");
 
-            Equip(testRing);
+            Equip((EquipableItem)testRing.NewItem());
         }
 
         public void Equip(EquipableItem item)
@@ -424,15 +458,19 @@ namespace Assets.Scripts.Entities
         {
             var equippedItem = _equipment.GetItemInSlot(slot);
 
-            int minDamage;
-            int maxDamage;
-            if (ranged)
+            int minDamage = 0;
+            int maxDamage = 0;
+
+            if (equippedItem != null)
             {
-                (minDamage, maxDamage) = equippedItem.GetRangedDamageRange();
-            }
-            else
-            {
-                (minDamage, maxDamage) = equippedItem.GetMeleeDamageRange();
+                if (ranged)
+                {
+                    (minDamage, maxDamage) = equippedItem.GetRangedDamageRange();
+                }
+                else
+                {
+                    (minDamage, maxDamage) = equippedItem.GetMeleeDamageRange();
+                }
             }
 
             var damage = Random.Range(minDamage, maxDamage + 1) + Stats.Attack;
@@ -669,14 +707,30 @@ namespace Assets.Scripts.Entities
 
         public void ApplyEffect(Effect effect)
         {
-            if (Effects == null)
+            // if (Effects == null)
+            // {
+            //     Effects = new List<Effect>();
+            // }
+
+            if (EffectTriggers == null)
             {
-                Effects = new List<Effect>();
+                EffectTriggers = new EffectTrigger<EffectArgs>();
             }
+
+            // if (!effect.CanStack())
+            // {
+            //     foreach (var existingEffect in Effects)
+            //     {
+            //         if (existingEffect.GetType() == effect.GetType())
+            //         {
+            //             return;
+            //         }
+            //     }
+            // }
 
             if (!effect.CanStack())
             {
-                foreach (var existingEffect in Effects)
+                foreach (var existingEffect in EffectTriggers.Effects)
                 {
                     if (existingEffect.GetType() == effect.GetType())
                     {
@@ -685,17 +739,37 @@ namespace Assets.Scripts.Entities
                 }
             }
 
-            Effects.Add(effect);
+            //Effects.Add(effect);
+
+            EffectTriggers.Add(effect);
         }
 
         public void RemoveEffect(Effect effect)
         {
-            if (Effects == null || Effects.Count < 1)
+            // if (Effects == null || Effects.Count < 1)
+            // {
+            //     return;
+            // }
+
+            if (EffectTriggers == null)
             {
                 return;
             }
 
-            Effects.Remove(effect);
+            //Effects.Remove(effect);
+
+            EffectTriggers.Remove(effect);
+        }
+
+        public void TriggerEffects()
+        {
+            if (EffectTriggers == null)
+            {
+                return;
+            }
+
+            //todo getting an enumeration modified error from this sometimes
+            EffectTriggers.TriggerEffects(new BasicEffectArgs(this));
         }
 
         public int RollForInitiative()

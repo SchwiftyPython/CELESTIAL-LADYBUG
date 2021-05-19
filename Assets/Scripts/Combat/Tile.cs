@@ -15,7 +15,7 @@ namespace Assets.Scripts.Combat
 
         private string _prefabName;
 
-        private List<Effect> _effects;
+        private List<Effect> _effects; //todo have a playerEffects list and a nonPlayerEffects list to differentiate who should get effect applied
 
         public UnityEngine.GameObject PrefabTexture { get; private set; }
 
@@ -162,7 +162,15 @@ namespace Assets.Scripts.Combat
                 return;
             }
 
-            foreach (var entityEffect in presentEntity.Effects.ToArray())
+            // foreach (var entityEffect in presentEntity.Effects.ToArray())
+            // {
+            //     if (ReferenceEquals(entityEffect, effect))
+            //     {
+            //         presentEntity.RemoveEffect(effect);
+            //     }
+            // }
+
+            foreach (var entityEffect in presentEntity.EffectTriggers.Effects.ToArray())
             {
                 if (ReferenceEquals(entityEffect, effect))
                 {

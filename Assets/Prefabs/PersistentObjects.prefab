@@ -720,8 +720,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 2596d569dd36de44d9e5fc9813126ae1, type: 3}
   - {fileID: 21300000, guid: acc73a77947cf54469176a79cc01975c, type: 3}
   - {fileID: 21300000, guid: 3e203defe68b8264ea8f23a65366b936, type: 3}
+  - {fileID: 21300000, guid: 287b474950600ac4c9921604fc219e95, type: 3}
   EffectSprites:
   - {fileID: 21300000, guid: 15eabc209e007b14c888b31cec0e6a5c, type: 3}
+  - {fileID: 21300000, guid: 82f23554d4c8f0249a899701fb6b9778, type: 3}
 --- !u!1 &1959258010
 GameObject:
   m_ObjectHideFlags: 0
