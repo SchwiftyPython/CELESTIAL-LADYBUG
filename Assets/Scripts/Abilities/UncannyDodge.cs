@@ -15,22 +15,29 @@ namespace Assets.Scripts.Abilities
             Icon = spriteStore.GetAbilitySprite(this);
         }
 
-        public IEnumerable<float> GetAdditiveModifiers(Enum stat)
+        public float GetAdditiveModifiers(Enum stat)
         {
+            if (!stat.GetType().Name.Equals(nameof(EntitySkillTypes)))
+            {
+                return 0f;
+            }
+
             if (!Enum.TryParse(stat.ToString(), out EntitySkillTypes skillType))
             {
-                yield return 0f;
+                return 0f;
             }
 
             if (skillType == EntitySkillTypes.Dodge)
             {
-                yield return DodgeMod;
+                return DodgeMod;
             }
+
+            return 0;
         }
 
-        public IEnumerable<float> GetPercentageModifiers(Enum stat)
+        public float GetPercentageModifiers(Enum stat)
         {
-            yield return 0f;
+            return 0f;
         }
     }
 }

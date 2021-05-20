@@ -36,9 +36,41 @@ namespace Assets.Scripts.Entities
                 }
             }
         }
-        public int Intellect { get; set; }
+
+        private int _intellect;
+        public int Intellect
+        {
+            get => _intellect + GetAllModifiersForStat(EntityAttributeTypes.Intellect);
+            set
+            {
+                if (value > AttributeMax)
+                {
+                    _intellect = AttributeMax;
+                }
+                else
+                {
+                    _intellect = value;
+                }
+            }
+        }
+
         public int Acumen { get; set; }
-        public int Charisma { get; set; }
+
+        private int _charisma;
+        public int Charisma
+        {
+            get => _charisma + GetAllModifiersForStat(EntityAttributeTypes.Charisma);
+            set {
+                if (value > AttributeMax)
+                {
+                    _charisma = AttributeMax;
+                }
+                else
+                {
+                    _charisma = value;
+                }
+            }
+        }
 
         //public int Magic { get; set; } todo not implemented
 

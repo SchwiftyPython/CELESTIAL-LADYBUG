@@ -35,7 +35,7 @@ namespace Assets.Scripts.Effects
             return Description;
         }
 
-        public virtual void Trigger(EffectArgs args)
+        public new virtual void Trigger(EffectArgs args)
         {
         }
 

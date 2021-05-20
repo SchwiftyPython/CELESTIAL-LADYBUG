@@ -379,10 +379,7 @@ namespace Assets.Scripts.Entities
                     continue;
                 }
 
-                foreach (var modifier in item.GetAdditiveModifiers(stat))
-                {
-                    total += modifier;
-                }
+                total += item.GetAdditiveModifiers(stat);
             }
 
             var abilities = _parent.Abilities;
@@ -394,10 +391,7 @@ namespace Assets.Scripts.Entities
                     continue;
                 }
 
-                foreach (var modifier in provider.GetAdditiveModifiers(stat))
-                {
-                    total += modifier;
-                }
+                total += provider.GetAdditiveModifiers(stat);
             }
 
             if (stat == EntityStatTypes.MaxActionPoints)
@@ -431,10 +425,7 @@ namespace Assets.Scripts.Entities
                     continue;
                 }
 
-                foreach (var modifier in item.GetPercentageModifiers(stat))
-                {
-                    total += modifier;
-                }
+                total += item.GetPercentageModifiers(stat);
             }
 
             var abilities = _parent.Abilities;
@@ -446,10 +437,7 @@ namespace Assets.Scripts.Entities
                     continue;
                 }
 
-                foreach (var modifier in provider.GetPercentageModifiers(stat))
-                {
-                    total += modifier;
-                }
+                total += provider.GetPercentageModifiers(stat);
             }
 
             return total;

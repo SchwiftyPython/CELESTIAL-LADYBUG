@@ -20,6 +20,11 @@ namespace Assets.Scripts.Abilities
 
         public IEnumerable<float> GetAdditiveModifiers(Enum stat)
         {
+            if (!stat.GetType().Name.Equals(nameof(CombatModifierTypes)))
+            {
+                yield return 0f;
+            }
+
             if (!Enum.TryParse(stat.ToString(), out CombatModifierTypes statType))
             {
                 yield return 0f;

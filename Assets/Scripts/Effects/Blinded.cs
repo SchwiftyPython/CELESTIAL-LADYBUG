@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Entities;
 using GoRogue;
@@ -20,22 +19,24 @@ namespace Assets.Scripts.Effects
         {
         }
 
-        public IEnumerable<float> GetAdditiveModifiers(Enum stat)
+        public float GetAdditiveModifiers(Enum stat)
         {
             if (!Enum.TryParse(stat.ToString(), out CombatModifierTypes combatModType))
             {
-                yield return 0f;
+                return 0f;
             }
 
             if (combatModType == CombatModifierTypes.MeleeToHit || combatModType == CombatModifierTypes.RangedToHit)
             {
-                yield return ToHitPenalty;
+                return ToHitPenalty;
             }
+
+            return 0f;
         }
 
-        public IEnumerable<float> GetPercentageModifiers(Enum stat)
+        public float GetPercentageModifiers(Enum stat)
         {
-            yield return 0f;
+            return 0f;
         }
     }
 }

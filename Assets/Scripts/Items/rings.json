@@ -73,11 +73,7 @@
       "Toughness": 0,
       "DodgeMod": 0
     },
-    "Abilities": 
-	[
-	  "Hardskin",
-	  "Conductive"
-	],
+    "Abilities": [],
 	"Range": -1,
     "Sprite": "yin_yang_ring",
     "Slot": "ring",
@@ -97,8 +93,7 @@
       "DodgeMod": 1
     },
     "Abilities": 
-	[
-	  "Immunity",
+	[	  
 	  "Charismatic"
 	],
 	"Range": -1,
@@ -119,10 +114,7 @@
       "Toughness": 0,
       "DodgeMod": 1
     },
-    "Abilities": 
-	[
-	  "Earthy"
-	],
+    "Abilities": [],
 	"Range": -1,
     "Sprite": "flower_ring",
     "Slot": "ring",
@@ -141,11 +133,7 @@
       "Toughness": 3,
       "DodgeMod": 0
     },
-    "Abilities": 
-	[
-	  "Immunity",
-	  "Stone Skin"
-	],
+    "Abilities": [],
 	"Range": -1,
     "Sprite": "jeweled_ring",
     "Slot": "ring",
@@ -164,10 +152,7 @@
       "Toughness": 5,
       "DodgeMod": 0
     },
-    "Abilities": 
-	[
-	  "Unstunnable"	  
-	],
+    "Abilities": [],
 	"Range": -1,
     "Sprite": "jeweled_ring_2",
     "Slot": "ring",

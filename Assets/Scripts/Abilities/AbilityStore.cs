@@ -30,6 +30,9 @@ namespace Assets.Scripts.Abilities
             {"massive damage", abilityOwner => new MassiveDamage(abilityOwner)},
             {"cumbersome", abilityOwner => new Cumbersome(abilityOwner)},
             {"intimidate", abilityOwner => new Intimidate(abilityOwner)},
+            {"knowledgeable", abilityOwner => new Knowledgeable(abilityOwner)},
+            {"charismatic", abilityOwner => new Charismatic(abilityOwner)},
+            {"wealthy", abilityOwner => new Wealthy(abilityOwner)},
         };
 
         public Ability GetAbilityByName(string abilityName, Entity abilityOwner)

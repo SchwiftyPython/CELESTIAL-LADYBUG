@@ -226,7 +226,7 @@ namespace Assets.Scripts
                     continue;
                 }
 
-                total += item.GetAdditiveModifiers(modType).Sum();
+                total += item.GetAdditiveModifiers(modType);
             }
 
             var abilities = parent.Abilities;
@@ -261,7 +261,7 @@ namespace Assets.Scripts
                     continue;
                 }
 
-                total += item.GetPercentageModifiers(modType).Sum();
+                total += item.GetPercentageModifiers(modType);
             }
 
             var abilities = parent.Abilities;
@@ -289,7 +289,7 @@ namespace Assets.Scripts
                     continue;
                 }
 
-                total += provider.GetAdditiveModifiers(modType).Sum();
+                total += provider.GetAdditiveModifiers(modType); 
             }
 
             return (int) total;
@@ -311,7 +311,7 @@ namespace Assets.Scripts
                     continue;
                 }
 
-                total += provider.GetPercentageModifiers(modType).Sum();
+                total += provider.GetPercentageModifiers(modType);
             }
 
             return (int)total;

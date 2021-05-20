@@ -48,7 +48,37 @@ namespace Assets.Scripts.Entities
         public int Toughness { get; set; }
         public int Healing { get; set; }
         public int Survival { get; set; }
-        public int Persuasion { get; set; }
+
+        private int _persuasion;
+        public int Persuasion 
+        {
+            get
+            {
+                var moddedPers = _persuasion + GetAllModifiersForStat(EntitySkillTypes.Persuasion);
+
+                if (moddedPers > SkillMax)
+                {
+                    return SkillMax;
+                }
+
+                return _persuasion;
+            }
+            private set
+            {
+                if (value < SkillMin)
+                {
+                    _persuasion = SkillMin;
+                }
+                else if (value > SkillMax)
+                {
+                    _persuasion = SkillMax;
+                }
+                else
+                {
+                    _persuasion = value;
+                }
+            }
+        }
 
         public Skills(Entity parent)
         {
@@ -153,10 +183,7 @@ namespace Assets.Scripts.Entities
                     continue;
                 }
 
-                foreach (var modifier in item.GetAdditiveModifiers(stat))
-                {
-                    total += modifier;
-                }
+                total += item.GetAdditiveModifiers(stat);
             }
 
             var abilities = _parent.Abilities;
@@ -168,10 +195,7 @@ namespace Assets.Scripts.Entities
                     continue;
                 }
 
-                foreach (var modifier in provider.GetAdditiveModifiers(stat))
-                {
-                    total += modifier;
-                }
+                total += provider.GetAdditiveModifiers(stat);
             }
 
             return total;
@@ -200,10 +224,7 @@ namespace Assets.Scripts.Entities
                     continue;
                 }
 
-                foreach (var modifier in item.GetPercentageModifiers(stat))
-                {
-                    total += modifier;
-                }
+                total += item.GetPercentageModifiers(stat);
             }
 
             var abilities = _parent.Abilities;
@@ -215,10 +236,7 @@ namespace Assets.Scripts.Entities
                     continue;
                 }
 
-                foreach (var modifier in provider.GetPercentageModifiers(stat))
-                {
-                    total += modifier;
-                }
+                total += provider.GetPercentageModifiers(stat);
             }
 
             return total;

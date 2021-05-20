@@ -146,12 +146,17 @@ namespace Assets.Scripts.Items
             return true;
         }
 
-        public IEnumerable<float> GetAdditiveModifiers(Enum stat)
+        public float GetAdditiveModifiers(Enum stat)
         {
             var total = 0;
 
             try
             {
+                if (!stat.GetType().Name.Equals(nameof(EntitySkillTypes)))
+                {
+                    total += 0;
+                }
+
                 if (!Enum.IsDefined(typeof(EntitySkillTypes), stat))
                 {
                     total += 0;
@@ -172,12 +177,12 @@ namespace Assets.Scripts.Items
                 total += 0;
             }
 
-            yield return total;
+            return total;
         }
 
-        public IEnumerable<float> GetPercentageModifiers(Enum stat)
+        public float GetPercentageModifiers(Enum stat)
         {
-            yield return 0f;
+            return 0f;
         }
     }
 }

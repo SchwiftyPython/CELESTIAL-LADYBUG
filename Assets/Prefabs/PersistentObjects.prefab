@@ -721,6 +721,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: acc73a77947cf54469176a79cc01975c, type: 3}
   - {fileID: 21300000, guid: 3e203defe68b8264ea8f23a65366b936, type: 3}
   - {fileID: 21300000, guid: 287b474950600ac4c9921604fc219e95, type: 3}
+  - {fileID: 21300000, guid: ed477c101f1d99e4e878b4cf6c133afb, type: 3}
+  - {fileID: 21300000, guid: b405f82c4808bdb4188d3abe63abb99e, type: 3}
+  - {fileID: 21300000, guid: 25b4e1be66b68314a86ee19295820184, type: 3}
   EffectSprites:
   - {fileID: 21300000, guid: 15eabc209e007b14c888b31cec0e6a5c, type: 3}
   - {fileID: 21300000, guid: 82f23554d4c8f0249a899701fb6b9778, type: 3}

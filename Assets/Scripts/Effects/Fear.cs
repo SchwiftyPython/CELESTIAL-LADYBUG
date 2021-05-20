@@ -18,6 +18,11 @@ namespace Assets.Scripts.Effects
 
         public override void Trigger(EffectArgs args)
         {
+            if (Duration != INFINITE)
+            {
+                Duration--;
+            }
+
             var basicEffectArgs = args as BasicEffectArgs;
 
             if (basicEffectArgs == null)
@@ -48,57 +53,7 @@ namespace Assets.Scripts.Effects
             {
                 foreach (var ability in basicEffectArgs.Target.Abilities.Values)
                 {
-                    if (ability.IsPassive || !ability.TargetInRange(target) ||
-                        ability.ApCost > basicEffectArgs.Target.Stats.CurrentActionPoints)
-                    {
-                        continue;
-                    }
-
-                    ability.Use(target);
-                    attackUsed = true;
-                    break;
-                }
-
-                if (attackUsed)
-                {
-                    break;
-                }
-            }
-
-            eventMediator.Broadcast(GlobalHelper.EndTurn, this);
-        }
-
-        protected override void OnTrigger(EffectArgs args)
-        {
-            var basicEffectArgs = args as BasicEffectArgs;
-
-            if (basicEffectArgs == null)
-            {
-                return;
-            }
-
-            // if (Random.Range(1, 101) > PanicChance)
-            // {
-            //     return;
-            // }
-
-            var message = $"{basicEffectArgs.Target.Name} panics!";
-
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
-            eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
-
-            var combatManager = Object.FindObjectOfType<CombatManager>();
-            var targets = combatManager.TurnOrder.ToList();
-
-            targets = GlobalHelper.ShuffleList(targets);
-
-            bool attackUsed = false;
-
-            foreach (var target in targets.ToArray())
-            {
-                foreach (var ability in basicEffectArgs.Target.Abilities.Values)
-                {
-                    if (ability.IsPassive || !ability.TargetInRange(target) ||
+                    if (ability.IsPassive || !ability.TargetInRange(target) || !ability.HostileTargetsOnly ||
                         ability.ApCost > basicEffectArgs.Target.Stats.CurrentActionPoints)
                     {
                         continue;

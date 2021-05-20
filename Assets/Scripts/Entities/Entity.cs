@@ -218,34 +218,6 @@ namespace Assets.Scripts.Entities
                     }
                 }
 
-                /*if (EffectTriggers.Effects.Count > 0)
-                {
-                    foreach (var effect in EffectTriggers.Effects.ToArray())
-                    {
-                        if (!((Effect)effect).IsLocationDependent())
-                        {
-                            continue;
-                        }
-
-                        if (tileEffects != null && tileEffects.Any())
-                        {
-                            foreach (var tileEffect in tileEffects)
-                            {
-                                if (ReferenceEquals(tileEffect, effect))
-                                {
-                                    continue;
-                                }
-
-                                RemoveEffect((Effect) effect);
-                            }
-                        }
-                        else
-                        {
-                            RemoveEffect((Effect) effect);
-                        }
-                    }
-                }*/
-
                 if (tileEffects != null && tileEffects.Any())
                 {
                     foreach (var effect in tileEffects)
@@ -293,7 +265,7 @@ namespace Assets.Scripts.Entities
 
             Equip(testShield);
 
-            var testRing = itemStore.GetItemTypeByName("Skull Ring");
+            var testRing = itemStore.GetItemTypeByName("Plunder Ring");
 
             Equip((EquipableItem)testRing.NewItem());
         }

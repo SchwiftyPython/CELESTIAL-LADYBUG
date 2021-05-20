@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using Assets.Scripts.Entities;
 
 namespace Assets.Scripts.Abilities
 {
-    public class WorksOut : Ability, IModifierProvider
+    public class Knowledgeable : Ability, IModifierProvider
     {
-        private const int PhysiqueMod = 1;
+        private const int IntellectMod = 1; 
 
-        public WorksOut(Entity abilityOwner) : base("Works Out", $"+{PhysiqueMod} Physique", -1, -1, abilityOwner,
-            false, true)
+        public Knowledgeable(Entity abilityOwner) : base("Knowledgeable", $"+{IntellectMod} Intellect", -1, -1, abilityOwner, false, true)
         {
         }
 
@@ -25,9 +23,9 @@ namespace Assets.Scripts.Abilities
                 return 0f;
             }
 
-            if (attributeType == EntityAttributeTypes.Physique)
+            if (attributeType == EntityAttributeTypes.Intellect)
             {
-                return PhysiqueMod;
+                return IntellectMod;
             }
 
             return 0f;
