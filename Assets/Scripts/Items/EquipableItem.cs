@@ -21,6 +21,11 @@ namespace Assets.Scripts.Items
             return (EquipLocation) ItemType.Slot;
         }
 
+        public int GetRange()
+        {
+            return ItemType.Range;
+        }
+
         public (int, int) GetMeleeDamageRange()
         {
             if (ItemType.Melee == null)

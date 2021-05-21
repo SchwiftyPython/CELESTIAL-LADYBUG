@@ -33,6 +33,9 @@ namespace Assets.Scripts.Abilities
             {"knowledgeable", abilityOwner => new Knowledgeable(abilityOwner)},
             {"charismatic", abilityOwner => new Charismatic(abilityOwner)},
             {"wealthy", abilityOwner => new Wealthy(abilityOwner)},
+            {"shield bash", abilityOwner => new ShieldBash(abilityOwner)},
+            {"thrust", abilityOwner => new Thrust(abilityOwner)},
+            {"charge", abilityOwner => new Charge(abilityOwner)},
         };
 
         public Ability GetAbilityByName(string abilityName, Entity abilityOwner)

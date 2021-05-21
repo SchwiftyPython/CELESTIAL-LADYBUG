@@ -23,7 +23,18 @@ namespace Assets.Scripts.Abilities
             Name = name;
             Description = description;
             ApCost = apCost;
-            Range = range;
+
+            if (range < 0 && !passive)
+            {
+                var equippedWeapon = abilityOwner.GetEquippedWeapon();
+
+                Range = equippedWeapon.GetRange();
+            }
+            else
+            {
+                Range = range;
+            }
+
             AbilityOwner = abilityOwner;
             HostileTargetsOnly = hostileTargetsOnly;
             IsPassive = passive;
@@ -42,7 +53,6 @@ namespace Assets.Scripts.Abilities
 
             eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
-            //todo if range < 0 then use equipped item's range
             if (Range < 2)
             {
                 AbilityOwner.MeleeAttack(target);

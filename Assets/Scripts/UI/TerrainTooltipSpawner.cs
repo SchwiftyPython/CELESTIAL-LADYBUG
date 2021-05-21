@@ -29,8 +29,6 @@ namespace Assets.Scripts.UI
                 return false;
             }
 
-            Debug.Log($"No Entity! Spawn Terrain ToolTip.");
-
             var tile = GetComponent<ITileHolder>().GetTile();
 
             return tile != null;

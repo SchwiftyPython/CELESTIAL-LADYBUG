@@ -1,10 +1,12 @@
-﻿using Assets.Scripts.Combat;
+﻿using System;
+using Assets.Scripts.Combat;
 using TMPro;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.UI
 {
-    //todo need a Popup interface or base class
+    [Obsolete("TileInfoPopup deprecated. Use TerrainTooltip.")]
     public class TileInfoPopup : MonoBehaviour, ISubscriber
     {
         private const string HoverPopupEvent = GlobalHelper.TileHovered;

@@ -111,7 +111,8 @@ namespace Assets.Scripts.UI
                 if (ability.Range >= distance)
                 {
                     //todo going to have to check book slot too for spells
-                    return ability.Range <= 1 || ability.AbilityOwner.HasMissileWeaponEquipped();
+                    //return ability.Range <= 1 || ability.AbilityOwner.HasMissileWeaponEquipped();
+                    return true;
                 }
             }
 

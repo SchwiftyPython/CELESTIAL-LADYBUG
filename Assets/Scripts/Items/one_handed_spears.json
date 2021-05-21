@@ -3,17 +3,16 @@
   {
 	"Description": "Long pokey boi.",  
     "Parent": null,
-    "Melee": 
-    {
+    "Melee": {},
+    "Ranged": 
+	{
       "MinDamage": 5,
       "MaxDamage": 7
     },
-    "Ranged": {},
     "Defense":{},
     "Abilities":
 	[
-	  "Thrust",
-	  "Corkscrew"	  
+	  "Thrust"	    
 	],
 	"Range": 2,
     "Sprite": "spear",
@@ -26,12 +25,12 @@
   {
 	"Description": "Long pokey boi typically for horse people.",  
     "Parent": "Spear",
-    "Melee": 
-    {
+    "Melee": {},
+    "Ranged": 
+	{
       "MinDamage": 7,
       "MaxDamage": 8
     },
-    "Ranged": {},
     "Defense":{},
     "Abilities":
 	[

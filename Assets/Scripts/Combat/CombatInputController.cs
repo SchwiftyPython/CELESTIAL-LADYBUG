@@ -219,6 +219,21 @@ namespace Assets.Scripts.Combat
             return _isAbilitySelected;
         }
 
+        public bool TileSelected()
+        {
+            return _isTileSelected;
+        }
+
+        public Tile GetSelectedTile()
+        {
+            return _selectedTile;
+        }
+
+        public int GetTotalTileMovementCost()
+        {
+            return _apMovementCost;
+        }
+
         public bool TargetInRange(Entity target)
         {
             return _selectedAbility.TargetInRange(target);

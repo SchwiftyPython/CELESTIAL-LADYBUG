@@ -72,8 +72,8 @@ namespace Assets.Scripts.Entities
                     Race = PickRace();
                 }
 
-                //EntityClass = PickEntityClass();
-                EntityClass = EntityClass.Crossbowman; //todo testing
+                EntityClass = PickEntityClass();
+                //EntityClass = EntityClass.Crossbowman; //todo testing
 
                 while (EntityClass == EntityClass.Derpus)
                 {
@@ -265,9 +265,9 @@ namespace Assets.Scripts.Entities
 
             Equip(testShield);
 
-            var testRing = itemStore.GetItemTypeByName("Plunder Ring");
+            var testRing = itemStore.GetRandomEquipableItem(EquipLocation.Ring);
 
-            Equip((EquipableItem)testRing.NewItem());
+            Equip(testRing);
         }
 
         public void Equip(EquipableItem item)
@@ -276,6 +276,8 @@ namespace Assets.Scripts.Entities
             {
                 return;
             }
+
+            _equipment.AddItem(item.GetAllowedEquipLocation(), item);
 
             if (Abilities == null)
             {
@@ -289,8 +291,6 @@ namespace Assets.Scripts.Entities
                     Abilities.Add(ability.GetType(), ability);
                 }
             }
-
-            _equipment.AddItem(item.GetAllowedEquipLocation(), item);
         }
 
         public void UnEquip(EquipLocation slot, bool swapAttempt)

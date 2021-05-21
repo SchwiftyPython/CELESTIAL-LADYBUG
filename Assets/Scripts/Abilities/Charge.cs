@@ -7,9 +7,9 @@ using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Abilities
 {
-    public class HelmetCharge : Ability
+    public class Charge : Ability
     {
-        public HelmetCharge(Entity abilityOwner) : base("Helmet Charge", "Charge headfirst into an enemy.", 4, 3, abilityOwner, true, false)
+        public Charge(Entity abilityOwner) : base("Charge", "Charge into an enemy.", 4, 3, abilityOwner, true, false)
         {
         }
 
@@ -66,21 +66,9 @@ namespace Assets.Scripts.Abilities
 
             AbilityOwner.MoveTo(destination, 0); //todo might look goofy with default walk animation
 
-            AbilityOwner.MeleeAttackWithSlot(target, EquipLocation.Helmet);
+            AbilityOwner.MeleeAttack(target);
 
             AbilityOwner.SubtractActionPoints(ApCost);
-        }
-
-        public override (int, int) GetAbilityDamageRange()
-        {
-            var helmet = AbilityOwner.GetEquippedItemInSlot(EquipLocation.Helmet);
-
-            int damageMin;
-            int damageMax;
-
-            (damageMin, damageMax) = helmet.GetMeleeDamageRange();
-
-            return (damageMin, damageMax);
         }
     }
 }
