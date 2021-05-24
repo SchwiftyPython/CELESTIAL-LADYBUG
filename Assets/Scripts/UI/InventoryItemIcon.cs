@@ -1,5 +1,4 @@
-﻿using System;
-using Assets.Scripts.Entities;
+﻿using Assets.Scripts.Entities;
 using Assets.Scripts.Items;
 using TMPro;
 using UnityEngine;
@@ -15,7 +14,7 @@ namespace Assets.Scripts.UI
     public class InventoryItemIcon : MonoBehaviour
     {
         private Color _enabledColor = Color.white;
-        private Color _disabledColor = new Color32((byte) 69f, (byte)39f, (byte)49f, byte.MaxValue / 2);
+        private Color _disabledColor = new Color32((byte) 69f, (byte)39f, (byte)49f, byte.MaxValue / 3);
 
         [SerializeField] private GameObject _textContainer = null;
         [SerializeField] private TextMeshProUGUI _itemNumber = null;

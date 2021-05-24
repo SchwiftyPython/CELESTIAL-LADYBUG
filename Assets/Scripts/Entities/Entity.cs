@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.AI;
 using Assets.Scripts.Combat;
+using Assets.Scripts.Effects;
+using Assets.Scripts.Effects.Args;
 using Assets.Scripts.Entities.Names;
 using Assets.Scripts.Items;
 using Assets.Scripts.UI;
+using GoRogue;
 using UnityEngine;
 using GameObject = GoRogue.GameFramework.GameObject;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Entities
@@ -18,8 +23,6 @@ namespace Assets.Scripts.Entities
         private int _level;
         private int _xp;
         private bool _isPlayer;
-
-        private List<Effect> _effects;
 
         private Equipment _equipment;
 
@@ -39,8 +42,12 @@ namespace Assets.Scripts.Entities
         public Skills Skills { get; }
         public Dictionary<Portrait.Slot, string> Portrait { get; private set; }
         //public Weapon EquippedWeapon { get; private set; }
-        public List<Ability> Abilities { get; private set; }
-        
+        public Dictionary<Type, Ability> Abilities { get; private set; }
+
+        public List<Effect> Effects { get; set; }
+
+        //public EffectTrigger<EffectArgs> EffectTriggers { get; set; }
+
         public UnityEngine.GameObject CombatSpritePrefab { get; private set; }
         public UnityEngine.GameObject CombatSpriteInstance { get; private set; }
         public Sprite UiSprite { get; private set; } //todo setup a sprite store that can give us the combat and ui sprites needed
@@ -66,6 +73,7 @@ namespace Assets.Scripts.Entities
                 }
 
                 EntityClass = PickEntityClass();
+                //EntityClass = EntityClass.Crossbowman; //todo testing
 
                 while (EntityClass == EntityClass.Derpus)
                 {
@@ -88,23 +96,23 @@ namespace Assets.Scripts.Entities
                 }
             }
 
-            Attributes = new Attributes();
-            Skills = new Skills();
-            Stats = new Stats(this, Attributes, Skills);
+            Attributes = new Attributes(this);
+            Skills = new Skills(this);
+
+            Abilities = new Dictionary<Type, Ability>();
 
             GenerateStartingEquipment();
+
+            Stats = new Stats(this, Attributes, Skills);
+
+            Effects = new List<Effect>();
+
+            //EffectTriggers = new EffectTrigger<EffectArgs>();
 
             GeneratePortrait();
 
             _level = 1;
             _xp = 0;
-
-            Abilities = new List<Ability>();
-
-            //todo for testing need to remove
-            var testSlashAbility = new Ability("slash", 3, 1, this, true);
-
-            Abilities.Add(testSlashAbility);
         }
 
         public void SetSpriteInstance(UnityEngine.GameObject instance)
@@ -147,6 +155,11 @@ namespace Assets.Scripts.Entities
             return currentTurn - _lastTurnMoved <= 1;
         }
 
+        public void RefillActionPoints()
+        {
+            Stats.CurrentActionPoints = Stats.MaxActionPoints;
+        }
+
         //todo refactor this so the sprite moves through each square and doesn't just teleport
         public void MoveTo(Tile tile, int apMovementCost)
         {
@@ -156,53 +169,108 @@ namespace Assets.Scripts.Entities
                 return;
             }
 
-            Stats.CurrentActionPoints -= apMovementCost;
-
-            //todo this will not update the position if blocked
-            //we could make a method to encapsulate this and check if position was updated to make it more clear
+            //this will not update the position if blocked
             Position = tile.Position;
 
-            CombatSpriteInstance.transform.position = new Vector3(Position.X, Position.Y);
+            if (Position == tile.Position)
+            {
+                Stats.CurrentActionPoints -= apMovementCost;
 
-            EventMediator.Instance.Broadcast(GlobalHelper.ActiveEntityMoved, this);
+                var currentTile = ((CombatMap)CurrentMap).GetTileAt(Position);
+
+                currentTile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(null);
+
+                CombatSpriteInstance.transform.position = new Vector3(Position.X, Position.Y);
+
+                tile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(this);
+
+                var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+                eventMediator.Broadcast(GlobalHelper.ActiveEntityMoved, this);
+
+                var tileEffects = tile.GetEffects();
+
+                if (Effects.Count > 0)
+                {
+                    foreach (var effect in Effects.ToArray())
+                    {
+                        if (!effect.IsLocationDependent())
+                        {
+                            continue;
+                        }
+
+                        if (tileEffects != null && tileEffects.Any())
+                        {
+                            foreach (var tileEffect in tileEffects)
+                            {
+                                if (ReferenceEquals(tileEffect, effect))
+                                {
+                                    continue;
+                                }
+
+                                RemoveEffect(effect);
+                            }
+                        }
+                        else
+                        {
+                            RemoveEffect(effect);
+                        }
+                    }
+                }
+
+                if (tileEffects != null && tileEffects.Any())
+                {
+                    foreach (var effect in tileEffects)
+                    {
+                        ApplyEffect(effect);
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log($"Movement Blocked for {Name}");
+            }
+
         }
 
         public void GenerateStartingEquipment()
         {
+            var itemStore = Object.FindObjectOfType<ItemStore>();
+
             //todo not implemented - temp for testing
 
             _equipment = new Equipment(EntityClass);
 
-            var testWeapon = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Weapon);
-            
+            var testWeapon = itemStore.GetRandomEquipableItem(EquipLocation.Weapon);
+
             Equip(testWeapon);
 
-            var testArmor = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Body);
+            var testArmor = itemStore.GetRandomEquipableItem(EquipLocation.Body);
 
             Equip(testArmor);
 
-            var testHelmet = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Helmet);
+            var testHelmet = itemStore.GetRandomEquipableItem(EquipLocation.Helmet);
 
             Equip(testHelmet);
 
-            var testBoots = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Boots);
+            var testBoots = itemStore.GetRandomEquipableItem(EquipLocation.Boots);
 
             Equip(testBoots);
 
-            var testGloves = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Gloves);
+            var testGloves = itemStore.GetRandomEquipableItem(EquipLocation.Gloves);
 
             Equip(testGloves);
 
-            var testShield = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Shield);
+            var testShield = itemStore.GetRandomEquipableItem(EquipLocation.Shield);
 
             Equip(testShield);
 
-            var testRing = ItemStore.Instance.GetRandomEquipableItem(EquipLocation.Ring);
+            var testRing = itemStore.GetRandomEquipableItem(EquipLocation.Ring);
 
             Equip(testRing);
         }
 
-        private void Equip(EquipableItem item)
+        public void Equip(EquipableItem item)
         {
             if (!_equipment.ItemValidForEntityClass(item))
             {
@@ -210,60 +278,230 @@ namespace Assets.Scripts.Entities
             }
 
             _equipment.AddItem(item.GetAllowedEquipLocation(), item);
+
+            if (Abilities == null)
+            {
+                Abilities = new Dictionary<Type, Ability>();
+            }
+
+            foreach (var ability in item.GetAbilities(this))
+            {
+                if (!Abilities.ContainsKey(ability.GetType()))
+                {
+                    Abilities.Add(ability.GetType(), ability);
+                }
+            }
         }
 
-        public void UnEquip()
+        public void UnEquip(EquipLocation slot, bool swapAttempt)
         {
+            var item = _equipment.GetItemInSlot(slot);
 
+            _equipment.RemoveItem(slot);
+
+            foreach (var ability in item.GetAbilities(this))
+            {
+                if (!_equipment.AbilityEquipped(ability))
+                {
+                    Abilities.Remove(ability.GetType());
+                }
+            }
+
+            if (swapAttempt)
+            {
+                return;
+            }
+
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this);
+        }
+
+        public bool HasAbility(Type abilityType)
+        {
+            foreach (var ability in Abilities)
+            {
+                if (abilityType == ability.Key)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void ResetOneUseCombatAbilities()
+        {
+            if (HasAbility(typeof(EndangeredEndurance)) &&
+                !((EndangeredEndurance)Abilities[typeof(EndangeredEndurance)])
+                    .SavedFromDeathThisBattle())
+            {
+                ((EndangeredEndurance)Abilities[typeof(EndangeredEndurance)]).Reset();
+            }
         }
 
         public void MeleeAttack(Entity target)
         {
-            var hitChance = CalculateChanceToHit(target);
+            var hitChance = CalculateChanceToHitMelee(target);
 
-            if (AttackHit(hitChance)) //todo handle damage in its own method since ranged will use this too
+            if (AttackHit(hitChance, target)) 
             {
-                var equippedWeapon = _equipment.GetItemInSlot(EquipLocation.Weapon);
-
-                var (minDamage, maxDamage) = equippedWeapon.GetMeleeDamageRange();
-
-                var damage = Random.Range(minDamage, maxDamage + 1) + Stats.Attack;
-
-                var targetArmor = target.GetTotalArmorToughness();
-
-                var damageReduction = GetDamageReduction(damage, targetArmor);
-
-                damage -= (int) (damage * damageReduction);
-
-                target.SubtractHealth(damage);
-
-                var message = $"{Name} dealt {damage} damage to {target.Name}!";
-
-                EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                ApplyDamage(target, false);
 
                 if (target.IsDead())
                 {
                     //todo sound for dying peep
 
-                    message = $"{Name} killed {target.Name}!";
+                    var message = $"{Name} killed {target.Name}!";
 
-                    EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                    var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+                    eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                }
+                else
+                {
+                    //todo check for abilities that respond to attack hit
+
+                    if (target.HasAbility(typeof(Riposte))) //todo hail mary not sure if this will work
+                    {
+                        target.Abilities[typeof(Riposte)].Use(this);
+                    }
+
+                }
+            }
+        }
+
+        public void MeleeAttackWithSlot(Entity target, EquipLocation slot)
+        {
+            var hitChance = CalculateChanceToHitMelee(target);
+
+            if (AttackHit(hitChance, target))
+            {
+                ApplyDamage(target, false, slot);
+
+                if (target.IsDead())
+                {
+                    //todo sound for dying peep
+
+                    var message = $"{Name} killed {target.Name}!";
+
+                    var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+                    eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                }
+                else
+                {
+                    //todo check for abilities that respond to attack hit
+
+                    if (target.HasAbility(typeof(Riposte))) //todo hail mary not sure if this will work
+                    {
+                        target.Abilities[typeof(Riposte)].Use(this);
+                    }
+
                 }
             }
         }
 
         public void RangedAttack(Entity target)
         {
-            throw new NotImplementedException();
+            var hitChance = CalculateChanceToHitRanged(target);
+
+            if (AttackHit(hitChance, target))
+            {
+                ApplyDamage(target, true);
+
+                if (target.IsDead())
+                {
+                    //todo sound for dying peep
+
+                    var message = $"{Name} killed {target.Name}!";
+
+                    var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+                    eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                }
+                else
+                {
+                    //todo check for abilities that respond to attack hit
+
+                    if (target.HasAbility(typeof(Riposte))) //todo hail mary not sure if this will work
+                    {
+                        target.Abilities[typeof(Riposte)].Use(this);
+                    }
+
+                }
+            }
+        }
+
+        public void ApplyDamage(Entity target, bool ranged, EquipLocation slot = EquipLocation.Weapon)
+        {
+            var equippedItem = _equipment.GetItemInSlot(slot);
+
+            int minDamage = 0;
+            int maxDamage = 0;
+
+            if (equippedItem != null)
+            {
+                if (ranged)
+                {
+                    (minDamage, maxDamage) = equippedItem.GetRangedDamageRange();
+                }
+                else
+                {
+                    (minDamage, maxDamage) = equippedItem.GetMeleeDamageRange();
+                }
+            }
+
+            var damage = Random.Range(minDamage, maxDamage + 1) + Stats.Attack;
+
+            damage = GlobalHelper.ModifyNewValueForStat(this, CombatModifierTypes.Damage, damage);
+
+            var targetArmor = target.GetTotalArmorToughness();
+
+            var damageReduction = GetDamageReduction(damage, targetArmor);
+
+            damage -= (int)(damage * damageReduction);
+
+            target.SubtractHealth(damage);
+
+            var message = $"{Name} dealt {damage} damage to {target.Name}!";
+
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+
+            if (!target.HasAbility(typeof(DemonicIntervention)))
+            {
+                return;
+            }
+
+            if (!DemonicIntervention.Intervened())
+            {
+                return;
+            }
+
+            SubtractHealth(damage);
+
+            message = $"Demonic Intervention! {target.Name} dealt {damage} damage to {Name}!";
+
+            eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
         }
 
         public bool HasMissileWeaponEquipped()
         {
-            //todo
-            return true;
+            var equippedWeapon = _equipment.GetItemInSlot(EquipLocation.Weapon);
+
+            if (equippedWeapon == null)
+            {
+                return false;
+            }
+
+            var (min, max) = equippedWeapon.GetRangedDamageRange();
+
+            return min > 0 && max > 0;
         }
 
-        public int GetTotalArmorToughness()
+        private int GetTotalArmorToughness()
         {
             var toughnessTotal = 0;
 
@@ -292,6 +530,11 @@ namespace Assets.Scripts.Entities
             return _equipment.GetItemInSlot(EquipLocation.Weapon);
         }
 
+        public EquipableItem GetEquippedItemInSlot(EquipLocation slot)
+        {
+            return _equipment.GetItemInSlot(slot);
+        }
+
         public Equipment GetEquipment()
         {
             return _equipment;
@@ -303,14 +546,25 @@ namespace Assets.Scripts.Entities
             throw new NotImplementedException();
         }
 
-        public int CalculateChanceToHit(Entity target)
+        public int CalculateChanceToHitMelee(Entity target)
         {
-            //todo need to add modifiers
+            var total = CalculateBaseChanceToHit(target);
 
-            return CalculateBaseChanceToHit(target);
+            total += (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.MeleeToHit);
+
+            return total;
         }
 
-        public int CalculateBaseChanceToHit(Entity target)
+        public int CalculateChanceToHitRanged(Entity target)
+        {
+            var total = CalculateBaseChanceToHit(target);
+
+            total += (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.RangedToHit);
+
+            return total;
+        }
+
+        private int CalculateBaseChanceToHit(Entity target)
         {
             Debug.Log($"Attacker Melee Skill: {Stats.MeleeSkill}");
             Debug.Log($"Defender Melee Skill: {target.Stats.MeleeSkill}");
@@ -318,35 +572,53 @@ namespace Assets.Scripts.Entities
             return Stats.MeleeSkill - target.Stats.MeleeSkill / 10;
         }
 
-        public bool AttackHit(int chanceToHit)
+        private bool AttackHit(int chanceToHit, Entity target)
         {
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
             //todo diceroller
             var roll = Random.Range(1, 101);
 
             string message;
             if (roll <= chanceToHit)
             {
-                message = $"Attack hit! Rolled: {roll} Needed: {chanceToHit}";
+                if (target.HasAbility(typeof(DivineIntervention)))
+                {
+                    if (DivineIntervention.Intervened())
+                    {
+                        message = $"Divine Intervention! Attack missed!";
 
-                EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                        eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
-                EventMediator.Instance.Broadcast(GlobalHelper.MeleeHit, this);
+                        return false;
+                    }
+                }
+
+                message = $"Attack hit!";
+
+                eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+
+                eventMediator.Broadcast(GlobalHelper.TargetHit, this, target);
 
                 return true;
             }
 
-            message = $"Attack missed! Rolled: {roll} Needed: {chanceToHit}";
+            message = $"Attack missed!";
 
-            EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+            eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
-            EventMediator.Instance.Broadcast(GlobalHelper.MeleeMiss, this);
+            eventMediator.Broadcast(GlobalHelper.TargetMiss, this);
 
             return false;
         }
 
-        public void AddHealth(int amount)
+        public int AddHealth(int amount)
         {
+            var startingHealth = Stats.CurrentHealth;
+
             Stats.CurrentHealth += amount;
+
+            return Stats.CurrentHealth - startingHealth;
         }
 
         public void SubtractHealth(int amount)
@@ -354,9 +626,13 @@ namespace Assets.Scripts.Entities
             Stats.CurrentHealth -= amount;
         }
 
-        public void AddEnergy(int amount)
+        public int AddEnergy(int amount)
         {
+            var startingEnergy = Stats.CurrentEnergy;
+
             Stats.CurrentEnergy += amount;
+
+            return Stats.CurrentEnergy - startingEnergy;
         }
 
         public void SubtractEnergy(int amount)
@@ -364,9 +640,13 @@ namespace Assets.Scripts.Entities
             Stats.CurrentEnergy -= amount;
         }
 
-        public void AddMorale(int amount)
+        public int AddMorale(int amount)
         {
+            var startingMorale = Stats.CurrentMorale;
+
             Stats.CurrentMorale += amount;
+
+            return Stats.CurrentMorale - startingMorale;
         }
 
         public void SubtractMorale(int amount)
@@ -396,17 +676,61 @@ namespace Assets.Scripts.Entities
 
         public void UseHealthPotion()
         {
-            AddHealth(40); //todo make a constant somewhere
+            Heal(40); //todo make a constant somewhere
+        }
+
+        public void Heal(int amount)
+        {
+            AddHealth(amount);
         }
 
         public void ApplyEffect(Effect effect)
         {
-            //todo
+            if (Effects == null)
+            {
+                Effects = new List<Effect>();
+            }
+
+            if (!effect.CanStack())
+            {
+                foreach (var existingEffect in Effects)
+                {
+                    if (existingEffect.GetType() == effect.GetType())
+                    {
+                        return;
+                    }
+                }
+            }
+
+            Effects.Add(effect);
         }
 
         public void RemoveEffect(Effect effect)
         {
-            //todo
+            if (Effects == null || Effects.Count < 1)
+            {
+                return;
+            }
+
+            Effects.Remove(effect);
+        }
+
+        public void TriggerEffects()
+        {
+            if (Effects == null)
+            {
+                return;
+            }
+
+            foreach (var effect in Effects.ToArray())
+            {
+                if (effect.Duration != Effect.INFINITE && effect.Duration < 1)
+                {
+                    Effects.Remove(effect);
+                }
+
+                effect.Trigger(new BasicEffectArgs(this));
+            }
         }
 
         public int RollForInitiative()
@@ -445,9 +769,11 @@ namespace Assets.Scripts.Entities
 
             //todo base off of equipped items
 
+            var spriteStore = Object.FindObjectOfType<SpriteStore>();
+
             foreach (Portrait.Slot slot in Enum.GetValues(typeof(Portrait.Slot)))
             {
-                Portrait.Add(slot, SpriteStore.Instance.GetRandomSpriteKeyForSlot(slot));
+                Portrait.Add(slot, spriteStore.GetRandomSpriteKeyForSlot(slot));
 
                 //Portrait[slot] = SpriteStore.Instance.GetRandomSpriteKeyForSlot(slot);
             }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Entities;
@@ -13,15 +12,7 @@ namespace Assets.Scripts.UI
     {
         private const string RefreshEvent = GlobalHelper.RefreshCombatUi;
 
-        private static Dictionary<string, Sprite> _abilityIcons;
-
         private Entity _activeEntity;
-
-        #region AbilityIcons
-
-        public Sprite SlashIcon;
-
-        #endregion
 
         public Transform AbilityButtonParent;
 
@@ -29,26 +20,14 @@ namespace Assets.Scripts.UI
 
         private void Start()
         {
-            _abilityIcons = new Dictionary<string, Sprite>
-            {
-                {"slash", SlashIcon}
-            };
+            var eventMediator = FindObjectOfType<EventMediator>();
 
-            EventMediator.Instance.SubscribeToEvent(RefreshEvent, this);
+            eventMediator.SubscribeToEvent(RefreshEvent, this);
         }
 
-        public static void AssignAbilityToButton(Ability ability, GameObject buttonParent)
+        private static void AssignAbilityToButton(Ability ability, GameObject buttonParent)
         {
             var buttonScript = buttonParent.GetComponent<Button>().GetComponent<UseAbilityButton>();
-
-            var icon = GetIconForAbility(ability);
-
-            buttonScript.AssignAbility(ability, icon);
-        }
-
-        public static void AssignAbilityToButton(Ability ability, Button button)
-        {
-            var buttonScript = button.GetComponent<UseAbilityButton>();
 
             var icon = GetIconForAbility(ability);
 
@@ -61,28 +40,32 @@ namespace Assets.Scripts.UI
 
             GlobalHelper.DestroyAllChildren(AbilityButtonParent.gameObject);
 
-            //todo determine abilities from the entity
-            //todo for each ability populate bar with an ability button prefab
+            var abilities = activeEntity.Abilities;
 
-            var testSlashAbility = new Ability("slash", 3, 1, _activeEntity, true);
-
-            var testInstance = Instantiate(AbilityButtonPrefab, new Vector3(0, 0), Quaternion.identity);
-
-            AssignAbilityToButton(testSlashAbility, testInstance);
-
-            testInstance.transform.SetParent(AbilityButtonParent);
-
-            var buttonScript = testInstance.GetComponent<Button>().GetComponent<UseAbilityButton>();
-
-            if (AbilityIsUsable(testSlashAbility))
+            foreach (var ability in abilities.Values)
             {
-                buttonScript.EnableButton();
-            }
-            else
-            {
-                buttonScript.DisableButton();
-            }
+                if (ability.IsPassive)
+                {
+                    continue;
+                }
 
+                var testInstance = Instantiate(AbilityButtonPrefab, new Vector3(0, 0), Quaternion.identity);
+
+                AssignAbilityToButton(ability, testInstance);
+
+                testInstance.transform.SetParent(AbilityButtonParent);
+
+                var buttonScript = testInstance.GetComponent<Button>().GetComponent<UseAbilityButton>();
+
+                if (AbilityIsUsable(ability))
+                {
+                    buttonScript.EnableButton();
+                }
+                else
+                {
+                    buttonScript.DisableButton();
+                }
+            }
         }
 
         private void Refresh()
@@ -111,7 +94,9 @@ namespace Assets.Scripts.UI
                 return false;
             }
 
-            var allEntities = CombatManager.Instance.TurnOrder.ToList();
+            var combatManager = FindObjectOfType<CombatManager>();
+
+            var allEntities = combatManager.TurnOrder.ToList();
 
             foreach (var entity in allEntities)
             {
@@ -125,6 +110,8 @@ namespace Assets.Scripts.UI
 
                 if (ability.Range >= distance)
                 {
+                    //todo going to have to check book slot too for spells
+                    //return ability.Range <= 1 || ability.AbilityOwner.HasMissileWeaponEquipped();
                     return true;
                 }
             }
@@ -139,7 +126,9 @@ namespace Assets.Scripts.UI
                 return null;
             }
 
-            return !_abilityIcons.ContainsKey(ability.Name) ? null : _abilityIcons[ability.Name];
+            var spriteStore = FindObjectOfType<SpriteStore>();
+
+            return spriteStore.GetAbilitySprite(ability);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

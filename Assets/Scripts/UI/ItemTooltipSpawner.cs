@@ -14,7 +14,8 @@ namespace Assets.Scripts.UI
 
         private void Start()
         {
-            EventMediator.Instance.SubscribeToEvent(GlobalHelper.PopulateCharacterSheet, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(GlobalHelper.PopulateCharacterSheet, this);
         }
 
         public override bool CanCreateTooltip()
@@ -41,7 +42,7 @@ namespace Assets.Scripts.UI
             itemTooltip.Setup(item, _currentCompanion);
         }
 
-        private Entity GetCurrentCompanion()
+        private static Entity GetCurrentCompanion()
         {
             var partyManagementWindow = GameObject.Find("PartyManagementWindowMask");
             var windowScript = partyManagementWindow.GetComponent<PartyManagementWindow>();

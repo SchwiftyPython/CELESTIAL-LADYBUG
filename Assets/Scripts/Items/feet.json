@@ -58,24 +58,24 @@
   },
   "Designer Boots":
   {
-	"Description": "Better for the runway than battle probably.",  
+	"Description": "Better for the runway than battle probably. Their shininess is distracting!",  
     "Parent": "Leather Boots",
     "Melee": {},
     "Ranged": {},
     "Defense": 
     {
       "Toughness": 0,
-      "DodgeMod": 2
+      "DodgeMod": 1
     },
     "Abilities": 
 	[
-	    "Distract"
+	    "Distracting"
 	],
 	"Range": -1,
     "Sprite": "sexy_boots",
     "Slot": "boots",
 	"Stackable": false,
-	"Price": 50,
+	"Price": 505,
 	"TwoHanded" : false
   },
   "Quick Boots":
@@ -87,11 +87,11 @@
     "Defense": 
     {
       "Toughness": 1,
-      "DodgeMod": 3
+      "DodgeMod": 1
     },
     "Abilities": 
 	[
-	    "Hard To Hit"
+	    "Uncanny Dodge"
 	],
 	"Range": -1,
     "Sprite": "speed_boots",
@@ -109,7 +109,7 @@
     "Defense": 
     {
       "Toughness": 3,
-      "DodgeMod": 3
+      "DodgeMod": 0
     },
     "Abilities": 
 	[
@@ -133,10 +133,7 @@
       "Toughness": 2,
       "DodgeMod": 0
     },
-    "Abilities": 
-	[
-	    "Cold Resistance"
-	],
+    "Abilities": [],
 	"Range": -1,
     "Sprite": "frost_boots",
     "Slot": "boots",
@@ -155,10 +152,7 @@
       "Toughness": 2,
       "DodgeMod": 1
     },
-    "Abilities": 
-	[
-	    "Rooted"
-	],
+    "Abilities": [],
 	"Range": -1,
     "Sprite": "grass_boots",
     "Slot": "boots",
@@ -175,12 +169,9 @@
     "Defense": 
     {
       "Toughness": 3,
-      "DodgeMod": 1
+      "DodgeMod": 0
     },
-    "Abilities": 
-	[
-	    "Icky"
-	],
+    "Abilities": [],	
 	"Range": -1,
     "Sprite": "insect_boots",
     "Slot": "boots",

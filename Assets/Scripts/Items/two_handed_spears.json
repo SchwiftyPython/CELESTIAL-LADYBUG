@@ -13,8 +13,7 @@
     "Abilities":
 	[
 	  "Thrust",
-	  "Slash",
-      "Hook"	  
+	  "Slash"      	  
 	],
 	"Range": 2,
     "Sprite": "naginata",

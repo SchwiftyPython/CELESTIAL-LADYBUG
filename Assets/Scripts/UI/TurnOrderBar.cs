@@ -23,7 +23,8 @@ namespace Assets.Scripts.UI
 
         private void Start()
         {
-            EventMediator.Instance.SubscribeToEvent(RefreshEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(RefreshEvent, this);
         }
 
         //todo refactor
@@ -46,7 +47,8 @@ namespace Assets.Scripts.UI
                 GlobalHelper.DestroyAllChildren(slot.gameObject);
             }
 
-            var turnOrder = CombatManager.Instance.TurnOrder;
+            var combatManager = Object.FindObjectOfType<CombatManager>();
+            var turnOrder = combatManager.TurnOrder;
 
             if (turnOrder == null || turnOrder.Count < 1)
             {

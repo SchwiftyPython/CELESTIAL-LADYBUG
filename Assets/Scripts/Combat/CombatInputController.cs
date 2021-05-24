@@ -36,22 +36,25 @@ namespace Assets.Scripts.Combat
         private Tile _highlightedAbilityTile;
         private Ability _selectedAbility;
 
+        private EventMediator _eventMediator;
+        private CombatManager _combatManager;
+
         public Color HighlightedColor; //todo refactor -- need to look into better way to highlight probably with an actual sprite
 
         public GameObject Canvas;
 
-        public static CombatInputController Instance;
+        //public static CombatInputController Instance;
 
         private void Start()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else if (Instance != this)
-            {
-                Destroy(gameObject);
-            }
+            // if (Instance == null)
+            // {
+            //     Instance = this;
+            // }
+            // else if (Instance != this)
+            // {
+            //     Destroy(gameObject);
+            // }
 
             if (Canvas == null)
             {
@@ -60,10 +63,14 @@ namespace Assets.Scripts.Combat
             _canvasGraphicRaycaster = Canvas.GetComponent<GraphicRaycaster>();
             _canvasEventSystem = Canvas.GetComponent<EventSystem>();
 
-            EventMediator.Instance.SubscribeToEvent(CombatSceneLoaded, this);
-            EventMediator.Instance.SubscribeToEvent(PlayerTurn, this);
-            EventMediator.Instance.SubscribeToEvent(AiTurn, this);
-            EventMediator.Instance.SubscribeToEvent(EndTurn, this);
+            _eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            _eventMediator.SubscribeToEvent(CombatSceneLoaded, this);
+            _eventMediator.SubscribeToEvent(PlayerTurn, this);
+            _eventMediator.SubscribeToEvent(AiTurn, this);
+            _eventMediator.SubscribeToEvent(EndTurn, this);
+
+            _combatManager = FindObjectOfType<CombatManager>();
         }
 
         //todo need refactor big time
@@ -71,40 +78,15 @@ namespace Assets.Scripts.Combat
         {
             if (_isPlayerTurn)
             {
-                //todo need to block when an entity is selected by an ability
                 if (!_isTileSelected)
                 {
-                    //todo highlight tile or show entity info if entity present
-
                     if (MouseHitUi())
                     {
                         ClearHighlights();
                         return;
                     }
 
-                    var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-                    var mouseCoord = new Coord((int)mousePosition.x, (int)mousePosition.y);
-
-                    var entity = (Entity) _map.Entities.GetItems(mouseCoord).FirstOrDefault();
-
-                    //todo clean up
-                    if (entity == null && !_isAbilitySelected)
-                    {
-                        HighlightTileUnderMouse();
-                    }
-                    else if (entity != null)
-                    {
-                        if (_isAbilitySelected && _selectedAbility.TargetValid(entity) &&
-                            _selectedAbility.TargetInRange(entity))
-                        {
-                            ShowHitChance(entity);
-                        }
-                        else
-                        {
-                            ShowEntityInfo(entity);
-                        }
-                    }
+                    HighlightTileUnderMouse();
                 }
 
                 if (Input.GetMouseButtonDown(0))
@@ -125,7 +107,7 @@ namespace Assets.Scripts.Combat
 
                             if (entity != null && _selectedAbility.TargetValid(entity) && _selectedAbility.TargetInRange(entity))
                             {
-                                _selectedAbility.Use(CombatManager.Instance.ActiveEntity, entity);
+                                _selectedAbility.Use(entity);
 
                                 _selectedAbility = null;
 
@@ -133,7 +115,7 @@ namespace Assets.Scripts.Combat
 
                                 ClearHighlights();
 
-                                EventMediator.Instance.Broadcast(GlobalHelper.RefreshCombatUi, this, CombatManager.Instance.ActiveEntity);
+                                _eventMediator.Broadcast(GlobalHelper.RefreshCombatUi, this, _combatManager.ActiveEntity);
                             }
                         }
                         else
@@ -171,9 +153,9 @@ namespace Assets.Scripts.Combat
                             return;
                         }
 
-                        if (_selectedTile == targetTile)
+                        if (ReferenceEquals(_selectedTile, targetTile))
                         {
-                            var activeEntity = CombatManager.Instance.ActiveEntity;
+                            var activeEntity = _combatManager.ActiveEntity;
 
                             if (_apMovementCost > activeEntity.Stats.CurrentActionPoints)
                             {
@@ -182,12 +164,12 @@ namespace Assets.Scripts.Combat
 
                             activeEntity.MoveTo(targetTile, _apMovementCost);
 
-                            EventMediator.Instance.Broadcast(GlobalHelper.RefreshCombatUi, this, activeEntity);
+                            _eventMediator.Broadcast(GlobalHelper.RefreshCombatUi, this, activeEntity);
                         }
 
                         _isTileSelected = false;
 
-                        EventMediator.Instance.Broadcast(GlobalHelper.TileDeselected, this);
+                        _eventMediator.Broadcast(GlobalHelper.TileDeselected, this);
                     }
                 }
                 else if (Input.GetMouseButtonDown(1))
@@ -195,7 +177,7 @@ namespace Assets.Scripts.Combat
                     _isTileSelected = false;
                     _isAbilitySelected = false;
 
-                    EventMediator.Instance.Broadcast(GlobalHelper.TileDeselected, this);
+                    _eventMediator.Broadcast(GlobalHelper.TileDeselected, this);
                 }
                 else if (Input.GetKeyDown(KeyCode.Escape))
                 {
@@ -205,7 +187,7 @@ namespace Assets.Scripts.Combat
                     _isTileSelected = false;
                     _isAbilitySelected = false;
 
-                    EventMediator.Instance.Broadcast(GlobalHelper.TileDeselected, this);
+                    _eventMediator.Broadcast(GlobalHelper.TileDeselected, this);
                 }
             }
         }
@@ -220,16 +202,58 @@ namespace Assets.Scripts.Combat
 
             HighlightTileUnderAbilityTarget(_selectedAbilityTarget);
 
-            var hitChance = CombatManager.Instance.ActiveEntity.CalculateChanceToHit(_selectedAbilityTarget);
+            var hitChance = _combatManager.ActiveEntity.CalculateChanceToHitMelee(_selectedAbilityTarget);
 
             //todo we'll need some kind of DTO to hold the hit chance and modifiers
-            EventMediator.Instance.Broadcast(GlobalHelper.EntityTargeted, _selectedAbilityTarget, hitChance);
+            _eventMediator.Broadcast(GlobalHelper.EntityTargeted, _selectedAbilityTarget, hitChance);
         }
 
         public void AbilityButtonClicked(Ability selectedAbility)
         {
             _selectedAbility = selectedAbility;
             _isAbilitySelected = true;
+        }
+
+        public bool AbilitySelected()
+        {
+            return _isAbilitySelected;
+        }
+
+        public bool TileSelected()
+        {
+            return _isTileSelected;
+        }
+
+        public Tile GetSelectedTile()
+        {
+            return _selectedTile;
+        }
+
+        public int GetTotalTileMovementCost()
+        {
+            return _apMovementCost;
+        }
+
+        public bool TargetInRange(Entity target)
+        {
+            return _selectedAbility.TargetInRange(target);
+        }
+
+        public bool TargetValid(Entity target)
+        {
+            return _selectedAbility.TargetValid(target);
+        }
+
+        public int GetHitChance(Entity targetEntity)
+        {
+            _selectedAbilityTarget = targetEntity;
+
+            if (_selectedAbility.IsRanged())
+            {
+                return _combatManager.ActiveEntity.CalculateChanceToHitRanged(_selectedAbilityTarget);
+            }
+
+            return _combatManager.ActiveEntity.CalculateChanceToHitMelee(_selectedAbilityTarget);
         }
 
         private void NextTarget()
@@ -239,7 +263,7 @@ namespace Assets.Scripts.Combat
                 return;
             }
 
-            EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
+            _eventMediator.Broadcast(GlobalHelper.HidePopup, this);
 
             ClearHighlightUnderAbilityTarget();
 
@@ -251,10 +275,10 @@ namespace Assets.Scripts.Combat
 
             HighlightTileUnderAbilityTarget(_selectedAbilityTarget);
 
-            var hitChance = CombatManager.Instance.ActiveEntity.CalculateChanceToHit(_selectedAbilityTarget);
+            var hitChance = _combatManager.ActiveEntity.CalculateChanceToHitMelee(_selectedAbilityTarget);
 
             //todo we'll need some kind of DTO to hold the hit chance and modifiers
-            EventMediator.Instance.Broadcast(GlobalHelper.EntityTargeted, _selectedAbilityTarget, hitChance);
+            _eventMediator.Broadcast(GlobalHelper.EntityTargeted, _selectedAbilityTarget, hitChance);
         }
 
         private bool MouseHitUi()
@@ -330,7 +354,7 @@ namespace Assets.Scripts.Combat
                 _highlightedTiles = new List<Tile>();
             }
 
-            var activeEntity = CombatManager.Instance.ActiveEntity;
+            var activeEntity = _combatManager.ActiveEntity;
 
             var path = _map.AStar.ShortestPath(activeEntity.Position, tile.Position);
 
@@ -362,9 +386,9 @@ namespace Assets.Scripts.Combat
 
             _isTileSelected = true;
 
-            EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
+            _eventMediator.Broadcast(GlobalHelper.HidePopup, this);
 
-            EventMediator.Instance.Broadcast(GlobalHelper.TileSelected, tile, _apMovementCost);
+            _eventMediator.Broadcast(GlobalHelper.TileSelected, tile, _apMovementCost);
         }
 
         private void HighlightTile(Tile tile)
@@ -423,14 +447,14 @@ namespace Assets.Scripts.Combat
 
         private void ShowEntityInfo(Entity targetEntity)
         {
-            EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
+            _eventMediator.Broadcast(GlobalHelper.HidePopup, this);
 
-            EventMediator.Instance.Broadcast(GlobalHelper.TileHovered, this, targetEntity);
+            _eventMediator.Broadcast(GlobalHelper.TileHovered, this, targetEntity);
         }
 
         private void ShowHitChance(Entity targetEntity)
         {
-            EventMediator.Instance.Broadcast(GlobalHelper.HidePopup, this);
+            _eventMediator.Broadcast(GlobalHelper.HidePopup, this);
 
             _selectedAbilityTarget = targetEntity;
 
@@ -438,10 +462,10 @@ namespace Assets.Scripts.Combat
 
             HighlightTileUnderAbilityTarget(_selectedAbilityTarget);
 
-            var hitChance = CombatManager.Instance.ActiveEntity.CalculateChanceToHit(_selectedAbilityTarget);
+            var hitChance = _combatManager.ActiveEntity.CalculateChanceToHitMelee(_selectedAbilityTarget);
 
             //todo we'll need some kind of DTO to hold the hit chance and modifiers
-            EventMediator.Instance.Broadcast(GlobalHelper.EntityTargeted, _selectedAbilityTarget, hitChance);
+            _eventMediator.Broadcast(GlobalHelper.EntityTargeted, _selectedAbilityTarget, hitChance);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

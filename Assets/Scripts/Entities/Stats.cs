@@ -1,5 +1,6 @@
 ﻿using System;
-using GoRogue.DiceNotation;
+using Assets.Scripts.Abilities;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Entities
@@ -14,13 +15,14 @@ namespace Assets.Scripts.Entities
 
         private const int CurrentStatsMin = 0;
 
-        private Entity _parent;
+        private readonly Entity _parent;
 
         private int _maxHealth;
+
         public int MaxHealth
         {
-            get => _maxHealth;
-            set
+            get => _maxHealth + GetAllModifiersForStat(EntityStatTypes.MaxHealth);
+            private set
             {
                 if (value > PrototypeStatsCap)
                 {
@@ -30,18 +32,51 @@ namespace Assets.Scripts.Entities
                 {
                     _maxHealth = value;
                 }
-            } }
+            }
+        }
 
         private int _currentHealth;
         public int CurrentHealth
         {
-            get => _currentHealth;
+            get
+            {
+                if (_currentHealth > MaxHealth)
+                {
+                    _currentHealth = MaxHealth;
+                }
+
+                return _currentHealth;
+            }
             set
             {
+                if (value > _currentHealth)
+                {
+                    var moddedValue = ModifyNewValueForStat(EntityStatTypes.CurrentHealth, value - _currentHealth);
+
+                    value = _currentHealth + moddedValue;
+                }
+
                 if (value <= CurrentStatsMin)
                 {
-                    _currentHealth = CurrentStatsMin;
-                    EventMediator.Instance.Broadcast(GlobalHelper.EntityDead, _parent);
+                    //todo need to encapsulate this if we add another will not die ability
+                    if (GameManager.Instance.InCombat() && _parent.HasAbility(typeof(EndangeredEndurance)) &&
+                        !((EndangeredEndurance) _parent.Abilities[typeof(EndangeredEndurance)])
+                            .SavedFromDeathThisBattle())
+                    {
+                        _parent.Abilities[typeof(EndangeredEndurance)].Use();
+                    }
+                    else
+                    {
+                        _currentHealth = CurrentStatsMin;
+
+                        foreach (var ability in _parent.Abilities.Values) //todo might make a Die method lol
+                        {
+                            ability.Terminate();
+                        }
+
+                        var eventMediator = Object.FindObjectOfType<EventMediator>();
+                        eventMediator.Broadcast(GlobalHelper.EntityDead, _parent);
+                    }
                 }
                 else if(value > MaxHealth)
                 {
@@ -83,7 +118,8 @@ namespace Assets.Scripts.Entities
 
                     if (_parent.IsDerpus())
                     {
-                        EventMediator.Instance.Broadcast(GlobalHelper.DerpusNoEnergy, this);
+                        var eventMediator = Object.FindObjectOfType<EventMediator>();
+                        eventMediator.Broadcast(GlobalHelper.DerpusNoEnergy, this);
                     }
                 }
                 else if (value > MaxEnergy)
@@ -123,7 +159,9 @@ namespace Assets.Scripts.Entities
                 if (value < CurrentStatsMin)
                 {
                     _currentMorale = CurrentStatsMin;
-                    EventMediator.Instance.Broadcast(GlobalHelper.MentalBreak, _parent);
+
+                    var eventMediator = Object.FindObjectOfType<EventMediator>();
+                    eventMediator.Broadcast(GlobalHelper.MentalBreak, _parent);
                 }
                 else if (value > MaxMorale)
                 {
@@ -139,24 +177,7 @@ namespace Assets.Scripts.Entities
         private int _maxActionPoints;
         public int MaxActionPoints
         {
-            get
-            {
-                //todo refactor to use modifiers or something
-
-                var energyPercentage = ((float)CurrentEnergy / MaxEnergy) * 100;
-
-                if (energyPercentage < 25)
-                {
-                    return _maxActionPoints - 2;
-                }
-
-                if (energyPercentage < 50)
-                {
-                    return _maxActionPoints - 1;
-                }
-
-                return _maxActionPoints;
-            }
+            get => _maxActionPoints + GetAllModifiersForStat(EntityStatTypes.MaxActionPoints);
             set
             {
                 if (value > PrototypeStatsCap)
@@ -173,7 +194,15 @@ namespace Assets.Scripts.Entities
         private int _currentActionPoints;
         public int CurrentActionPoints
         {
-            get => _currentActionPoints;
+            get
+            {
+                if (_currentActionPoints > MaxActionPoints)
+                {
+                    _currentActionPoints = MaxActionPoints;
+                }
+
+                return _currentActionPoints;
+            }
             set
             {
                 if (value < CurrentStatsMin)
@@ -268,7 +297,7 @@ namespace Assets.Scripts.Entities
             //Critical = (int)(attributes.Agility * 2.4 + attributes.Intellect * 2.4 + RollD20()); //todo use wild die for critical success or failures
 
             MaxActionPoints = 10;
-            CurrentActionPoints = MaxActionPoints;
+            CurrentActionPoints = CurrentActionPoints;
         }
 
         private void EnforceStatCap(int stat)
@@ -309,6 +338,126 @@ namespace Assets.Scripts.Entities
             }
 
             return total;
+        }
+
+        /// <summary>
+        /// Returns all modifiers for the given StatType.
+        /// </summary>
+        private int GetAllModifiersForStat(EntityStatTypes stat)
+        {
+            return (int)(GetAdditiveModifiers(stat) * (1 + GetPercentageModifiers(stat) / 100));
+        }
+
+        /// <summary>
+        /// Applies all modifiers to a new value for the given StatType.
+        /// </summary>
+        private int ModifyNewValueForStat(EntityStatTypes stat, int value)
+        {
+            return (int) (GetAdditiveModifiers(stat) + value * (1 + GetPercentageModifiers(stat) / 100));
+        }
+
+        /// <summary>
+        /// Returns all additive modifiers in equipment and abilities for the given StatType.
+        /// </summary>
+        private float GetAdditiveModifiers(EntityStatTypes stat)
+        {
+            float total = 0;
+
+            var equipment = _parent.GetEquipment();
+
+            if (equipment == null)
+            {
+                return total;
+            }
+
+            foreach (EquipLocation slot in Enum.GetValues(typeof(EquipLocation)))
+            {
+                var item = equipment.GetItemInSlot(slot);
+
+                if (item == null)
+                {
+                    continue;
+                }
+
+                total += item.GetAdditiveModifiers(stat);
+            }
+
+            var abilities = _parent.Abilities;
+
+            foreach (var ability in abilities.Values)
+            {
+                if (!(ability is IModifierProvider provider))
+                {
+                    continue;
+                }
+
+                total += provider.GetAdditiveModifiers(stat);
+            }
+
+            if (stat == EntityStatTypes.MaxActionPoints)
+            {
+                total += GetMaxActionPointsModifier();
+            }
+
+            return total;
+        }
+
+        /// <summary>
+        /// Returns all percentage modifiers in equipment and abilities for the given StatType.
+        /// </summary>
+        private float GetPercentageModifiers(EntityStatTypes stat)
+        {
+            float total = 0;
+
+            var equipment = _parent.GetEquipment();
+
+            if (equipment == null)
+            {
+                return total;
+            }
+
+            foreach (EquipLocation slot in Enum.GetValues(typeof(EquipLocation)))
+            {
+                var item = equipment.GetItemInSlot(slot);
+
+                if (item == null)
+                {
+                    continue;
+                }
+
+                total += item.GetPercentageModifiers(stat);
+            }
+
+            var abilities = _parent.Abilities;
+
+            foreach (var ability in abilities.Values)
+            {
+                if (!(ability is IModifierProvider provider))
+                {
+                    continue;
+                }
+
+                total += provider.GetPercentageModifiers(stat);
+            }
+
+            return total;
+        }
+
+        private int GetMaxActionPointsModifier()
+        {
+            var energyPercentage = ((float)CurrentEnergy / MaxEnergy) * 100;
+
+            if (energyPercentage < 25)
+            {
+                return _maxActionPoints - 2;
+            }
+
+            if (energyPercentage < 50)
+            {
+                return _maxActionPoints - 1;
+            }
+
+            return 0;
         }
     }
 }

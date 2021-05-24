@@ -5,6 +5,7 @@ using Assets.Scripts.Combat;
 using Assets.Scripts.Travel;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Encounters
 {
@@ -39,16 +40,18 @@ namespace Assets.Scripts.Encounters
                 throw new ArgumentNullException(nameof(selectedOption));
             }
 
+            var travelManager = Object.FindObjectOfType<TravelManager>();
+
             List<string> rewardsText = null; 
             if (selectedOption.HasReward())
             {
-                rewardsText = TravelManager.Instance.ApplyEncounterReward(selectedOption.Reward);
+                rewardsText = travelManager.ApplyEncounterReward(selectedOption.Reward);
             }
 
             List<string> penaltiesText = null; 
             if (selectedOption.HasPenalty())
             {
-                penaltiesText = TravelManager.Instance.ApplyEncounterPenalty(selectedOption.Penalty);
+                penaltiesText = travelManager.ApplyEncounterPenalty(selectedOption.Penalty);
             }
 
             var fullResultDescription = new List<string> {selectedOption.ResultText + "\n"};
@@ -65,37 +68,41 @@ namespace Assets.Scripts.Encounters
 
             EncounterType = selectedOption.TargetEncounterType;
 
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
             if (EncounterType == EncounterType.Combat)
             {
                 if (selectedOption is RetreatCombatOption retreatCombatOption)
                 {
                     if (retreatCombatOption.Success)
                     {
-                        EventMediator.Instance.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
+                        eventMediator.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
                     }
                     else
                     {
                         SubscribeToOptionSelectedEvent();
-                        EventMediator.Instance.Broadcast(GlobalHelper.RetreatEncounterFailed, this, fullResultDescription);
+                        eventMediator.Broadcast(GlobalHelper.RetreatEncounterFailed, this, fullResultDescription);
                     }
                 }
                 else //if to arms option selected
                 {
                     SceneManager.LoadScene(GlobalHelper.CombatScene);
 
-                    CombatManager.Instance.Enemies = ((FightCombatOption) selectedOption).Enemies;
+                    var combatManager = Object.FindObjectOfType<CombatManager>();
 
-                    CombatManager.Instance.Load();
+                    combatManager.Enemies = ((FightCombatOption) selectedOption).Enemies;
+
+                    combatManager.Load();
                 }
                
             }
             else if (fullResultDescription.Count > 1 || !fullResultDescription.First().Equals("\n"))
             {
-                EventMediator.Instance.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
+                eventMediator.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
             }
             else
             {
-                EventMediator.Instance.Broadcast(GlobalHelper.EncounterFinished, this);
+                eventMediator.Broadcast(GlobalHelper.EncounterFinished, this);
             }
         }
 
@@ -106,12 +113,14 @@ namespace Assets.Scripts.Encounters
 
         protected void SubscribeToOptionSelectedEvent()
         {
-            EventMediator.Instance.SubscribeToEvent(OptionSelectedEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(OptionSelectedEvent, this);
         }
 
         protected void UnsubscribeFromOptionSelectedEvent()
         {
-            EventMediator.Instance.UnsubscribeFromEvent(OptionSelectedEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.UnsubscribeFromEvent(OptionSelectedEvent, this);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

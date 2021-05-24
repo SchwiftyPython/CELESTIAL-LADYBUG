@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.UI;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.Utilities.UI.Dragging
@@ -82,7 +83,20 @@ namespace Assets.Scripts.Utilities.UI.Dragging
 
         private void DropItemIntoContainer(IDragDestination<T> destination)
         {
-            if (object.ReferenceEquals(destination, _source)) return;
+            if (ReferenceEquals(destination, _source))
+            {
+                return;
+            }
+
+            if (_source is EquipmentSlotUi sourceEquipmentSlot && sourceEquipmentSlot.IsLocked())
+            {
+                return;
+            }
+
+            if (destination is EquipmentSlotUi destEquipmentSlot && destEquipmentSlot.IsLocked())
+            {
+                return;
+            }
 
             var destinationContainer = destination as IDragContainer<T>;
             var sourceContainer = _source as IDragContainer<T>;
@@ -107,8 +121,8 @@ namespace Assets.Scripts.Utilities.UI.Dragging
             var removedDestinationNumber = destination.GetNumber();
             var removedDestinationItem = destination.GetItem();
 
-            source.RemoveItems(removedSourceNumber);
-            destination.RemoveItems(removedDestinationNumber);
+            source.RemoveItems(removedSourceNumber, true);
+            destination.RemoveItems(removedDestinationNumber, true);
 
             var sourceTakeBackNumber = CalculateTakeBack(removedSourceItem, removedSourceNumber, source, destination);
             var destinationTakeBackNumber = CalculateTakeBack(removedDestinationItem, removedDestinationNumber, destination, source);
@@ -155,7 +169,7 @@ namespace Assets.Scripts.Utilities.UI.Dragging
 
             if (toTransfer > 0)
             {
-                _source.RemoveItems(toTransfer);
+                _source.RemoveItems(toTransfer, false);
                 destination.AddItems(draggingItem, toTransfer);
                 return false;
             }

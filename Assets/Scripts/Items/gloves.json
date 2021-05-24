@@ -65,12 +65,9 @@
     "Defense": 
     {
       "Toughness": 1,
-      "DodgeMod": 1
+      "DodgeMod": 0
     },
-    "Abilities": 
-	[
-	  "Careful Shooter"
-	],
+    "Abilities": [],
 	"Range": -1,
     "Sprite": "metal_bracer",
     "Slot": "gloves",
@@ -87,11 +84,11 @@
     "Defense": 
     {
       "Toughness": 1,
-      "DodgeMod": 2
+      "DodgeMod": 0
     },
     "Abilities": 
 	[
-	  "Careful Shooter"
+	  "Calculated"
 	],
 	"Range": -1,
     "Sprite": "fancy_bracer",
@@ -109,11 +106,11 @@
     "Defense": 
     {
       "Toughness": 6,
-      "DodgeMod": 8
+      "DodgeMod": 0
     },
     "Abilities": 
 	[
-	  "Bodybuilder",
+	  "Works Out",
 	  "Tank"
 	],
 	"Range": -1,
@@ -132,7 +129,7 @@
     "Defense": 
     {
       "Toughness": 10,
-      "DodgeMod": 4
+      "DodgeMod": 0
     },
     "Abilities": 
 	[
@@ -154,13 +151,9 @@
     "Defense": 
     {
       "Toughness": 4,
-      "DodgeMod": 4
+      "DodgeMod": 0
     },
-    "Abilities": 
-	[
-	  "Concentration",
-	  "Agile"
-	],
+    "Abilities": [],
 	"Range": -1,
     "Sprite": "fancy_gloves_3",
     "Slot": "gloves",
@@ -201,10 +194,7 @@
       "Toughness": 0,
       "DodgeMod": 1
     },
-    "Abilities": 
-	[
-	  "Amplify"
-	],
+    "Abilities": [],
 	"Range": -1,
     "Sprite": "colorful_gloves",
     "Slot": "gloves",

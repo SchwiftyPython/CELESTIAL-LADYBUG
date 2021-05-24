@@ -19,7 +19,8 @@ namespace Assets.Scripts.UI
 
         private void Start()
         {
-            EventMediator.Instance.SubscribeToEvent(RefreshEvent, this);
+            var eventMediator = FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(RefreshEvent, this);
         }
 
         private void Populate(Entity activeEntity)

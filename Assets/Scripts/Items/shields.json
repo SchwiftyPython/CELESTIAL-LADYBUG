@@ -38,7 +38,7 @@
     "Defense": 
     {
       "Toughness": 2,
-      "DodgeMod": 1
+      "DodgeMod": 0
     },
     "Abilities": 
 	[
@@ -83,8 +83,7 @@
 	},
     "Abilities": 
 	[
-	  "Shield Bash",
-      "Shield Wall"	  
+	  "Shield Bash"  
 	],
 	"Range": 1,
     "Sprite": "kite_shield_1",
@@ -102,9 +101,7 @@
     "Defense":{},
     "Abilities": 
 	[
-	  "Shield Bash",
-      "Shield Wall",
-      "Fire Circle"	  
+	  "Shield Bash" 
 	],
 	"Range": 1,
     "Sprite": "kite_shield_2",
@@ -126,8 +123,7 @@
 	},
     "Abilities": 
 	[
-	  "Shield Bash",
-      "Shield Wall"       
+	  "Shield Bash"     
 	],
 	"Range": 1,
     "Sprite": "fancy_shield_1",
@@ -145,13 +141,11 @@
     "Defense":
 	{
 	  "Toughness": 2,
-      "DodgeMod": 2
+      "DodgeMod": 0
 	},
     "Abilities": 
 	[
-	  "Shield Bash",
-      "Shield Wall",
-      "Acid Defense"	  
+	  "Shield Bash"	  
 	],
 	"Range": 1,
     "Sprite": "fancy_shield_2",
@@ -169,13 +163,11 @@
     "Defense":
 	{
 	  "Toughness": 1,
-      "DodgeMod": 3
+      "DodgeMod": 1
 	},
     "Abilities": 
 	[
-	  "Shield Bash",
-      "Shield Wall",
-      "Premonition"	  
+	  "Shield Bash" 
 	],
 	"Range": 1,
     "Sprite": "fancy_shield_3",

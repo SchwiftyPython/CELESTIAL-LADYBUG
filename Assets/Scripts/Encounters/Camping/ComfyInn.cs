@@ -10,8 +10,6 @@ namespace Assets.Scripts.Encounters.Camping
         private const int EnergyGain = 50;
         private const int BreakfastChance = 2;
 
-        //todo need to move a lot of this to Run()
-        //todo anything that depends on companion count or individual companions can't happen ahead of time.
         public ComfyInn()
         {
             Rarity = Rarity.Common;
@@ -25,19 +23,21 @@ namespace Assets.Scripts.Encounters.Camping
         {
             Options = new Dictionary<string, Option>();
 
-            var totalCost = CostPerPerson * TravelManager.Instance.Party.GetCompanions().Count;
+            var travelManager = Object.FindObjectOfType<TravelManager>();
+
+            var totalCost = CostPerPerson * travelManager.Party.GetCompanions().Count;
 
             string optionTitle;
             string optionResultText;
-            if (totalCost <= TravelManager.Instance.Party.Gold)
+            if (totalCost <= travelManager.Party.Gold)
             {
                 optionTitle = $"Pay the {totalCost} gold";
                 optionResultText = $"The group pays {totalCost} gold to stay the night. It's pretty comfy!";
 
                 var optionReward = new Reward();
-                optionReward.AddEntityGain(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentEnergy, EnergyGain);
+                optionReward.AddEntityGain(travelManager.Party.Derpus, EntityStatTypes.CurrentEnergy, EnergyGain);
 
-                foreach (var companion in TravelManager.Instance.Party.GetCompanions())
+                foreach (var companion in travelManager.Party.GetCompanions())
                 {
                     optionReward.AddEntityGain(companion, EntityStatTypes.CurrentEnergy, EnergyGain);
                 }
@@ -51,14 +51,14 @@ namespace Assets.Scripts.Encounters.Camping
                 {
                     optionResultText = "\nThe innkeeper serves breakfast as thanks for being great guests!";
 
-                    optionReward.AddEntityGain(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentMorale, EnergyGain);
+                    optionReward.AddEntityGain(travelManager.Party.Derpus, EntityStatTypes.CurrentMorale, EnergyGain);
 
-                    foreach (var companion in TravelManager.Instance.Party.GetCompanions())
+                    foreach (var companion in travelManager.Party.GetCompanions())
                     {
                         optionReward.AddEntityGain(companion, EntityStatTypes.CurrentMorale, EnergyGain);
                     }
 
-                    optionReward.AddPartyGain(PartySupplyTypes.Food, TravelManager.Instance.Party.GetCompanions().Count * Party.FoodConsumedPerCompanion);
+                    optionReward.AddPartyGain(PartySupplyTypes.Food, travelManager.Party.GetCompanions().Count * Party.FoodConsumedPerCompanion);
                 }
 
                 Options.Add(optionTitle, new Option(optionTitle, optionResultText, optionReward, optionOnePenalty, EncounterType));
@@ -68,9 +68,9 @@ namespace Assets.Scripts.Encounters.Camping
             optionResultText = "You keep on going and travel through the night.";
 
             var optionTwoPenalty = new Penalty();
-            optionTwoPenalty.AddEntityLoss(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentEnergy, 10);
+            optionTwoPenalty.AddEntityLoss(travelManager.Party.Derpus, EntityStatTypes.CurrentEnergy, 10);
 
-            foreach (var companion in TravelManager.Instance.Party.GetCompanions())
+            foreach (var companion in travelManager.Party.GetCompanions())
             {
                 optionTwoPenalty.AddEntityLoss(companion, EntityStatTypes.CurrentEnergy, 10);
             }
@@ -79,7 +79,9 @@ namespace Assets.Scripts.Encounters.Camping
 
             SubscribeToOptionSelectedEvent();
 
-            EventMediator.Instance.Broadcast(GlobalHelper.FourOptionEncounter, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.FourOptionEncounter, this);
         }
     }
 }

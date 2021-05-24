@@ -69,7 +69,9 @@ namespace Assets.Scripts
 
             if (_companions.Count <= 0)
             {
-                EventMediator.Instance.Broadcast(GlobalHelper.GameOver, this);
+                EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+
+                eventMediator.Broadcast(GlobalHelper.GameOver, this);
             }
         }
 
@@ -98,7 +100,9 @@ namespace Assets.Scripts
             totalResult.AddRange(eatResult);
             totalResult.AddRange(healResult);
 
-            EventMediator.Instance.Broadcast(GlobalHelper.PartyEatAndHeal, this, totalResult);
+            EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.PartyEatAndHeal, this, totalResult);
         }
 
         //todo refactor may not need a list here

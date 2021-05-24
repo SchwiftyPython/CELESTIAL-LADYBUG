@@ -46,7 +46,7 @@
     "Defense": 
     {
       "Toughness": 5,
-      "DodgeMod": 4
+      "DodgeMod": 0
     },
     "Abilities": 
 	[
@@ -64,18 +64,21 @@
   {
 	"Description": "The helmet you can stab with.",  
     "Parent": "Leather Headband",
-    "Melee": {},
+    "Melee": 
+	{
+	  "MinDamage": 5,
+      "MaxDamage": 6
+	},
     "Ranged": {},
     "Defense": 
     {
       "Toughness": 8,
-      "DodgeMod": 4
+      "DodgeMod": 0
     },
     "Abilities": 
-	[
-	  "Eats Veggies",
+	[	  
 	  "Endangered Endurance",
-	  "Stabby"
+	  "Helmet Charge"
 	],
 	"Range": -1,
     "Sprite": "unicorn_helm",
@@ -93,11 +96,11 @@
     "Defense": 
     {
       "Toughness": 3,
-      "DodgeMod": 2
+      "DodgeMod": 0
     },
     "Abilities": 
 	[
-	  "Eats Veggies"	  
+	  "Well Fed"	  
 	],
 	"Range": -1,
     "Sprite": "bear_head",
@@ -115,12 +118,11 @@
     "Defense": 
     {
       "Toughness": 1,
-      "DodgeMod": 4
+      "DodgeMod": 1
     },
     "Abilities": 
 	[
-	  "Careful Aim",
-      "Snapshot"	  
+	  "Calculated"      	  
 	],
 	"Range": -1,
     "Sprite": "bycocket",
@@ -138,7 +140,7 @@
     "Defense": 
     {
       "Toughness": 2,
-      "DodgeMod": 1
+      "DodgeMod": 0
     },
     "Abilities": [],
 	"Range": -1,
@@ -157,12 +159,11 @@
     "Defense": 
     {
       "Toughness": 4,
-      "DodgeMod": 3
+      "DodgeMod": 0
     },
     "Abilities": 
 	[
-	  "Demonic Intervention",
-	  "Eats Veggies",
+	  "Demonic Intervention",	  
 	  "Works Out"
 	],
 	"Range": -1,
@@ -181,11 +182,11 @@
     "Defense": 
     {
       "Toughness": 4,
-      "DodgeMod": 3
+      "DodgeMod": 1
     },
     "Abilities": 
 	[	  
-	  "Eats Veggies"	  
+	  "Well Fed"	  
 	],
 	"Range": -1,
     "Sprite": "insect_helmet",

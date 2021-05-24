@@ -42,10 +42,9 @@
 		},
 		"Ranged": {},
 		"Defense": {},
-		"Abilities": [
-			"Slash",
-			"Thrust",
-			"Ignite"
+		"Abilities": 
+		[
+			"Slash"
 		],
 		"Range": 1,
 		"Sprite": "flame_sword",
@@ -84,8 +83,7 @@
 		"Ranged": {},
 		"Defense": {},
 		"Abilities": [
-			"Slash",
-			"Swing",
+			"Slash",			
 			"Thrust"
 		],
 		"Range": 1,

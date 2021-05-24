@@ -22,24 +22,26 @@ namespace Assets.Scripts.Encounters
 
         public float TimeTilNextEncounter;
 
-        public static EncounterManager Instance;
+        //public static EncounterManager Instance;
 
         private void Start()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else if (Instance != this)
-            {
-                Destroy(gameObject);
-            }
-            DontDestroyOnLoad(gameObject);
-            
-            EventMediator.Instance.SubscribeToEvent(MentalBreak, this);
-            EventMediator.Instance.SubscribeToEvent(GlobalHelper.DerpusNoEnergy, this);
-            EventMediator.Instance.SubscribeToEvent(PauseTimerEvent, this);
-            EventMediator.Instance.SubscribeToEvent(ResumeTimerEvent, this);
+            // if (Instance == null)
+            // {
+            //     Instance = this;
+            // }
+            // else if (Instance != this)
+            // {
+            //     Destroy(gameObject);
+            // }
+            // DontDestroyOnLoad(gameObject);
+
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.SubscribeToEvent(MentalBreak, this);
+            eventMediator.SubscribeToEvent(GlobalHelper.DerpusNoEnergy, this);
+            eventMediator.SubscribeToEvent(PauseTimerEvent, this);
+            eventMediator.SubscribeToEvent(ResumeTimerEvent, this);
 
             PauseTimer();
         }
@@ -75,9 +77,11 @@ namespace Assets.Scripts.Encounters
                 normalEncounterSize++;
             }
 
-            _normalEncounterDeck = new EncounterDeck(EncounterStore.Instance.GetNormalEncounters(), normalEncounterSize);
+            var encounterStore = Object.FindObjectOfType<EncounterStore>();
 
-            var combatEncounters = EncounterStore.Instance.GetCombatEncounters();
+            _normalEncounterDeck = new EncounterDeck(encounterStore.GetNormalEncounters(), normalEncounterSize);
+
+            var combatEncounters = encounterStore.GetCombatEncounters();
 
             _normalEncounterDeck.AddCard(combatEncounters[Random.Range(0, combatEncounters.Count)]);
 
@@ -85,7 +89,7 @@ namespace Assets.Scripts.Encounters
 
             if (_campingDeck == null || _campingDeck.Size < 1)
             {
-                _campingDeck = new EncounterDeck(EncounterStore.Instance.GetCampingEncounters(), 5);
+                _campingDeck = new EncounterDeck(encounterStore.GetCampingEncounters(), 5);
             }
 
             ResetTimer();
@@ -104,7 +108,9 @@ namespace Assets.Scripts.Encounters
 
             _encounterInProgress = true;
 
-            EventMediator.Instance.SubscribeToEvent(EncounterFinished, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.SubscribeToEvent(EncounterFinished, this);
         }
 
         private void AddToEncounterQueue(Encounter encounter)
@@ -148,11 +154,15 @@ namespace Assets.Scripts.Encounters
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
         {
+            var encounterStore = Object.FindObjectOfType<EncounterStore>();
+
             if (eventName.Equals(EncounterFinished))
             {
                 ResetTimer();
 
-                EventMediator.Instance.UnsubscribeFromEvent(EncounterFinished, this);
+                var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+                eventMediator.UnsubscribeFromEvent(EncounterFinished, this);
 
                 RunQueuedEncounters();
 
@@ -167,17 +177,17 @@ namespace Assets.Scripts.Encounters
 
                 if (companion.IsDerpus())
                 {
-                    AddToEncounterQueue(EncounterStore.Instance.GetDerpusNoMoraleEncounter());
+                    AddToEncounterQueue(encounterStore.GetDerpusNoMoraleEncounter());
                 }
                 else
                 {
                     //todo draw from the mental break deck
-                    AddToEncounterQueue(EncounterStore.Instance.GetRandomMentalBreakEncounter(companion));
+                    AddToEncounterQueue(encounterStore.GetRandomMentalBreakEncounter(companion));
                 }
             }
             else if (eventName.Equals(GlobalHelper.DerpusNoEnergy))
             {
-                AddToEncounterQueue(EncounterStore.Instance.GetDerpusNoEnergyEncounter());
+                AddToEncounterQueue(encounterStore.GetDerpusNoEnergyEncounter());
             }
             else if (eventName.Equals(PauseTimerEvent))
             {

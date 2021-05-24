@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using Assets.Scripts.Abilities;
+using Assets.Scripts.Entities;
 using Assets.Scripts.Items.Components;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Items
 {
-    public class Item
+    public class Item : IModifierProvider
     {
         [SerializeField] private string _itemId;
 
@@ -71,24 +75,59 @@ namespace Assets.Scripts.Items
             return ItemType.Defense;
         }
 
-        public string GetToughness()
+        public int GetToughness()
         {
             if (ItemType.Defense == null)
             {
-                return "0";
+                return 0;
             }
 
-            return ItemType.Defense.Toughness.ToString();
+            return ItemType.Defense.Toughness;
         }
 
-        public string GetDodgeMod()
+        private int GetDodgeMod()
         {
             if (ItemType.Defense == null)
             {
-                return "0";
+                return 0;
             }
 
-            return ItemType.Defense.DodgeMod.ToString();
+            return ItemType.Defense.DodgeMod;
+        }
+
+        public string GetDodgeModForDisplay()
+        {
+            return GetDodgeMod().ToString();
+        }
+
+        public List<string> GetAbilityNames()
+        {
+            return ItemType.Abilities;
+        }
+
+        public List<Ability> GetAbilities(Entity abilityOwner)
+        {
+            var abilities = new List<Ability>();
+
+            if (ItemType.Abilities == null || ItemType.Abilities.Count < 1)
+            {
+                return abilities;
+            }
+
+            foreach (var abilityName in ItemType.Abilities)
+            {
+                var abilityStore = Object.FindObjectOfType<AbilityStore>();
+                var ability = abilityStore.GetAbilityByName(abilityName, abilityOwner);
+
+                if (ability == null)
+                {
+                    continue;
+                }
+
+                abilities.Add(ability);
+            }
+
+            return abilities;
         }
 
         public bool IsTwoHanded()
@@ -105,6 +144,45 @@ namespace Assets.Scripts.Items
             }
 
             return true;
+        }
+
+        public float GetAdditiveModifiers(Enum stat)
+        {
+            var total = 0;
+
+            try
+            {
+                if (!stat.GetType().Name.Equals(nameof(EntitySkillTypes)))
+                {
+                    total += 0;
+                }
+
+                if (!Enum.IsDefined(typeof(EntitySkillTypes), stat))
+                {
+                    total += 0;
+                }
+
+                if (!Enum.TryParse<EntitySkillTypes>(stat.ToString(), out var statType))
+                {
+                    total += 0;
+                }
+
+                if (statType == EntitySkillTypes.Dodge)
+                {
+                    total += GetDodgeMod();
+                }
+            }
+            catch
+            {
+                total += 0;
+            }
+
+            return total;
+        }
+
+        public float GetPercentageModifiers(Enum stat)
+        {
+            return 0f;
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using Assets.Scripts.Items.Components;
 using Leguar.TotalJSON;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Items
@@ -15,21 +16,31 @@ namespace Assets.Scripts.Items
 
         public TextAsset[] ItemTypesFiles;
 
-        public static ItemStore Instance;
+        //public static ItemStore Instance;
 
         private void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else if (Instance != this)
-            {
-                Destroy(gameObject);
-            }
-            DontDestroyOnLoad(gameObject);
+            // if (Instance == null)
+            // {
+            //     Instance = this;
+            // }
+            // else if (Instance != this)
+            // {
+            //     Destroy(gameObject);
+            // }
+            // DontDestroyOnLoad(gameObject);
 
-            EventMediator.Instance.SubscribeToEvent(GlobalHelper.SpritesLoaded, this);
+            //eventMediator.SubscribeToEvent(GlobalHelper.SpritesLoaded, this);
+        }
+
+        
+        public void Setup()
+        {
+            /*EventMediator eventMediator = FindObjectOfType<EventMediator>();
+
+            eventMediator.SubscribeToEvent(GlobalHelper.SpritesLoaded, this);*/ 
+
+            DeserializeItemTypes();
         }
 
         public ItemType GetItemTypeByName(string typeName)
@@ -87,6 +98,8 @@ namespace Assets.Scripts.Items
 
             var settings = new DeserializeSettings {RequireAllFieldsArePopulated = false};
 
+            SpriteStore spriteStore = FindObjectOfType<SpriteStore>();
+
             foreach (var itemTypesFile in ItemTypesFiles)
             {
                 var json = JSON.ParseString(itemTypesFile.text);
@@ -115,7 +128,7 @@ namespace Assets.Scripts.Items
 
                     var spriteKey = itemTypeJson.GetString("Sprite")?.Trim();
 
-                    itemType.Sprite = SpriteStore.Instance.GetItemSpriteByKey(spriteKey);
+                    itemType.Sprite = spriteStore.GetItemSpriteByKey(spriteKey);
 
                     var slotString = itemTypeJson.GetString("Slot")?.Trim();
 
@@ -181,7 +194,9 @@ namespace Assets.Scripts.Items
 
         private void AddSpriteNameForGroup(ItemGroup group, string spriteName)
         {
-            switch(group)
+            var spriteStore = Object.FindObjectOfType<SpriteStore>();
+
+            switch (group)
             {
                 case ItemGroup.Robe:
                     //todo
@@ -202,27 +217,27 @@ namespace Assets.Scripts.Items
                     //todo
                     break;
                 case ItemGroup.Shield:
-                    SpriteStore.Instance.ShieldSpriteNames.Add(spriteName);
+                    spriteStore.ShieldSpriteNames.Add(spriteName);
                     break;
                 case ItemGroup.Axe:
                     //todo
                     break;
                 case ItemGroup.Crossbow:
-                    SpriteStore.Instance.CrossbowSpriteNames.Add(spriteName);
+                    spriteStore.CrossbowSpriteNames.Add(spriteName);
                     break;
                 case ItemGroup.Dagger:
-                    SpriteStore.Instance.DaggerSpriteNames.Add(spriteName);
+                    spriteStore.DaggerSpriteNames.Add(spriteName);
                     break;
                 case ItemGroup.OneHandedSpear:
                 case ItemGroup.TwoHandedSpear:
-                    SpriteStore.Instance.SpearSpriteNames.Add(spriteName);
+                    spriteStore.SpearSpriteNames.Add(spriteName);
                     break;
                 case ItemGroup.Book:
                     //todo
                     break;
                 case ItemGroup.OneHandedSword:
                 case ItemGroup.TwoHandedSword:
-                    SpriteStore.Instance.SwordSpriteNames.Add(spriteName);
+                    spriteStore.SwordSpriteNames.Add(spriteName);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(@group), @group, null);

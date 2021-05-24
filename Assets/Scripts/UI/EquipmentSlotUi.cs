@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.Entities;
+﻿using System.Linq;
+using Assets.Scripts.Abilities;
+using Assets.Scripts.Entities;
 using Assets.Scripts.Items;
 using Assets.Scripts.Utilities.UI.Dragging;
 using UnityEngine;
@@ -16,6 +18,7 @@ namespace Assets.Scripts.UI
 
         [SerializeField] private InventoryItemIcon _itemIcon = null;
         [SerializeField] private GameObject _slotIcon = null;
+        [SerializeField] private GameObject _lockedIcon = null;
         [SerializeField] private EquipLocation _equipLocation = EquipLocation.Weapon;
 
         private Equipment _companionEquipment;
@@ -23,8 +26,9 @@ namespace Assets.Scripts.UI
 
         private void Awake() 
         {
-            EventMediator.Instance.SubscribeToEvent(RefreshEvent, this);
-            EventMediator.Instance.SubscribeToEvent(PopulateEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(RefreshEvent, this);
+            eventMediator.SubscribeToEvent(PopulateEvent, this);
         }
 
         public int MaxAcceptable(Item item)
@@ -54,7 +58,7 @@ namespace Assets.Scripts.UI
 
         public void AddItems(Item item, int number)
         {
-            _companionEquipment.AddItem(_equipLocation, (EquipableItem) item);
+            _currentCompanion.Equip((EquipableItem) item);
         }
 
         public Item GetItem()
@@ -74,9 +78,29 @@ namespace Assets.Scripts.UI
             }
         }
 
-        public void RemoveItems(int number)
+        public void RemoveItems(int number, bool swapAttempt)
         {
-            _companionEquipment.RemoveItem(_equipLocation);
+            _currentCompanion.UnEquip(_equipLocation, swapAttempt);
+        }
+
+        public bool IsLocked()
+        {
+            var itemAbilities = _companionEquipment.GetItemInSlot(_equipLocation)?.GetAbilities(_currentCompanion);
+
+            if (itemAbilities == null || !itemAbilities.Any())
+            {
+                return false;
+            }
+
+            foreach (var ability in itemAbilities)
+            {
+                if (ability.GetType() == typeof(Soulbound))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void RedrawUi()
@@ -95,6 +119,8 @@ namespace Assets.Scripts.UI
             _itemIcon.SetItem(item, _currentCompanion);
 
             _slotIcon.GetComponent<Image>().enabled = item == null;
+
+            _lockedIcon.SetActive(IsLocked());
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

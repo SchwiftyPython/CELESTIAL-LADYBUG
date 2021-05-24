@@ -6,7 +6,8 @@ namespace Assets.Scripts.UI
     {
         public void OnClick()
         {
-            EventMediator.Instance.Broadcast(GlobalHelper.EndTurn, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.Broadcast(GlobalHelper.EndTurn, this);
         }
     }
 }

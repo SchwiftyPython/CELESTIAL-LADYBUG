@@ -13,8 +13,7 @@
     "Abilities":
 	[
 	  "Shoot",
-	  "Aim",
-      "Reload"	  
+	  "Aimed Shot"	  
 	],
 	"Range": 5,
     "Sprite": "crossbow_1",
@@ -37,8 +36,7 @@
     "Abilities":
 	[
 	  "Shoot",
-	  "Snapshot",
-      "Reload"	  
+	  "Snapshot"
 	],
 	"Range": 4,
     "Sprite": "crossbow_3",
@@ -61,8 +59,7 @@
     "Abilities":
 	[
 	  "Shoot",
-	  "Knockback",
-      "Reload"	  
+	  "Knockback"
 	],
 	"Range": 6,
     "Sprite": "crossbow_2",

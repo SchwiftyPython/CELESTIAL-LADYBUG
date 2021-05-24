@@ -72,7 +72,9 @@ namespace Assets.Scripts.Encounters.Combat
 
             SubscribeToOptionSelectedEvent();
 
-            EventMediator.Instance.Broadcast(GlobalHelper.FourOptionEncounter, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.FourOptionEncounter, this);
         }
     }
 }

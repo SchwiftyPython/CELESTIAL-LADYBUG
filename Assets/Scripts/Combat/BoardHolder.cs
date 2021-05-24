@@ -34,31 +34,35 @@ namespace Assets.Scripts.Combat
 
                     var tile = map.GetTerrain<Tile>(coord);
 
-                    var instance = Instantiate(tile.PrefabTexture, new Vector2(currentColumn, currentRow), Quaternion.identity);
+                    var tileInstance = Instantiate(tile.PrefabTexture, new Vector2(currentColumn, currentRow), Quaternion.identity);
 
-                    tile.SetSpriteInstance(instance);
+                    tile.SetSpriteInstance(tileInstance);
 
-                    instance.AddComponent<OnMouseOverTile>();
+                    tileInstance.AddComponent<OnMouseOverTile>();
 
-                    instance.GetComponent<OnMouseOverTile>().Tile = tile;
+                    tileInstance.GetComponent<OnMouseOverTile>().Tile = tile;
 
-                    instance.transform.SetParent(transform);
+                    tileInstance.transform.SetParent(transform);
+
+                    tileInstance.GetComponent<TerrainSlotUi>().SetTile(tile);
 
                     var entity = map.GetEntity<Entity>(coord);
 
                     if (entity != null)
                     {
-                        instance = Instantiate(entity.CombatSpritePrefab, new Vector2(currentColumn, currentRow), Quaternion.identity);
+                        var entityInstance = Instantiate(entity.CombatSpritePrefab, new Vector2(currentColumn, currentRow), Quaternion.identity);
 
-                        instance.transform.SetParent(EntityHolder);
+                        entityInstance.transform.SetParent(EntityHolder);
 
-                        entity.SetSpriteInstance(instance);
+                        entity.SetSpriteInstance(entityInstance);
 
                         if (!entity.IsPlayer())
                         {
-                            instance.AddComponent<AiController>();
-                            instance.GetComponent<AiController>().SetSelf(entity);
+                            entityInstance.AddComponent<AiController>();
+                            entityInstance.GetComponent<AiController>().SetSelf(entity);
                         }
+
+                        tileInstance.GetComponent<TerrainSlotUi>().SetEntity(entity);
                     }
                 }
             }

@@ -1,46 +1,77 @@
-﻿using Assets.Scripts.Entities;
+﻿using System.Linq;
+using Assets.Scripts.Combat;
+using Assets.Scripts.Entities;
 using GoRogue;
+using GoRogue.GameFramework;
+using UnityEngine;
 
 namespace Assets.Scripts.Abilities
 {
-    public class Ability 
+    public abstract class Ability 
     {
         public string Name { get; private set; }
+        public string Description { get; private set; }
         public int ApCost { get; private set; }
         public int Range { get; private set; }
         public Entity AbilityOwner { get; private set; }
         public bool HostileTargetsOnly { get; private set; }
+        public bool IsPassive { get; private set; }
+        public Sprite Icon { get; protected set; }
 
-        public Ability(string name, int apCost, int range, Entity abilityOwner, bool hostileTargetsOnly)
+        protected Ability(string name, string description, int apCost, int range, Entity abilityOwner, bool hostileTargetsOnly, bool passive)
         {
             Name = name;
+            Description = description;
             ApCost = apCost;
-            Range = range;
+
+            if (range < 0 && !passive)
+            {
+                var equippedWeapon = abilityOwner.GetEquippedWeapon();
+
+                Range = equippedWeapon.GetRange();
+            }
+            else
+            {
+                Range = range;
+            }
+
             AbilityOwner = abilityOwner;
             HostileTargetsOnly = hostileTargetsOnly;
+            IsPassive = passive;
+
+            GetIconForAbility(this);
         }
 
-        public void Use(Entity abilityOwner, Entity target)
+        public virtual void Use(Entity target)
         {
             //todo testing for prototype - assumes combat ability
 
             //todo message assumes combat ability
-            var message = $"{abilityOwner.Name} attacks {target.Name} with {GlobalHelper.CapitalizeAllWords(Name)}!";
+            var message = $"{AbilityOwner.Name} attacks {target.Name} with {GlobalHelper.CapitalizeAllWords(Name)}!";
 
-            EventMediator.Instance.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
 
-            //todo either we change this check or we give a weapon a "reach" property and check for that
-            //for spears for example that could melee attack 2 squares away
+            eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+
             if (Range < 2)
             {
-                abilityOwner.MeleeAttack(target);
+                AbilityOwner.MeleeAttack(target);
             }
             else
             {
-                abilityOwner.RangedAttack(target);
+                AbilityOwner.RangedAttack(target);
             }
 
-            abilityOwner.SubtractActionPoints(ApCost);
+            AbilityOwner.SubtractActionPoints(ApCost);
+        }
+
+        public virtual int Use()
+        {
+            return 0;
+        }
+
+        public virtual void SetupForCombat()
+        {
         }
 
         public bool TargetInRange(Entity target)
@@ -52,6 +83,13 @@ namespace Assets.Scripts.Abilities
 
         public bool TargetValid(Entity target)
         {
+            //todo might need to have a boolean for if ability uses line of sight
+
+            if (IsRanged() && !HasLineOfSight(target))
+            {
+                return false;
+            }
+
             if (HostileTargetsOnly)
             {
                 return AbilityOwner.IsPlayer() != target.IsPlayer();
@@ -63,6 +101,61 @@ namespace Assets.Scripts.Abilities
         public bool IsRanged()
         {
             return Range > 1;
+        }
+
+        public virtual (int, int) GetAbilityDamageRange()
+        {
+            var combatManager = Object.FindObjectOfType<CombatManager>();
+
+            int damageMin;
+            int damageMax;
+            if (IsRanged())
+            {
+                (damageMin, damageMax) = AbilityOwner.GetEquippedWeapon().GetRangedDamageRange();
+            }
+            else
+            {
+                (damageMin, damageMax) = AbilityOwner.GetEquippedWeapon().GetMeleeDamageRange();
+            }
+
+            return (damageMin, damageMax);
+        }
+
+        public virtual void Terminate()
+        {
+        }
+
+        private bool HasLineOfSight(IGameObject target)
+        {
+            //todo need to allow for some objects to be shot around at a penalty, but some objects should completely block los
+
+            var line = Lines.Get(AbilityOwner.Position, target.Position).ToList();
+
+            var combatManager = Object.FindObjectOfType<CombatManager>();
+
+            var map = combatManager.Map;
+
+            foreach (var coord in line)
+            {
+                if (coord == line.First() || coord == line.Last())
+                {
+                    continue;
+                }
+
+                if (!map.GetTileAt(coord).IsWalkable)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void GetIconForAbility(Ability ability)
+        {
+            var spriteStore = Object.FindObjectOfType<SpriteStore>();
+
+            Icon = spriteStore.GetAbilitySprite(ability);
         }
     }
 }

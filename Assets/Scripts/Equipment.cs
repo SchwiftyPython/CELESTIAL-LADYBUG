@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Assets.Scripts.Abilities;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Items;
 using Assets.Scripts.Saving;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts
 {
@@ -147,7 +149,9 @@ namespace Assets.Scripts
 
             _equippedItems[slot] = item;
 
-            EventMediator.Instance.Broadcast(GlobalHelper.EquipmentUpdated, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this);
         }
 
         /// <summary>
@@ -155,8 +159,36 @@ namespace Assets.Scripts
         /// </summary>
         public void RemoveItem(EquipLocation slot)
         {
+            if (!_equippedItems.ContainsKey(slot))
+            {
+                return;
+            }
+
             _equippedItems[slot] = null;
-            EventMediator.Instance.Broadcast(GlobalHelper.EquipmentUpdated, this);
+            //eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this);
+        }
+
+        public bool AbilityEquipped(Ability ability)
+        {
+            foreach (var item in _equippedItems.Values)
+            {
+                if (item == null)
+                {
+                    continue;
+                }
+
+                var itemAbilities = item.GetAbilities(null);
+
+                foreach (var itemAbility in itemAbilities)
+                {
+                    if (itemAbility.GetType() == ability.GetType())
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public bool ItemValidForEntityClass(EquipableItem item)

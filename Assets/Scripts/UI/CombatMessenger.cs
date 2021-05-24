@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +8,7 @@ namespace Assets.Scripts.UI
 {
     public class CombatMessenger : MonoBehaviour, ISubscriber
     {
-        private const int MaxMessagesOnScreen = 45;
+        private const int MaxMessagesOnScreen = 90;
 
         private Queue<GameObject> _messagesOnScreen;
 
@@ -21,7 +22,8 @@ namespace Assets.Scripts.UI
         {
             _messagesOnScreen = new Queue<GameObject>();
 
-            EventMediator.Instance.SubscribeToEvent(GlobalHelper.SendMessageToConsole, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(GlobalHelper.SendMessageToConsole, this);
         }
 
         private void ClearExcessOnScreenMessages()
@@ -43,13 +45,14 @@ namespace Assets.Scripts.UI
             _messagesOnScreen = new Queue<GameObject>();
         }
 
-        private void ScrollToBottom()
+        private IEnumerator PushToBottom()
         {
-            MessageScrollRect.verticalScrollbar.direction = Scrollbar.Direction.BottomToTop;
-            MessageScrollRect.normalizedPosition = new Vector2(0, 0.0f);
+            yield return new WaitForEndOfFrame();
+            MessageScrollRect.verticalNormalizedPosition = 0;
+            LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)MessageScrollRect.transform);
         }
 
-        public void CreateOnScreenMessage(string myMessage)
+        private void CreateOnScreenMessage(string myMessage)
         {
             ClearExcessOnScreenMessages();
 
@@ -63,7 +66,7 @@ namespace Assets.Scripts.UI
 
             _messagesOnScreen.Enqueue(messageInstance);
 
-            ScrollToBottom();
+            StartCoroutine(PushToBottom());
         }
 
 
@@ -75,7 +78,7 @@ namespace Assets.Scripts.UI
 
                 if (string.IsNullOrEmpty(message))
                 {
-                    Debug.Log("Empty message passed to CombatMessenger!");
+                    Debug.LogError("Empty message passed to CombatMessenger!");
                     return;
                 }
 

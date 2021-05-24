@@ -40,7 +40,9 @@ namespace Assets.Scripts
 
             for (var i = 0; i < numItems; i++)
             {
-                var item = ItemStore.Instance.GetRandomEquipableItem();
+                ItemStore itemStore = FindObjectOfType<ItemStore>();
+
+                var item = itemStore.GetRandomEquipableItem();
 
                 AddToFirstEmptySlot(item, 1);
             }
@@ -79,7 +81,11 @@ namespace Assets.Scripts
 
             _slots[i].Item = item;
             _slots[i].Number += number;
-            EventMediator.Instance.Broadcast(GlobalHelper.InventoryUpdated, this);
+
+            EventMediator eventMediator = FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.InventoryUpdated, this);
+
             return true;
         }
 
@@ -127,7 +133,9 @@ namespace Assets.Scripts
                 _slots[slot].Item = null;
             }
 
-            EventMediator.Instance.Broadcast(GlobalHelper.InventoryUpdated, this);
+            EventMediator eventMediator = FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.InventoryUpdated, this);
         }
 
         /// <summary>
@@ -154,7 +162,10 @@ namespace Assets.Scripts
 
             _slots[slot].Item = item;
             _slots[slot].Number += number;
-            EventMediator.Instance.Broadcast(GlobalHelper.InventoryUpdated, this);
+
+            EventMediator eventMediator = FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.InventoryUpdated, this);
             return true;
         }
 
@@ -248,7 +259,9 @@ namespace Assets.Scripts
                 _slots[i].Number = slotStrings[i].Number;
             }
 
-            EventMediator.Instance.Broadcast(GlobalHelper.InventoryUpdated, this);
+            EventMediator eventMediator = FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.InventoryUpdated, this);
         }
     }
 }

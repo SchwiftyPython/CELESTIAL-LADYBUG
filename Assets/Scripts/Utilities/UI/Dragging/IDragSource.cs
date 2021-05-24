@@ -23,6 +23,10 @@
         /// <param name="number">
         /// This should never exceed the number returned by `GetNumber`.
         /// </param>
-        void RemoveItems(int number);
+        /// /// <param name="swapAttempt">
+        /// Lets method know that another item is intended to be added to the slot
+        /// so don't fire the EquipmentChanged event yet.
+        /// </param>
+        void RemoveItems(int number, bool swapAttempt);
     }
 }

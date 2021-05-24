@@ -16,5 +16,15 @@ namespace Assets.Scripts.Combat
 
             return x >= Width || x < 0 || y >= Height || y < 0;
         }
+
+        public Tile GetTileAt(Coord position)
+        {
+            if (OutOfBounds(position))
+            {
+                return null;
+            }
+
+            return GetTerrain<Floor>(position);
+        }
     }
 }
