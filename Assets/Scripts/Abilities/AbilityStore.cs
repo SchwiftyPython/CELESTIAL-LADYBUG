@@ -7,7 +7,7 @@ namespace Assets.Scripts.Abilities
 {
     public class AbilityStore : MonoBehaviour
     {
-        private Dictionary<string, Func<Entity, Ability>> _allAbilities = new Dictionary<string, Func<Entity, Ability>>
+        private readonly Dictionary<string, Func<Entity, Ability>> _allAbilities = new Dictionary<string, Func<Entity, Ability>>
         {
             {"tank", abilityOwner => new Tank(abilityOwner)},
             {"well fed", abilityOwner => new WellFed(abilityOwner)},
@@ -36,6 +36,9 @@ namespace Assets.Scripts.Abilities
             {"shield bash", abilityOwner => new ShieldBash(abilityOwner)},
             {"thrust", abilityOwner => new Thrust(abilityOwner)},
             {"charge", abilityOwner => new Charge(abilityOwner)},
+            {"slash", abilityOwner => new Slash(abilityOwner)},
+            {"wound", abilityOwner => new Wound(abilityOwner)},
+            {"cleave", abilityOwner => new Cleave(abilityOwner)},
         };
 
         public Ability GetAbilityByName(string abilityName, Entity abilityOwner)

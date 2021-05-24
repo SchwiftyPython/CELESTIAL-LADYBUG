@@ -15,7 +15,7 @@
 		],
 		"Range": 1,
 		"Sprite": "warbrand",
-		"Slot": null,
+		"Slot": "weapon",
 		"Stackable": false,
 		"Price": 40,
 		"TwoHanded": true

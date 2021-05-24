@@ -121,14 +121,20 @@ namespace Assets.Scripts.Combat
 
                     break;
                 case CombatState.PlayerTurn:
-                    UpdateActiveEntityInfoPanel();
 
                     _eventMediator.Broadcast(GlobalHelper.PlayerTurn, this);
-                    //_eventMediator.SubscribeToEvent(EndTurnEvent, this);
+                   
                     break;
                 case CombatState.AiTurn:
                     _eventMediator.Broadcast(GlobalHelper.AiTurn, this);
-                    //_eventMediator.SubscribeToEvent(EndTurnEvent, this);
+
+                    var activeSprite = ActiveEntity.CombatSpriteInstance;
+
+                    if (ReferenceEquals(activeSprite, null))
+                    {
+                        return;
+                    }
+
                     ActiveEntity.CombatSpriteInstance.GetComponent<AiController>().TakeTurn();
                     break;
                 case CombatState.EndTurn:
@@ -143,8 +149,6 @@ namespace Assets.Scripts.Combat
                         ActiveEntity.RefillActionPoints();
 
                         HighlightActiveEntitySprite();
-
-                        //_eventMediator.SubscribeToEvent(EndTurnEvent, this);
 
                         if (ActiveEntityPlayerControlled())
                         {

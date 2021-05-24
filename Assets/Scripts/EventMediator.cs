@@ -9,20 +9,8 @@ namespace Assets.Scripts
     {
         private Dictionary<string, List<ISubscriber>> _eventSubscriptions;
 
-        //public static EventMediator Instance;
-
         private void Awake()
         {
-            // if (Instance == null)
-            // {
-            //     Instance = this;
-            // }
-            // else if (Instance != this)
-            // {
-            //     Destroy(gameObject);
-            // }
-            // DontDestroyOnLoad(gameObject);
-
             _eventSubscriptions = new Dictionary<string, List<ISubscriber>> ();
         }
 
@@ -71,7 +59,7 @@ namespace Assets.Scripts
                 catch (Exception e)
                 {
                     subscribers.Remove(sub);
-                    Debug.Log(e);
+                    Debug.LogError(e);
                 }
             }
         }

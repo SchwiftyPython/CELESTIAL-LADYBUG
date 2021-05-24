@@ -44,10 +44,7 @@
     "Melee": {},
     "Ranged": {},
     "Defense": {},
-    "Abilities": 
-    [
-      "Amplify"
-    ],
+    "Abilities": [],
 	"Range": -1,
     "Sprite": "robe_2",
     "Slot": null,

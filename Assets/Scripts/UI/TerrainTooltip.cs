@@ -11,60 +11,69 @@ namespace Assets.Scripts.UI
         private const string RefreshEvent = GlobalHelper.TileSelected;
 
         [SerializeField]
-        private TextMeshProUGUI _tileType;
+        private TextMeshProUGUI tileType;
 
         [SerializeField]
-        private TextMeshProUGUI _apCost;
+        private TextMeshProUGUI apCost;
 
         [SerializeField]
-        private GameObject _tileEffectsParent;
+        private GameObject tileEffectsParent;
 
         [SerializeField]
-        private GameObject _tileEffectTextPrefab;
+        private GameObject tileEffectTextPrefab;
 
         private bool _subscribed;
+        private CombatInputController _inputController;
+
+        private void Start()
+        {
+            _inputController = FindObjectOfType<CombatInputController>();
+        }
 
         public void Setup(Tile tile, int totalApCost = 0)
         {
-            GlobalHelper.DestroyAllChildren(_tileEffectsParent);
+            GlobalHelper.DestroyAllChildren(tileEffectsParent);
 
-            _tileType.text = tile.TileType.ToString();
+            tileType.text = tile.TileType.ToString();
+
+            if (ReferenceEquals(_inputController, null))
+            {
+                _inputController = FindObjectOfType<CombatInputController>();
+            }
 
             if (tile is Floor floor)
             {
-                var inputController = FindObjectOfType<CombatInputController>();
-
-                if (inputController.TileSelected() && ReferenceEquals(tile, inputController.GetSelectedTile()))
+                if (_inputController.TileSelected() && ReferenceEquals(tile, _inputController.GetSelectedTile()))
                 {
 
                     if (totalApCost <= 0)
                     {
-                        totalApCost = inputController.GetTotalTileMovementCost();
+                        totalApCost = _inputController.GetTotalTileMovementCost();
                     }
 
-                    _apCost.text = $"{totalApCost} AP to move here";
+                    apCost.text = $"{totalApCost} AP to move here";
                 }
                 else
                 {
-                    _apCost.text = $"{floor.ApCost} AP to cross";
+                    apCost.text = $"{floor.ApCost} AP to cross";
                 }
             }
             else
             {
-                _apCost.text = "Impassable";
+                apCost.text = "Impassable";
             }
 
             var effects = tile.GetEffects();
 
             if (effects == null || !effects.Any())
             {
-                _tileEffectsParent?.SetActive(false);
+                tileEffectsParent.SetActive(false);
             }
             else
             {
                 var listedEffects = new List<string>();
 
-                _tileEffectsParent?.SetActive(true);
+                tileEffectsParent.SetActive(true);
 
                 foreach (var effect in effects)
                 {
@@ -75,7 +84,7 @@ namespace Assets.Scripts.UI
 
                     listedEffects.Add(effect.Name);
 
-                    var effectText = Instantiate(_tileEffectTextPrefab, _tileEffectsParent?.transform);
+                    var effectText = Instantiate(tileEffectTextPrefab, tileEffectsParent?.transform);
 
                     effectText.GetComponent<TextMeshProUGUI>().text = effect.Name;
                 }

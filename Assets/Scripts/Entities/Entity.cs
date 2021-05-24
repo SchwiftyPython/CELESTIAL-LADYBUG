@@ -691,11 +691,6 @@ namespace Assets.Scripts.Entities
                 Effects = new List<Effect>();
             }
 
-            // if (EffectTriggers == null)
-            // {
-            //     EffectTriggers = new EffectTrigger<EffectArgs>();
-            // }
-
             if (!effect.CanStack())
             {
                 foreach (var existingEffect in Effects)
@@ -707,20 +702,7 @@ namespace Assets.Scripts.Entities
                 }
             }
 
-            // if (!effect.CanStack())
-            // {
-            //     foreach (var existingEffect in EffectTriggers.Effects)
-            //     {
-            //         if (existingEffect.GetType() == effect.GetType())
-            //         {
-            //             return;
-            //         }
-            //     }
-            // }
-
             Effects.Add(effect);
-
-            //EffectTriggers.Add(effect);
         }
 
         public void RemoveEffect(Effect effect)
@@ -730,14 +712,7 @@ namespace Assets.Scripts.Entities
                 return;
             }
 
-            // if (EffectTriggers == null)
-            // {
-            //     return;
-            // }
-
             Effects.Remove(effect);
-
-            //EffectTriggers.Remove(effect);
         }
 
         public void TriggerEffects()
@@ -756,9 +731,6 @@ namespace Assets.Scripts.Entities
 
                 effect.Trigger(new BasicEffectArgs(this));
             }
-
-            //getting an enumeration modified error from this sometimes -- might be better off triggering our own way
-            //EffectTriggers.TriggerEffects(new BasicEffectArgs(this));
         }
 
         public int RollForInitiative()
