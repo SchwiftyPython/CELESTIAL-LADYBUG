@@ -22,20 +22,8 @@ namespace Assets.Scripts.Encounters
 
         public float TimeTilNextEncounter;
 
-        //public static EncounterManager Instance;
-
         private void Start()
         {
-            // if (Instance == null)
-            // {
-            //     Instance = this;
-            // }
-            // else if (Instance != this)
-            // {
-            //     Destroy(gameObject);
-            // }
-            // DontDestroyOnLoad(gameObject);
-
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 
             eventMediator.SubscribeToEvent(MentalBreak, this);
@@ -57,6 +45,10 @@ namespace Assets.Scripts.Encounters
                 else
                 {
                     PauseTimer();
+
+                    var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+                    eventMediator.Broadcast(PauseTimerEvent, this);
 
                     DrawNextEncounter();
                 }
@@ -167,6 +159,8 @@ namespace Assets.Scripts.Encounters
                 RunQueuedEncounters();
 
                 _encounterInProgress = false;
+
+                eventMediator.Broadcast(ResumeTimerEvent, this);
             }
             else if (eventName.Equals(MentalBreak))
             {
