@@ -1,19 +1,7 @@
 fileFormatVersion: 2
-guid: 0c0c6e7ae2d8cd34b9d51b837f1005f7
+guid: bf3ec3da3120928459a18a67bfe38860
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 1403738032524752045
-    second: wagon draft_0
-  - first:
-      213: -955182979955198655
-    second: wagon draft_1
-  - first:
-      213: -2629773047960875693
-    second: wagon draft_2
-  - first:
-      213: -711825986649234712
-    second: wagon draft_3
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -52,7 +40,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -121,49 +109,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: wagon draft_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 32
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: da4f752ad441b7310800000000000000
-      internalID: 1403738032524752045
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: wagon draft_1
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 0
-        width: 32
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1457548f3228eb2f0800000000000000
-      internalID: -955182979955198655
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
