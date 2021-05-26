@@ -85,16 +85,16 @@ namespace Assets.Scripts
             {
                 case Portrait.Slot.Skin:
                     return PortraitSkinSprites[Random.Range(0, PortraitSkinSprites.Length)];
-                case Portrait.Slot.Ears:
-                    return PortraitEarSprites[Random.Range(0, PortraitEarSprites.Length)]; 
+                // case Portrait.Slot.Ears:
+                //     return PortraitEarSprites[Random.Range(0, PortraitEarSprites.Length)]; 
                 case Portrait.Slot.Chest:
                     return PortraitChestSprites[Random.Range(0, PortraitChestSprites.Length)];
                 case Portrait.Slot.FacialHair:
                     return PortraitFacialFairSprites[Random.Range(0, PortraitFacialFairSprites.Length)];
                 case Portrait.Slot.Hair:
                     return PortraitHairSprites[Random.Range(0, PortraitHairSprites.Length)];
-                case Portrait.Slot.Helmet:
-                    return PortraitHelmetSprites[Random.Range(0, PortraitHelmetSprites.Length)];
+                // case Portrait.Slot.Helmet:
+                //     return PortraitHelmetSprites[Random.Range(0, PortraitHelmetSprites.Length)];
                 default:
                     throw new ArgumentOutOfRangeException(nameof(slot), slot, null);
             }
@@ -106,16 +106,16 @@ namespace Assets.Scripts
             {
                 case Portrait.Slot.Skin:
                     return _pSkinDictionary.ElementAt(Random.Range(0, _pSkinDictionary.Count)).Key;
-                case Portrait.Slot.Ears:
-                    return _pEarDictionary.ElementAt(Random.Range(0, _pEarDictionary.Count)).Key;
+                // case Portrait.Slot.Ears:
+                //     return _pEarDictionary.ElementAt(Random.Range(0, _pEarDictionary.Count)).Key;
                 case Portrait.Slot.Chest:
                     return _pChestDictionary.ElementAt(Random.Range(0, _pChestDictionary.Count)).Key;
                 case Portrait.Slot.FacialHair:
                     return _pFacialHairDictionary.ElementAt(Random.Range(0, _pFacialHairDictionary.Count)).Key;
                 case Portrait.Slot.Hair:
                     return _pHairDictionary.ElementAt(Random.Range(0, _pHairDictionary.Count)).Key;
-                case Portrait.Slot.Helmet:
-                    return _pHelmetDictionary.ElementAt(Random.Range(0, _pHelmetDictionary.Count)).Key;
+                // case Portrait.Slot.Helmet:
+                //     return _pHelmetDictionary.ElementAt(Random.Range(0, _pHelmetDictionary.Count)).Key;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(slot), slot, null);
             }
@@ -127,16 +127,16 @@ namespace Assets.Scripts
             {
                 case Portrait.Slot.Skin:
                     return _pSkinDictionary[key];
-                case Portrait.Slot.Ears:
-                    return _pEarDictionary[key];
+                // case Portrait.Slot.Ears:
+                //     return _pEarDictionary[key];
                 case Portrait.Slot.Chest:
                     return _pChestDictionary[key];
                 case Portrait.Slot.FacialHair:
                     return _pFacialHairDictionary[key];
                 case Portrait.Slot.Hair:
                     return _pHairDictionary[key];
-                case Portrait.Slot.Helmet:
-                    return _pHelmetDictionary[key];
+                // case Portrait.Slot.Helmet:
+                //     return _pHelmetDictionary[key];
                 default:
                     throw new ArgumentOutOfRangeException(nameof(slot), slot, null);
             }
@@ -208,9 +208,9 @@ namespace Assets.Scripts
                     case Portrait.Slot.Skin:
                         _pSkinDictionary = PopulateDictionaryFromArray(PortraitSkinSprites);
                         break;
-                    case Portrait.Slot.Ears:
-                        _pEarDictionary = PopulateDictionaryFromArray(PortraitEarSprites);
-                        break;
+                    // case Portrait.Slot.Ears:
+                    //     _pEarDictionary = PopulateDictionaryFromArray(PortraitEarSprites);
+                    //     break;
                     case Portrait.Slot.Chest:
                         _pChestDictionary = PopulateDictionaryFromArray(PortraitChestSprites);
                         break;
@@ -220,9 +220,9 @@ namespace Assets.Scripts
                     case Portrait.Slot.Hair:
                         _pHairDictionary = PopulateDictionaryFromArray(PortraitHairSprites);
                         break;
-                    case Portrait.Slot.Helmet:
-                        _pHelmetDictionary = PopulateDictionaryFromArray(PortraitHelmetSprites);
-                        break;
+                    // case Portrait.Slot.Helmet:
+                    //     _pHelmetDictionary = PopulateDictionaryFromArray(PortraitHelmetSprites);
+                    //     break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(slot), slot, null);
                 }
