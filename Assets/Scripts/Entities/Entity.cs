@@ -767,15 +767,11 @@ namespace Assets.Scripts.Entities
         {
             Portrait = new Dictionary<Portrait.Slot, string>();
 
-            //todo base off of equipped items
-
             var spriteStore = Object.FindObjectOfType<SpriteStore>();
 
             foreach (Portrait.Slot slot in Enum.GetValues(typeof(Portrait.Slot)))
             {
                 Portrait.Add(slot, spriteStore.GetRandomSpriteKeyForSlot(slot));
-
-                //Portrait[slot] = SpriteStore.Instance.GetRandomSpriteKeyForSlot(slot);
             }
         }
 

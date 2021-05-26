@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Assets.Scripts.Travel;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
@@ -13,11 +12,11 @@ namespace Assets.Scripts.UI
         public enum Slot
         {
             Skin, 
-            Ears,
+            //Ears,
             Chest,
             FacialHair,
             Hair,
-            Helmet
+            //Helmet
         }
 
         [SerializeField] private GameObject _skin;
@@ -34,9 +33,9 @@ namespace Assets.Scripts.UI
                 case Slot.Skin:
                     _skin.GetComponent<Image>().sprite = sprite;
                     break;
-                case Slot.Ears:
-                    _ears.GetComponent<Image>().sprite = sprite;
-                    break;
+                // case Slot.Ears:
+                //     _ears.GetComponent<Image>().sprite = sprite;
+                //     break;
                 case Slot.Chest:
                     _chest.GetComponent<Image>().sprite = sprite;
                     break;
@@ -46,9 +45,9 @@ namespace Assets.Scripts.UI
                 case Slot.Hair:
                     _hair.GetComponent<Image>().sprite = sprite;
                     break;
-                case Slot.Helmet:
-                    _helmet.GetComponent<Image>().sprite = sprite;
-                    break;
+                // case Slot.Helmet:
+                //     _helmet.GetComponent<Image>().sprite = sprite;
+                //     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(slot), slot, null);
             }
