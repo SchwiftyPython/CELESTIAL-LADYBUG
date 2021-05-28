@@ -90,14 +90,14 @@ namespace Assets.Scripts.Combat
                     numTries++;
                 }
 
-                if (placed)
-                {
-                    Debug.Log($"{combatant.Name} placed at: {combatant.Position}");
-                }
-                else
-                {
-                    Debug.Log($"{combatant.Name} failed to place. Last try at: {combatant.Position}");
-                }
+                // if (placed)
+                // {
+                //     Debug.Log($"{combatant.Name} placed at: {combatant.Position}");
+                // }
+                // else
+                // {
+                //     Debug.Log($"{combatant.Name} failed to place. Last try at: {combatant.Position}");
+                // }
             }
 
         }

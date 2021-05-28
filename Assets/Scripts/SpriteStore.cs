@@ -11,7 +11,14 @@ namespace Assets.Scripts
 {
     public class SpriteStore : MonoBehaviour
     {
-        //todo need a struct to hold the sprite and the color scheme that goes with it
+        public struct ColorSwap
+        {
+            public Color RedSwap;
+            public Color GreenSwap;
+        }
+
+        private Dictionary<string, ColorScheme> _colorSwapLookup;
+
         #region PortraitSprites
 
         private Dictionary<string, Sprite> _pSkinDictionary;
@@ -67,6 +74,7 @@ namespace Assets.Scripts
         public void Setup()
         {
             PopulateSpriteDictionaries();
+            PopulateColorSwaps();
 
             CrossbowSpriteNames = new List<string>();
             DaggerSpriteNames = new List<string>();
@@ -191,6 +199,16 @@ namespace Assets.Scripts
             return _effectSpriteDictionary[effect.Name.ToLower()];
         }
 
+        public ColorScheme GetColorSwap(string key)
+        {
+            if (_colorSwapLookup == null || !_colorSwapLookup.ContainsKey(key))
+            {
+                return null;
+            }
+
+            return _colorSwapLookup[key];
+        }
+
         private void PopulateSpriteDictionaries()
         {
             PopulatePortraitSprites();
@@ -280,6 +298,65 @@ namespace Assets.Scripts
             }
 
             return spriteDictionary;
+        }
+
+        private void PopulateColorSwaps()
+        {
+            var palette = FindObjectOfType<Palette>();
+
+            _colorSwapLookup = new Dictionary<string, ColorScheme>
+            {
+                {"base", new ColorScheme(palette.Orange, palette.DesatOrange, Color.white)},
+                {"base_2", new ColorScheme(palette.DarkModerateRed, palette.VeryDarkDesatPink, Color.white)},
+                {"base_3", new ColorScheme(palette.VerySoftOrange, palette.SoftOrange, Color.white)},
+                {"base_4", new ColorScheme(palette.BurntOrange, palette.DarkModerateRed, Color.white)},
+                {"bear_head", new ColorScheme(palette.SoftOrange, palette.BurntOrange, Color.white)},
+                {"bycocket", new ColorScheme(palette.BurntOrange, palette.DarkModerateRed, Color.white)},
+                {"close_helm", new ColorScheme(palette.GrayBlue, palette.DarkDesatBlue, Color.white)},
+                {"demon_helm", new ColorScheme(palette.ModeratePink, palette.SoftRed, Color.white)},
+                {"insect_helmet", new ColorScheme(palette.BrightCyan, palette.PureBlue, Color.white)},
+                {"leather_headband", new ColorScheme(palette.Orange, palette.DesatOrange, Color.white)},
+                {"leather_helmet", new ColorScheme(palette.Orange, palette.DesatOrange, Color.white)},
+                {"stone_mask", new ColorScheme(palette.LightGrayBlue, palette.GrayBlue, Color.white)},
+                {"unicorn_helm", new ColorScheme(palette.LightGrayBlue, palette.GrayBlue, Color.white)},
+                {"hair_balding", new ColorScheme(palette.VeryDarkDesatPink, palette.VeryDarkDesatPink, Color.white)},
+                {"hair_long", new ColorScheme(palette.VeryDarkDesatMagenta, palette.DesatBlue, Color.white)},
+                {"hair_long_2", new ColorScheme(palette.DarkModerateRed, palette.VeryDarkDesatPink, Color.white)},
+                {"hair_short", new ColorScheme(palette.DarkModerateRed, palette.VeryDarkDesatPink, Color.white)},
+                {"hair_short_2", new ColorScheme(palette.StrongRed, palette.DarkModerateRed, Color.white)},
+                {"hair_short_3", new ColorScheme(palette.BrightOrange, palette.ModerateOrange, Color.white)},
+                {"colorful_gloves", new ColorScheme(palette.VeryDarkDesatMagenta, palette.DesatBlue, Color.white)},
+                {"fancy_bracer", new ColorScheme(palette.BrightRed, palette.DarkRed, Color.white)},
+                {"fancy_gloves", new ColorScheme(palette.PureBlue, palette.DarkBlue, Color.white)},
+                {"fancy_gloves_2", new ColorScheme(palette.DarkDesatBlue, palette.VeryDarkDesatBlue, Color.white)},
+                {"fancy_gloves_3", new ColorScheme(palette.VeryDarkDesatMagenta, palette.VeryDarkDesatBlue, Color.white)},
+                {"leather_gloves", new ColorScheme(palette.Orange, palette.DesatOrange, Color.white)},
+                {"leather_gloves_2", new ColorScheme(palette.Orange, palette.DesatOrange, Color.white)},
+                {"leather_gloves_3", new ColorScheme(palette.Orange, palette.DesatOrange, Color.white)},
+                {"metal_bracer", new ColorScheme(palette.DarkDesatBlue, palette.VeryDarkDesatBlue, Color.white)},
+                {"plate_gauntlets_1", new ColorScheme(palette.DarkDesatBlue, palette.VeryDarkDesatBlue, Color.white)},
+                {"lance", new ColorScheme(palette.GrayBlue, palette.DarkDesatBlue, Color.white)},
+                {"naginata", new ColorScheme(palette.GrayBlue, palette.GrayBlue, Color.white)},
+                {"spear", new ColorScheme(palette.GrayBlue, palette.DarkDesatBlue, Color.white)},
+                {"demon_feet", new ColorScheme(palette.ModeratePink, palette.SoftRed, Color.white)},
+                {"frost_boots", new ColorScheme(palette.PureBlue, palette.DarkBlue, Color.white)},
+                {"grass_boots", new ColorScheme(palette.DarkLimeGreen, palette.VeryDarkLimeGreen, Color.white)},
+                {"insect_boots", new ColorScheme(palette.Orange, palette.DesatOrange, Color.white)},
+                {"leather_boots", new ColorScheme(palette.Orange, palette.DesatOrange, Color.white)},
+                {"leather_boots_2", new ColorScheme(palette.Orange, palette.DesatOrange, Color.white)},
+                {"leather_boots_3", new ColorScheme(palette.Orange, palette.DesatOrange, Color.white)},
+                {"sexy_boots", new ColorScheme(palette.Orange, palette.DesatOrange, Color.white)},
+                {"speed_boots", new ColorScheme(palette.DarkRed, palette.VeryDarkDesatPink, Color.white)},
+                {"robe_2", new ColorScheme(palette.BrightOrange, palette.DarkDesatBlue, Color.white)},
+                {"robe_1", new ColorScheme(palette.Orange, palette.DesatOrange, Color.white)},
+                {"chainmail", new ColorScheme(palette.GrayBlue, palette.DarkDesatBlue, Color.white)},
+                {"demon", new ColorScheme(palette.ModeratePink, palette.SoftRed, Color.white)},
+                {"leather", new ColorScheme(palette.Orange, palette.DesatOrange, Color.white)},
+                {"plate_armor", new ColorScheme(palette.GrayBlue, palette.DarkDesatBlue, Color.white)},
+                {"plate_armor_2", new ColorScheme(palette.LightGrayBlue, palette.GrayBlue, Color.white)},
+                {"plate_armor_3", new ColorScheme(palette.LightGrayBlue, palette.GrayBlue, Color.white)},
+                {"plate_armor_4", new ColorScheme(palette.GrayBlue, palette.DarkDesatBlue, Color.white)},
+            };
         }
     }
 }

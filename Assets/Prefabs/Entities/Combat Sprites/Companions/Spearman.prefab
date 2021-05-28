@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c829d928c6e3614488b7cf9a7d4d0b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swapSlot: 1
 --- !u!114 &8726410407802083499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,6 +280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c829d928c6e3614488b7cf9a7d4d0b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swapSlot: 2
 --- !u!114 &8726410408491745270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,6 +423,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c829d928c6e3614488b7cf9a7d4d0b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swapSlot: 3
 --- !u!114 &8726410408536851343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -531,6 +534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c829d928c6e3614488b7cf9a7d4d0b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swapSlot: 0
 --- !u!114 &8726410408754170571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -673,6 +677,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c829d928c6e3614488b7cf9a7d4d0b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swapSlot: 4
 --- !u!114 &8726410409141439990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -812,3 +817,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c829d928c6e3614488b7cf9a7d4d0b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swapSlot: 5

@@ -22,12 +22,14 @@ namespace Assets.Scripts
         {
             _index = 0;
 
+            var palette = FindObjectOfType<Palette>();
+
             Schemes = new List<ColorScheme>
             {
-                new ColorScheme(Palette.Instance.DarkDesatBlue, Palette.Instance.DarkBlue, Palette.Instance.BurntOrange),
-                new ColorScheme(Palette.Instance.DarkLimeGreen, Palette.Instance.DesatBlue, Palette.Instance.DesatOrange),
-                new ColorScheme(Palette.Instance.GrayBlue, Palette.Instance.LightGrayBlue, Palette.Instance.ModerateLimeGreen),
-                new ColorScheme(Palette.Instance.ModeratePink, Palette.Instance.Orange, Palette.Instance.ModerateOrange)
+                new ColorScheme(palette.DarkDesatBlue, palette.DarkBlue, palette.BurntOrange),
+                new ColorScheme(palette.DarkLimeGreen, palette.DesatBlue, palette.DesatOrange),
+                new ColorScheme(palette.GrayBlue, palette.LightGrayBlue, palette.ModerateLimeGreen),
+                new ColorScheme(palette.ModeratePink, palette.Orange, palette.ModerateOrange)
             };
 
             ApplyColorScheme(Schemes.First());

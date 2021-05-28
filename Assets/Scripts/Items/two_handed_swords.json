@@ -9,8 +9,7 @@
 		"Ranged": {},
 		"Defense": {},
 		"Abilities": [
-			"Slash",
-			"Swing",
+			"Slash",			
 			"Cleave"
 		],
 		"Range": 1,

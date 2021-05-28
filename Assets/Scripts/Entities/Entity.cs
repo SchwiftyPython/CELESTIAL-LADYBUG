@@ -251,7 +251,7 @@ namespace Assets.Scripts.Entities
 
             var testHelmet = itemStore.GetRandomEquipableItem(EquipLocation.Helmet);
 
-            Equip(testHelmet);
+            //Equip(testHelmet);
 
             var testBoots = itemStore.GetRandomEquipableItem(EquipLocation.Boots);
 

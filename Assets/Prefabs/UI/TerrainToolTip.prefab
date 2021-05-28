@@ -192,10 +192,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67fd3fa5ff4e4894fbd1461cf119b2f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tileType: {fileID: 4834635349567158933}
-  _apCost: {fileID: 4834635349369829130}
-  _tileEffectsParent: {fileID: 2005851429610585050}
-  _tileEffectTextPrefab: {fileID: 7570686861934560238, guid: 8b207581b93ff0e4a88420802bd4b3c9,
+  tileType: {fileID: 4834635349567158933}
+  apCost: {fileID: 4834635349369829130}
+  tileEffectsParent: {fileID: 2005851429610585050}
+  tileEffectTextPrefab: {fileID: 7570686861934560238, guid: 8b207581b93ff0e4a88420802bd4b3c9,
     type: 3}
 --- !u!114 &104135435
 MonoBehaviour:

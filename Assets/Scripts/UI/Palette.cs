@@ -40,25 +40,12 @@ namespace Assets.Scripts.UI
         public Color Orange;
         public Color DesatOrange;
 
-        public static Palette Instance;
-
         private void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else if (Instance != this)
-            {
-                Destroy(gameObject);
-            }
-
-            DontDestroyOnLoad(gameObject);
-
             PopulateColorDictionary();
         }
 
-        public void PopulateColorDictionary()
+        private void PopulateColorDictionary()
         {
             _colors = new Dictionary<string, Color>
             {
