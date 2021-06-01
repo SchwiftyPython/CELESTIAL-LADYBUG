@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.Effects;
+using Assets.Scripts.Entities;
 using Assets.Scripts.UI;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -197,6 +198,102 @@ namespace Assets.Scripts
             }
 
             return _effectSpriteDictionary[effect.Name.ToLower()];
+        }
+
+        public void SetColorSwaps(ColorSwapper[] colorSwapper, Entity entity)
+        {
+            foreach (var swapper in colorSwapper)
+            {
+                switch (swapper.swapSlot)
+                {
+                    case ColorSwapper.ColorSwapSlot.Helmet:
+                        var helmet = entity.GetEquippedItemInSlot(EquipLocation.Helmet);
+
+                        ColorScheme helmetColorSwap;
+                        if (helmet == null || ReferenceEquals(helmet.GetIcon(), null))
+                        {
+                            helmetColorSwap = GetColorSwap(entity.Portrait[Portrait.Slot.Hair]);
+                        }
+                        else
+                        {
+                            helmetColorSwap = GetColorSwap(helmet.GetIcon().name);
+                        }
+
+                        swapper.SwapColorsOnSprite(helmetColorSwap);
+                        break;
+                    case ColorSwapper.ColorSwapSlot.Head:
+                        var skinSprite = entity.Portrait[Portrait.Slot.Skin];
+
+                        var skinColorSwap = GetColorSwap(skinSprite);
+
+                        swapper.SwapColorsOnSprite(skinColorSwap);
+                        break;
+                    case ColorSwapper.ColorSwapSlot.Body:
+                        var body = entity.GetEquippedItemInSlot(EquipLocation.Body);
+
+                        ColorScheme bodyColorSwap;
+                        if (body == null || ReferenceEquals(body.GetIcon(), null))
+                        {
+                            bodyColorSwap = GetColorSwap(entity.Portrait[Portrait.Slot.Skin]);
+                        }
+                        else
+                        {
+                            bodyColorSwap = GetColorSwap(body.GetIcon().name);
+                        }
+
+                        swapper.SwapColorsOnSprite(bodyColorSwap);
+                        break;
+                    case ColorSwapper.ColorSwapSlot.Hands:
+                        var gloves = entity.GetEquippedItemInSlot(EquipLocation.Gloves);
+
+                        ColorScheme handsColorSwap;
+                        if (gloves == null || ReferenceEquals(gloves.GetIcon(), null))
+                        {
+                            handsColorSwap = GetColorSwap(entity.Portrait[Portrait.Slot.Skin]);
+                        }
+                        else
+                        {
+                            handsColorSwap = GetColorSwap(gloves.GetIcon().name);
+                        }
+
+                        swapper.SwapColorsOnSprite(handsColorSwap);
+                        break;
+                    case ColorSwapper.ColorSwapSlot.Feet:
+                        var boots = entity.GetEquippedItemInSlot(EquipLocation.Boots);
+
+                        ColorScheme bootColorSwap;
+                        if (boots == null || ReferenceEquals(boots.GetIcon(), null))
+                        {
+                            bootColorSwap = GetColorSwap(entity.Portrait[Portrait.Slot.Skin]);
+                        }
+                        else
+                        {
+                            bootColorSwap = GetColorSwap(boots.GetIcon().name);
+                        }
+
+                        swapper.SwapColorsOnSprite(bootColorSwap);
+                        break;
+                    case ColorSwapper.ColorSwapSlot.Weapon:
+                        var weapon = entity.GetEquippedWeapon();
+
+                        if (weapon == null)
+                        {
+                            continue;
+                        }
+
+                        var weaponColorSwap = GetColorSwap(weapon.GetIcon().name);
+
+                        if (weaponColorSwap == null)
+                        {
+                            continue;
+                        }
+
+                        swapper.SwapColorsOnSprite(weaponColorSwap);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
         }
 
         public ColorScheme GetColorSwap(string key)
