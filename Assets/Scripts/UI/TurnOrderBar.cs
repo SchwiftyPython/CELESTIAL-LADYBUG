@@ -9,10 +9,6 @@ namespace Assets.Scripts.UI
         private const string RefreshEvent = GlobalHelper.RefreshCombatUi;
         private const int MaxSprites = 7;
 
-        //todo for prototype only - get from the UiSprite in Entity class later
-        public GameObject PlayerSprite;
-        public GameObject EnemySprite;
-
         public Transform SlotOne;
         public Transform SlotTwo;
         public Transform SlotThree;
@@ -68,25 +64,21 @@ namespace Assets.Scripts.UI
                     continue;
                 }
 
-                GameObject spriteParentPrefab;
-                if (entity.IsPlayer())
-                {
-                    spriteParentPrefab = PlayerSprite;
-                }
-                else
-                {
-                    spriteParentPrefab = EnemySprite;
-                }
+                var entityInstance = Instantiate(entity.CombatSpritePrefab, new Vector3(0, 0), Quaternion.identity);
 
-                var instance = Instantiate(spriteParentPrefab, new Vector3(0, 0), Quaternion.identity);
+                var spriteStore = FindObjectOfType<SpriteStore>();
 
-                instance.gameObject.GetComponent<Animator>().enabled = false;
+                var colorSwapper = entityInstance.GetComponentsInChildren<ColorSwapper>();
 
-                instance.transform.SetParent(slotList[count]);
+                spriteStore.SetColorSwaps(colorSwapper, entity);
 
-                instance.transform.localPosition = new Vector3(-0.075f, -0.3f);
+                entityInstance.gameObject.GetComponent<Animator>().enabled = false;
 
-                instance.transform.localScale = new Vector3(0.15f, 0.8f);
+                entityInstance.transform.SetParent(slotList[count]);
+
+                entityInstance.transform.localPosition = new Vector3(-0.075f, -0.3f);
+
+                entityInstance.transform.localScale = new Vector3(0.15f, 0.8f);
 
                 count++;
             }
