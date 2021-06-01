@@ -7202,10 +7202,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67d911aad10aafa4fad7d020bff36083, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerSprite: {fileID: 8726410407947978318, guid: 03909cb094f99554281613a2848ef171,
-    type: 3}
-  EnemySprite: {fileID: 3736600100793527761, guid: 5b9b420637ddd694cb4430d422cb0bee,
-    type: 3}
   SlotOne: {fileID: 1623449672}
   SlotTwo: {fileID: 978625912}
   SlotThree: {fileID: 1265861565}

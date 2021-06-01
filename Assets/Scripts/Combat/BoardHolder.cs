@@ -61,6 +61,7 @@ namespace Assets.Scripts.Combat
                         {
                             entityInstance.AddComponent<AiController>();
                             entityInstance.GetComponent<AiController>().SetSelf(entity);
+                            entityInstance.GetComponent<SpriteRenderer>().flipX = true;
                         }
 
                         var spriteStore = FindObjectOfType<SpriteStore>();
