@@ -31,6 +31,11 @@ namespace Assets.Scripts.UI
 
             var icon = GetIconForAbility(ability);
 
+            if (icon == null)
+            {
+                return;
+            }
+
             buttonScript.AssignAbility(ability, icon);
         }
 
@@ -136,6 +141,11 @@ namespace Assets.Scripts.UI
             if (eventName.Equals(RefreshEvent))
             {
                 if (!(parameter is Entity activeEntity))
+                {
+                    return;
+                }
+
+                if (!activeEntity.IsPlayer())
                 {
                     return;
                 }

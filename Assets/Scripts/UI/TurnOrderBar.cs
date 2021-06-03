@@ -76,7 +76,15 @@ namespace Assets.Scripts.UI
 
                 entityInstance.transform.SetParent(slotList[count]);
 
-                entityInstance.transform.localPosition = new Vector3(-0.075f, -0.3f);
+                if (!entity.IsPlayer())
+                {
+                    entityInstance.GetComponent<SpriteRenderer>().flipX = true;
+                    entityInstance.transform.localPosition = new Vector3(0.08f, -0.3f);
+                }
+                else
+                {
+                    entityInstance.transform.localPosition = new Vector3(-0.075f, -0.3f);
+                }
 
                 entityInstance.transform.localScale = new Vector3(0.15f, 0.8f);
 

@@ -14,6 +14,18 @@ TextureImporter:
   - first:
       213: -4765929652033140276
     second: VampireIdle_3
+  - first:
+      213: -4330751571207379598
+    second: VampireIdle_0
+  - first:
+      213: -2427686735179987668
+    second: VampireIdle_1
+  - first:
+      213: -8712204882847979149
+    second: VampireIdle_2
+  - first:
+      213: 1209043230899179445
+    second: VampireIdle_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -130,15 +142,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6e45fd109aebf8b10800000000000000
-      internalID: 1986015593783842022
+      spriteID: 27528bb246416e3c0800000000000000
+      internalID: -4330751571207379598
       vertices: []
       indices: 
       edges: []
@@ -151,15 +163,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 35f69c9a4d3e71e60800000000000000
-      internalID: 7933059771157540691
+      spriteID: c254babd6cf1f4ed0800000000000000
+      internalID: -2427686735179987668
       vertices: []
       indices: 
       edges: []
@@ -172,15 +184,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 71deb3c16955700a0800000000000000
-      internalID: -6915464599596962537
+      spriteID: 3792c6b71d7081780800000000000000
+      internalID: -8712204882847979149
       vertices: []
       indices: 
       edges: []
@@ -193,15 +205,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cc940128b340cddb0800000000000000
-      internalID: -4765929652033140276
+      spriteID: 5bf06d7a96267c010800000000000000
+      internalID: 1209043230899179445
       vertices: []
       indices: 
       edges: []

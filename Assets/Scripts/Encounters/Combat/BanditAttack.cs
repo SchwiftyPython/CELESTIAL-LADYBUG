@@ -26,7 +26,7 @@ namespace Assets.Scripts.Encounters.Combat
 
             for (var i = 0; i < numBandits; i++)
             {
-                var bandit = new Entity(false);
+                var bandit = new Skeleton(); //todo change
 
                 bandit.GenerateStartingEquipment();
 

@@ -14,6 +14,18 @@ TextureImporter:
   - first:
       213: -6315843291517724096
     second: DeathKnightIdle_3
+  - first:
+      213: -4231137757101245535
+    second: DeathKnightIdle_0
+  - first:
+      213: 7086373508084745724
+    second: DeathKnightIdle_1
+  - first:
+      213: 7348043637363606341
+    second: DeathKnightIdle_2
+  - first:
+      213: -6360148178848849656
+    second: DeathKnightIdle_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -130,15 +142,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d863bea7098a12640800000000000000
-      internalID: 5053505595377399437
+      spriteID: 1abbc30a0aaf745c0800000000000000
+      internalID: -4231137757101245535
       vertices: []
       indices: 
       edges: []
@@ -151,15 +163,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 615e966d5a5c0bdf0800000000000000
-      internalID: -166415870155168490
+      spriteID: cf5412f092bd75260800000000000000
+      internalID: 7086373508084745724
       vertices: []
       indices: 
       edges: []
@@ -172,15 +184,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 66e6576554a342f50800000000000000
-      internalID: 6855668602242428518
+      spriteID: 543802fa1ce79f560800000000000000
+      internalID: 7348043637363606341
       vertices: []
       indices: 
       edges: []
@@ -193,15 +205,15 @@ TextureImporter:
         y: 0
         width: 16
         height: 16
-      alignment: 0
+      alignment: 6
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 04a5d083dfd9958a0800000000000000
-      internalID: -6315843291517724096
+      spriteID: 801edd8cde63cb7a0800000000000000
+      internalID: -6360148178848849656
       vertices: []
       indices: 
       edges: []

@@ -36,7 +36,7 @@ namespace Assets.Scripts.Combat
 
             for (var i = 0; i < numBandits; i++)
             {
-                var bandit = new Entity(false);
+                var bandit = new Spider(); 
 
                 bandits.Add(bandit);
             }

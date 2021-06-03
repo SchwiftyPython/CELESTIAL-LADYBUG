@@ -263,13 +263,20 @@ namespace Assets.Scripts
 
         private void GenerateStartingParty()
         {
-            Derpus = new Entity(true, true);
+            Derpus = new Entity(Race.RaceType.Derpus, EntityClass.Derpus, true);
 
             _companions = new Dictionary<string, Entity>();
 
             for (var i = 0; i < StartSize; i++)
             {
-                var companion = new Entity(true);
+                var rType = GlobalHelper.GetRandomEnumValue<Race.RaceType>();
+
+                if (rType == Race.RaceType.Derpus)
+                {
+                    rType = Race.RaceType.Human;
+                }
+
+                var companion = new Spearman(rType, true); //todo change
                 
                 AddCompanion(companion);
             }
