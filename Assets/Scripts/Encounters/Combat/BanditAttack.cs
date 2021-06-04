@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Entities.Necromancer;
 using UnityEngine;
 
 namespace Assets.Scripts.Encounters.Combat

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Entities
+namespace Assets.Scripts.Entities.Necromancer
 {
     public class Skeleton : Entity
     {

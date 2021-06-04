@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Entities.Companions;
 using UnityEngine;
 
 namespace Assets.Scripts

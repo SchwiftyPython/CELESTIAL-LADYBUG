@@ -18,7 +18,7 @@ namespace Assets.Scripts
         {
             if (_prefabDictionary == null || !_prefabDictionary.ContainsKey(prefabName.ToLower()))
             {
-                Debug.LogError($"Ability sprite for {prefabName} does not exist!");
+                Debug.LogError($"Combat sprite for {prefabName} does not exist!");
                 return null;
             }
 

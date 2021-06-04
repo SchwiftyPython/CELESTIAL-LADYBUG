@@ -383,7 +383,7 @@ namespace Assets.Scripts.Entities
 
             if (AttackHit(hitChance, target)) 
             {
-                ApplyDamage(target, false);
+                ApplyDamageWithEquipment(target, false);
 
                 if (target.IsDead())
                 {
@@ -414,7 +414,7 @@ namespace Assets.Scripts.Entities
 
             if (AttackHit(hitChance, target))
             {
-                ApplyDamage(target, false, slot);
+                ApplyDamageWithEquipment(target, false, slot);
 
                 if (target.IsDead())
                 {
@@ -445,7 +445,7 @@ namespace Assets.Scripts.Entities
 
             if (AttackHit(hitChance, target))
             {
-                ApplyDamage(target, true);
+                ApplyDamageWithEquipment(target, true);
 
                 if (target.IsDead())
                 {
@@ -470,7 +470,57 @@ namespace Assets.Scripts.Entities
             }
         }
 
-        public void ApplyDamage(Entity target, bool ranged, EquipLocation slot = EquipLocation.Weapon)
+        public void AttackWithAbility(Entity target, Ability ability)
+        {
+            int hitChance;
+
+            if (ability.IsRanged())
+            {
+                hitChance = CalculateChanceToHitRanged(target);
+            }
+            else
+            {
+                hitChance = CalculateChanceToHitMelee(target);
+            }
+
+            if (AttackHit(hitChance, target))
+            {
+                ApplyDamageWithAbility(target, ability);
+
+                if (target.IsDead())
+                {
+                    //todo sound for dying peep
+
+                    var message = $"{Name} killed {target.Name}!";
+
+                    var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+                    eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                }
+                else
+                {
+                    //todo check for abilities that respond to attack hit
+
+                    if (target.HasAbility(typeof(Riposte))) //todo hail mary not sure if this will work
+                    {
+                        target.Abilities[typeof(Riposte)].Use(this);
+                    }
+
+                }
+            }
+        }
+
+        public void ApplyDamageWithAbility(Entity target, Ability ability)
+        {
+            int minDamage = 0;
+            int maxDamage = 0;
+
+            (minDamage, maxDamage) = ability.GetAbilityDamageRange();
+
+            ApplyDamage(target, (minDamage, maxDamage));
+        }
+
+        public void ApplyDamageWithEquipment(Entity target, bool ranged, EquipLocation slot = EquipLocation.Weapon)
         {
             var equippedItem = _equipment.GetItemInSlot(slot);
 
@@ -489,6 +539,13 @@ namespace Assets.Scripts.Entities
                 }
             }
 
+            ApplyDamage(target, (minDamage, maxDamage));
+        }
+
+        public void ApplyDamage(Entity target, (int, int) damageRange)
+        {
+            var (minDamage, maxDamage) = damageRange;
+
             var damage = Random.Range(minDamage, maxDamage + 1) + Stats.Attack;
 
             damage = GlobalHelper.ModifyNewValueForStat(this, CombatModifierTypes.Damage, damage);
@@ -506,6 +563,7 @@ namespace Assets.Scripts.Entities
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 
             eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+            eventMediator.Broadcast(GlobalHelper.DamageDealt, this, damage);
 
             if (!target.HasAbility(typeof(DemonicIntervention)))
             {
