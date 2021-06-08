@@ -19,6 +19,11 @@ namespace Assets.Scripts.Entities.Necromancer
 
             Abilities.Add(vBite.GetType(), vBite);
 
+            if (Abilities.ContainsKey(typeof(Intimidate)))
+            {
+                return;
+            }
+
             var intimidate = abilityStore.GetAbilityByName("intimidate", this);
 
             Abilities.Add(intimidate.GetType(), intimidate);

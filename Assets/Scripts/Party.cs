@@ -277,7 +277,7 @@ namespace Assets.Scripts
                     rType = Race.RaceType.Human;
                 }
 
-                var companion = new Spearman(rType, true); //todo change
+                var companion = new Wizard(rType, true); //todo change
                 
                 AddCompanion(companion);
             }

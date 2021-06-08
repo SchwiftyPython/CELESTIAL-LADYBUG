@@ -32,24 +32,7 @@ AnimationClip:
       value: {fileID: 2467288899999555828, guid: a88258f59ffda5e4ea95d4963bd1f484,
         type: 3}
     attribute: m_Sprite
-    path: 
-    classID: 212
-    script: {fileID: 0}
-  - curve:
-    - time: 0
-      value: {fileID: -7373258638682447843, guid: 01337bb18101a954daa04bfba0446001,
-        type: 3}
-    - time: 0.25
-      value: {fileID: -7655990202804255712, guid: 01337bb18101a954daa04bfba0446001,
-        type: 3}
-    - time: 0.5
-      value: {fileID: 7038673676332182284, guid: 01337bb18101a954daa04bfba0446001,
-        type: 3}
-    - time: 0.75
-      value: {fileID: 8433899510172932789, guid: 01337bb18101a954daa04bfba0446001,
-        type: 3}
-    attribute: m_Sprite
-    path: SkinSwap
+    path: CrossbowmanIdleSkinSwap
     classID: 212
     script: {fileID: 0}
   m_SampleRate: 4
@@ -60,14 +43,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 0
-      attribute: 0
-      script: {fileID: 0}
-      typeID: 212
-      customType: 23
-      isPPtrCurve: 1
-    - serializedVersion: 2
-      path: 2586202542
+      path: 298460629
       attribute: 0
       script: {fileID: 0}
       typeID: 212
@@ -78,10 +54,6 @@ AnimationClip:
     - {fileID: -1534315663693049046, guid: a88258f59ffda5e4ea95d4963bd1f484, type: 3}
     - {fileID: -5080551726932157387, guid: a88258f59ffda5e4ea95d4963bd1f484, type: 3}
     - {fileID: 2467288899999555828, guid: a88258f59ffda5e4ea95d4963bd1f484, type: 3}
-    - {fileID: -7373258638682447843, guid: 01337bb18101a954daa04bfba0446001, type: 3}
-    - {fileID: -7655990202804255712, guid: 01337bb18101a954daa04bfba0446001, type: 3}
-    - {fileID: 7038673676332182284, guid: 01337bb18101a954daa04bfba0446001, type: 3}
-    - {fileID: 8433899510172932789, guid: 01337bb18101a954daa04bfba0446001, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}

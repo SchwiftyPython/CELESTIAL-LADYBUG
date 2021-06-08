@@ -1,18 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Crossbowman : MonoBehaviour
+namespace Assets.Scripts.Entities.Companions
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Crossbowman : Entity
     {
-        
-    }
+        public Crossbowman(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Crossbowman, isPlayer)
+        {
+            var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+            CombatSpritePrefab = entityPrefabStore.GetCombatSpritePrefab("Crossbowman");
+        }
     }
 }
