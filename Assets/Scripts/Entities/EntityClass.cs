@@ -12,6 +12,8 @@ namespace Assets.Scripts.Entities
         [Description("Battle-Mage")] BattleMage,
         [Description("Knight")] Knight,
         [Description("Paladin")] Paladin,
-        [Description("Derpus")] Derpus
+        [Description("Derpus")] Derpus,
+        [Description("Beast")] Beast,
+        [Description("Ethereal")] Ethereal,
     }
 }

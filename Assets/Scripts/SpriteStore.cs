@@ -182,7 +182,7 @@ namespace Assets.Scripts
         {
             if (_abilitySpriteDictionary == null || !_abilitySpriteDictionary.ContainsKey(ability.Name.ToLower()))
             {
-                Debug.LogError($"Ability sprite for {ability.GetType()} does not exist!");
+                //Debug.LogError($"Ability sprite for {ability.GetType()} does not exist!");
                 return null;
             }
 

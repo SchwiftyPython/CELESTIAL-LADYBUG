@@ -99,7 +99,7 @@ namespace Assets.Scripts.AI
 
             var tileStep = map.GetTerrain<Floor>(path.GetStep(0));
 
-            if (Self.Stats.CurrentActionPoints < tileStep.ApCost)
+            if (Self.Stats.CurrentActionPoints < tileStep.ApCost || !tileStep.IsWalkable || !map.WalkabilityView[tileStep.Position])
             {
                 _actionAvailable = false;
                 return;

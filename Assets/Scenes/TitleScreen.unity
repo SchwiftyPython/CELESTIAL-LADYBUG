@@ -841,12 +841,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bafc08bd0ee4ae64694293fe15dc0ce0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CompanionPrototypePrefab: {fileID: 8726410407947978318, guid: 03909cb094f99554281613a2848ef171,
-    type: 3}
-  EnemyPrototypePrefab: {fileID: 3736600100793527761, guid: 5b9b420637ddd694cb4430d422cb0bee,
-    type: 3}
-  DerpusPrototypePrefab: {fileID: 2458269009230534490, guid: 210d67d9172254a4eaf8207597a9b45d,
-    type: 3}
+  combatSpritePrefabs: []
 --- !u!4 &427643594
 Transform:
   m_ObjectHideFlags: 0

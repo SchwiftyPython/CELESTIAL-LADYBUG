@@ -1,27 +1,40 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
-    //todo refactor
     public class EntityPrefabStore : MonoBehaviour
     {
-        public GameObject CompanionPrototypePrefab;
-        public GameObject EnemyPrototypePrefab;
-        public GameObject DerpusPrototypePrefab;
+        private Dictionary<string, GameObject> _prefabDictionary;
 
-        public static EntityPrefabStore Instance;
+        public GameObject[] combatSpritePrefabs;
 
         private void Awake()
         {
-            if (Instance == null)
+            _prefabDictionary = PopulateDictionaryFromArray(combatSpritePrefabs);
+        }
+
+        public GameObject GetCombatSpritePrefab(string prefabName)
+        {
+            if (_prefabDictionary == null || !_prefabDictionary.ContainsKey(prefabName.ToLower()))
             {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
+                Debug.LogError($"Combat sprite for {prefabName} does not exist!");
+                return null;
             }
-            else if (Instance != this)
+
+            return _prefabDictionary[prefabName.ToLower()];
+        }
+
+        private static Dictionary<string, GameObject> PopulateDictionaryFromArray(IEnumerable<GameObject> prefabs)
+        {
+            var prefabDictionary = new Dictionary<string, GameObject>();
+
+            foreach (var prefab in prefabs)
             {
-                Destroy(gameObject);
+                prefabDictionary.Add(prefab.name.ToLower(), prefab);
             }
+
+            return prefabDictionary;
         }
     }
 }

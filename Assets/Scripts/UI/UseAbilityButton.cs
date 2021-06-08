@@ -39,7 +39,7 @@ namespace Assets.Scripts.UI
 
         public void AssignAbility(Ability ability, Sprite icon)
         {
-            if (ability == null)
+            if (ability == null || icon == null)
             {
                 return;
             }

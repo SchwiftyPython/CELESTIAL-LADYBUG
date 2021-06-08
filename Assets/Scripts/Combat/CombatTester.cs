@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Entities.Necromancer;
 using Assets.Scripts.Items;
 using Assets.Scripts.Travel;
 using UnityEngine;
@@ -11,22 +12,22 @@ namespace Assets.Scripts.Combat
         private const int MinBandits = 3;
         private const int MaxBandits = 5;
 
-        public bool TestingEnabled;
+        public bool testingEnabled;
 
         private void Start()
         {
-            if (!TestingEnabled)
+            if (!testingEnabled)
             {
                 return;
             }
 
-            var spriteStore = Object.FindObjectOfType<SpriteStore>();
+            var spriteStore = FindObjectOfType<SpriteStore>();
             spriteStore.Setup();
 
-            var itemStore = Object.FindObjectOfType<ItemStore>();
+            var itemStore = FindObjectOfType<ItemStore>();
             itemStore.Setup();
 
-            var travelManager = Object.FindObjectOfType<TravelManager>();
+            var travelManager = FindObjectOfType<TravelManager>();
 
             travelManager.NewParty();
 
@@ -34,14 +35,30 @@ namespace Assets.Scripts.Combat
 
             var bandits = new List<Entity>();
 
-            for (var i = 0; i < numBandits; i++)
+            for (var i = 0; i < 1; i++)
             {
-                var bandit = new Entity(false);
+                Entity bandit = new Ghost();
+
+                bandits.Add(bandit);
+
+                bandit = new Zombie();
+
+                bandits.Add(bandit);
+
+                bandit = new Skeleton();
+
+                bandits.Add(bandit);
+
+                bandit = new Lich();
+
+                bandits.Add(bandit);
+
+                bandit = new Vampire(); 
 
                 bandits.Add(bandit);
             }
 
-            var combatManager = Object.FindObjectOfType<CombatManager>();
+            var combatManager = FindObjectOfType<CombatManager>();
 
             combatManager.Enemies = bandits;
 

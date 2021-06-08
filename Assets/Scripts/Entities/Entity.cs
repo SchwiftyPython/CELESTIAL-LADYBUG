@@ -10,7 +10,6 @@ using Assets.Scripts.Effects.Args;
 using Assets.Scripts.Entities.Names;
 using Assets.Scripts.Items;
 using Assets.Scripts.UI;
-using GoRogue;
 using UnityEngine;
 using GameObject = GoRogue.GameFramework.GameObject;
 using Object = UnityEngine.Object;
@@ -26,8 +25,6 @@ namespace Assets.Scripts.Entities
 
         private Equipment _equipment;
 
-        //private Armor _equippedArmor;
-
         //todo use this instead of get component if possible
         private AiController _aiController;
 
@@ -35,29 +32,26 @@ namespace Assets.Scripts.Entities
 
         public string Name { get; set; }
         public Sex Sex { get; }
-        public Race Race { get; }
+        public Race Race { get; } //todo this and class are likely modifier providers so we should make classes for these
+                                  // will be easier to define starting equipment and whatnot I think
         public EntityClass EntityClass { get; }
         public Attributes Attributes { get; }
         public Stats Stats { get; }
         public Skills Skills { get; }
         public Dictionary<Portrait.Slot, string> Portrait { get; private set; }
-        //public Weapon EquippedWeapon { get; private set; }
+        
         public Dictionary<Type, Ability> Abilities { get; private set; }
 
         public List<Effect> Effects { get; set; }
 
-        //public EffectTrigger<EffectArgs> EffectTriggers { get; set; }
-
-        public UnityEngine.GameObject CombatSpritePrefab { get; private set; }
+        public UnityEngine.GameObject CombatSpritePrefab { get; protected set; }
         public UnityEngine.GameObject CombatSpriteInstance { get; private set; }
-        public Sprite UiSprite { get; private set; } //todo setup a sprite store that can give us the combat and ui sprites needed
 
-
-        public Entity(bool isPlayer, bool isDerpus = false) : base((-1, -1), 1, null, false, false, true)
+        /*public Entity(bool isPlayer, bool isDerpus = false) : base((-1, -1), 1, null, false, false, true)
         {
             if (isDerpus)
             {
-                Race = Race.Derpus;
+                Race = new Race(Race.RaceType.Derpus);
                 EntityClass = EntityClass.Derpus;
                 Sex = Sex.Male;
                 Name = "Derpus";
@@ -65,15 +59,16 @@ namespace Assets.Scripts.Entities
             }
             else
             {
-                Race = PickRace();
+                var rType = PickRace();
 
-                while (Race == Race.Derpus)
+                while (rType == Race.RaceType.Derpus)
                 {
-                    Race = PickRace();
+                    rType = PickRace();
                 }
 
+                Race = new Race(rType);
+
                 EntityClass = PickEntityClass();
-                //EntityClass = EntityClass.Crossbowman; //todo testing
 
                 while (EntityClass == EntityClass.Derpus)
                 {
@@ -84,6 +79,7 @@ namespace Assets.Scripts.Entities
                 Name = GenerateName(null, Sex);
 
                 //todo pick prefab based on race and/or class
+                //todo restrict to certain races and classes if player
                 if (isPlayer)
                 {
                     CombatSpritePrefab = EntityPrefabStore.Instance.CompanionPrototypePrefab;
@@ -107,7 +103,41 @@ namespace Assets.Scripts.Entities
 
             Effects = new List<Effect>();
 
-            //EffectTriggers = new EffectTrigger<EffectArgs>();
+            GeneratePortrait();
+
+            _level = 1;
+            _xp = 0;
+        }*/
+
+        public Entity(Race.RaceType rType, EntityClass eClass, bool isPlayer) : base((-1, -1), 1, null, false, false, true)
+        {
+            Sex = PickSex();
+
+            if (rType != Race.RaceType.Derpus)
+            {
+                Name = GenerateName(null, Sex);
+            }
+            else
+            {
+                Name = "Derpus";
+            }
+
+            Race = new Race(rType);
+
+            EntityClass = eClass;
+
+            _isPlayer = isPlayer;
+
+            Attributes = new Attributes(this);
+            Skills = new Skills(this);
+
+            Abilities = new Dictionary<Type, Ability>();
+
+            GenerateStartingEquipment();
+
+            Stats = new Stats(this, Attributes, Skills);
+
+            Effects = new List<Effect>();
 
             GeneratePortrait();
 
@@ -142,7 +172,7 @@ namespace Assets.Scripts.Entities
 
         public bool IsDerpus()
         {
-            return EntityClass == EntityClass.Derpus || Race == Race.Derpus;
+            return EntityClass == EntityClass.Derpus || Race.GetRaceType() == Race.RaceType.Derpus;
         }
 
         public string FirstName()
@@ -180,7 +210,14 @@ namespace Assets.Scripts.Entities
 
                 currentTile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(null);
 
-                CombatSpriteInstance.transform.position = new Vector3(Position.X, Position.Y);
+                if (IsPlayer())
+                {
+                    CombatSpriteInstance.transform.position = new Vector3(Position.X, Position.Y);
+                }
+                else
+                {
+                    CombatSpriteInstance.transform.position = new Vector3(Position.X + 1, Position.Y);
+                }
 
                 tile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(this);
 
@@ -346,7 +383,7 @@ namespace Assets.Scripts.Entities
 
             if (AttackHit(hitChance, target)) 
             {
-                ApplyDamage(target, false);
+                ApplyDamageWithEquipment(target, false);
 
                 if (target.IsDead())
                 {
@@ -377,7 +414,7 @@ namespace Assets.Scripts.Entities
 
             if (AttackHit(hitChance, target))
             {
-                ApplyDamage(target, false, slot);
+                ApplyDamageWithEquipment(target, false, slot);
 
                 if (target.IsDead())
                 {
@@ -408,7 +445,7 @@ namespace Assets.Scripts.Entities
 
             if (AttackHit(hitChance, target))
             {
-                ApplyDamage(target, true);
+                ApplyDamageWithEquipment(target, true);
 
                 if (target.IsDead())
                 {
@@ -433,7 +470,57 @@ namespace Assets.Scripts.Entities
             }
         }
 
-        public void ApplyDamage(Entity target, bool ranged, EquipLocation slot = EquipLocation.Weapon)
+        public void AttackWithAbility(Entity target, Ability ability)
+        {
+            int hitChance;
+
+            if (ability.IsRanged())
+            {
+                hitChance = CalculateChanceToHitRanged(target);
+            }
+            else
+            {
+                hitChance = CalculateChanceToHitMelee(target);
+            }
+
+            if (AttackHit(hitChance, target))
+            {
+                ApplyDamageWithAbility(target, ability);
+
+                if (target.IsDead())
+                {
+                    //todo sound for dying peep
+
+                    var message = $"{Name} killed {target.Name}!";
+
+                    var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+                    eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                }
+                else
+                {
+                    //todo check for abilities that respond to attack hit
+
+                    if (target.HasAbility(typeof(Riposte))) //todo hail mary not sure if this will work
+                    {
+                        target.Abilities[typeof(Riposte)].Use(this);
+                    }
+
+                }
+            }
+        }
+
+        public void ApplyDamageWithAbility(Entity target, Ability ability)
+        {
+            int minDamage = 0;
+            int maxDamage = 0;
+
+            (minDamage, maxDamage) = ability.GetAbilityDamageRange();
+
+            ApplyDamage(target, (minDamage, maxDamage));
+        }
+
+        public void ApplyDamageWithEquipment(Entity target, bool ranged, EquipLocation slot = EquipLocation.Weapon)
         {
             var equippedItem = _equipment.GetItemInSlot(slot);
 
@@ -452,6 +539,13 @@ namespace Assets.Scripts.Entities
                 }
             }
 
+            ApplyDamage(target, (minDamage, maxDamage));
+        }
+
+        public void ApplyDamage(Entity target, (int, int) damageRange)
+        {
+            var (minDamage, maxDamage) = damageRange;
+
             var damage = Random.Range(minDamage, maxDamage + 1) + Stats.Attack;
 
             damage = GlobalHelper.ModifyNewValueForStat(this, CombatModifierTypes.Damage, damage);
@@ -469,6 +563,7 @@ namespace Assets.Scripts.Entities
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 
             eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+            eventMediator.Broadcast(GlobalHelper.DamageDealt, this, damage);
 
             if (!target.HasAbility(typeof(DemonicIntervention)))
             {
@@ -780,9 +875,9 @@ namespace Assets.Scripts.Entities
             return GlobalHelper.GetRandomEnumValue<Sex>();
         }
 
-        private Race PickRace()
+        private Race.RaceType PickRace()
         {
-            return GlobalHelper.GetRandomEnumValue<Race>();
+            return GlobalHelper.GetRandomEnumValue<Race.RaceType>();
         }
 
         private EntityClass PickEntityClass()

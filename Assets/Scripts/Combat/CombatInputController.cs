@@ -43,19 +43,8 @@ namespace Assets.Scripts.Combat
 
         public GameObject Canvas;
 
-        //public static CombatInputController Instance;
-
         private void Start()
         {
-            // if (Instance == null)
-            // {
-            //     Instance = this;
-            // }
-            // else if (Instance != this)
-            // {
-            //     Destroy(gameObject);
-            // }
-
             if (Canvas == null)
             {
                 Canvas = GameObject.Find("UI");
