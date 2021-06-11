@@ -767,6 +767,16 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 4d21a7ef111549947970d15c21f42240, type: 3}
   - {fileID: 21300000, guid: 13d63e2fad0548b459620c41cb2ae8b1, type: 3}
   - {fileID: 21300000, guid: 55446de60efc21a40982ac55cd59e8c2, type: 3}
+  GrassSprites:
+  - {fileID: 7161607071353929121, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
+  - {fileID: 6511899745706718598, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
+  - {fileID: 5946904825018439571, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
+  - {fileID: -8473276002466409079, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
+  - {fileID: -9114828219825523740, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
+  GrassyMudSprites:
+  - {fileID: 6402699291505321801, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
+  TemperateTreeSprites:
+  - {fileID: 8754832103998367119, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
   AbilitySprites:
   - {fileID: 21300000, guid: a9812ed049e19704389dd690d8b41953, type: 3}
   - {fileID: 21300000, guid: 1a5b75fcb171fcc44b3deceb27bb49d2, type: 3}
@@ -886,6 +896,50 @@ Transform:
   - {fileID: 1822136638}
   - {fileID: 515205978}
   - {fileID: 1117057277}
+  - {fileID: 2880448006741837963}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8783068749873186104
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2880448006741837963}
+  - component: {fileID: 7193047132919042191}
+  m_Layer: 0
+  m_Name: TerrainStore
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2880448006741837963
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8783068749873186104}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5300460287694405909}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7193047132919042191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8783068749873186104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c90096ce971bd214fbcb00875e4f783f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

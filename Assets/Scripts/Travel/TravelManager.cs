@@ -4,7 +4,6 @@ using Assets.Scripts.Encounters;
 using Assets.Scripts.Entities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Travel
 {
@@ -19,23 +18,11 @@ namespace Assets.Scripts.Travel
 
         public Party Party { get; private set; }
 
-        public TravelNode CurrentNode { get; private set; }
-
-        //public static TravelManager Instance;
+        public BiomeType CurrentBiome { get; private set; }
 
         private void Awake()
         {
-            // if (Instance == null)
-            // {
-            //     Instance = this;
-            // }
-            // else if (Instance != this)
-            // {
-            //     Destroy(gameObject);
-            // }
-            // DontDestroyOnLoad(gameObject);
-
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
 
             if (!SceneManager.GetActiveScene().name.Equals(GlobalHelper.CombatScene))
             {
@@ -43,6 +30,8 @@ namespace Assets.Scripts.Travel
             }
 
             eventMediator.SubscribeToEvent(GlobalHelper.EntityDead, this);
+
+            CurrentBiome = BiomeType.Grassland;
 
             _currentDayOfTravel = 0;
 
@@ -62,7 +51,7 @@ namespace Assets.Scripts.Travel
 
         public void StartNewDay()
         {
-            var encounterManager = Object.FindObjectOfType<EncounterManager>();
+            var encounterManager = FindObjectOfType<EncounterManager>();
             encounterManager.BuildDecksForNewDay();
         }
 
@@ -318,7 +307,7 @@ namespace Assets.Scripts.Travel
 
         private void OnDestroy()
         {
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
             eventMediator?.UnsubscribeFromAllEvents(this);
         }
 
@@ -343,7 +332,7 @@ namespace Assets.Scripts.Travel
 
                 if (TravelDaysToDestination <= 0)
                 {
-                    var eventMediator = Object.FindObjectOfType<EventMediator>();
+                    var eventMediator = FindObjectOfType<EventMediator>();
                     eventMediator.Broadcast(GlobalHelper.YouWon, this);
                 }
                 else

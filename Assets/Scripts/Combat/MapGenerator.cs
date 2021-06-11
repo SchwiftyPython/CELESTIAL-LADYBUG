@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Travel;
 using GoRogue;
 using GoRogue.MapGeneration;
 using GoRogue.MapViews;
@@ -9,10 +11,8 @@ namespace Assets.Scripts.Combat
 {
     public class MapGenerator : MonoBehaviour
     {
-        private const int MapWidth = 12;
-        private const int MapHeight = 7;
-
-        public GameObject TerrainSlotPrefab; //todo move to some kind of terrain store
+        private const int MapWidth = 32;
+        private const int MapHeight = 24;
 
         public static MapGenerator Instance;
 
@@ -41,15 +41,47 @@ namespace Assets.Scripts.Combat
         //todo temp for prototype
         private CombatMap GenerateTerrain()
         {
+            //todo change map generator if weighted stuff doesn't look so nice or is a mess to code
+
             var terrainMap = new ArrayMap<bool>(MapWidth, MapHeight);
             QuickGenerators.GenerateRectangleMap(terrainMap);
 
             var map = new CombatMap(terrainMap.Width, terrainMap.Height);
 
+            var biome = FindObjectOfType<TravelManager>().CurrentBiome;
+
+            var tStore = FindObjectOfType<TerrainStore>();
+
+            var tileWeights = tStore.GetTileTypeWeights(biome);
+
             foreach (var position in terrainMap.Positions())
             {
-                //all floors for prototype first pass
-                map.SetTerrain(new Floor(TileType.Grass, TerrainSlotPrefab, position));
+                var selection = tileWeights.First().Key;
+
+                var totalWeight = tileWeights.Values.Sum();
+
+                var roll = Random.Range(0, totalWeight);
+
+                foreach (var tType in tileWeights.OrderByDescending(t => t.Value))
+                {
+                    var weightedValue = tType.Value;
+
+                    if (roll >= weightedValue)
+                    {
+                        roll -= weightedValue;
+                    }
+                    else
+                    {
+                        selection = tType.Key;
+                        break;
+                    }
+                }
+
+                //todo check if wall or floor
+
+                var floor = tStore.GetFloorTile(selection, position);
+                
+                map.SetTerrain(floor);
             }
 
             return map;
