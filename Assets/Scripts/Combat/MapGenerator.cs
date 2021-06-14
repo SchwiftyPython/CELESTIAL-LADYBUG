@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Travel;
@@ -6,6 +7,7 @@ using GoRogue;
 using GoRogue.MapGeneration;
 using GoRogue.MapViews;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Combat
 {
@@ -41,8 +43,6 @@ namespace Assets.Scripts.Combat
         //todo temp for prototype
         private CombatMap GenerateTerrain()
         {
-            //todo change map generator if weighted stuff doesn't look so nice or is a mess to code
-
             var terrainMap = new ArrayMap<bool>(MapWidth, MapHeight);
             QuickGenerators.GenerateRectangleMap(terrainMap);
 
@@ -77,14 +77,36 @@ namespace Assets.Scripts.Combat
                     }
                 }
 
-                //todo check if wall or floor
+                Tile tile;
+                if (IsWallTile(selection))
+                {
+                    tile = tStore.GetWallTile(selection, position);
+                }
+                else
+                {
+                    tile = TerrainStore.GetFloorTile(selection, position);
+                }
 
-                var floor = tStore.GetFloorTile(selection, position);
-                
-                map.SetTerrain(floor);
+                map.SetTerrain(tile);
             }
 
             return map;
+        }
+
+        //todo should probably be in Tile class
+        private static bool IsWallTile(TileType tType)
+        {
+            switch (tType)
+            {
+                case TileType.Grass:
+                case TileType.GrassDecorators:
+                case TileType.Mud:
+                    return false;
+                case TileType.Tree:
+                    return true;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(tType), tType, null);
+            }
         }
 
         private void PlaceEntities(CombatMap map, List<Entity> combatants)
@@ -95,32 +117,54 @@ namespace Assets.Scripts.Combat
             //todo for now just place on opposite sides
 
             (int, int) playerEntityRangeX = (0, MapWidth / 2);
-            (int, int) enemyEntityRangeX = (MapWidth / 2 + 1, MapWidth);
+            (int, int) enemyEntityRangeX = (MapWidth / 2 + 1, MapWidth - 5);
+
+            int playerIndexX = playerEntityRangeX.Item2 - 1;
+            int playerIndexY = MapHeight / 2 + combatants.Count / 3;
 
             foreach (var combatant in combatants)
             {
-                (int, int) entityRangeX;
-
                 if (combatant.IsPlayer())
                 {
-                    entityRangeX = playerEntityRangeX;
+                    var placed = false;
+                    var numTries = 0;
+                    while (!placed)
+                    {
+                        combatant.Position = new Coord(playerIndexX, playerIndexY);
+
+                        placed = map.AddEntity(combatant);
+
+                        if (playerIndexY <= 0 || numTries > maxTries)
+                        {
+                            playerIndexY = MapHeight / 2 + combatants.Count / 3;
+                            playerIndexX--;
+                        }
+                        else
+                        {
+                            playerIndexY--;
+                        }
+
+                        numTries++;
+                    }
                 }
                 else
                 {
-                    entityRangeX = enemyEntityRangeX;
+                    var (xMin, xMax) = enemyEntityRangeX;
+
+                    var placed = false;
+                    var numTries = 0;
+                    while (!placed && numTries < maxTries)
+                    {
+                        combatant.Position = new Coord(Random.Range(xMin, xMax),
+                            Random.Range(5, map.Height - 5));
+
+                        placed = map.AddEntity(combatant);
+
+                        numTries++;
+                    }
                 }
 
-                var placed = false;
-                var numTries = 0;
-                while (!placed && numTries < maxTries)
-                {
-                    combatant.Position = new Coord(Random.Range(entityRangeX.Item1, entityRangeX.Item2),
-                        Random.Range(1, map.Height));
-
-                    placed = map.AddEntity(combatant);
-
-                    numTries++;
-                }
+                
 
                 // if (placed)
                 // {

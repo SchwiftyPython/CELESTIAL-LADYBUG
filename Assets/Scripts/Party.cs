@@ -268,16 +268,11 @@ namespace Assets.Scripts
 
             _companions = new Dictionary<string, Entity>();
 
+            var entityStore = Object.FindObjectOfType<EntityPrefabStore>();
+
             for (var i = 0; i < StartSize; i++)
             {
-                var rType = GlobalHelper.GetRandomEnumValue<Race.RaceType>();
-
-                if (rType == Race.RaceType.Derpus)
-                {
-                    rType = Race.RaceType.Human;
-                }
-
-                var companion = new Wizard(rType, true); //todo change
+                var companion = entityStore.GetRandomCompanion();
                 
                 AddCompanion(companion);
             }

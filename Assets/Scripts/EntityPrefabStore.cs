@@ -1,10 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Assets.Scripts.Entities;
+using Assets.Scripts.Entities.Companions;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts
 {
     public class EntityPrefabStore : MonoBehaviour
     {
+        private readonly Dictionary<Type, Func<Race.RaceType, bool, Entity>> _companions = new Dictionary<Type, Func<Race.RaceType, bool, Entity>>
+        {
+            {typeof(Crossbowman), (rType, isPlayer)  => new Crossbowman(rType, isPlayer)},
+            {typeof(Gladiator), (rType, isPlayer)  => new Gladiator(rType, isPlayer)},
+            {typeof(Knight), (rType, isPlayer)  => new Knight(rType, isPlayer)},
+            {typeof(ManAtArms), (rType, isPlayer)  => new ManAtArms(rType, isPlayer)},
+            {typeof(Paladin), (rType, isPlayer)  => new Paladin(rType, isPlayer)},
+            {typeof(Spearman), (rType, isPlayer)  => new Spearman(rType, isPlayer)},
+            {typeof(Wizard), (rType, isPlayer)  => new Wizard(rType, isPlayer)},
+        };
+
+        //todo organize collections by group - necromancer, castle, etc
+
         private Dictionary<string, GameObject> _prefabDictionary;
 
         public GameObject[] combatSpritePrefabs;
@@ -23,6 +41,25 @@ namespace Assets.Scripts
             }
 
             return _prefabDictionary[prefabName.ToLower()];
+        }
+
+        public Entity GetRandomCompanion()
+        {
+            var index = Random.Range(0, _companions.Count);
+
+            var key = _companions.ElementAt(index).Key;
+
+            return _companions[key].Invoke(GlobalHelper.GetRandomEnumValue<Race.RaceType>(), true);
+        }
+
+        public Entity GetCompanion(Type companionType)
+        {
+            if (!_companions.ContainsKey(companionType))
+            {
+                return null;
+            }
+
+            return _companions[companionType].Invoke(GlobalHelper.GetRandomEnumValue<Race.RaceType>(), true);
         }
 
         private static Dictionary<string, GameObject> PopulateDictionaryFromArray(IEnumerable<GameObject> prefabs)

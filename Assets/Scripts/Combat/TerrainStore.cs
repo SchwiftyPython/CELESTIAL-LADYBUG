@@ -19,8 +19,9 @@ namespace Assets.Scripts.Combat
                 {BiomeType.Grassland, new Dictionary<TileType, int>
                 {
                     {TileType.Grass, 110},
-                    {TileType.Mud, 20},
-                    //{TileType.Tree, 20},
+                    {TileType.GrassDecorators, 10},
+                    {TileType.Mud, 5},
+                    {TileType.Tree, 5},
                 }}
             };
 
@@ -31,9 +32,14 @@ namespace Assets.Scripts.Combat
             return new Floor(tileTypes[Random.Range(0, tileTypes.Count)], position);
         }
 
-        public Floor GetFloorTile(TileType tType, Coord position)
+        public static Floor GetFloorTile(TileType tType, Coord position)
         {
             return new Floor(tType, position);
+        }
+
+        public Wall GetWallTile(TileType tType, Coord position)
+        {
+            return new Wall(tType, position);
         }
 
         public Dictionary<TileType, int> GetTileTypeWeights(BiomeType bType)

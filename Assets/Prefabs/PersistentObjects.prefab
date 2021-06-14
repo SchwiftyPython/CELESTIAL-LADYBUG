@@ -768,15 +768,19 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 13d63e2fad0548b459620c41cb2ae8b1, type: 3}
   - {fileID: 21300000, guid: 55446de60efc21a40982ac55cd59e8c2, type: 3}
   GrassSprites:
-  - {fileID: 7161607071353929121, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
-  - {fileID: 6511899745706718598, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
   - {fileID: 5946904825018439571, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
   - {fileID: -8473276002466409079, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
   - {fileID: -9114828219825523740, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
+  GrassDecoratorSprites:
+  - {fileID: 7161607071353929121, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
+  - {fileID: 6511899745706718598, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
+  - {fileID: 8516663929768610881, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
+  - {fileID: 6019019574683630068, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
+  - {fileID: -4120319368634811560, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
   GrassyMudSprites:
   - {fileID: 6402699291505321801, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
   TemperateTreeSprites:
-  - {fileID: 8754832103998367119, guid: 8b887fe2da7432045bbb84e50765662d, type: 3}
+  - {fileID: 21300000, guid: 72e56bb5fd3bfd54f9ee43496515f7ea, type: 3}
   AbilitySprites:
   - {fileID: 21300000, guid: a9812ed049e19704389dd690d8b41953, type: 3}
   - {fileID: 21300000, guid: 1a5b75fcb171fcc44b3deceb27bb49d2, type: 3}

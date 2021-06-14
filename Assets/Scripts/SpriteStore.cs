@@ -71,6 +71,7 @@ namespace Assets.Scripts
         #region TerrainSprites
 
         public Sprite[] GrassSprites;
+        public Sprite[] GrassDecoratorSprites;
         public Sprite[] GrassyMudSprites;
         public Sprite[] TemperateTreeSprites;
 
@@ -425,6 +426,7 @@ namespace Assets.Scripts
             _combatTerrainSprites = new Dictionary<TileType, Sprite[]>
             {
                 {TileType.Grass, GrassSprites},
+                {TileType.GrassDecorators, GrassDecoratorSprites},
                 {TileType.Mud, GrassyMudSprites},
                 {TileType.Tree, TemperateTreeSprites}
             };
