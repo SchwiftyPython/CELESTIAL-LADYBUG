@@ -36,7 +36,22 @@ namespace Assets.Scripts.Abilities
             }
 
             var ownerPosition = AbilityOwner.Position;
-            var ownerTile = ((CombatMap)AbilityOwner.CurrentMap).GetTileAt(ownerPosition);
+
+            var map = (CombatMap) AbilityOwner.CurrentMap;
+
+            if(map == null)
+            {
+                var combatManager = Object.FindObjectOfType<CombatManager>();
+
+                map = combatManager.Map;
+            }
+
+            var ownerTile = map.GetTileAt(ownerPosition);
+
+            if (ownerTile == null)
+            {
+                return;
+            }
 
             foreach (var tile in ownerTile.GetAdjacentTiles())
             {

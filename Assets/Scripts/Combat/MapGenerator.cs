@@ -124,6 +124,11 @@ namespace Assets.Scripts.Combat
 
             foreach (var combatant in combatants)
             {
+                if (combatant.IsDerpus())
+                {
+                    continue;
+                }
+
                 if (combatant.IsPlayer())
                 {
                     var placed = false;
@@ -163,17 +168,6 @@ namespace Assets.Scripts.Combat
                         numTries++;
                     }
                 }
-
-                
-
-                // if (placed)
-                // {
-                //     Debug.Log($"{combatant.Name} placed at: {combatant.Position}");
-                // }
-                // else
-                // {
-                //     Debug.Log($"{combatant.Name} failed to place. Last try at: {combatant.Position}");
-                // }
             }
 
         }

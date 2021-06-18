@@ -22,6 +22,11 @@ namespace Assets.Scripts.Combat
 
         public TileType TileType { get; protected set; }
 
+        //these are for BFS to determine movement range
+        public bool Selectable { get; set; }
+        public bool Visited    { get; set; }
+        public int TotalApCost { get; set; }
+
         public Map CurrentMap => _backingField.CurrentMap;
 
         public bool IsStatic => _backingField.IsStatic;
@@ -58,6 +63,10 @@ namespace Assets.Scripts.Combat
         {
             _backingField = new GameObject(position, 0, this, true,
                 isWalkable, isTransparent);
+
+            Selectable = false;
+            Visited = false;
+            TotalApCost = 0;
         }
 
         public void SetSpriteInstance(UnityEngine.GameObject instance)

@@ -199,14 +199,14 @@ namespace Assets.Scripts.Entities
                 return;
             }
 
+            var currentTile = ((CombatMap)CurrentMap).GetTileAt(Position);
+
             //this will not update the position if blocked
             Position = tile.Position;
 
             if (Position == tile.Position)
             {
                 Stats.CurrentActionPoints -= apMovementCost;
-
-                var currentTile = ((CombatMap)CurrentMap).GetTileAt(Position);
 
                 currentTile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(null);
 

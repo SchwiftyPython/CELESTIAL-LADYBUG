@@ -91,11 +91,13 @@ namespace Assets.Scripts.AI
             var combatManager = FindObjectOfType<CombatManager>();
             var map = combatManager.Map;
 
-            //todo either we have to get a tile adjacent to the target or stop from moving onto the target's tile
-            //todo not sure how that is happening - thought GoRogue would prevent that -- The sprite is moving but not the entity?
             var path = map.AStar.ShortestPath(Self.Position, Target.Position);
 
-            //todo take next step
+            if (path == null)
+            {
+                _actionAvailable = false;
+                return;
+            }
 
             var tileStep = map.GetTerrain<Floor>(path.GetStep(0));
 
