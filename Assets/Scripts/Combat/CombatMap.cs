@@ -24,7 +24,7 @@ namespace Assets.Scripts.Combat
                 return null;
             }
 
-            return GetTerrain<Floor>(position);
+            return GetTerrain<Tile>(position);
         }
     }
 }

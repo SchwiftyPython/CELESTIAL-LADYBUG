@@ -10,6 +10,15 @@ namespace Assets.Scripts
 {
     public class EntityPrefabStore : MonoBehaviour
     {
+        private readonly List<Race.RaceType> _companionRaces = new List<Race.RaceType>
+        {
+            Race.RaceType.Human,
+            Race.RaceType.Dwarf,
+            Race.RaceType.Elf,
+            Race.RaceType.Gnome,
+            Race.RaceType.Halfling
+        };
+
         private readonly Dictionary<Type, Func<Race.RaceType, bool, Entity>> _companions = new Dictionary<Type, Func<Race.RaceType, bool, Entity>>
         {
             {typeof(Crossbowman), (rType, isPlayer)  => new Crossbowman(rType, isPlayer)},
@@ -49,7 +58,9 @@ namespace Assets.Scripts
 
             var key = _companions.ElementAt(index).Key;
 
-            return _companions[key].Invoke(GlobalHelper.GetRandomEnumValue<Race.RaceType>(), true);
+            var rType = _companionRaces[Random.Range(0, _companionRaces.Count)];
+
+            return _companions[key].Invoke(rType, true);
         }
 
         public Entity GetCompanion(Type companionType)
@@ -59,7 +70,9 @@ namespace Assets.Scripts
                 return null;
             }
 
-            return _companions[companionType].Invoke(GlobalHelper.GetRandomEnumValue<Race.RaceType>(), true);
+            var rType = _companionRaces[Random.Range(0, _companionRaces.Count)];
+
+            return _companions[companionType].Invoke(rType, true);
         }
 
         private static Dictionary<string, GameObject> PopulateDictionaryFromArray(IEnumerable<GameObject> prefabs)

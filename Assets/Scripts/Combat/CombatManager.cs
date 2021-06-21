@@ -128,7 +128,7 @@ namespace Assets.Scripts.Combat
                     _eventMediator.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
                     _eventMediator.Broadcast(RefreshUi, this, ActiveEntity);
 
-                    _combatInput.HighlightMovementRange();
+                    //_combatInput.HighlightMovementRange();
 
                     break;
                 case CombatState.PlayerTurn:
@@ -161,7 +161,7 @@ namespace Assets.Scripts.Combat
 
                         HighlightActiveEntitySprite();
 
-                        _combatInput.HighlightMovementRange();
+                        //_combatInput.HighlightMovementRange();
 
                         if (ActiveEntityPlayerControlled())
                         {
@@ -406,7 +406,7 @@ namespace Assets.Scripts.Combat
             else if (eventName.Equals(GlobalHelper.ActiveEntityMoved))
             {
                 HighlightActiveEntitySprite();
-                _combatInput.HighlightMovementRange();
+                //_combatInput.HighlightMovementRange();
             }
         }
     }

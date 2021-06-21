@@ -384,7 +384,7 @@ namespace Assets.Scripts.Combat
             _eventMediator.Broadcast(GlobalHelper.TileSelected, tile, _apMovementCost);
         }
 
-        public void HighlightMovementRange()
+        public void HighlightMovementRange() 
         {
             if (_selectableTiles != null && _selectableTiles.Count > 0)
             {
@@ -418,6 +418,7 @@ namespace Assets.Scripts.Combat
 
             process.Enqueue(activeTile);
             activeTile.Visited = true;
+            activeTile.TotalApCost = 0;
 
             while (process.Count > 0)
             {
@@ -426,9 +427,11 @@ namespace Assets.Scripts.Combat
                 if (currentTile.TotalApCost < activeEntity.Stats.CurrentActionPoints)
                 {
                     _selectableTiles.Add(currentTile);
-                    currentTile.Selectable = true;  //todo maybe not if active tile
+                    currentTile.Selectable = true;
 
-                    foreach (Tile tile in currentTile.GetAdjacentTiles())
+                    var adjacentTiles = currentTile.GetAdjacentTiles();
+
+                    foreach (Tile tile in adjacentTiles)
                     {
                         var floor = tile as Floor;
 
@@ -446,11 +449,59 @@ namespace Assets.Scripts.Combat
                         }
                     }
                 }
+                else
+                {
+                    var path = _map.AStar.ShortestPath(activeEntity.Position, currentTile.Position);
+
+                    if (path == null || !path.Steps.Any())
+                    {
+                        return;
+                    }
+
+                    var totalCost = 0;
+
+                    foreach (var step in path.Steps)
+                    {
+                        var tileStep = _map.GetTerrain<Floor>(step);
+
+                        if (!tileStep.IsWalkable)
+                        {
+                            continue;
+                        }
+
+                        totalCost += tileStep.ApCost;
+                    }
+
+                    if (totalCost <= activeEntity.Stats.CurrentActionPoints)
+                    {
+                        _selectableTiles.Add(currentTile);
+                        currentTile.Selectable = true;
+
+                        var adjacentTiles = currentTile.GetAdjacentTiles();
+
+                        foreach (Tile tile in adjacentTiles)
+                        {
+                            var floor = tile as Floor;
+
+                            if (floor == null || !floor.IsWalkable)
+                            {
+                                continue;
+                            }
+
+                            if (!floor.Visited)
+                            {
+                                floor.Visited = true;
+                                floor.TotalApCost = floor.ApCost + currentTile.TotalApCost;
+                                process.Enqueue(floor);
+                            }
+                        }
+                    }
+                }
             }
 
-            foreach (var tile in _selectableTiles)
+            foreach (var sTile in _selectableTiles)
             {
-                tile.SpriteInstance.GetComponent<SpriteRenderer>().color = MovementRangeColor;
+                sTile.SpriteInstance.GetComponent<SpriteRenderer>().color = MovementRangeColor;
             }
         }
 
