@@ -24,8 +24,6 @@ namespace Assets.Scripts.Combat
 
     public class CombatManager : MonoBehaviour, ISubscriber
     {
-        //private const string PlayerEndTurn = GlobalHelper.PlayerEndTurn;
-        //private const string AiEndTurn = GlobalHelper.AiEndTurn;
         private const string EndTurnEvent = GlobalHelper.EndTurn;
         private const string CombatFinished = GlobalHelper.CombatFinished;
         private const string EntityDead = GlobalHelper.EntityDead;
@@ -36,6 +34,7 @@ namespace Assets.Scripts.Combat
 
         private EventMediator _eventMediator;
         private TravelManager _travelManager;
+        private CombatInputController _combatInput;
 
         private List<EffectTrigger<EffectArgs>> _effectTriggers;
 
@@ -58,6 +57,8 @@ namespace Assets.Scripts.Combat
             _eventMediator = FindObjectOfType<EventMediator>();
 
             _travelManager = FindObjectOfType<TravelManager>();
+
+            _combatInput = FindObjectOfType<CombatInputController>();
         }
 
         private void Update()
@@ -80,7 +81,15 @@ namespace Assets.Scripts.Combat
 
                     var combatants = new List<Entity>();
 
-                    combatants.AddRange(party);
+                    foreach (var companion in party)
+                    {
+                        if (companion.IsDerpus())
+                        {
+                            continue;
+                        }
+
+                        combatants.Add(companion);
+                    }
 
                     combatants.AddRange(Enemies);
 
@@ -119,6 +128,8 @@ namespace Assets.Scripts.Combat
                     _eventMediator.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
                     _eventMediator.Broadcast(RefreshUi, this, ActiveEntity);
 
+                    //_combatInput.HighlightMovementRange();
+
                     break;
                 case CombatState.PlayerTurn:
 
@@ -149,6 +160,8 @@ namespace Assets.Scripts.Combat
                         ActiveEntity.RefillActionPoints();
 
                         HighlightActiveEntitySprite();
+
+                        //_combatInput.HighlightMovementRange();
 
                         if (ActiveEntityPlayerControlled())
                         {
@@ -290,18 +303,21 @@ namespace Assets.Scripts.Combat
             return ActiveEntity.IsPlayer();
         }
 
-        private void HighlightActiveEntitySprite()
+        private void HighlightActiveEntitySprite() 
         {
             if (ActiveEntity == null)
             {
                 ActiveEntity = TurnOrder.Peek();
-
-                Debug.Log($"Can't highlight active sprite because it is null!");
             }
 
-            var highlighter = GetPawnHighlighterInstance();
+            var activeTile = Map.GetTileAt(ActiveEntity.Position);
 
-            highlighter.transform.position = ActiveEntity.CombatSpriteInstance.transform.position;
+            if (activeTile == null)
+            {
+                return;
+            }
+
+            activeTile.SpriteInstance.GetComponent<TerrainSlotUi>().HighlightTileForActiveEntity();
         }
 
         private void UpdateActiveEntityInfoPanel()
@@ -309,8 +325,6 @@ namespace Assets.Scripts.Combat
             //todo might have panel subscribe to end turn event
         }
 
-        //todo we can remove the dead entity's portrait from the turn order and remove it from queue when their turn comes around
-        //this happens on refresh anyways
         private void RemoveDeadEntitiesFromTurnOrderDisplay()
         {
             foreach (var entity in TurnOrder.ToArray())
@@ -373,8 +387,6 @@ namespace Assets.Scripts.Combat
         {
             if (eventName.Equals(EndTurnEvent))
             {
-                //_eventMediator.UnsubscribeFromEvent(EndTurnEvent, this);
-
                 _currentCombatState = CombatState.EndTurn;
             }
             else if (eventName.Equals(GlobalHelper.EntityDead))
@@ -394,6 +406,7 @@ namespace Assets.Scripts.Combat
             else if (eventName.Equals(GlobalHelper.ActiveEntityMoved))
             {
                 HighlightActiveEntitySprite();
+                //_combatInput.HighlightMovementRange();
             }
         }
     }

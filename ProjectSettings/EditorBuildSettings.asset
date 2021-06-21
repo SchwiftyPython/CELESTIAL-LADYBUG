@@ -14,4 +14,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Combat.unity
     guid: 2d9bfa530ddf98f4c9d2b902a6ad809d
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: cba3592d10e19554e82d36066b8501f7,
+      type: 2}

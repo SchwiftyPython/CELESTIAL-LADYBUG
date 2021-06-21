@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace Assets.Scripts.Entities
 {
@@ -9,14 +10,14 @@ namespace Assets.Scripts.Entities
         //todo does it matter if the types are not represented graphically?
         public enum RaceType
         {
-            Human,
-            Dwarf,
-            Elf,
-            Gnome,
-            Halfling,
-            Undead,
-            Beast,
-            Derpus
+            [Description("Human")] Human,
+            [Description("Dwarf")] Dwarf,
+            [Description("Elf")] Elf,
+            [Description("Gnome")] Gnome,
+            [Description("Halfling")] Halfling,
+            [Description("Undead")] Undead,
+            [Description("Beast")] Beast,
+            [Description("Derpus")] Derpus
         }
 
         public Race(RaceType rType)

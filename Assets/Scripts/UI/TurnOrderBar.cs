@@ -74,16 +74,32 @@ namespace Assets.Scripts.UI
 
                 entityInstance.gameObject.GetComponent<Animator>().enabled = false;
 
+                var spriteRenderer = entityInstance.GetComponent<SpriteRenderer>();
+
+                if (spriteRenderer == null)
+                {
+                    var childRenderers = entityInstance.GetComponentsInChildren<SpriteRenderer>();
+
+                    foreach (var cRenderer in childRenderers)
+                    {
+                        cRenderer.sortingLayerName = "FakeUi";
+                    }
+                }
+                else
+                {
+                    spriteRenderer.sortingLayerName = "FakeUi";
+                }
+
                 entityInstance.transform.SetParent(slotList[count]);
 
                 if (!entity.IsPlayer())
                 {
                     entityInstance.GetComponent<SpriteRenderer>().flipX = true;
-                    entityInstance.transform.localPosition = new Vector3(0.08f, -0.3f);
+                    entityInstance.transform.localPosition = new Vector3(0.08f, -0.3f, -0.01f);
                 }
                 else
                 {
-                    entityInstance.transform.localPosition = new Vector3(-0.075f, -0.3f);
+                    entityInstance.transform.localPosition = new Vector3(-0.075f, -0.3f, -0.01f);
                 }
 
                 entityInstance.transform.localScale = new Vector3(0.15f, 0.8f);

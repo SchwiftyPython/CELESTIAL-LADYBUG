@@ -9,6 +9,8 @@ namespace Assets.Scripts.Combat
 {
     public class BoardHolder : MonoBehaviour
     {
+        public GameObject TerrainSlotPrefab;
+
         public Transform EntityHolder;
 
         public static BoardHolder Instance;
@@ -35,7 +37,9 @@ namespace Assets.Scripts.Combat
 
                     var tile = map.GetTerrain<Tile>(coord);
 
-                    var tileInstance = Instantiate(tile.PrefabTexture, new Vector2(currentColumn, currentRow), Quaternion.identity);
+                    var tileInstance = Instantiate(TerrainSlotPrefab, new Vector2(currentColumn, currentRow), Quaternion.identity);
+
+                    tileInstance.GetComponent<SpriteRenderer>().sprite = tile.Texture;
 
                     tile.SetSpriteInstance(tileInstance);
 

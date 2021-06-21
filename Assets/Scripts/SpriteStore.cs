@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Abilities;
+using Assets.Scripts.Combat;
 using Assets.Scripts.Effects;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Travel;
 using Assets.Scripts.UI;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -66,6 +68,17 @@ namespace Assets.Scripts
 
         #endregion ItemSprites
 
+        #region TerrainSprites
+
+        public Sprite[] GrassSprites;
+        public Sprite[] GrassDecoratorSprites;
+        public Sprite[] GrassyMudSprites;
+        public Sprite[] TemperateTreeSprites;
+
+        private Dictionary<TileType, Sprite[]> _combatTerrainSprites;
+
+        #endregion TerrainSprites
+
         private Dictionary<string, Sprite> _abilitySpriteDictionary;
         private Dictionary<string, Sprite> _effectSpriteDictionary;
 
@@ -76,6 +89,7 @@ namespace Assets.Scripts
         {
             PopulateSpriteDictionaries();
             PopulateColorSwaps();
+            PopulateCombatTerrain();
 
             CrossbowSpriteNames = new List<string>();
             DaggerSpriteNames = new List<string>();
@@ -200,7 +214,17 @@ namespace Assets.Scripts
             return _effectSpriteDictionary[effect.Name.ToLower()];
         }
 
-        public void SetColorSwaps(ColorSwapper[] colorSwapper, Entity entity)
+        public Sprite[] GetFloorSprites(TileType tType)
+        {
+            return _combatTerrainSprites[tType];
+        }
+
+        public Sprite[] GetWallSprites(TileType tType)
+        {
+            return _combatTerrainSprites[tType];
+        }
+
+        public void SetColorSwaps(IEnumerable<ColorSwapper> colorSwapper, Entity entity)
         {
             foreach (var swapper in colorSwapper)
             {
@@ -395,6 +419,17 @@ namespace Assets.Scripts
             }
 
             return spriteDictionary;
+        }
+
+        private void PopulateCombatTerrain()
+        {
+            _combatTerrainSprites = new Dictionary<TileType, Sprite[]>
+            {
+                {TileType.Grass, GrassSprites},
+                {TileType.GrassDecorators, GrassDecoratorSprites},
+                {TileType.Mud, GrassyMudSprites},
+                {TileType.Tree, TemperateTreeSprites}
+            };
         }
 
         private void PopulateColorSwaps()

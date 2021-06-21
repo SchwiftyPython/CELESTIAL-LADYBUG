@@ -5,6 +5,7 @@ using Assets.Scripts.Effects;
 using Assets.Scripts.Entities;
 using GoRogue;
 using GoRogue.GameFramework;
+using UnityEngine;
 using GameObject = GoRogue.GameFramework.GameObject;
 
 namespace Assets.Scripts.Combat
@@ -13,15 +14,18 @@ namespace Assets.Scripts.Combat
     {
         private IGameObject _backingField;
 
-        private string _prefabName;
-
         private List<Effect> _effects; //todo have a playerEffects list and a nonPlayerEffects list to differentiate who should get effect applied
 
-        public UnityEngine.GameObject PrefabTexture { get; private set; }
+        public Sprite Texture { get; protected set; }
 
         public UnityEngine.GameObject SpriteInstance { get; private set; }
 
-        public TileType TileType { get; private set; }
+        public TileType TileType { get; protected set; }
+
+        //these are for BFS to determine movement range
+        public bool Selectable { get; set; }
+        public bool Visited    { get; set; }
+        public int TotalApCost { get; set; }
 
         public Map CurrentMap => _backingField.CurrentMap;
 
@@ -55,13 +59,14 @@ namespace Assets.Scripts.Combat
 
         public int Layer => _backingField.Layer;
 
-        public Tile(TileType tileType, UnityEngine.GameObject texture, Coord position, bool isWalkable, bool isTransparent)
+        public Tile(Coord position, bool isWalkable, bool isTransparent)
         {
             _backingField = new GameObject(position, 0, this, true,
                 isWalkable, isTransparent);
 
-            PrefabTexture = texture;
-            _prefabName = texture.name;
+            Selectable = false;
+            Visited = false;
+            TotalApCost = 0;
         }
 
         public void SetSpriteInstance(UnityEngine.GameObject instance)

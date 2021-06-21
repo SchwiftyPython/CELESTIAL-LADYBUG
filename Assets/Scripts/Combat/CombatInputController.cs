@@ -2,10 +2,13 @@
 using System.Linq;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.Entities;
+using FloodSpill;
 using GoRogue;
+using GoRogue.GameFramework;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using GameObject = UnityEngine.GameObject;
 
 namespace Assets.Scripts.Combat
 {
@@ -23,6 +26,7 @@ namespace Assets.Scripts.Combat
         private CombatMap _map;
 
         private List<Tile> _highlightedTiles;
+        private List<Tile> _selectableTiles;
 
         private Tile _selectedTile;
 
@@ -39,7 +43,8 @@ namespace Assets.Scripts.Combat
         private EventMediator _eventMediator;
         private CombatManager _combatManager;
 
-        public Color HighlightedColor; //todo refactor -- need to look into better way to highlight probably with an actual sprite
+        public Color HighlightedColor;
+        public Color MovementRangeColor;
 
         public GameObject Canvas;
 
@@ -357,7 +362,6 @@ namespace Assets.Scripts.Combat
 
             _apMovementCost = 0;
 
-            //todo not sure if first and last steps are inclusive - don't want to count first tile if it is the start point
             foreach (var step in path.Steps)
             {
                 var tileStep = _map.GetTerrain<Floor>(step);
@@ -378,6 +382,127 @@ namespace Assets.Scripts.Combat
             _eventMediator.Broadcast(GlobalHelper.HidePopup, this);
 
             _eventMediator.Broadcast(GlobalHelper.TileSelected, tile, _apMovementCost);
+        }
+
+        public void HighlightMovementRange() 
+        {
+            if (_selectableTiles != null && _selectableTiles.Count > 0)
+            {
+                foreach (var tile in _selectableTiles)
+                {
+                    tile.Visited = false;
+                    tile.Selectable = false;
+                    tile.TotalApCost = 0;
+
+                    if (tile.SpriteInstance == null)
+                    {
+                        continue;
+                    }
+
+                    tile.SpriteInstance.GetComponent<SpriteRenderer>().color = Color.white;
+                }
+            }
+
+            _selectableTiles = new List<Tile>();
+
+            var activeEntity = _combatManager.ActiveEntity;
+
+            if (!activeEntity.IsPlayer())
+            {
+                return;
+            }
+
+            var activeTile = _map.GetTileAt(activeEntity.Position);
+
+            Queue<Tile> process = new Queue<Tile>();
+
+            process.Enqueue(activeTile);
+            activeTile.Visited = true;
+            activeTile.TotalApCost = 0;
+
+            while (process.Count > 0)
+            {
+                var currentTile = process.Dequeue();
+
+                if (currentTile.TotalApCost < activeEntity.Stats.CurrentActionPoints)
+                {
+                    _selectableTiles.Add(currentTile);
+                    currentTile.Selectable = true;
+
+                    var adjacentTiles = currentTile.GetAdjacentTiles();
+
+                    foreach (Tile tile in adjacentTiles)
+                    {
+                        var floor = tile as Floor;
+
+                        if (floor == null || !floor.IsWalkable)
+                        {
+                            continue;
+                        }
+
+                        if (!floor.Visited)
+                        {
+                            //tile.parent = currentTile;
+                            floor.Visited = true;
+                            floor.TotalApCost = floor.ApCost + currentTile.TotalApCost;
+                            process.Enqueue(floor);
+                        }
+                    }
+                }
+                else
+                {
+                    var path = _map.AStar.ShortestPath(activeEntity.Position, currentTile.Position);
+
+                    if (path == null || !path.Steps.Any())
+                    {
+                        return;
+                    }
+
+                    var totalCost = 0;
+
+                    foreach (var step in path.Steps)
+                    {
+                        var tileStep = _map.GetTerrain<Floor>(step);
+
+                        if (!tileStep.IsWalkable)
+                        {
+                            continue;
+                        }
+
+                        totalCost += tileStep.ApCost;
+                    }
+
+                    if (totalCost <= activeEntity.Stats.CurrentActionPoints)
+                    {
+                        _selectableTiles.Add(currentTile);
+                        currentTile.Selectable = true;
+
+                        var adjacentTiles = currentTile.GetAdjacentTiles();
+
+                        foreach (Tile tile in adjacentTiles)
+                        {
+                            var floor = tile as Floor;
+
+                            if (floor == null || !floor.IsWalkable)
+                            {
+                                continue;
+                            }
+
+                            if (!floor.Visited)
+                            {
+                                floor.Visited = true;
+                                floor.TotalApCost = floor.ApCost + currentTile.TotalApCost;
+                                process.Enqueue(floor);
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (var sTile in _selectableTiles)
+            {
+                sTile.SpriteInstance.GetComponent<SpriteRenderer>().color = MovementRangeColor;
+            }
         }
 
         private void HighlightTile(Tile tile)
@@ -428,7 +553,14 @@ namespace Assets.Scripts.Combat
                     continue;
                 }
 
-                tile.SpriteInstance.GetComponent<SpriteRenderer>().color = Color.white;
+                if (tile.Selectable)
+                {
+                    tile.SpriteInstance.GetComponent<SpriteRenderer>().color = MovementRangeColor;
+                }
+                else
+                {
+                    tile.SpriteInstance.GetComponent<SpriteRenderer>().color = Color.white;
+                }
             }
 
             _highlightedTiles = new List<Tile>();

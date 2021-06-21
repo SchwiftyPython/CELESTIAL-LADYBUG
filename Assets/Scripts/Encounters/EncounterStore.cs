@@ -52,21 +52,6 @@ namespace Assets.Scripts.Encounters
             {"no morale", () => new DerpusNoMorale()}
         };
 
-        /*public static EncounterStore Instance;
-
-        private void Start()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else if (Instance != this)
-            {
-                Destroy(gameObject);
-            }
-            DontDestroyOnLoad(gameObject);
-        }*/
-
         public List<Encounter> GetNormalEncounters()
         {
             var encounters = new List<Encounter>();

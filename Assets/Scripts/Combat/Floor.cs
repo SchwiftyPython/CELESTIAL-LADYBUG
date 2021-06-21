@@ -1,17 +1,38 @@
-﻿using GoRogue;
+﻿using System.Collections.Generic;
+using GoRogue;
 using UnityEngine;
 
 namespace Assets.Scripts.Combat
 {
     public class Floor : Tile
     {
+        private readonly Dictionary<TileType, int> _terrainCosts = new Dictionary<TileType, int>
+        {
+            {TileType.Grass, 2},
+            {TileType.GrassDecorators, 2},
+            {TileType.Mud, 3},
+        };
+
         public int ApCost { get; private set; }
 
-        //todo can get prefab texture from terrain store based on tiletype
-        public Floor(TileType tileType, GameObject texture, Coord position) : base(tileType, texture, position, true, true)
+        public Floor(TileType tileType, Coord position) : base(position, true, true)
         {
-            //todo for testing prototype -- have terrain store return this info from a <TileType, int> dictionary
-            ApCost = 2;
+            ApCost = _terrainCosts[tileType];
+
+            var spriteStore = Object.FindObjectOfType<SpriteStore>();
+
+            var floorSprites = spriteStore.GetFloorSprites(tileType);
+
+            Texture = floorSprites[Random.Range(0, floorSprites.Length)];
+
+            if (tileType == TileType.GrassDecorators) //todo going to have to move this into setter once we add more stuff
+            {
+                TileType = TileType.Grass;
+            }
+            else
+            {
+                TileType = tileType;
+            }
         }
     }
 }
