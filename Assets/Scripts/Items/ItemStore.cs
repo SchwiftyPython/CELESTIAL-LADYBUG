@@ -16,30 +16,8 @@ namespace Assets.Scripts.Items
 
         public TextAsset[] ItemTypesFiles;
 
-        //public static ItemStore Instance;
-
-        private void Awake()
-        {
-            // if (Instance == null)
-            // {
-            //     Instance = this;
-            // }
-            // else if (Instance != this)
-            // {
-            //     Destroy(gameObject);
-            // }
-            // DontDestroyOnLoad(gameObject);
-
-            //eventMediator.SubscribeToEvent(GlobalHelper.SpritesLoaded, this);
-        }
-
-        
         public void Setup()
         {
-            /*EventMediator eventMediator = FindObjectOfType<EventMediator>();
-
-            eventMediator.SubscribeToEvent(GlobalHelper.SpritesLoaded, this);*/ 
-
             DeserializeItemTypes();
         }
 

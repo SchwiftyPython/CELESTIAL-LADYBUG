@@ -272,7 +272,8 @@ namespace Assets.Scripts
 
             for (var i = 0; i < StartSize; i++)
             {
-                var companion = entityStore.GetRandomCompanion();
+                //var companion = entityStore.GetRandomCompanion();  //todo just for testing
+                var companion = entityStore.GetCompanion(typeof(Wizard));
                 
                 AddCompanion(companion);
             }

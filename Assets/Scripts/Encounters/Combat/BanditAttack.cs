@@ -29,8 +29,6 @@ namespace Assets.Scripts.Encounters.Combat
             {
                 var bandit = new Skeleton(); //todo change
 
-                bandit.GenerateStartingEquipment();
-
                 bandits.Add(bandit);
             }
 
