@@ -14,7 +14,7 @@ namespace Assets.Scripts.Entities
 
         private Entity _parent;
 
-        private int _dodge;
+        /*private int _dodge;
         public int Dodge 
         {
             get
@@ -43,9 +43,13 @@ namespace Assets.Scripts.Entities
                     _dodge = value;
                 }
             }
-        }
+        }*/
+
+        //todo probably should define setters and getters here
+        public int Melee { get; set; }
+        public int Ranged { get; set; }
         public int Lockpicking { get; set; }
-        public int Toughness { get; set; }
+        public int Endurance { get; set; }
         public int Healing { get; set; }
         public int Survival { get; set; }
 
@@ -91,9 +95,9 @@ namespace Assets.Scripts.Entities
         {
             var startingValues = new Dictionary<EntitySkillTypes, int>
             {
-                { EntitySkillTypes.Dodge, SkillMin },
+                { EntitySkillTypes.Melee, SkillMin },
                 { EntitySkillTypes.Lockpicking, SkillMin },
-                { EntitySkillTypes.Toughness, SkillMin },
+                { EntitySkillTypes.Endurance, SkillMin },
                 { EntitySkillTypes.Healing, SkillMin },
                 { EntitySkillTypes.Survival, SkillMin },
                 { EntitySkillTypes.Persuasion, SkillMin }
@@ -120,14 +124,17 @@ namespace Assets.Scripts.Entities
             {
                 switch (startingValue.Key)
                 {
-                    case EntitySkillTypes.Dodge:
-                        Dodge = startingValue.Value;
+                    case EntitySkillTypes.Melee:
+                        Melee = startingValue.Value;
+                        break;
+                    case EntitySkillTypes.Ranged:
+                        Ranged = startingValue.Value;
                         break;
                     case EntitySkillTypes.Lockpicking:
                         Lockpicking = startingValue.Value;
                         break;
-                    case EntitySkillTypes.Toughness:
-                        Toughness = startingValue.Value;
+                    case EntitySkillTypes.Endurance:
+                        Endurance = startingValue.Value;
                         break;
                     case EntitySkillTypes.Healing:
                         Healing = startingValue.Value;

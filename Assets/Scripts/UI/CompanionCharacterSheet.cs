@@ -17,8 +17,8 @@ namespace Assets.Scripts.UI
         [SerializeField] private TextMeshProUGUI _health;
         [SerializeField] private TextMeshProUGUI _energy;
         [SerializeField] private TextMeshProUGUI _morale;
-        [SerializeField] private TextMeshProUGUI _attack;
-        [SerializeField] private TextMeshProUGUI _dodge;
+        [SerializeField] private TextMeshProUGUI _melee;
+        [SerializeField] private TextMeshProUGUI _ranged;
         [SerializeField] private TextMeshProUGUI _lockpick;
         [SerializeField] private TextMeshProUGUI _toughness;
         [SerializeField] private TextMeshProUGUI _healing;
@@ -53,13 +53,13 @@ namespace Assets.Scripts.UI
             _health.text = $"{stats.CurrentHealth}/{stats.MaxHealth}";
             _energy.text = $"{stats.CurrentEnergy}/{stats.MaxEnergy}";
             _morale.text = $"{stats.CurrentMorale}/{stats.MaxMorale}";
-            _attack.text = stats.Attack.ToString();
+            _melee.text = stats.Attack.ToString();
 
             var skills = _companion.Skills;
 
-            _dodge.text = skills.Dodge.ToString();
+            _ranged.text = skills.Ranged.ToString();
             _lockpick.text = skills.Lockpicking.ToString();
-            _toughness.text = skills.Toughness.ToString();
+            _toughness.text = skills.Endurance.ToString();
             _healing.text = skills.Healing.ToString();
             _survival.text = skills.Survival.ToString();
             _persuasion.text = skills.Persuasion.ToString();

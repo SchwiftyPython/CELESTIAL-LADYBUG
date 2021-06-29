@@ -1205,9 +1205,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Toughness
-
-'
+  m_text: Endurance
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f4bccea45e50e984e9b93fbe219eaa8d, type: 2}
   m_sharedMaterial: {fileID: -8101100261937072485, guid: f4bccea45e50e984e9b93fbe219eaa8d,
@@ -1491,7 +1489,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Attack
+  m_text: 'Melee
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f4bccea45e50e984e9b93fbe219eaa8d, type: 2}
   m_sharedMaterial: {fileID: -8101100261937072485, guid: f4bccea45e50e984e9b93fbe219eaa8d,
@@ -3481,7 +3481,7 @@ GameObject:
   - component: {fileID: 338063067}
   - component: {fileID: 338063066}
   m_Layer: 5
-  m_Name: Dodge
+  m_Name: Ranged
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15557,7 +15557,7 @@ GameObject:
   - component: {fileID: 1395854715}
   - component: {fileID: 1395854714}
   m_Layer: 5
-  m_Name: Toughness
+  m_Name: Endurance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20576,7 +20576,7 @@ GameObject:
   - component: {fileID: 1801647283}
   - component: {fileID: 1801647282}
   m_Layer: 5
-  m_Name: Attack
+  m_Name: Melee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21298,7 +21298,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Dodge
+  m_text: 'Ranged
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f4bccea45e50e984e9b93fbe219eaa8d, type: 2}
   m_sharedMaterial: {fileID: -8101100261937072485, guid: f4bccea45e50e984e9b93fbe219eaa8d,

@@ -85,6 +85,7 @@ namespace Assets.Scripts.Items
             return ItemType.Defense.Toughness;
         }
 
+        //todo add to base hit difficulty
         private int GetDodgeMod()
         {
             if (ItemType.Defense == null)

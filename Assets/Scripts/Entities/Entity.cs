@@ -641,6 +641,8 @@ namespace Assets.Scripts.Entities
             return total;
         }
 
+        //todo need to figure out how we can calc this
+        //if we can't get solid numbers out of this, try abtracting to "good" or "bad" chance to hit instead of showing number to player
         private int CalculateBaseChanceToHit(Entity target)
         {
             Debug.Log($"Attacker Melee Skill: {Stats.MeleeSkill}");
