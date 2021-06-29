@@ -55,9 +55,9 @@ namespace Assets.Scripts.Items
             return GlobalHelper.GetEnumDescription(ItemType.Group);
         }
 
-        public string GetValue()
+        public int GetValue()
         {
-            return ItemType.Price.ToString();
+            return ItemType.Price;
         }
 
         public Attack GetMeleeAttack()

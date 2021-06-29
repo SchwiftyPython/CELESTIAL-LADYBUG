@@ -13,6 +13,9 @@ namespace Assets.Scripts.Entities.Necromancer
 
             var abilityStore = Object.FindObjectOfType<AbilityStore>();
 
+            //todo a web ability?
+            //at least a few other generic spider attacks
+
             var bite = abilityStore.GetAbilityByName("bite", this);
 
             Abilities.Add(bite.GetType(), bite);

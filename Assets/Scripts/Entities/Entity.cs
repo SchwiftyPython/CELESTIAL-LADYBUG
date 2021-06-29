@@ -23,7 +23,7 @@ namespace Assets.Scripts.Entities
         private int _xp;
         private bool _isPlayer;
 
-        private Equipment _equipment;
+        protected Equipment Equipment;
 
         //todo use this instead of get component if possible
         private AiController _aiController;
@@ -132,8 +132,6 @@ namespace Assets.Scripts.Entities
             Skills = new Skills(this);
 
             Abilities = new Dictionary<Type, Ability>();
-
-            GenerateStartingEquipment();
 
             Stats = new Stats(this, Attributes, Skills);
 
@@ -270,51 +268,35 @@ namespace Assets.Scripts.Entities
 
         }
 
-        public void GenerateStartingEquipment()
+        public void GenerateStartingEquipment(EntityClass eClass, Dictionary<EquipLocation, List<string>> startingTable)
         {
             var itemStore = Object.FindObjectOfType<ItemStore>();
 
-            //todo not implemented - temp for testing
+            Equipment = new Equipment(eClass);
 
-            _equipment = new Equipment(EntityClass);
+            foreach (var equipment in startingTable)
+            {
+                var itemName = equipment.Value[Random.Range(0, equipment.Value.Count)];
 
-            var testWeapon = itemStore.GetRandomEquipableItem(EquipLocation.Weapon);
+                if (string.IsNullOrEmpty(itemName))
+                {
+                    continue;
+                }
 
-            Equip(testWeapon);
+                var item = (EquipableItem) itemStore.GetItemTypeByName(itemName).NewItem();
 
-            var testArmor = itemStore.GetRandomEquipableItem(EquipLocation.Body);
-
-            Equip(testArmor);
-
-            var testHelmet = itemStore.GetRandomEquipableItem(EquipLocation.Helmet);
-
-            //Equip(testHelmet);
-
-            var testBoots = itemStore.GetRandomEquipableItem(EquipLocation.Boots);
-
-            Equip(testBoots);
-
-            var testGloves = itemStore.GetRandomEquipableItem(EquipLocation.Gloves);
-
-            Equip(testGloves);
-
-            var testShield = itemStore.GetRandomEquipableItem(EquipLocation.Shield);
-
-            Equip(testShield);
-
-            var testRing = itemStore.GetRandomEquipableItem(EquipLocation.Ring);
-
-            Equip(testRing);
+                Equip(item);
+            }
         }
 
         public void Equip(EquipableItem item)
         {
-            if (!_equipment.ItemValidForEntityClass(item))
+            if (!Equipment.ItemValidForEntityClass(item))
             {
                 return;
             }
 
-            _equipment.AddItem(item.GetAllowedEquipLocation(), item);
+            Equipment.AddItem(item.GetAllowedEquipLocation(), item);
 
             if (Abilities == null)
             {
@@ -332,13 +314,13 @@ namespace Assets.Scripts.Entities
 
         public void UnEquip(EquipLocation slot, bool swapAttempt)
         {
-            var item = _equipment.GetItemInSlot(slot);
+            var item = Equipment.GetItemInSlot(slot);
 
-            _equipment.RemoveItem(slot);
+            Equipment.RemoveItem(slot);
 
             foreach (var ability in item.GetAbilities(this))
             {
-                if (!_equipment.AbilityEquipped(ability))
+                if (!Equipment.AbilityEquipped(ability))
                 {
                     Abilities.Remove(ability.GetType());
                 }
@@ -522,7 +504,7 @@ namespace Assets.Scripts.Entities
 
         public void ApplyDamageWithEquipment(Entity target, bool ranged, EquipLocation slot = EquipLocation.Weapon)
         {
-            var equippedItem = _equipment.GetItemInSlot(slot);
+            var equippedItem = Equipment.GetItemInSlot(slot);
 
             int minDamage = 0;
             int maxDamage = 0;
@@ -584,7 +566,7 @@ namespace Assets.Scripts.Entities
 
         public bool HasMissileWeaponEquipped()
         {
-            var equippedWeapon = _equipment.GetItemInSlot(EquipLocation.Weapon);
+            var equippedWeapon = Equipment.GetItemInSlot(EquipLocation.Weapon);
 
             if (equippedWeapon == null)
             {
@@ -607,7 +589,7 @@ namespace Assets.Scripts.Entities
                     continue;
                 }
 
-                var  equippedArmor = _equipment.GetItemInSlot(location);
+                var  equippedArmor = Equipment.GetItemInSlot(location);
 
                 if (equippedArmor == null)
                 {
@@ -622,17 +604,17 @@ namespace Assets.Scripts.Entities
 
         public EquipableItem GetEquippedWeapon()
         {
-            return _equipment.GetItemInSlot(EquipLocation.Weapon);
+            return Equipment.GetItemInSlot(EquipLocation.Weapon);
         }
 
         public EquipableItem GetEquippedItemInSlot(EquipLocation slot)
         {
-            return _equipment.GetItemInSlot(slot);
+            return Equipment.GetItemInSlot(slot);
         }
 
         public Equipment GetEquipment()
         {
-            return _equipment;
+            return Equipment;
         }
 
         public bool TargetInRange(Entity target)

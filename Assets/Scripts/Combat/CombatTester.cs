@@ -41,7 +41,7 @@ namespace Assets.Scripts.Combat
 
                 bandits.Add(bandit);
 
-                /*bandit = new Zombie();
+                bandit = new Zombie();
 
                 bandits.Add(bandit);
 
@@ -55,7 +55,7 @@ namespace Assets.Scripts.Combat
 
                 bandit = new Vampire(); 
 
-                bandits.Add(bandit);*/
+                bandits.Add(bandit);
             }
 
             var combatManager = FindObjectOfType<CombatManager>();

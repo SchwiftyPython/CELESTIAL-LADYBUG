@@ -15,6 +15,7 @@ namespace Assets.Scripts.Entities.Necromancer
             //pass through obstacles
             //buff other undead
             //possession
+            //generic ghost attack
 
             var abilityStore = Object.FindObjectOfType<AbilityStore>();
 
