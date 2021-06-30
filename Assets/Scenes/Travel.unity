@@ -8412,8 +8412,8 @@ MonoBehaviour:
   _health: {fileID: 485875465}
   _energy: {fileID: 1943244946}
   _morale: {fileID: 1904433491}
-  _attack: {fileID: 615341114}
-  _dodge: {fileID: 1625792648}
+  _melee: {fileID: 615341114}
+  _ranged: {fileID: 1625792648}
   _lockpick: {fileID: 921101024}
   _toughness: {fileID: 1397448028}
   _healing: {fileID: 402367575}

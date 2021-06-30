@@ -13,6 +13,7 @@ namespace Assets.Scripts.Abilities
         {
         }
 
+        //todo need to get this modifier only when the ability is selected
         public float GetAdditiveModifiers(Enum stat)
         {
             if (!stat.GetType().Name.Equals(nameof(CombatModifierTypes)))

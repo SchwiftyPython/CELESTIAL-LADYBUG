@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Travel;
+using GoRogue.DiceNotation;
 using UnityEngine;
 
 namespace Assets.Scripts.Encounters.Normal
@@ -34,9 +35,9 @@ namespace Assets.Scripts.Encounters.Normal
                 optionTitle = $"{bestArm.Name} takes the bet";
                 optionResultText = $"\"Best two out of three?\" says {bestArm.FirstName()}. \n\n";
 
-                var opponentRoll = 50 + Random.Range(1, 21);
+                var opponentRoll = Dice.Roll("2d6");
 
-                var companionRoll = bestArm.Stats.RangedSkill + Random.Range(1, 21);
+                var companionRoll = Dice.Roll($"{bestArm.Skills.Ranged}d6");
 
                 if (companionRoll >= opponentRoll)
                 {

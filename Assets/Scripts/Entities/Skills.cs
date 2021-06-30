@@ -7,10 +7,11 @@ namespace Assets.Scripts.Entities
 {
     public class Skills
     {
-        private const int SkillMin = 0;
-        private const int SkillMax = 5;
+        private const int SkillMin = 1;
+        private const int SkillMax = 50;
 
         private const int StartingSkillDice = 7;
+        private const int StartingSkillMax = 5;
 
         private Entity _parent;
 
@@ -91,11 +92,17 @@ namespace Assets.Scripts.Entities
             GenerateSkillValues();
         }
 
+        //todo this assumes level 1 entity
+        //could take in a level (int) to create higher level fellers
+        //or even better would be to use whatever level up system we slam together
         public void GenerateSkillValues()
         {
+            //todo also need to consider that some classes don't melee or use ranged 
+            //could define these values per class 
             var startingValues = new Dictionary<EntitySkillTypes, int>
             {
                 { EntitySkillTypes.Melee, SkillMin },
+                { EntitySkillTypes.Ranged, SkillMin },
                 { EntitySkillTypes.Lockpicking, SkillMin },
                 { EntitySkillTypes.Endurance, SkillMin },
                 { EntitySkillTypes.Healing, SkillMin },
@@ -111,7 +118,7 @@ namespace Assets.Scripts.Entities
 
                 var attributeKey = startingValues.ElementAt(attributeIndex).Key;
 
-                if (startingValues[attributeKey] >= SkillMax)
+                if (startingValues[attributeKey] >= StartingSkillMax)
                 {
                     continue;
                 }

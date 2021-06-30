@@ -53,10 +53,10 @@ namespace Assets.Scripts.UI
             _health.text = $"{stats.CurrentHealth}/{stats.MaxHealth}";
             _energy.text = $"{stats.CurrentEnergy}/{stats.MaxEnergy}";
             _morale.text = $"{stats.CurrentMorale}/{stats.MaxMorale}";
-            _melee.text = stats.Attack.ToString();
 
             var skills = _companion.Skills;
 
+            _melee.text = skills.Melee.ToString();
             _ranged.text = skills.Ranged.ToString();
             _lockpick.text = skills.Lockpicking.ToString();
             _toughness.text = skills.Endurance.ToString();

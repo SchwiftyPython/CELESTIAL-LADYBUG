@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Assets.Scripts.Entities;
+using GoRogue.DiceNotation;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -230,7 +231,7 @@ namespace Assets.Scripts
                 total += item.GetAdditiveModifiers(modType);
             }
 
-            var abilities = parent.Abilities;
+            var abilities = parent.Abilities; //todo only passives should be considered here
 
             total += GetAdditiveModifiersInCollection(abilities.Values, modType);
             total += GetAdditiveModifiersInCollection(parent.Effects, modType);
@@ -347,9 +348,21 @@ namespace Assets.Scripts
             return lowerCase ? builder.ToString().ToLower() : builder.ToString();
         }
 
-        public static Object GetObjectOfType(Type objectType)
+        public static int RollWildDie()
         {
-            return FindObjectOfType(objectType);
+            var roll = Dice.Roll("1d6");
+
+            var total = roll;
+
+            while (roll == 6)
+            {
+                roll = Dice.Roll("1d6");
+                total += roll;
+            }
+
+            Debug.Log($"Wild Roll Total: {total}");
+
+            return total;
         }
     }
 }

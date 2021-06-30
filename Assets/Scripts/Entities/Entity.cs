@@ -10,6 +10,7 @@ using Assets.Scripts.Effects.Args;
 using Assets.Scripts.Entities.Names;
 using Assets.Scripts.Items;
 using Assets.Scripts.UI;
+using GoRogue.DiceNotation;
 using UnityEngine;
 using GameObject = GoRogue.GameFramework.GameObject;
 using Object = UnityEngine.Object;
@@ -19,6 +20,8 @@ namespace Assets.Scripts.Entities
 {
     public class Entity : GameObject
     {
+        private const float BaseChanceToHit = 10;
+
         private int _level;
         private int _xp;
         private bool _isPlayer;
@@ -361,9 +364,9 @@ namespace Assets.Scripts.Entities
 
         public void MeleeAttack(Entity target)
         {
-            var hitChance = CalculateChanceToHitMelee(target);
+            var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
-            if (AttackHit(hitChance, target)) 
+            if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Melee)) 
             {
                 ApplyDamageWithEquipment(target, false);
 
@@ -392,9 +395,9 @@ namespace Assets.Scripts.Entities
 
         public void MeleeAttackWithSlot(Entity target, EquipLocation slot)
         {
-            var hitChance = CalculateChanceToHitMelee(target);
+            var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
-            if (AttackHit(hitChance, target))
+            if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Melee))
             {
                 ApplyDamageWithEquipment(target, false, slot);
 
@@ -423,9 +426,9 @@ namespace Assets.Scripts.Entities
 
         public void RangedAttack(Entity target)
         {
-            var hitChance = CalculateChanceToHitRanged(target);
+            var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Ranged);
 
-            if (AttackHit(hitChance, target))
+            if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Ranged))
             {
                 ApplyDamageWithEquipment(target, true);
 
@@ -454,18 +457,21 @@ namespace Assets.Scripts.Entities
 
         public void AttackWithAbility(Entity target, Ability ability)
         {
-            int hitChance;
+            float hitDifficulty;
+            bool attackHit;
 
             if (ability.IsRanged())
             {
-                hitChance = CalculateChanceToHitRanged(target);
+                hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Ranged);
+                attackHit = AttackHit((int) hitDifficulty, target, EntitySkillTypes.Ranged);
             }
             else
             {
-                hitChance = CalculateChanceToHitMelee(target);
+                hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
+                attackHit = AttackHit((int) hitDifficulty, target, EntitySkillTypes.Melee);
             }
 
-            if (AttackHit(hitChance, target))
+            if (attackHit)
             {
                 ApplyDamageWithAbility(target, ability);
 
@@ -524,23 +530,29 @@ namespace Assets.Scripts.Entities
             ApplyDamage(target, (minDamage, maxDamage));
         }
 
-        public void ApplyDamage(Entity target, (int, int) damageRange)
+        private void ApplyDamage(Entity target, (int, int) damageRange)
         {
             var (minDamage, maxDamage) = damageRange;
 
-            var damage = Random.Range(minDamage, maxDamage + 1) + Stats.Attack;
+            var damage = Random.Range(minDamage, maxDamage + 1);
 
             damage = GlobalHelper.ModifyNewValueForStat(this, CombatModifierTypes.Damage, damage);
 
-            var targetArmor = target.GetTotalArmorToughness();
+            var damageReduction = target.GetDamageReduction();
 
-            var damageReduction = GetDamageReduction(damage, targetArmor);
+            damage -= damageReduction;
 
-            damage -= (int)(damage * damageReduction);
+            string message;
+            if (damage <= 0)
+            {
+                message = $"{target.Name} resisted all damage!"; //todo see if we can communicate to player if there is no chance for attack to do damage
+            }
+            else
+            {
+                target.SubtractHealth(damage);
 
-            target.SubtractHealth(damage);
-
-            var message = $"{Name} dealt {damage} damage to {target.Name}!";
+                message = $"{Name} dealt {damage} damage to {target.Name}!";
+            }
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 
@@ -623,43 +635,91 @@ namespace Assets.Scripts.Entities
             throw new NotImplementedException();
         }
 
+        private float CalculateCombatDifficulty(Entity target, EntitySkillTypes skillType)
+        {
+            var totalDifficulty = BaseChanceToHit;
+
+            //todo add combat difficulty mods
+            if (skillType == EntitySkillTypes.Melee)
+            {
+
+            }
+            else if (skillType == EntitySkillTypes.Ranged)
+            {
+
+            }
+
+            return totalDifficulty;
+        }
+
         public int CalculateChanceToHitMelee(Entity target)
         {
-            var total = CalculateBaseChanceToHit(target);
+            Debug.Log($"Attacker Melee Skill: {Skills.Melee}");
 
-            total += (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.MeleeToHit);
+            var totalDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
-            return total;
+            var dicePotential = Skills.Melee * 6;
+
+            var chanceToHit = (dicePotential - totalDifficulty) / dicePotential * 100;
+
+            if (chanceToHit <= 0)
+            {
+                chanceToHit = 1;
+            }
+
+            chanceToHit += (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.MeleeToHit);
+
+            return (int) chanceToHit;
         }
 
         public int CalculateChanceToHitRanged(Entity target)
         {
-            var total = CalculateBaseChanceToHit(target);
+            Debug.Log($"Attacker Ranged Skill: {Skills.Ranged}");
 
-            total += (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.RangedToHit);
+            var totalDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Ranged);
 
-            return total;
+            var dicePotential = Skills.Ranged * 6;
+
+            var chanceToHit = (dicePotential - totalDifficulty) / dicePotential * 100;
+
+            if (chanceToHit <= 0)
+            {
+                chanceToHit = 1;
+            }
+
+            chanceToHit += (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.RangedToHit);
+
+            return (int) chanceToHit;
         }
 
-        //todo need to figure out how we can calc this
-        //if we can't get solid numbers out of this, try abtracting to "good" or "bad" chance to hit instead of showing number to player
-        private int CalculateBaseChanceToHit(Entity target)
-        {
-            Debug.Log($"Attacker Melee Skill: {Stats.MeleeSkill}");
-            Debug.Log($"Defender Melee Skill: {target.Stats.MeleeSkill}");
-
-            return Stats.MeleeSkill - target.Stats.MeleeSkill / 10;
-        }
-
-        private bool AttackHit(int chanceToHit, Entity target)
+        private bool AttackHit(int chanceToHit, Entity target, EntitySkillTypes skillType)
         {
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 
-            //todo diceroller
-            var roll = Random.Range(1, 101);
+            int coreRoll;
+            
+            if (skillType == EntitySkillTypes.Melee)
+            {
+                coreRoll = Dice.Roll($"{Skills.Melee - 1}d6");
+                coreRoll += (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.MeleeToHit);
+            }
+            else if (skillType == EntitySkillTypes.Ranged)
+            {
+                coreRoll = Dice.Roll($"{Skills.Ranged - 1}d6");
+                coreRoll += (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.RangedToHit);
+            }
+            else
+            {
+                Debug.LogError($"Invalid SkillType used to attack: {skillType}");
+                return false;
+            }
+
+            var wildRoll = GlobalHelper.RollWildDie();
+
+            var totalRoll = coreRoll + wildRoll;
 
             string message;
-            if (roll <= chanceToHit)
+            if (totalRoll >= chanceToHit)
             {
                 if (target.HasAbility(typeof(DivineIntervention)))
                 {
@@ -673,7 +733,14 @@ namespace Assets.Scripts.Entities
                     }
                 }
 
-                message = $"Attack hit!";
+                if (wildRoll > 6)  //todo need to apply crit to damage somehow
+                {
+                    message = "CRITICAL HIT!";
+                }
+                else
+                {
+                    message = $"Attack hit!";
+                }
 
                 eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
@@ -823,13 +890,17 @@ namespace Assets.Scripts.Entities
             AddEnergy(45); //todo make a constant somewhere
         }
 
-        private float GetDamageReduction(int damage, int armor)
+        private int GetDamageReduction()
         {
-            var reduction = (damage - armor) * (400f / (400f + armor));
+            var armor = GetTotalArmorToughness();
 
-            Debug.Log($"Damage reduction = {reduction}%");
+            var physiqueRoll = Dice.Roll($"{Attributes.Physique}d6");
 
-            return reduction / 100;
+            var reduction = armor + physiqueRoll;
+
+            Debug.Log($"Damage reduction = {reduction}");
+
+            return reduction;
         }
 
         private string GenerateName(List<string> possibleNameFiles, Sex sex)

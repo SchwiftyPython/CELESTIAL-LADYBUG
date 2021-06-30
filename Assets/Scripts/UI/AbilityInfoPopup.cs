@@ -103,7 +103,7 @@ namespace Assets.Scripts.UI
                     return;
                 }
 
-                Show(ability, ability.AbilityOwner.Stats.Attack);
+                //Show(ability, ability.AbilityOwner.Stats.Attack);
             }
             else if (eventName.Equals(HidePopupEvent))
             {

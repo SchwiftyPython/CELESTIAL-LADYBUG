@@ -253,7 +253,7 @@ namespace Assets.Scripts
             Entity bestShot = null;
             foreach (var companion in _companions.Values)
             {
-                if (bestShot == null || companion.Stats.RangedSkill > bestShot.Stats.RangedSkill)
+                if (bestShot == null || companion.Skills.Ranged > bestShot.Skills.Ranged)
                 {
                     bestShot = companion;
                 }
