@@ -12,7 +12,7 @@ namespace Assets.Scripts.Abilities
 
         public override void Use(Entity target)
         {
-            AbilityOwner.ApplyDamageWithEquipment(target, false);
+            AbilityOwner.ApplyDamageWithEquipment(target, false, 0, false);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Assets.Scripts.Abilities;
 using Assets.Scripts.Entities;
 using GoRogue.DiceNotation;
 using UnityEngine;
@@ -231,11 +232,10 @@ namespace Assets.Scripts
                 total += item.GetAdditiveModifiers(modType);
             }
 
-            var abilities = parent.Abilities; //todo only passives should be considered here
+            List<Ability> passiveAbilities = parent.Abilities.Values.Where(a => a.IsPassive).ToList();
 
-            total += GetAdditiveModifiersInCollection(abilities.Values, modType);
+            total += GetAdditiveModifiersInCollection(passiveAbilities, modType);
             total += GetAdditiveModifiersInCollection(parent.Effects, modType);
-            //total += GetAdditiveModifiersInCollection(parent.EffectTriggers?.Effects, modType);
 
             return total;
         }
@@ -266,11 +266,10 @@ namespace Assets.Scripts
                 total += item.GetPercentageModifiers(modType);
             }
 
-            var abilities = parent.Abilities;
+            List<Ability> passiveAbilities = parent.Abilities.Values.Where(a => a.IsPassive).ToList();
 
-            total += GetPercentageModifiersInCollection(abilities.Values, modType);
+            total += GetPercentageModifiersInCollection(passiveAbilities, modType);
             total += GetPercentageModifiersInCollection(parent.Effects, modType);
-            //total += GetPercentageModifiersInCollection(parent.EffectTriggers?.Effects, modType);
 
             return total;
         }

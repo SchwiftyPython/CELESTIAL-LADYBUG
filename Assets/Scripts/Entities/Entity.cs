@@ -362,13 +362,25 @@ namespace Assets.Scripts.Entities
             }
         }
 
-        public void MeleeAttack(Entity target)
+        public void MeleeAttack(Entity target, IModifierProvider modifierProvider = null)
         {
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
-            if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Melee)) 
+            int toHitMod = 0;
+            if (modifierProvider != null)
             {
-                ApplyDamageWithEquipment(target, false);
+                toHitMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.MeleeToHit);
+            }
+
+            if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Melee, toHitMod, out bool criticalHit)) 
+            {
+                int damageMod = 0;
+                if (modifierProvider != null)
+                {
+                    damageMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.Damage);
+                }
+
+                ApplyDamageWithEquipment(target, false, damageMod, criticalHit);
 
                 if (target.IsDead())
                 {
@@ -393,13 +405,25 @@ namespace Assets.Scripts.Entities
             }
         }
 
-        public void MeleeAttackWithSlot(Entity target, EquipLocation slot)
+        public void MeleeAttackWithSlot(Entity target, EquipLocation slot, IModifierProvider modifierProvider = null)
         {
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
-            if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Melee))
+            int toHitMod = 0;
+            if (modifierProvider != null)
             {
-                ApplyDamageWithEquipment(target, false, slot);
+                toHitMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.MeleeToHit);
+            }
+
+            if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Melee, toHitMod, out bool criticalHit))
+            {
+                int damageMod = 0;
+                if (modifierProvider != null)
+                {
+                    damageMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.Damage);
+                }
+
+                ApplyDamageWithEquipment(target, false, damageMod, criticalHit, slot);
 
                 if (target.IsDead())
                 {
@@ -424,13 +448,25 @@ namespace Assets.Scripts.Entities
             }
         }
 
-        public void RangedAttack(Entity target)
+        public void RangedAttack(Entity target, IModifierProvider modifierProvider = null)
         {
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Ranged);
 
-            if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Ranged))
+            int toHitMod = 0;
+            if (modifierProvider != null)
             {
-                ApplyDamageWithEquipment(target, true);
+                toHitMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.MeleeToHit);
+            }
+
+            if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Ranged, toHitMod, out bool criticalHit))
+            {
+                int damageMod = 0;
+                if (modifierProvider != null)
+                {
+                    damageMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.Damage);
+                }
+
+                ApplyDamageWithEquipment(target, true, damageMod, criticalHit);
 
                 if (target.IsDead())
                 {
@@ -457,23 +493,46 @@ namespace Assets.Scripts.Entities
 
         public void AttackWithAbility(Entity target, Ability ability)
         {
+            IModifierProvider modifierProvider = ability as IModifierProvider;
+
+            int toHitMod = 0;
+
             float hitDifficulty;
             bool attackHit;
+            bool criticalHit;
 
             if (ability.IsRanged())
             {
                 hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Ranged);
-                attackHit = AttackHit((int) hitDifficulty, target, EntitySkillTypes.Ranged);
+
+                if (modifierProvider != null)
+                {
+                    toHitMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.RangedToHit);
+                }
+
+                attackHit = AttackHit((int) hitDifficulty, target, EntitySkillTypes.Ranged, toHitMod, out criticalHit);
             }
             else
             {
                 hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
-                attackHit = AttackHit((int) hitDifficulty, target, EntitySkillTypes.Melee);
+
+                if (modifierProvider != null)
+                {
+                    toHitMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.MeleeToHit);
+                }
+
+                attackHit = AttackHit((int) hitDifficulty, target, EntitySkillTypes.Melee, toHitMod, out criticalHit);
             }
 
             if (attackHit)
             {
-                ApplyDamageWithAbility(target, ability);
+                int damageMod = 0;
+                if (modifierProvider != null)
+                {
+                    damageMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.Damage);
+                }
+
+                ApplyDamageWithAbility(target, ability, damageMod, criticalHit);
 
                 if (target.IsDead())
                 {
@@ -498,17 +557,18 @@ namespace Assets.Scripts.Entities
             }
         }
 
-        public void ApplyDamageWithAbility(Entity target, Ability ability)
+        public void ApplyDamageWithAbility(Entity target, Ability ability, int damageMod, bool criticalHit)
         {
             int minDamage = 0;
             int maxDamage = 0;
 
             (minDamage, maxDamage) = ability.GetAbilityDamageRange();
 
-            ApplyDamage(target, (minDamage, maxDamage));
+            ApplyDamage(target, (minDamage, maxDamage), damageMod, criticalHit);
         }
 
-        public void ApplyDamageWithEquipment(Entity target, bool ranged, EquipLocation slot = EquipLocation.Weapon)
+        public void ApplyDamageWithEquipment(Entity target, bool ranged, int damageMod, bool criticalHit,
+            EquipLocation slot = EquipLocation.Weapon)
         {
             var equippedItem = Equipment.GetItemInSlot(slot);
 
@@ -527,16 +587,27 @@ namespace Assets.Scripts.Entities
                 }
             }
 
-            ApplyDamage(target, (minDamage, maxDamage));
+            ApplyDamage(target, (minDamage, maxDamage), damageMod, criticalHit);
         }
 
-        private void ApplyDamage(Entity target, (int, int) damageRange)
+        private void ApplyDamage(Entity target, (int, int) damageRange, int damageMod, bool criticalHit)
         {
             var (minDamage, maxDamage) = damageRange;
 
-            var damage = Random.Range(minDamage, maxDamage + 1);
+            var damage = Random.Range(minDamage, maxDamage + 1) + damageMod;
 
             damage = GlobalHelper.ModifyNewValueForStat(this, CombatModifierTypes.Damage, damage);
+
+            if (criticalHit)
+            {
+                // const float critBoost = .05f;
+                //
+                // damage += (int)Mathf.Ceil(damage * critBoost);
+
+                var wildRoll = GlobalHelper.RollWildDie();
+
+                damage += wildRoll;
+            }
 
             var damageReduction = target.GetDamageReduction();
 
@@ -692,7 +763,7 @@ namespace Assets.Scripts.Entities
             return (int) chanceToHit;
         }
 
-        private bool AttackHit(int chanceToHit, Entity target, EntitySkillTypes skillType)
+        private bool AttackHit(int hitDifficulty, Entity target, EntitySkillTypes skillType, int toHitMod, out bool criticalHit)
         {
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 
@@ -711,15 +782,16 @@ namespace Assets.Scripts.Entities
             else
             {
                 Debug.LogError($"Invalid SkillType used to attack: {skillType}");
+                criticalHit = false;
                 return false;
             }
 
             var wildRoll = GlobalHelper.RollWildDie();
 
-            var totalRoll = coreRoll + wildRoll;
+            var totalRoll = coreRoll + wildRoll + toHitMod;
 
             string message;
-            if (totalRoll >= chanceToHit)
+            if (totalRoll >= hitDifficulty)
             {
                 if (target.HasAbility(typeof(DivineIntervention)))
                 {
@@ -729,16 +801,19 @@ namespace Assets.Scripts.Entities
 
                         eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
+                        criticalHit = false;
                         return false;
                     }
                 }
 
                 if (wildRoll > 6)  //todo need to apply crit to damage somehow
                 {
+                    criticalHit = true;
                     message = "CRITICAL HIT!";
                 }
                 else
                 {
+                    criticalHit = false;
                     message = $"Attack hit!";
                 }
 
@@ -755,6 +830,7 @@ namespace Assets.Scripts.Entities
 
             eventMediator.Broadcast(GlobalHelper.TargetMiss, this);
 
+            criticalHit = false;
             return false;
         }
 

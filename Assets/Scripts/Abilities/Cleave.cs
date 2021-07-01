@@ -27,7 +27,7 @@ namespace Assets.Scripts.Abilities
 
             eventMediator.SubscribeToEvent(GlobalHelper.TargetHit, this);
 
-            AbilityOwner.MeleeAttack(target);
+            AbilityOwner.MeleeAttack(target, this);
 
             AbilityOwner.SubtractActionPoints(ApCost);
 

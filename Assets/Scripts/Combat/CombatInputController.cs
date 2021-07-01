@@ -240,14 +240,32 @@ namespace Assets.Scripts.Combat
 
         public int GetHitChance(Entity targetEntity)
         {
+            IModifierProvider modifierProvider = _selectedAbility as IModifierProvider;
+
             _selectedAbilityTarget = targetEntity;
 
             if (_selectedAbility.IsRanged())
             {
-                return _combatManager.ActiveEntity.CalculateChanceToHitRanged(_selectedAbilityTarget);
+                var rangedChance = _combatManager.ActiveEntity.CalculateChanceToHitRanged(_selectedAbilityTarget);
+
+                int rangedMod = 0;
+                if (modifierProvider != null)
+                {
+                    rangedMod = (int) modifierProvider.GetAdditiveModifiers(CombatModifierTypes.RangedToHit);
+                }
+
+                return rangedChance + rangedMod;
             }
 
-            return _combatManager.ActiveEntity.CalculateChanceToHitMelee(_selectedAbilityTarget);
+            var meleeChance = _combatManager.ActiveEntity.CalculateChanceToHitMelee(_selectedAbilityTarget);
+
+            int meleeMod = 0;
+            if (modifierProvider != null)
+            {
+                meleeMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.MeleeToHit);
+            }
+
+            return meleeChance + meleeMod;
         }
 
         private void NextTarget()
