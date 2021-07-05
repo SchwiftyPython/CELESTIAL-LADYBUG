@@ -3,31 +3,36 @@ using Assets.Scripts.Combat;
 using Assets.Scripts.Entities;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Scripts.UI
 {
     public class EntityTooltip : MonoBehaviour
     {
         [SerializeField]
-        private TextMeshProUGUI _name;
+        private TextMeshProUGUI entityName;
 
         [SerializeField]
-        private TextMeshProUGUI _health;
+        private TextMeshProUGUI health;
 
         [SerializeField]
-        private TextMeshProUGUI _hitChance;
+        private TextMeshProUGUI hitChance;
         [SerializeField]
-        private GameObject _hitChanceParent;
+        private GameObject hitChanceParent;
+        [SerializeField]
+        private GameObject negativesParent;
+        [SerializeField]
+        private GameObject positivesParent;
 
         [SerializeField]
-        private TextMeshProUGUI _nextTurn;
+        private TextMeshProUGUI nextTurnText;
 
         public void Setup(Entity targetEntity)
         {
             //todo should show equipped armor toughness
 
-            _name.text = targetEntity.Name;
-            _health.text = $"{targetEntity.Stats.CurrentHealth}/{targetEntity.Stats.MaxHealth}";
+            entityName.text = targetEntity.Name;
+            health.text = $"{targetEntity.Stats.CurrentHealth}/{targetEntity.Stats.MaxHealth}";
 
             var inputController = FindObjectOfType<CombatInputController>();
 
@@ -35,18 +40,19 @@ namespace Assets.Scripts.UI
                 inputController.TargetInRange(targetEntity))
             {
                 //todo list hit chance modifiers
-                _hitChance.text = $"{inputController.GetHitChance(targetEntity)}% Chance to hit";
-                _hitChanceParent.SetActive(true);
+                //todo could use a method for getting hit chance positives and negatives
+                hitChance.text = $"{inputController.GetHitChance(targetEntity)}% Chance to hit";
+                hitChanceParent.SetActive(true);
             }
             else
             {
-                _hitChanceParent.SetActive(false);
+                hitChanceParent.SetActive(false);
             }
 
             var combatManager = Object.FindObjectOfType<CombatManager>();
             var nextTurn = combatManager.TurnOrder.ToList().IndexOf(targetEntity);
 
-            _nextTurn.text = $"Acts in {nextTurn} turns";
+            nextTurnText.text = $"Acts in {nextTurn} turns";
         }
     }
 }

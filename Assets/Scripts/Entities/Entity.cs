@@ -20,7 +20,7 @@ namespace Assets.Scripts.Entities
 {
     public class Entity : GameObject
     {
-        private const float BaseChanceToHit = 10;
+        private const float BaseCombatDifficulty = 10;
 
         private int _level;
         private int _xp;
@@ -708,8 +708,13 @@ namespace Assets.Scripts.Entities
 
         private float CalculateCombatDifficulty(Entity target, EntitySkillTypes skillType)
         {
-            var totalDifficulty = BaseChanceToHit;
+            var totalDifficulty = BaseCombatDifficulty;
 
+            return totalDifficulty;
+        }
+
+        public List<string> GetHitChancePositives(Entity target, EntitySkillTypes skillType)
+        {
             //todo add combat difficulty mods
             if (skillType == EntitySkillTypes.Melee)
             {
@@ -719,8 +724,19 @@ namespace Assets.Scripts.Entities
             {
 
             }
+        }
 
-            return totalDifficulty;
+        public List<string> GetHitChanceNegatives(Entity target, EntitySkillTypes skillType)
+        {
+            //todo add combat difficulty mods
+            if (skillType == EntitySkillTypes.Melee)
+            {
+
+            }
+            else if (skillType == EntitySkillTypes.Ranged)
+            {
+
+            }
         }
 
         public int CalculateChanceToHitMelee(Entity target)
