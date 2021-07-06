@@ -186,22 +186,6 @@ namespace Assets.Scripts.Combat
             }
         }
 
-        public void AbilityButtonClicked(Queue<Entity> targets)
-        {
-            _abilityTargets = new Queue<Entity>(targets);
-
-            _selectedAbilityTarget = targets.Peek();
-
-            ClearHighlightUnderAbilityTarget();
-
-            HighlightTileUnderAbilityTarget(_selectedAbilityTarget);
-
-            var hitChance = _combatManager.ActiveEntity.CalculateChanceToHitMelee(_selectedAbilityTarget);
-
-            //todo we'll need some kind of DTO to hold the hit chance and modifiers
-            _eventMediator.Broadcast(GlobalHelper.EntityTargeted, _selectedAbilityTarget, hitChance);
-        }
-
         public void AbilityButtonClicked(Ability selectedAbility)
         {
             _selectedAbility = selectedAbility;
@@ -238,7 +222,7 @@ namespace Assets.Scripts.Combat
             return _selectedAbility.TargetValid(target);
         }
 
-        public int GetHitChance(Entity targetEntity)
+        public (int hitChance, List<string> positives, List<string> negatives) GetHitChance(Entity targetEntity)
         {
             IModifierProvider modifierProvider = _selectedAbility as IModifierProvider;
 
@@ -254,7 +238,14 @@ namespace Assets.Scripts.Combat
                     rangedMod = (int) modifierProvider.GetAdditiveModifiers(CombatModifierTypes.RangedToHit);
                 }
 
-                return rangedChance + rangedMod;
+                var rHitChance = rangedChance.hitChance + rangedMod;
+
+                if (rHitChance <= 0)
+                {
+                    rHitChance = 1;
+                }
+
+                return (rHitChance, rangedChance.positives, rangedChance.negatives);
             }
 
             var meleeChance = _combatManager.ActiveEntity.CalculateChanceToHitMelee(_selectedAbilityTarget);
@@ -265,32 +256,14 @@ namespace Assets.Scripts.Combat
                 meleeMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.MeleeToHit);
             }
 
-            return meleeChance + meleeMod;
-        }
+            var mHitChance = meleeChance.hitChance + meleeMod;
 
-        private void NextTarget()
-        {
-            if (_abilityTargets == null || _abilityTargets.Count < 2)
+            if (mHitChance <= 0)
             {
-                return;
+                mHitChance = 1;
             }
 
-            _eventMediator.Broadcast(GlobalHelper.HidePopup, this);
-
-            ClearHighlightUnderAbilityTarget();
-
-            var lastTarget = _abilityTargets.Dequeue();
-
-            _abilityTargets.Enqueue(lastTarget);
-
-            _selectedAbilityTarget = _abilityTargets.Peek();
-
-            HighlightTileUnderAbilityTarget(_selectedAbilityTarget);
-
-            var hitChance = _combatManager.ActiveEntity.CalculateChanceToHitMelee(_selectedAbilityTarget);
-
-            //todo we'll need some kind of DTO to hold the hit chance and modifiers
-            _eventMediator.Broadcast(GlobalHelper.EntityTargeted, _selectedAbilityTarget, hitChance);
+            return (mHitChance, meleeChance.positives, meleeChance.negatives);
         }
 
         private bool MouseHitUi()
@@ -582,29 +555,6 @@ namespace Assets.Scripts.Combat
             }
 
             _highlightedTiles = new List<Tile>();
-        }
-
-        private void ShowEntityInfo(Entity targetEntity)
-        {
-            _eventMediator.Broadcast(GlobalHelper.HidePopup, this);
-
-            _eventMediator.Broadcast(GlobalHelper.TileHovered, this, targetEntity);
-        }
-
-        private void ShowHitChance(Entity targetEntity)
-        {
-            _eventMediator.Broadcast(GlobalHelper.HidePopup, this);
-
-            _selectedAbilityTarget = targetEntity;
-
-            ClearHighlightUnderAbilityTarget();
-
-            HighlightTileUnderAbilityTarget(_selectedAbilityTarget);
-
-            var hitChance = _combatManager.ActiveEntity.CalculateChanceToHitMelee(_selectedAbilityTarget);
-
-            //todo we'll need some kind of DTO to hold the hit chance and modifiers
-            _eventMediator.Broadcast(GlobalHelper.EntityTargeted, _selectedAbilityTarget, hitChance);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

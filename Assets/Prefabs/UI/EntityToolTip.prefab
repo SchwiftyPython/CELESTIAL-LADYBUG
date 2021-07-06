@@ -570,7 +570,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 605, y: 0}
-  m_SizeDelta: {x: 155, y: 0}
+  m_SizeDelta: {x: 215, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &805387704634394313
 CanvasRenderer:
@@ -660,11 +660,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 765de61f179ea414b88869d692f50838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: {fileID: 805387704878699904}
-  _health: {fileID: 805387705886512015}
-  _hitChance: {fileID: 805387704811073581}
-  _hitChanceParent: {fileID: 805387705151303065}
-  _nextTurn: {fileID: 805387704614967976}
+  entityName: {fileID: 805387704878699904}
+  health: {fileID: 805387705886512015}
+  hitChanceValue: {fileID: 871432346287075326}
+  hitChanceLabel: {fileID: 805387704811073581}
+  hitChanceParent: {fileID: 805387705151303065}
+  negativesParent: {fileID: 1766290702}
+  positivesParent: {fileID: 2010085928}
+  positivesPrefab: {fileID: 6173562838423078849, guid: 32f4c33e5591be149b1a0e7a634f512c,
+    type: 3}
+  negativesPrefab: {fileID: 695318892215837599, guid: eb0bdeee58ac2074eac58a08d865ba53,
+    type: 3}
+  nextTurnText: {fileID: 805387704614967976}
 --- !u!1 &805387704703411915
 GameObject:
   m_ObjectHideFlags: 0
