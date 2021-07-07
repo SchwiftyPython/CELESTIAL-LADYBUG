@@ -218,5 +218,17 @@ namespace Assets.Scripts.Combat
         {
             _backingField.OnMapChanged(newMap);
         }
+
+        public bool HasEntity()
+        {
+            var entity = (Entity)CurrentMap.Entities.GetItems(Position).FirstOrDefault();
+
+            return entity != null;
+        }
+
+        public Entity GetEntity()
+        {
+            return (Entity)CurrentMap.Entities.GetItems(Position).FirstOrDefault();
+        }
     }
 }

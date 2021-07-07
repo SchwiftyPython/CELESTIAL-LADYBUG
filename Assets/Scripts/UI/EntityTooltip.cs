@@ -3,7 +3,6 @@ using Assets.Scripts.Combat;
 using Assets.Scripts.Entities;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Assets.Scripts.UI
 {
@@ -46,10 +45,25 @@ namespace Assets.Scripts.UI
             health.text = $"{targetEntity.Stats.CurrentHealth}/{targetEntity.Stats.MaxHealth}";
 
             var inputController = FindObjectOfType<CombatInputController>();
+            var combatManager = FindObjectOfType<CombatManager>();
 
             if (inputController.AbilitySelected())
             {
-                if (!inputController.TargetValid(targetEntity))
+                var activeEntity = combatManager.ActiveEntity;
+
+                if (!GlobalHelper.HasLineOfSight(activeEntity.Position, targetEntity.Position))
+                {
+                    hitChanceValue.text = "0%";
+                    hitChanceValue.color = Color.red; //FindObjectOfType<Palette>().BrightRed; 
+                    hitChanceLabel.text = "Blocked Line of Sight";
+                    hitChanceParent.SetActive(true);
+                    positivesParent.SetActive(false);
+                    negativesParent.SetActive(false);
+
+                    GetComponent<RectTransform>()
+                        .SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, TooltipWidthHitChance);
+                }
+                else if (!inputController.TargetValid(targetEntity))
                 {
                     hitChanceValue.text = "0%";
                     hitChanceValue.color =  Color.red; //FindObjectOfType<Palette>().BrightRed; 
@@ -157,7 +171,6 @@ namespace Assets.Scripts.UI
                     .SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, TooltipWidthNormal);
             }
 
-            var combatManager = FindObjectOfType<CombatManager>();
             var nextTurn = combatManager.TurnOrder.ToList().IndexOf(targetEntity);
 
             nextTurnText.text = $"Acts in {nextTurn} turns";

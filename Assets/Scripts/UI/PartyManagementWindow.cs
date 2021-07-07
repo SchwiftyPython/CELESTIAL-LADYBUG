@@ -47,6 +47,12 @@ namespace Assets.Scripts.UI
         private void OnDestroy()
         {
             var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            if (eventMediator == null)
+            {
+                return;
+            }
+
             eventMediator.UnsubscribeFromEvent(ShowPopupEvent, this);
             eventMediator.UnsubscribeFromEvent(HidePopupEvent, this);
             GameManager.Instance.RemoveActiveWindow(gameObject);

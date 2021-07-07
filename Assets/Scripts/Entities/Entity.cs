@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.AI;
@@ -33,7 +32,8 @@ namespace Assets.Scripts.Entities
         //todo use this instead of get component if possible
         private AiController _aiController;
 
-        private int _lastTurnMoved;
+        private bool _moved;
+        private bool _movedLastTurn;
 
         public string Name { get; set; }
         public Sex Sex { get; }
@@ -51,68 +51,6 @@ namespace Assets.Scripts.Entities
 
         public UnityEngine.GameObject CombatSpritePrefab { get; protected set; }
         public UnityEngine.GameObject CombatSpriteInstance { get; private set; }
-
-        /*public Entity(bool isPlayer, bool isDerpus = false) : base((-1, -1), 1, null, false, false, true)
-        {
-            if (isDerpus)
-            {
-                Race = new Race(Race.RaceType.Derpus);
-                EntityClass = EntityClass.Derpus;
-                Sex = Sex.Male;
-                Name = "Derpus";
-                CombatSpritePrefab = EntityPrefabStore.Instance.DerpusPrototypePrefab;
-            }
-            else
-            {
-                var rType = PickRace();
-
-                while (rType == Race.RaceType.Derpus)
-                {
-                    rType = PickRace();
-                }
-
-                Race = new Race(rType);
-
-                EntityClass = PickEntityClass();
-
-                while (EntityClass == EntityClass.Derpus)
-                {
-                    EntityClass = PickEntityClass();
-                }
-
-                Sex = PickSex();
-                Name = GenerateName(null, Sex);
-
-                //todo pick prefab based on race and/or class
-                //todo restrict to certain races and classes if player
-                if (isPlayer)
-                {
-                    CombatSpritePrefab = EntityPrefabStore.Instance.CompanionPrototypePrefab;
-                    _isPlayer = true;
-                }
-                else
-                {
-                    CombatSpritePrefab = EntityPrefabStore.Instance.EnemyPrototypePrefab;
-                    _isPlayer = false;
-                }
-            }
-
-            Attributes = new Attributes(this);
-            Skills = new Skills(this);
-
-            Abilities = new Dictionary<Type, Ability>();
-
-            GenerateStartingEquipment();
-
-            Stats = new Stats(this, Attributes, Skills);
-
-            Effects = new List<Effect>();
-
-            GeneratePortrait();
-
-            _level = 1;
-            _xp = 0;
-        }*/
 
         public Entity(Race.RaceType rType, EntityClass eClass, bool isPlayer) : base((-1, -1), 1, null, false, false, true)
         {
@@ -183,9 +121,20 @@ namespace Assets.Scripts.Entities
             return Regex.Replace(Name.Split()[0], @"[^0-9a-zA-Z\ ]+", "");
         }
 
-        public bool MovedLastTurn()
+        public bool MovedLastTurn() //todo this won't work - maybe use a boolean instead
         {
-            return Object.FindObjectOfType<CombatManager>().CurrentTurnNumber - _lastTurnMoved <= 1;
+            return _movedLastTurn;
+        }
+
+        public bool MovedThisTurn()
+        {
+            return _moved;
+        }
+
+        public void UpdateMovedFlags()
+        {
+            _movedLastTurn = _moved;
+            _moved = false;
         }
 
         public void RefillActionPoints()
@@ -209,7 +158,7 @@ namespace Assets.Scripts.Entities
 
             if (Position == tile.Position)
             {
-                _lastTurnMoved = Object.FindObjectOfType<CombatManager>().CurrentTurnNumber;
+                _moved = true;
 
                 Stats.CurrentActionPoints -= apMovementCost;
 
@@ -317,6 +266,10 @@ namespace Assets.Scripts.Entities
                     Abilities.Add(ability.GetType(), ability);
                 }
             }
+
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this);
         }
 
         public void UnEquip(EquipLocation slot, bool swapAttempt)
@@ -667,26 +620,22 @@ namespace Assets.Scripts.Entities
 
         private int GetTotalArmorToughness()
         {
-            var toughnessTotal = 0;
-
-            foreach (EquipLocation location in Enum.GetValues(typeof(EquipLocation)))
+            if (Equipment == null)
             {
-                if(location == EquipLocation.Weapon)
-                {
-                    continue;
-                }
-
-                var  equippedArmor = Equipment.GetItemInSlot(location);
-
-                if (equippedArmor == null)
-                {
-                    continue;
-                }
-
-                toughnessTotal += equippedArmor.GetToughness();
+                return 0;
             }
 
-            return toughnessTotal;
+            return Equipment.GetTotalArmorToughness();
+        }
+
+        private int GetDodgeTotal()
+        {
+            if (Equipment == null)
+            {
+                return 0;
+            }
+
+            return Equipment.GetDodgeTotal();
         }
 
         public EquipableItem GetEquippedWeapon()
@@ -704,15 +653,13 @@ namespace Assets.Scripts.Entities
             return Equipment;
         }
 
-        public bool TargetInRange(Entity target)
-        {
-            //todo prob not needed since everything is ability based
-            throw new NotImplementedException();
-        }
-
         private float CalculateCombatDifficulty(Entity target, EntitySkillTypes skillType)
         {
             var totalDifficulty = BaseCombatDifficulty / 2; //todo testing to make easier for now
+
+            totalDifficulty += target.GetDodgeTotal();
+
+            //Debug.Log($"Base Combat Difficulty: {totalDifficulty}");
 
             return totalDifficulty;
         }
@@ -724,7 +671,11 @@ namespace Assets.Scripts.Entities
 
             if (skillType == EntitySkillTypes.Melee)
             {
-
+                if (target.IsSurrounded())
+                {
+                    posMod += 10;
+                    posMessages.Add("Target surrounded");
+                }
             }
             else if (skillType == EntitySkillTypes.Ranged)
             {
@@ -767,13 +718,18 @@ namespace Assets.Scripts.Entities
             {
                 var distanceToTarget = Distance.CHEBYSHEV.Calculate(Position, target.Position);
 
-                if (distanceToTarget >= 6) 
+                if (distanceToTarget >= 6)
                 {
                     negMod -= 10;
                     negMessages.Add($"Distance of {distanceToTarget}");
                 }
 
-                if (MovedLastTurn()) 
+                if (MovedThisTurn())
+                {
+                    negMod -= 10;
+                    negMessages.Add("Attacker moved");
+                } 
+                else if (MovedLastTurn())
                 {
                     negMod -= 10;
                     negMessages.Add("Attacker moved last turn");
@@ -934,6 +890,35 @@ namespace Assets.Scripts.Entities
             return false;
         }
 
+        public bool IsSurrounded()
+        {
+            var currentTile = ((CombatMap) (CurrentMap)).GetTileAt(Position);
+
+            var numEnemies = 0;
+
+            foreach (var tile in currentTile.GetAdjacentTiles())
+            {
+                var entity = tile.GetEntity();
+
+                if (entity == null)
+                {
+                    continue;
+                }
+
+                if (IsPlayer() != entity.IsPlayer())
+                {
+                    numEnemies++;
+
+                    if (numEnemies > 1)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public int AddHealth(int amount)
         {
             var startingHealth = Stats.CurrentHealth;
@@ -1072,7 +1057,7 @@ namespace Assets.Scripts.Entities
 
             var physiqueRoll = Dice.Roll($"{Attributes.Physique}d6");
 
-            var reduction = armor + physiqueRoll;
+            var reduction = armor; //+ physiqueRoll; //might be too much with physique roll
 
             Debug.Log($"Damage reduction = {reduction}");
 

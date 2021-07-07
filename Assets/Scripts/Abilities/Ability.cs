@@ -28,7 +28,14 @@ namespace Assets.Scripts.Abilities
             {
                 var equippedWeapon = abilityOwner.GetEquippedWeapon();
 
-                Range = equippedWeapon.GetRange();
+                if (equippedWeapon == null)
+                {
+                    Range = -1;
+                }
+                else
+                {
+                    Range = equippedWeapon.GetRange();
+                }
             }
             else
             {

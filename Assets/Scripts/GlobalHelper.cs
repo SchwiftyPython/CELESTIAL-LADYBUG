@@ -5,7 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Assets.Scripts.Abilities;
+using Assets.Scripts.Combat;
 using Assets.Scripts.Entities;
+using GoRogue;
 using GoRogue.DiceNotation;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -362,6 +364,30 @@ namespace Assets.Scripts
             Debug.Log($"Wild Roll Total: {total}");
 
             return total;
+        }
+
+        public static bool HasLineOfSight(Coord startPos, Coord targetCoord)
+        {
+            var line = Lines.Get(startPos, targetCoord).ToList();
+
+            var combatManager = FindObjectOfType<CombatManager>();
+
+            var map = combatManager.Map;
+
+            foreach (var coord in line)
+            {
+                if (coord == line.First() || coord == line.Last())
+                {
+                    continue;
+                }
+
+                if (!map.GetTileAt(coord).IsWalkable)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
