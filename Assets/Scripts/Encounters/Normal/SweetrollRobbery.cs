@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Travel;
+using UnityEngine;
 
 namespace Assets.Scripts.Encounters.Normal
 {
@@ -16,10 +17,12 @@ namespace Assets.Scripts.Encounters.Normal
 
             Reward.AddPartyGain(PartySupplyTypes.Food, 8);
 
-            //todo need a method for giving entire party the same reward or penalty
-            Reward.AddEntityGain(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentMorale, 10);
+            var travelManager = Object.FindObjectOfType<TravelManager>();
 
-            foreach (var companion in TravelManager.Instance.Party.GetCompanions())
+            //todo need a method for giving entire party the same reward or penalty
+            Reward.AddEntityGain(travelManager.Party.Derpus, EntityStatTypes.CurrentMorale, 10);
+
+            foreach (var companion in travelManager.Party.GetCompanions())
             {
                 Reward.AddEntityGain(companion, EntityStatTypes.CurrentMorale, 10);
             }
@@ -31,11 +34,13 @@ namespace Assets.Scripts.Encounters.Normal
 
             fullResultDescription.Add(Description + "\n");
 
-            var rewardsText = TravelManager.Instance.ApplyEncounterReward(Reward);
+            var travelManager = Object.FindObjectOfType<TravelManager>();
+            var rewardsText = travelManager.ApplyEncounterReward(Reward);
 
             fullResultDescription.AddRange(rewardsText);
 
-            EventMediator.Instance.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
         }
     }
 }

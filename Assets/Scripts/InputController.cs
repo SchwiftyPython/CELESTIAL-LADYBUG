@@ -4,7 +4,7 @@ namespace Assets.Scripts
 {
     public class InputController : MonoBehaviour
     {
-        public static InputController Instance;
+        /*public static InputController Instance;
 
         private void Start()
         {
@@ -18,7 +18,7 @@ namespace Assets.Scripts
             }
 
             DontDestroyOnLoad(gameObject);
-        }
+        }*/
 
         private void Update()
         {
@@ -35,26 +35,30 @@ namespace Assets.Scripts
 
                 var partyWindow = GameObject.Find("PartyManagementWindowMask");
 
+                EventMediator eventMediator = FindObjectOfType<EventMediator>();
+
                 if (GameManager.Instance.WindowActive(partyWindow))
                 {
-                    EventMediator.Instance.Broadcast(GlobalHelper.HidePartyManagement, this);
+                    eventMediator.Broadcast(GlobalHelper.HidePartyManagement, this);
                 }
                 else
                 {
-                    EventMediator.Instance.Broadcast(GlobalHelper.ManageParty, this);
+                    eventMediator.Broadcast(GlobalHelper.ManageParty, this);
                 }
             }
             else if (Input.GetKeyDown(KeyCode.Escape))
             {
                 var pauseMenu = GameObject.Find("PauseMenuMask");
 
+                EventMediator eventMediator = FindObjectOfType<EventMediator>();
+
                 if (GameManager.Instance.WindowActive(pauseMenu))
                 {
-                    EventMediator.Instance.Broadcast(GlobalHelper.HidePauseMenu, this);
+                    eventMediator.Broadcast(GlobalHelper.HidePauseMenu, this);
                 }
                 else
                 {
-                    EventMediator.Instance.Broadcast(GlobalHelper.ShowPauseMenu, this);
+                    eventMediator.Broadcast(GlobalHelper.ShowPauseMenu, this);
                 }
             }
         }

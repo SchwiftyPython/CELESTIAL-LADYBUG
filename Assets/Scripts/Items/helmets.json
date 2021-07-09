@@ -1,0 +1,198 @@
+{
+"Leather Headband":
+  {
+	"Description": "A repurposed belt",  
+    "Parent": null,
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 0,
+      "DodgeMod": 1
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "leather_headband",
+    "Slot": "helmet",
+	"Stackable": false,
+	"Price": 10,
+	"TwoHanded" : false
+  },
+  "Leather Helmet":
+  {
+	"Description": "Some tough noggin jerky.",  
+    "Parent": "Leather Headband",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 0
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "leather_helmet",
+    "Slot": "helmet",
+	"Stackable": false,
+	"Price": 10,
+	"TwoHanded" : false
+  },
+  "Ancient Stone Mask":
+  {
+	"Description": "This gives off an energy of some kind.",  
+    "Parent": "Leather Headband",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 5,
+      "DodgeMod": 0
+    },
+    "Abilities": 
+	[
+	  "Calculated",
+	  "Divine Intervention"
+	],
+	"Range": -1,
+    "Sprite": "stone_mask",
+    "Slot": "helmet",
+	"Stackable": false,
+	"Price": 170,
+	"TwoHanded" : false
+  },
+  "Unicorn Helmet":
+  {
+	"Description": "The helmet you can stab with.",  
+    "Parent": "Leather Headband",
+    "Melee": 
+	{
+	  "MinDamage": 5,
+      "MaxDamage": 6
+	},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 8,
+      "DodgeMod": 0
+    },
+    "Abilities": 
+	[	  
+	  "Endangered Endurance",
+	  "Helmet Charge"
+	],
+	"Range": -1,
+    "Sprite": "unicorn_helm",
+    "Slot": "helmet",
+	"Stackable": false,
+	"Price": 190,
+	"TwoHanded" : false
+  },
+  "Bear Head":
+  {
+	"Description": "It's exactly what it looks like.",  
+    "Parent": "Leather Headband",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 3,
+      "DodgeMod": 0
+    },
+    "Abilities": 
+	[
+	  "Well Fed"	  
+	],
+	"Range": -1,
+    "Sprite": "bear_head",
+    "Slot": "helmet",
+	"Stackable": false,
+	"Price": 165,
+	"TwoHanded" : false
+  },
+  "Bycocket":
+  {
+	"Description": "Eat the rich.",  
+    "Parent": "Leather Headband",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 1
+    },
+    "Abilities": 
+	[
+	  "Calculated"      	  
+	],
+	"Range": -1,
+    "Sprite": "bycocket",
+    "Slot": "helmet",
+	"Stackable": false,
+	"Price": 165,
+	"TwoHanded" : false
+  },
+  "Close Helm":
+  {
+	"Description": "It's a metal bucket with a visor.",  
+    "Parent": "Leather Headband",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 2,
+      "DodgeMod": 0
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "close_helm",
+    "Slot": "helmet",
+	"Stackable": false,
+	"Price": 15,
+	"TwoHanded" : false
+  },
+  "Demon Helmet":
+  {
+	"Description": "This looks kinda scary, hoss.",  
+    "Parent": "Leather Headband",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 4,
+      "DodgeMod": 0
+    },
+    "Abilities": 
+	[
+	  "Demonic Intervention",	  
+	  "Works Out"
+	],
+	"Range": -1,
+    "Sprite": "demon_helm",
+    "Slot": "helmet",
+	"Stackable": false,
+	"Price": 140,
+	"TwoHanded" : false
+  },
+  "Insect Helmet":
+  {
+	"Description": "Beetle but with a chinstrap.",  
+    "Parent": "Leather Headband",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 4,
+      "DodgeMod": 1
+    },
+    "Abilities": 
+	[	  
+	  "Well Fed"	  
+	],
+	"Range": -1,
+    "Sprite": "insect_helmet",
+    "Slot": "helmet",
+	"Stackable": false,
+	"Price": 110,
+	"TwoHanded" : false
+  }
+}

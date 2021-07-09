@@ -16,7 +16,8 @@ namespace Assets.Scripts.Encounters.Normal
         //todo refactor
         public override void Run()
         {
-            var chosenCompanion = TravelManager.Instance.Party.GetRandomCompanion();
+            var travelManager = Object.FindObjectOfType<TravelManager>();
+            var chosenCompanion = travelManager.Party.GetRandomCompanion();
 
             Description =
                 $"While scouting a town, {chosenCompanion.Name} decides the caravan would not be welcome here. Before they can leave, a guard sees through their disguise! {chosenCompanion.FirstName()} is cornered in an alley with large crates and a tall fence.";
@@ -100,7 +101,8 @@ namespace Assets.Scripts.Encounters.Normal
 
             SubscribeToOptionSelectedEvent();
 
-            EventMediator.Instance.Broadcast(GlobalHelper.FourOptionEncounter, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.Broadcast(GlobalHelper.FourOptionEncounter, this);
         }
     }
 }

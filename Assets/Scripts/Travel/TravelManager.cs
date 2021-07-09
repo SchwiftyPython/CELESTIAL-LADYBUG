@@ -18,28 +18,20 @@ namespace Assets.Scripts.Travel
 
         public Party Party { get; private set; }
 
-        public TravelNode CurrentNode { get; private set; }
-
-        public static TravelManager Instance;
+        public BiomeType CurrentBiome { get; private set; }
 
         private void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else if (Instance != this)
-            {
-                Destroy(gameObject);
-            }
-            DontDestroyOnLoad(gameObject);
+            var eventMediator = FindObjectOfType<EventMediator>();
 
             if (!SceneManager.GetActiveScene().name.Equals(GlobalHelper.CombatScene))
             {
-                EventMediator.Instance.SubscribeToEvent(GlobalHelper.CampingEncounterFinished, this);
+                eventMediator.SubscribeToEvent(GlobalHelper.CampingEncounterFinished, this);
             }
 
-            EventMediator.Instance.SubscribeToEvent(GlobalHelper.EntityDead, this);
+            eventMediator.SubscribeToEvent(GlobalHelper.EntityDead, this);
+
+            CurrentBiome = BiomeType.Grassland;
 
             _currentDayOfTravel = 0;
 
@@ -51,9 +43,16 @@ namespace Assets.Scripts.Travel
             Party = new Party();
         }
 
+        public void NewInventory()
+        {
+            var inventory = Inventory.GetPartyInventory();
+            inventory.GenerateStartingItems();
+        }
+
         public void StartNewDay()
         {
-            EncounterManager.Instance.BuildDecksForNewDay();
+            var encounterManager = FindObjectOfType<EncounterManager>();
+            encounterManager.BuildDecksForNewDay();
         }
 
         public string BuildPartyRewardTextItem(int value, PartySupplyTypes gainType)
@@ -141,23 +140,24 @@ namespace Assets.Scripts.Travel
                         {
                             var gainType = statGain.Key;
 
+                            var moddedGain = 0;
                             switch (gainType)
                             {
                                 case EntityStatTypes.CurrentMorale:
-                                    companion.AddMorale(statGain.Value);
+                                    moddedGain = companion.AddMorale(statGain.Value);
                                     break;
                                 case EntityStatTypes.CurrentHealth:
-                                    companion.AddHealth(statGain.Value);
+                                    moddedGain = companion.AddHealth(statGain.Value);
                                     break;
                                 case EntityStatTypes.CurrentEnergy:
-                                    companion.AddEnergy(statGain.Value);
+                                    moddedGain = companion.AddEnergy(statGain.Value);
                                     break;
                                 default:
                                     Debug.Log($"Invalid gain type! {gainType}");
                                     break;
                             }
 
-                            rewardsText.Add(BuildCompanionRewardTextItem(companion, statGain.Value, gainType));
+                            rewardsText.Add(BuildCompanionRewardTextItem(companion, moddedGain, gainType));
                         }
                     }
                 }
@@ -307,7 +307,8 @@ namespace Assets.Scripts.Travel
 
         private void OnDestroy()
         {
-            EventMediator.Instance.UnsubscribeFromAllEvents(this);
+            var eventMediator = FindObjectOfType<EventMediator>();
+            eventMediator?.UnsubscribeFromAllEvents(this);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
@@ -331,7 +332,8 @@ namespace Assets.Scripts.Travel
 
                 if (TravelDaysToDestination <= 0)
                 {
-                    EventMediator.Instance.Broadcast(GlobalHelper.YouWon, this);
+                    var eventMediator = FindObjectOfType<EventMediator>();
+                    eventMediator.Broadcast(GlobalHelper.YouWon, this);
                 }
                 else
                 {

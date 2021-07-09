@@ -1,0 +1,25 @@
+{
+"Naginata":
+  {
+	"Description": "Long slashy boi.",  
+    "Parent": null,
+    "Melee": 
+    {
+      "MinDamage": 7,
+      "MaxDamage": 8
+    },
+    "Ranged": {},
+    "Defense":{},
+    "Abilities":
+	[
+	  "Thrust",
+	  "Slash"      	  
+	],
+	"Range": 2,
+    "Sprite": "naginata",
+    "Slot": "weapon",
+	"Stackable": false,
+	"Price": 20,
+	"TwoHanded" : true
+  }
+}

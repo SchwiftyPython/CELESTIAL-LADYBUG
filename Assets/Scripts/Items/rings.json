@@ -1,0 +1,186 @@
+{
+"Old Wedding Ring":
+  {
+	"Description": "Repels potential mates.",  
+    "Parent": null,
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 0,
+      "DodgeMod": 0
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "old_wedding_ring",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 10,
+	"TwoHanded" : false
+  },
+  "Skull Ring":
+  {
+	"Description": "Look like a badass!",  
+    "Parent": "Old Wedding Ring",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 0,
+      "DodgeMod": 0
+    },
+    "Abilities": 
+	[
+	  "Intimidate"
+	],
+	"Range": -1,
+    "Sprite": "skull_ring",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 20,
+	"TwoHanded" : false
+  },
+  "Overachiever Ring":
+  {
+	"Description": "Someone good at schoolin' won this fair and square.",  
+    "Parent": "Old Wedding Ring",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 0,
+      "DodgeMod": 0
+    },
+    "Abilities": 
+	[
+	  "Knowledgeable"
+	],
+	"Range": -1,
+    "Sprite": "wing_ring",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 40,
+	"TwoHanded" : false
+  },
+  "Yin Yang Ring":
+  {
+	"Description": "Protects against non-magic damage, but you take more damage form magic attacks.",  
+    "Parent": "Old Wedding Ring",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 0,
+      "DodgeMod": 0
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "yin_yang_ring",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 70,
+	"TwoHanded" : false
+  },
+  "Ancient Ring":
+  {
+	"Description": "Left over from a dead civilization. Possibly cursed.",  
+    "Parent": "Old Wedding Ring",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 1
+    },
+    "Abilities": 
+	[	  
+	  "Charismatic"
+	],
+	"Range": -1,
+    "Sprite": "ancient_ring",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 210,
+	"TwoHanded" : false
+  },
+  "Flower Ring":
+  {
+	"Description": "Wook trinket.",  
+    "Parent": "Old Wedding Ring",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 0,
+      "DodgeMod": 1
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "flower_ring",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 25,
+	"TwoHanded" : false
+  },
+  "Unbreakable Ring":
+  {
+	"Description": "This thing is built tough. Dwarf tough.",  
+    "Parent": "Old Wedding Ring",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 3,
+      "DodgeMod": 0
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "jeweled_ring",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 280,
+	"TwoHanded" : false
+  },
+  "Mammoth Ring":
+  {
+	"Description": "Not hairy, but tough.",  
+    "Parent": "Old Wedding Ring",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 5,
+      "DodgeMod": 0
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "jeweled_ring_2",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 330,
+	"TwoHanded" : false
+  },
+  "Plunder Ring":
+  {
+	"Description": "This ring seems to make the wearer wealthier somehow.",  
+    "Parent": "Old Wedding Ring",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 0,
+      "DodgeMod": 0
+    },
+    "Abilities": 
+	[
+	  "Wealthy",
+      "Charismatic"	  
+	],
+	"Range": -1,
+    "Sprite": "jeweled_ring_3",
+    "Slot": "ring",
+	"Stackable": false,
+	"Price": 100,
+	"TwoHanded" : false
+  }
+}

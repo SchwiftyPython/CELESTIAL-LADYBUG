@@ -7,7 +7,8 @@ namespace Assets.Scripts
     {
         public void Clicked()
         {
-            EventMediator.Instance.Broadcast(GlobalHelper.ButtonClick, this);
+            var eventMediator = FindObjectOfType<EventMediator>();
+            eventMediator.Broadcast(GlobalHelper.ButtonClick, this);
         }
     }
 }

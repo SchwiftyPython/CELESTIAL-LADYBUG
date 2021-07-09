@@ -1,0 +1,71 @@
+{  
+  "Crossbow":
+  {
+	"Description": "Convenient ranged damage.",  
+    "Parent": null,
+    "Melee": {},
+    "Ranged": 
+	{
+      "MinDamage": 7,
+      "MaxDamage": 8
+    },
+    "Defense":{},
+    "Abilities":
+	[
+	  "Shoot",
+	  "Aimed Shot"	  
+	],
+	"Range": 7,
+    "Sprite": "crossbow_1",
+    "Slot": "weapon",
+	"Stackable": false,
+	"Price": 30,
+	"TwoHanded" : true
+  },
+  "Light Crossbow":
+  {
+	"Description": "Convenient light ranged damage.",  
+    "Parent": "Crossbow",
+    "Melee": {},
+    "Ranged": 
+	{
+      "MinDamage": 5,
+      "MaxDamage": 6
+    },
+    "Defense":{},
+    "Abilities":
+	[
+	  "Shoot",
+	  "Snapshot"
+	],
+	"Range": 7,
+    "Sprite": "crossbow_3",
+    "Slot": "weapon",
+	"Stackable": false,
+	"Price": 50,
+	"TwoHanded" : true
+  },
+  "Heavy Crossbow":
+  {
+	"Description": "Convenient heavy ranged damage.",  
+    "Parent": "Crossbow",
+    "Melee": {},
+    "Ranged": 
+	{
+      "MinDamage": 9,
+      "MaxDamage": 10
+    },
+    "Defense":{},
+    "Abilities":
+	[
+	  "Shoot",
+	  "Knockback"
+	],
+	"Range": 7,
+    "Sprite": "crossbow_2",
+    "Slot": "weapon",
+	"Stackable": false,
+	"Price": 70,
+	"TwoHanded" : true
+  }
+}

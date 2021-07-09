@@ -11,6 +11,8 @@ namespace Assets.Scripts.AI
     //todo this is just prototype dumb dumb ai - but if it works then don't fix it :)
     public class AiController : MonoBehaviour
     {
+        private const int MaxTries = 2;
+
         private List<Tile> _pathToTarget;
         private bool _actionAvailable;
 
@@ -31,8 +33,9 @@ namespace Assets.Scripts.AI
         {
             _actionAvailable = true;
 
-            //todo this if should probably be a while loop
-            while (Self.Stats.CurrentActionPoints > 0 && _actionAvailable)
+            var currentTry = 0;
+
+            while (Self.Stats.CurrentActionPoints > 0 && _actionAvailable && currentTry < MaxTries)
             {
                 if (Target == null || Target.IsDead())
                 {
@@ -45,21 +48,23 @@ namespace Assets.Scripts.AI
                     continue;
                 }
 
-                //todo find distance to target
                 var distance = Distance.CHEBYSHEV.Calculate(Self.Position, Target.Position);
 
                 var usableAbilities = new List<Ability>();
 
-                foreach (var ability in Self.Abilities)
+                foreach (var ability in Self.Abilities.Values)
                 {
-                    if (ability.Range >= distance && Self.Stats.CurrentActionPoints >= ability.ApCost)
+                    if (ability.IsPassive || ability.Range < distance)
+                    {
+                        continue;
+                    }
+
+                    if ((ability.Range == 1 || ability.Range > 1 && Self.HasMissileWeaponEquipped()) && Self.Stats.CurrentActionPoints >= ability.ApCost)
                     {
                         usableAbilities.Add(ability);
                     }
                 }
 
-                //todo if greater than any combat ability range, move
-                //todo else attack
                 if (usableAbilities.Count < 1)
                 {
                     Move();
@@ -68,30 +73,35 @@ namespace Assets.Scripts.AI
                 {
                     Attack(usableAbilities);
                 }
+
+                currentTry++;
             }
 
-            //todo end turn
-            EventMediator.Instance.Broadcast(GlobalHelper.EndTurn, this);
+            var eventMediator = FindObjectOfType<EventMediator>();
+            eventMediator.Broadcast(GlobalHelper.EndTurn, this);
         }
 
-        public void Move()
+        private void Move()
         {
             //todo if path is not null and target hasn't moved don't calc new path
             //todo get path to target
 
             _pathToTarget = new List<Tile>();
 
-            var map = CombatManager.Instance.Map;
+            var combatManager = FindObjectOfType<CombatManager>();
+            var map = combatManager.Map;
 
-            //todo either we have to get a tile adjacent to the target or stop from moving onto the target's tile
-            //todo not sure how that is happening - thought GoRogue would prevent that -- The sprite is moving but not the entity?
             var path = map.AStar.ShortestPath(Self.Position, Target.Position);
 
-            //todo take next step
+            if (path == null)
+            {
+                _actionAvailable = false;
+                return;
+            }
 
             var tileStep = map.GetTerrain<Floor>(path.GetStep(0));
 
-            if (Self.Stats.CurrentActionPoints < tileStep.ApCost)
+            if (Self.Stats.CurrentActionPoints < tileStep.ApCost || !tileStep.IsWalkable || !map.WalkabilityView[tileStep.Position])
             {
                 _actionAvailable = false;
                 return;
@@ -100,16 +110,17 @@ namespace Assets.Scripts.AI
             Self.MoveTo(tileStep, tileStep.ApCost);
         }
 
-        public void Attack(List<Ability> usableAbilities)
+        private void Attack(List<Ability> usableAbilities)
         {
-            //todo choose an ability at random and do it
+            //todo choose a hostile ability at random and do it
 
-            usableAbilities[Random.Range(0, usableAbilities.Count)].Use(Self, Target);
+            usableAbilities[Random.Range(0, usableAbilities.Count)].Use(Target);
         }
 
-        private Entity FindTarget()
+        private static Entity FindTarget()
         {
-            var targets = CombatManager.Instance.TurnOrder.ToList();
+            var combatManager = FindObjectOfType<CombatManager>();
+            var targets = combatManager.TurnOrder.ToList();
 
             foreach (var target in targets.ToArray())
             {

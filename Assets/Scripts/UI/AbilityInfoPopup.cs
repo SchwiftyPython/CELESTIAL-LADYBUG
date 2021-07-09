@@ -1,6 +1,5 @@
 ﻿using Assets.Scripts.Abilities;
 using Assets.Scripts.Combat;
-using Assets.Scripts.Entities;
 using TMPro;
 using UnityEngine;
 
@@ -22,11 +21,13 @@ namespace Assets.Scripts.UI
         private TextMeshProUGUI _apCost;
 
         [SerializeField]
-        private TextMeshProUGUI _damageDescription;
+        private TextMeshProUGUI _damageDescription; 
 
         private void Start()
         {
-            EventMediator.Instance.SubscribeToEvent(HoverPopupEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.SubscribeToEvent(HoverPopupEvent, this);
             Hide();
         }
 
@@ -36,14 +37,30 @@ namespace Assets.Scripts.UI
             _abilityDescription.text = "Description not implemented yet"; //todo
             _apCost.text = ability.ApCost.ToString();
 
-            var (damageMin, damageMax) = CombatManager.Instance.ActiveEntity.EquippedWeapon.DamageRange;
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var combatManager = Object.FindObjectOfType<CombatManager>();
 
-            _damageDescription.text = $"Deals {damageMin + baseDamage} - {damageMax + baseDamage} damage";
+            //todo probably need bool for if ability damage is based on weapon
+            if (ability.HostileTargetsOnly)
+            {
+                int damageMin;
+                int damageMax;
+                if (ability.IsRanged())
+                {
+                    (damageMin, damageMax) = combatManager.ActiveEntity.GetEquippedWeapon().GetRangedDamageRange();
+                }
+                else
+                {
+                    (damageMin, damageMax) = combatManager.ActiveEntity.GetEquippedWeapon().GetMeleeDamageRange();
+                }
+
+                _damageDescription.text = $"Deals {damageMin + baseDamage} - {damageMax + baseDamage} damage";
+            }
 
             var position = Input.mousePosition;
             gameObject.transform.position = new Vector2(position.x + 180f, position.y + 160f);
 
-            EventMediator.Instance.SubscribeToEvent(HidePopupEvent, this);
+            eventMediator.SubscribeToEvent(HidePopupEvent, this);
 
             gameObject.SetActive(true);
             GameManager.Instance.AddActiveWindow(gameObject);
@@ -51,15 +68,17 @@ namespace Assets.Scripts.UI
 
         private void Hide()
         {
-            EventMediator.Instance.UnsubscribeFromEvent(HidePopupEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.UnsubscribeFromEvent(HidePopupEvent, this);
             gameObject.SetActive(false);
             GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 
         private void OnDestroy()
         {
-            EventMediator.Instance.UnsubscribeFromEvent(HoverPopupEvent, this);
-            EventMediator.Instance.UnsubscribeFromEvent(HidePopupEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator?.UnsubscribeFromEvent(HoverPopupEvent, this);
+            eventMediator?.UnsubscribeFromEvent(HidePopupEvent, this);
             GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 
@@ -84,7 +103,7 @@ namespace Assets.Scripts.UI
                     return;
                 }
 
-                Show(ability, ability.AbilityOwner.Stats.Attack);
+                //Show(ability, ability.AbilityOwner.Stats.Attack);
             }
             else if (eventName.Equals(HidePopupEvent))
             {

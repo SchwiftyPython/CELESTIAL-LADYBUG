@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Travel;
+using GoRogue.DiceNotation;
 using UnityEngine;
 
 namespace Assets.Scripts.Encounters.Normal
@@ -24,16 +25,19 @@ namespace Assets.Scripts.Encounters.Normal
             string optionResultText;
             Reward optionReward = null;
             Penalty optionPenalty = null;
-            if (TravelManager.Instance.Party.Gold >= BetAmount)
+
+            var travelManager = Object.FindObjectOfType<TravelManager>();
+
+            if (travelManager.Party.Gold >= BetAmount)
             {
-                var bestArm = TravelManager.Instance.Party.GetCompanionWithHighestRangedSkill();
+                var bestArm = travelManager.Party.GetCompanionWithHighestRangedSkill();
 
                 optionTitle = $"{bestArm.Name} takes the bet";
                 optionResultText = $"\"Best two out of three?\" says {bestArm.FirstName()}. \n\n";
 
-                var opponentRoll = 50 + Random.Range(1, 21);
+                var opponentRoll = Dice.Roll("2d6");
 
-                var companionRoll = bestArm.Stats.RangedSkill + Random.Range(1, 21);
+                var companionRoll = Dice.Roll($"{bestArm.Skills.Ranged}d6");
 
                 if (companionRoll >= opponentRoll)
                 {
@@ -64,7 +68,8 @@ namespace Assets.Scripts.Encounters.Normal
 
             SubscribeToOptionSelectedEvent();
 
-            EventMediator.Instance.Broadcast(GlobalHelper.FourOptionEncounter, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.Broadcast(GlobalHelper.FourOptionEncounter, this);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Entities.Necromancer;
 using UnityEngine;
 
 namespace Assets.Scripts.Encounters.Combat
@@ -26,9 +27,7 @@ namespace Assets.Scripts.Encounters.Combat
 
             for (var i = 0; i < numBandits; i++)
             {
-                var bandit = new Entity(false);
-
-                bandit.GenerateStartingEquipment();
+                var bandit = new Skeleton(); //todo change
 
                 bandits.Add(bandit);
             }
@@ -72,7 +71,9 @@ namespace Assets.Scripts.Encounters.Combat
 
             SubscribeToOptionSelectedEvent();
 
-            EventMediator.Instance.Broadcast(GlobalHelper.FourOptionEncounter, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.FourOptionEncounter, this);
         }
     }
 }

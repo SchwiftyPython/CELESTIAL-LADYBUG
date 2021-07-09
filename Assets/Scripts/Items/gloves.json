@@ -1,0 +1,205 @@
+{
+"Leather Gloves":
+  {
+	"Description": "Great for lawncare and fighting goblins.",  
+    "Parent": null,
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 0
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "leather_gloves",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 10,
+	"TwoHanded" : false
+  },
+  "Fitted Leather Gloves":
+  {
+	"Description": "Deliver deadly blows in comfort.",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 1
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "leather_gloves_2",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 30,
+	"TwoHanded" : false
+  },
+  "Hardened Leather Gloves":
+  {
+	"Description": "Stiffer, but tougher.",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 2,
+      "DodgeMod": 0
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "leather_gloves_3",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 30,
+	"TwoHanded" : false
+  },
+  "Metal Bracers":
+  {
+	"Description": "Soup can protection.",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 0
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "metal_bracer",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 35,
+	"TwoHanded" : false
+  },
+  "Decorative Bracers":
+  {
+	"Description": "Forearm protection with style.",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 1,
+      "DodgeMod": 0
+    },
+    "Abilities": 
+	[
+	  "Calculated"
+	],
+	"Range": -1,
+    "Sprite": "fancy_bracer",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 45,
+	"TwoHanded" : false
+  },
+  "Dragon Gauntlets":
+  {
+	"Description": "Made with REAL dragon scales!",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 6,
+      "DodgeMod": 0
+    },
+    "Abilities": 
+	[
+	  "Works Out",
+	  "Tank"
+	],
+	"Range": -1,
+    "Sprite": "fancy_gloves",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 145,
+	"TwoHanded" : false
+  },
+  "Destroyer Gauntlets":
+  {
+	"Description": "Punch your house down.",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 10,
+      "DodgeMod": 0
+    },
+    "Abilities": 
+	[
+	  "Massive Damage"	  
+	],
+	"Range": -1,
+    "Sprite": "fancy_gloves_2",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 145,
+	"TwoHanded" : false
+  },
+  "Battle-Mage Mittens":
+  {
+	"Description": "Magical boost with a tin can vibe.",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 4,
+      "DodgeMod": 0
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "fancy_gloves_3",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 145,
+	"TwoHanded" : false
+  },
+  "Plate Gauntlets":
+  {
+	"Description": "Tough armor, but hard to maneuver in.",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 4,
+      "DodgeMod": 0
+    },
+    "Abilities": 
+	[
+	  "Cumbersome"
+	],
+	"Range": -1,
+    "Sprite": "plate_gauntlets_1",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 45,
+	"TwoHanded" : false
+  },
+  "Mage Gloves":
+  {
+	"Description": "Stylish, with a magic touch.",  
+    "Parent": "Leather Gloves",
+    "Melee": {},
+    "Ranged": {},
+    "Defense": 
+    {
+      "Toughness": 0,
+      "DodgeMod": 1
+    },
+    "Abilities": [],
+	"Range": -1,
+    "Sprite": "colorful_gloves",
+    "Slot": "gloves",
+	"Stackable": false,
+	"Price": 40,
+	"TwoHanded" : false
+  }
+}

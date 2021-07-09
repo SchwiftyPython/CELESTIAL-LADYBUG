@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.AI;
+﻿using System;
+using Assets.Scripts.AI;
 using Assets.Scripts.Entities;
 using Assets.Scripts.UI;
 using GoRogue;
@@ -8,6 +9,8 @@ namespace Assets.Scripts.Combat
 {
     public class BoardHolder : MonoBehaviour
     {
+        public GameObject TerrainSlotPrefab;
+
         public Transform EntityHolder;
 
         public static BoardHolder Instance;
@@ -34,31 +37,46 @@ namespace Assets.Scripts.Combat
 
                     var tile = map.GetTerrain<Tile>(coord);
 
-                    var instance = Instantiate(tile.PrefabTexture, new Vector2(currentColumn, currentRow), Quaternion.identity);
+                    var tileInstance = Instantiate(TerrainSlotPrefab, new Vector2(currentColumn, currentRow), Quaternion.identity);
 
-                    tile.SetSpriteInstance(instance);
+                    tileInstance.GetComponent<SpriteRenderer>().sprite = tile.Texture;
 
-                    instance.AddComponent<OnMouseOverTile>();
+                    tile.SetSpriteInstance(tileInstance);
 
-                    instance.GetComponent<OnMouseOverTile>().Tile = tile;
+                    tileInstance.AddComponent<OnMouseOverTile>();
 
-                    instance.transform.SetParent(transform);
+                    tileInstance.GetComponent<OnMouseOverTile>().Tile = tile;
+
+                    tileInstance.transform.SetParent(transform);
+
+                    tileInstance.GetComponent<TerrainSlotUi>().SetTile(tile);
 
                     var entity = map.GetEntity<Entity>(coord);
 
                     if (entity != null)
                     {
-                        instance = Instantiate(entity.CombatSpritePrefab, new Vector2(currentColumn, currentRow), Quaternion.identity);
+                        var entityInstance = Instantiate(entity.CombatSpritePrefab, new Vector2(currentColumn, currentRow), Quaternion.identity);
 
-                        instance.transform.SetParent(EntityHolder);
+                        entityInstance.transform.SetParent(EntityHolder);
 
-                        entity.SetSpriteInstance(instance);
+                        entity.SetSpriteInstance(entityInstance);
 
                         if (!entity.IsPlayer())
                         {
-                            instance.AddComponent<AiController>();
-                            instance.GetComponent<AiController>().SetSelf(entity);
+                            entityInstance.AddComponent<AiController>();
+                            entityInstance.GetComponent<AiController>().SetSelf(entity);
+                            entityInstance.GetComponent<SpriteRenderer>().flipX = true;
+                            entityInstance.transform.position = new Vector3(entityInstance.transform.position.x + 1,
+                                entityInstance.transform.position.y, entityInstance.transform.position.z);
                         }
+
+                        var spriteStore = FindObjectOfType<SpriteStore>();
+
+                        var colorSwapper = entityInstance.GetComponentsInChildren<ColorSwapper>();
+
+                        spriteStore.SetColorSwaps(colorSwapper, entity);
+
+                        tileInstance.GetComponent<TerrainSlotUi>().SetEntity(entity);
                     }
                 }
             }

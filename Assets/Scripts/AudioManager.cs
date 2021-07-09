@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
+    //todo replace with fmod
     //todo need more generic attack sound event where sound played is based on equipped weapon or ability 
     public class AudioManager : MonoBehaviour, ISubscriber
     {
@@ -39,15 +40,17 @@ namespace Assets.Scripts
 
         private void SubscribeToEvents()
         {
+            var eventMediator = FindObjectOfType<EventMediator>();
             foreach (var eventName in _subscribedEvents)
             {
-                EventMediator.Instance.SubscribeToEvent(eventName, this);
+                eventMediator.SubscribeToEvent(eventName, this);
             }
         }
 
         private void UnsubscribeFromEvents()
         {
-            EventMediator.Instance.UnsubscribeFromAllEvents(this);
+            var eventMediator = FindObjectOfType<EventMediator>();
+            eventMediator?.UnsubscribeFromAllEvents(this);
         }
 
         private void OnDestroy()

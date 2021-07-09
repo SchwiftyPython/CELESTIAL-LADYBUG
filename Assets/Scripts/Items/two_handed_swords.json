@@ -1,0 +1,22 @@
+{
+"Warbrand": {
+		"Description": "A big sword with no guard.",
+		"Parent": null,
+		"Melee": {
+			"MinDamage": 13,
+			"MaxDamage": 19
+		},
+		"Ranged": {},
+		"Defense": {},
+		"Abilities": [
+			"Slash",			
+			"Cleave"
+		],
+		"Range": 1,
+		"Sprite": "warbrand",
+		"Slot": "weapon",
+		"Stackable": false,
+		"Price": 40,
+		"TwoHanded": true
+	}
+}

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Travel;
+using UnityEngine;
 
 //todo refactor
 namespace Assets.Scripts.Encounters.Normal
@@ -23,7 +24,9 @@ namespace Assets.Scripts.Encounters.Normal
             reward.AddPartyGain(PartySupplyTypes.Food, 10);
 
             var penalty = new Penalty();
-            penalty.AddEntityLoss(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentMorale, 10);
+
+            var travelManager = Object.FindObjectOfType<TravelManager>();
+            penalty.AddEntityLoss(travelManager.Party.Derpus, EntityStatTypes.CurrentMorale, 10);
 
             var optionOne = new Option(optionTitle, optionResultText, reward, penalty, EncounterType);
 
@@ -42,7 +45,8 @@ namespace Assets.Scripts.Encounters.Normal
         {
             SubscribeToOptionSelectedEvent();
 
-            EventMediator.Instance.Broadcast(GlobalHelper.FourOptionEncounter, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.Broadcast(GlobalHelper.FourOptionEncounter, this);
         }
     }
 }

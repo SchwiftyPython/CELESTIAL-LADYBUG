@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Entities.Companions;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -69,7 +70,9 @@ namespace Assets.Scripts
 
             if (_companions.Count <= 0)
             {
-                EventMediator.Instance.Broadcast(GlobalHelper.GameOver, this);
+                EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+
+                eventMediator.Broadcast(GlobalHelper.GameOver, this);
             }
         }
 
@@ -98,7 +101,9 @@ namespace Assets.Scripts
             totalResult.AddRange(eatResult);
             totalResult.AddRange(healResult);
 
-            EventMediator.Instance.Broadcast(GlobalHelper.PartyEatAndHeal, this, totalResult);
+            EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.PartyEatAndHeal, this, totalResult);
         }
 
         //todo refactor may not need a list here
@@ -248,7 +253,7 @@ namespace Assets.Scripts
             Entity bestShot = null;
             foreach (var companion in _companions.Values)
             {
-                if (bestShot == null || companion.Stats.RangedSkill > bestShot.Stats.RangedSkill)
+                if (bestShot == null || companion.Skills.Ranged > bestShot.Skills.Ranged)
                 {
                     bestShot = companion;
                 }
@@ -259,14 +264,16 @@ namespace Assets.Scripts
 
         private void GenerateStartingParty()
         {
-            Derpus = new Entity(true, true);
+            Derpus = new Entity(Race.RaceType.Derpus, EntityClass.Derpus, true);
 
             _companions = new Dictionary<string, Entity>();
 
+            var entityStore = Object.FindObjectOfType<EntityPrefabStore>();
+
             for (var i = 0; i < StartSize; i++)
             {
-                var companion = new Entity(true);
-                
+                var companion = entityStore.GetRandomCompanion();
+
                 AddCompanion(companion);
             }
         }

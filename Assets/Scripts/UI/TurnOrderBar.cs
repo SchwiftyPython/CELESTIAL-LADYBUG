@@ -9,10 +9,6 @@ namespace Assets.Scripts.UI
         private const string RefreshEvent = GlobalHelper.RefreshCombatUi;
         private const int MaxSprites = 7;
 
-        //todo for prototype only - get from the UiSprite in Entity class later
-        public GameObject PlayerSprite;
-        public GameObject EnemySprite;
-
         public Transform SlotOne;
         public Transform SlotTwo;
         public Transform SlotThree;
@@ -23,7 +19,8 @@ namespace Assets.Scripts.UI
 
         private void Start()
         {
-            EventMediator.Instance.SubscribeToEvent(RefreshEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(RefreshEvent, this);
         }
 
         //todo refactor
@@ -46,7 +43,8 @@ namespace Assets.Scripts.UI
                 GlobalHelper.DestroyAllChildren(slot.gameObject);
             }
 
-            var turnOrder = CombatManager.Instance.TurnOrder;
+            var combatManager = Object.FindObjectOfType<CombatManager>();
+            var turnOrder = combatManager.TurnOrder;
 
             if (turnOrder == null || turnOrder.Count < 1)
             {
@@ -66,25 +64,45 @@ namespace Assets.Scripts.UI
                     continue;
                 }
 
-                GameObject spriteParentPrefab;
-                if (entity.IsPlayer())
+                var entityInstance = Instantiate(entity.CombatSpritePrefab, new Vector3(0, 0), Quaternion.identity);
+
+                var spriteStore = FindObjectOfType<SpriteStore>();
+
+                var colorSwapper = entityInstance.GetComponentsInChildren<ColorSwapper>();
+
+                spriteStore.SetColorSwaps(colorSwapper, entity);
+
+                entityInstance.gameObject.GetComponent<Animator>().enabled = false;
+
+                var spriteRenderer = entityInstance.GetComponent<SpriteRenderer>();
+
+                if (spriteRenderer == null)
                 {
-                    spriteParentPrefab = PlayerSprite;
+                    var childRenderers = entityInstance.GetComponentsInChildren<SpriteRenderer>();
+
+                    foreach (var cRenderer in childRenderers)
+                    {
+                        cRenderer.sortingLayerName = "FakeUi";
+                    }
                 }
                 else
                 {
-                    spriteParentPrefab = EnemySprite;
+                    spriteRenderer.sortingLayerName = "FakeUi";
                 }
 
-                var instance = Instantiate(spriteParentPrefab, new Vector3(0, 0), Quaternion.identity);
+                entityInstance.transform.SetParent(slotList[count]);
 
-                instance.gameObject.GetComponent<Animator>().enabled = false;
+                if (!entity.IsPlayer())
+                {
+                    entityInstance.GetComponent<SpriteRenderer>().flipX = true;
+                    entityInstance.transform.localPosition = new Vector3(0.08f, -0.3f, -0.01f);
+                }
+                else
+                {
+                    entityInstance.transform.localPosition = new Vector3(-0.075f, -0.3f, -0.01f);
+                }
 
-                instance.transform.SetParent(slotList[count]);
-
-                instance.transform.localPosition = new Vector3(-0.075f, -0.3f);
-
-                instance.transform.localScale = new Vector3(0.15f, 0.8f);
+                entityInstance.transform.localScale = new Vector3(0.15f, 0.8f);
 
                 count++;
             }

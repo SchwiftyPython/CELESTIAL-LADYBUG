@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Effects;
 using Assets.Scripts.Entities;
+using GoRogue;
 
 namespace Assets.Scripts.Encounters
 {

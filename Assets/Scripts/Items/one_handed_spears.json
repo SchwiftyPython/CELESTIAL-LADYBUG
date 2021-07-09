@@ -1,0 +1,47 @@
+{
+"Spear":
+  {
+	"Description": "Long pokey boi.",  
+    "Parent": null,
+    "Melee": {},
+    "Ranged": 
+	{
+      "MinDamage": 5,
+      "MaxDamage": 7
+    },
+    "Defense":{},
+    "Abilities":
+	[
+	  "Thrust"	    
+	],
+	"Range": 2,
+    "Sprite": "spear",
+    "Slot": "weapon",
+	"Stackable": false,
+	"Price": 10,
+	"TwoHanded" : false
+  },
+  "Lance":
+  {
+	"Description": "Long pokey boi typically for horse people.",  
+    "Parent": "Spear",
+    "Melee": {},
+    "Ranged": 
+	{
+      "MinDamage": 7,
+      "MaxDamage": 8
+    },
+    "Defense":{},
+    "Abilities":
+	[
+	  "Thrust",
+	  "Charge"	  
+	],
+	"Range": 2,
+    "Sprite": "lance",
+    "Slot": "weapon",
+	"Stackable": false,
+	"Price": 20,
+	"TwoHanded" : false
+  }  
+}

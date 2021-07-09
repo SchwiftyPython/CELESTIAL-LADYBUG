@@ -13,7 +13,8 @@ namespace Assets.Scripts.UI
 
         private void Awake()
         {
-            EventMediator.Instance.SubscribeToEvent(PopupEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(PopupEvent, this);
             Hide();
         }
 
@@ -40,7 +41,14 @@ namespace Assets.Scripts.UI
 
         private void OnDestroy()
         {
-            EventMediator.Instance.UnsubscribeFromEvent(PopupEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            if (eventMediator == null)
+            {
+                return;
+            }
+
+            eventMediator.UnsubscribeFromEvent(PopupEvent, this);
             GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 

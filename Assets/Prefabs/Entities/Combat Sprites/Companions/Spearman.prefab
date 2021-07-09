@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c829d928c6e3614488b7cf9a7d4d0b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swapSlot: 1
 --- !u!114 &8726410407802083499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,7 +193,6 @@ GameObject:
   m_Component:
   - component: {fileID: 402936860171526559}
   - component: {fileID: 8726410408491745264}
-  - component: {fileID: 8726410408491745271}
   - component: {fileID: 8726410408491745270}
   - component: {fileID: 8726410408491745269}
   m_Layer: 0
@@ -267,18 +267,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8726410408491745271
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8726410408491745275}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c829d928c6e3614488b7cf9a7d4d0b95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8726410408491745270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,6 +409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c829d928c6e3614488b7cf9a7d4d0b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swapSlot: 3
 --- !u!114 &8726410408536851343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -444,7 +433,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1153201730582133060}
   - component: {fileID: 8726410408754170565}
-  - component: {fileID: 8726410408754170564}
   - component: {fileID: 8726410408754170571}
   - component: {fileID: 8726410408754170570}
   m_Layer: 0
@@ -519,18 +507,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8726410408754170564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8726410408754170568}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c829d928c6e3614488b7cf9a7d4d0b95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8726410408754170571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -571,7 +547,6 @@ GameObject:
   - component: {fileID: 6138093041614263226}
   - component: {fileID: 8726410409141439985}
   - component: {fileID: 8726410409141439984}
-  - component: {fileID: 8726410409141439991}
   - component: {fileID: 8726410409141439990}
   m_Layer: 0
   m_Name: Feet
@@ -661,18 +636,6 @@ MonoBehaviour:
   normalStrenght: 5
   normalSmoothing: 1
   computingNormal: 0
---- !u!114 &8726410409141439991
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8726410409141439988}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c829d928c6e3614488b7cf9a7d4d0b95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &8726410409141439990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -812,3 +775,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c829d928c6e3614488b7cf9a7d4d0b95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swapSlot: 5

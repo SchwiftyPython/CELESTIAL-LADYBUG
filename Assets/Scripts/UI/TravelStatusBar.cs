@@ -40,7 +40,8 @@ namespace Assets.Scripts.UI
 
         public void Populate()
         {
-            var party = TravelManager.Instance.Party;
+            var travelManager = Object.FindObjectOfType<TravelManager>();
+            var party = travelManager.Party;
 
             GoldValue.text = party.Gold.ToString();
             FoodValue.text = party.Food.ToString();
@@ -50,7 +51,7 @@ namespace Assets.Scripts.UI
 
             PopulateCompanionStatuses(party);
 
-            TravelDaysToDestinationLabel.text = $"Days of Travel Left: {TravelManager.Instance.TravelDaysToDestination}";
+            TravelDaysToDestinationLabel.text = $"Days of Travel Left: {travelManager.TravelDaysToDestination}";
         }
 
         private void PopulateCompanionStatuses(Party party)
@@ -112,7 +113,8 @@ namespace Assets.Scripts.UI
         //todo maybe polish to keep from resetting party status list to first each time
         public void Refresh()
         {
-            var party = TravelManager.Instance.Party;
+            var travelManager = Object.FindObjectOfType<TravelManager>();
+            var party = travelManager.Party;
 
             GoldValue.text = party.Gold.ToString();
             FoodValue.text = party.Food.ToString();
@@ -194,15 +196,17 @@ namespace Assets.Scripts.UI
 
         private void SubscribeToEvents()
         {
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
             foreach (var eventName in _refreshEvents)
             {
-                EventMediator.Instance.SubscribeToEvent(eventName, this);
+                eventMediator.SubscribeToEvent(eventName, this);
             }
         }
 
         private void UnsubscribeFromEvents()
         {
-            EventMediator.Instance.UnsubscribeFromAllEvents(this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.UnsubscribeFromAllEvents(this);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

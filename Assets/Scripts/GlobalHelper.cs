@@ -1,9 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Assets.Scripts.Abilities;
+using Assets.Scripts.Combat;
+using Assets.Scripts.Entities;
+using GoRogue;
+using GoRogue.DiceNotation;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts
@@ -37,9 +44,13 @@ namespace Assets.Scripts
         public const string ManageParty = "ManageParty";
         public const string HidePartyManagement = "HidePartyManagement";
         public const string PopulateCharacterSheet = "PopulateCharacterSheet";
+        public const string EquipmentUpdated = "EquipmentUpdated";
+        public const string InventoryUpdated = "InventoryUpdated";
         public const string EndTurn = "EndTurn";
         public const string NextTarget = "NextTarget";
         public const string EntityTargeted = "EntityTargeted";
+        public const string TargetHit = "TargetHit";
+        public const string TargetMiss = "TargetMiss";
         public const string CombatFinished = "CombatFinished";
         public const string EntityDead = "EntityDead";
         public const string MentalBreak = "MentalBreak";
@@ -51,11 +62,13 @@ namespace Assets.Scripts
         public const string ButtonClick = "ButtonClick";
         public const string MeleeHit = "MeleeHit";
         public const string MeleeMiss = "MeleeMiss";
+        public const string DamageDealt = "DamageDealt";
         public const string ActiveEntityMoved = "ActiveEntityMoved";
         public const string PauseTimer = "PauseTimer";
         public const string ResumeTimer = "ResumeTimer";
         public const string ShowPauseMenu = "ShowPauseMenu";
         public const string HidePauseMenu = "HidePauseMenu";
+        public const string SpritesLoaded = "SpritesLoaded";
 
         #endregion EventNames
 
@@ -187,6 +200,139 @@ namespace Assets.Scripts
             return arr.Length == j ? arr[0] : arr[j];
         }
 
+        /// <summary>
+        /// Applies all modifiers to a new value for the given ModType.
+        /// </summary>
+        public static int ModifyNewValueForStat(Entity parent, Enum modType, int value)
+        {
+            return (int)(GetAdditiveModifiers(parent, modType) + value * (1 + GetPercentageModifiers(parent, modType) / 100));
+        }
+
+        /// <summary>
+        /// Returns all additive modifiers in equipment, abilities, and effects for the given ModType.
+        /// </summary>
+        public static float GetAdditiveModifiers(Entity parent, Enum modType)
+        {
+            float total = 0;
+
+            var equipment = parent.GetEquipment();
+
+            if (equipment == null)
+            {
+                return total;
+            }
+
+            foreach (EquipLocation slot in Enum.GetValues(typeof(EquipLocation)))
+            {
+                var item = equipment.GetItemInSlot(slot);
+
+                if (item == null)
+                {
+                    continue;
+                }
+
+                total += item.GetAdditiveModifiers(modType);
+            }
+
+            List<Ability> passiveAbilities = parent.Abilities.Values.Where(a => a.IsPassive).ToList();
+
+            total += GetAdditiveModifiersInCollection(passiveAbilities, modType);
+            total += GetAdditiveModifiersInCollection(parent.Effects, modType);
+
+            return total;
+        }
+
+        /// <summary>
+        /// Returns all percentage modifiers in equipment, abilities, and effects for the given ModType.
+        /// </summary>
+        public static float GetPercentageModifiers(Entity parent, Enum modType)
+        {
+            float total = 0;
+
+            var equipment = parent.GetEquipment();
+
+            if (equipment == null)
+            {
+                return total;
+            }
+
+            foreach (EquipLocation slot in Enum.GetValues(typeof(EquipLocation)))
+            {
+                var item = equipment.GetItemInSlot(slot);
+
+                if (item == null)
+                {
+                    continue;
+                }
+
+                total += item.GetPercentageModifiers(modType);
+            }
+
+            List<Ability> passiveAbilities = parent.Abilities.Values.Where(a => a.IsPassive).ToList();
+
+            total += GetPercentageModifiersInCollection(passiveAbilities, modType);
+            total += GetPercentageModifiersInCollection(parent.Effects, modType);
+
+            return total;
+        }
+
+        private static int GetAdditiveModifiersInCollection<T>(IReadOnlyCollection<T> collection, Enum modType)
+        {
+            var total = 0f;
+
+            if (collection == null || !collection.Any())
+            {
+                return (int) total;
+            }
+
+            foreach (var item in collection)
+            {
+                if (!(item is IModifierProvider provider))
+                {
+                    continue;
+                }
+
+                total += provider.GetAdditiveModifiers(modType); 
+            }
+
+            return (int) total;
+        }
+
+        private static int GetPercentageModifiersInCollection<T>(IReadOnlyCollection<T> collection, Enum modType)
+        {
+            var total = 0f;
+
+            if (collection == null || !collection.Any())
+            {
+                return (int)total;
+            }
+
+            foreach (var item in collection)
+            {
+                if (!(item is IModifierProvider provider))
+                {
+                    continue;
+                }
+
+                total += provider.GetPercentageModifiers(modType);
+            }
+
+            return (int)total;
+        }
+
+        public static List<T> ShuffleList<T>(List<T> list)
+        {
+            for (var i = list.Count - 1; i > 0; i--)
+            {
+                var n = Random.Range(0, i + 1);
+                var temp = list[i];
+                list[i] = list[n];
+                list[n] = temp;
+            }
+
+            return list;
+        }
+
         public static string RandomString(int size, bool lowerCase = false)
         {
             var builder = new StringBuilder(size);
@@ -201,6 +347,47 @@ namespace Assets.Scripts
             }
 
             return lowerCase ? builder.ToString().ToLower() : builder.ToString();
+        }
+
+        public static int RollWildDie()
+        {
+            var roll = Dice.Roll("1d6");
+
+            var total = roll;
+
+            while (roll == 6)
+            {
+                roll = Dice.Roll("1d6");
+                total += roll;
+            }
+
+            Debug.Log($"Wild Roll Total: {total}");
+
+            return total;
+        }
+
+        public static bool HasLineOfSight(Coord startPos, Coord targetCoord)
+        {
+            var line = Lines.Get(startPos, targetCoord).ToList();
+
+            var combatManager = FindObjectOfType<CombatManager>();
+
+            var map = combatManager.Map;
+
+            foreach (var coord in line)
+            {
+                if (coord == line.First() || coord == line.Last())
+                {
+                    continue;
+                }
+
+                if (!map.GetTileAt(coord).IsWalkable)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Assets.Scripts.UI
     public class CompanionCharacterSheet : MonoBehaviour, ISubscriber
     {
         private const string PopulateCharacterSheet = GlobalHelper.PopulateCharacterSheet;
+        private const string EquipmentUpdated = GlobalHelper.EquipmentUpdated;
 
         [SerializeField] private GameObject _portraitParent;
         [SerializeField] private TextMeshProUGUI _name;
@@ -16,8 +17,8 @@ namespace Assets.Scripts.UI
         [SerializeField] private TextMeshProUGUI _health;
         [SerializeField] private TextMeshProUGUI _energy;
         [SerializeField] private TextMeshProUGUI _morale;
-        [SerializeField] private TextMeshProUGUI _attack;
-        [SerializeField] private TextMeshProUGUI _dodge;
+        [SerializeField] private TextMeshProUGUI _melee;
+        [SerializeField] private TextMeshProUGUI _ranged;
         [SerializeField] private TextMeshProUGUI _lockpick;
         [SerializeField] private TextMeshProUGUI _toughness;
         [SerializeField] private TextMeshProUGUI _healing;
@@ -31,36 +32,39 @@ namespace Assets.Scripts.UI
         [SerializeField] private TextMeshProUGUI _persuasion;
 
         private Portrait _portrait;
+        private Entity _companion;
 
         private void Awake()
         {
-            EventMediator.Instance.SubscribeToEvent(PopulateCharacterSheet, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(PopulateCharacterSheet, this);
+            eventMediator.SubscribeToEvent(EquipmentUpdated, this);
         }
 
-        private void Populate(Entity companion)
+        private void Populate()
         {
-            SetPortrait(companion.Portrait);
+            SetPortrait(_companion.Portrait);
 
-            _name.text = companion.Name;
-            _raceClass.text = $"{companion._race}  {companion._entityClass}";
+            _name.text = _companion.Name;
+            _raceClass.text = $"{_companion.Race.GetRaceType()} {GlobalHelper.GetEnumDescription(_companion.EntityClass)}";
 
-            var stats = companion.Stats;
+            var stats = _companion.Stats;
 
             _health.text = $"{stats.CurrentHealth}/{stats.MaxHealth}";
             _energy.text = $"{stats.CurrentEnergy}/{stats.MaxEnergy}";
             _morale.text = $"{stats.CurrentMorale}/{stats.MaxMorale}";
-            _attack.text = stats.Attack.ToString();
 
-            var skills = companion.Skills;
+            var skills = _companion.Skills;
 
-            _dodge.text = skills.Dodge.ToString();
+            _melee.text = skills.Melee.ToString();
+            _ranged.text = skills.Ranged.ToString();
             _lockpick.text = skills.Lockpicking.ToString();
-            _toughness.text = skills.Toughness.ToString();
+            _toughness.text = skills.Endurance.ToString();
             _healing.text = skills.Healing.ToString();
             _survival.text = skills.Survival.ToString();
             _persuasion.text = skills.Persuasion.ToString();
 
-            var attributes = companion.Attributes;
+            var attributes = _companion.Attributes;
 
             _agility.text = attributes.Agility.ToString();
             _coordination.text = attributes.Coordination.ToString();
@@ -76,7 +80,8 @@ namespace Assets.Scripts.UI
 
             foreach (var slot in portraitKeys.Keys)
             {
-                var slotSprite = SpriteStore.Instance.GetSpriteForSlotByKey(slot, portraitKeys[slot]);
+                var spriteStore = Object.FindObjectOfType<SpriteStore>();
+                var slotSprite = spriteStore.GetPortraitSpriteForSlotByKey(slot, portraitKeys[slot]);
                 sprites.Add(slot, slotSprite);
             }
 
@@ -98,7 +103,13 @@ namespace Assets.Scripts.UI
                     return;
                 }
 
-                Populate(companion);
+                _companion = companion;
+
+                Populate();
+            }
+            else if(eventName.Equals(EquipmentUpdated))
+            {
+                Populate();
             }
         }
     }

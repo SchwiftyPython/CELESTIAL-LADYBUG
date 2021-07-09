@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Travel;
+using UnityEngine;
 
 namespace Assets.Scripts.Encounters.Camping
 {
@@ -17,21 +18,24 @@ namespace Assets.Scripts.Encounters.Camping
 
         public override void Run()
         {
-            Penalty = new Penalty();
-            Penalty.AddEntityLoss(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentEnergy, 10);
+            var travelManager = Object.FindObjectOfType<TravelManager>();
 
-            foreach (var companion in TravelManager.Instance.Party.GetCompanions())
+            Penalty = new Penalty();
+            Penalty.AddEntityLoss(travelManager.Party.Derpus, EntityStatTypes.CurrentEnergy, 10);
+
+            foreach (var companion in travelManager.Party.GetCompanions())
             {
                 Penalty.AddEntityLoss(companion, EntityStatTypes.CurrentEnergy, 10);
             }
 
             var fullResultDescription = new List<string> {Description + "\n"};
 
-            var penaltiesText = TravelManager.Instance.ApplyEncounterPenalty(Penalty);
+            var penaltiesText = travelManager.ApplyEncounterPenalty(Penalty);
 
             fullResultDescription.AddRange(penaltiesText);
 
-            EventMediator.Instance.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
         }
     }
 }

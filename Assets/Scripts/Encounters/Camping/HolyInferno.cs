@@ -23,7 +23,8 @@ namespace Assets.Scripts.Encounters.Camping
 
             const int escapeSuccess = 26;
 
-            var smartyPants = TravelManager.Instance.Party.GetCompanionWithHighestIntellect();
+            var travelManager = Object.FindObjectOfType<TravelManager>();
+            var smartyPants = travelManager.Party.GetCompanionWithHighestIntellect();
 
             //todo diceroller here
             var intCheck = smartyPants.Attributes.Intellect + Random.Range(1, 21);
@@ -47,7 +48,7 @@ namespace Assets.Scripts.Encounters.Camping
 
                 penalty = new Penalty();
 
-                foreach (var companion in TravelManager.Instance.Party.GetCompanions())
+                foreach (var companion in travelManager.Party.GetCompanions())
                 {
                     penalty.AddEntityLoss(companion, EntityStatTypes.CurrentHealth, 10);
                 }
@@ -57,9 +58,9 @@ namespace Assets.Scripts.Encounters.Camping
                 optionResultText = $"{smartyPants.Name} tries to find a safe exit, but panics instead! Everyone runs screaming from the building!";
 
                 penalty = new Penalty();
-                penalty.AddEntityLoss(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentMorale, 10);
+                penalty.AddEntityLoss(travelManager.Party.Derpus, EntityStatTypes.CurrentMorale, 10);
 
-                foreach (var companion in TravelManager.Instance.Party.GetCompanions())
+                foreach (var companion in travelManager.Party.GetCompanions())
                 {
                     penalty.AddEntityLoss(companion, EntityStatTypes.CurrentMorale, 10);
                 }
@@ -71,21 +72,21 @@ namespace Assets.Scripts.Encounters.Camping
 
             optionTitle = "RUN!";
 
-            var chosenCompanion = TravelManager.Instance.Party.GetRandomCompanion();
+            var chosenCompanion = travelManager.Party.GetRandomCompanion();
 
             optionResultText = $"Everyone flees to safety in a panic. After ensuring everyone is unharmed, {chosenCompanion.Name} notices that their bag was left behind.";
 
             penalty = new Penalty();
 
-            var foodLost = TravelManager.Instance.Party.Food / 4;
+            var foodLost = travelManager.Party.Food / 4;
 
             penalty.AddPartyLoss(PartySupplyTypes.Food, foodLost);
 
-            var goldLost = TravelManager.Instance.Party.Gold / 4;
+            var goldLost = travelManager.Party.Gold / 4;
 
             penalty.AddPartyLoss(PartySupplyTypes.Gold, goldLost);
 
-            var potionsLost = TravelManager.Instance.Party.HealthPotions / 4;
+            var potionsLost = travelManager.Party.HealthPotions / 4;
 
             penalty.AddPartyLoss(PartySupplyTypes.HealthPotions, potionsLost);
 
@@ -95,7 +96,8 @@ namespace Assets.Scripts.Encounters.Camping
 
             SubscribeToOptionSelectedEvent();
 
-            EventMediator.Instance.Broadcast(GlobalHelper.FourOptionEncounter, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.Broadcast(GlobalHelper.FourOptionEncounter, this);
         }
     }
 }

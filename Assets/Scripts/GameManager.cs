@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Items;
 using Assets.Scripts.Travel;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts
 {
@@ -118,15 +120,30 @@ namespace Assets.Scripts
             return false;
         }
 
+        public bool InCombat()
+        {
+            return SceneManager.GetActiveScene().name.Equals(CombatSceneName);
+        }
+
         public void StartNewGame()
         {
             //todo BUG this in fact does not start a new game lmao
 
+            var spriteStore = Object.FindObjectOfType<SpriteStore>();
+            spriteStore.Setup();
+
+            var itemStore = Object.FindObjectOfType<ItemStore>();
+            itemStore.Setup();
+
             LoadTravelScene();
 
-            TravelManager.Instance.NewParty();
+            var travelManager = Object.FindObjectOfType<TravelManager>();
 
-            TravelManager.Instance.StartNewDay();
+            travelManager.NewParty();
+
+            travelManager.NewInventory();
+
+            travelManager.StartNewDay();
         }
 
         public void LoadTravelScene()
@@ -154,14 +171,14 @@ namespace Assets.Scripts
             // foreach (var eventName in _subscribedEventNames)
             // {
             //     //todo
-            //     //EventMediator.Instance.SubscribeToEvent(eventName, this);
+            //     //eventMediator.SubscribeToEvent(eventName, this);
             // }
         }
 
         private void UnsubscribeFromEvents()
         {
             //todo
-            //EventMediator.Instance.UnsubscribeFromAllEvents(this);
+            //eventMediator.UnsubscribeFromAllEvents(this);
         }
     }
 }

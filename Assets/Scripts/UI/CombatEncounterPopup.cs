@@ -26,8 +26,9 @@ namespace Assets.Scripts.UI
                 OptionButtonTwo
             };
 
-            EventMediator.Instance.SubscribeToEvent(EncounterPopupEvent, this);
-            EventMediator.Instance.SubscribeToEvent(RetreatFailedPopupEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(EncounterPopupEvent, this);
+            eventMediator.SubscribeToEvent(RetreatFailedPopupEvent, this);
             Hide();
         }
 
@@ -111,8 +112,15 @@ namespace Assets.Scripts.UI
 
         private void OnDestroy()
         {
-            EventMediator.Instance.UnsubscribeFromEvent(EncounterPopupEvent, this);
-            EventMediator.Instance.UnsubscribeFromEvent(RetreatFailedPopupEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            if (eventMediator == null)
+            {
+                return;
+            }
+
+            eventMediator.UnsubscribeFromEvent(EncounterPopupEvent, this);
+            eventMediator.UnsubscribeFromEvent(RetreatFailedPopupEvent, this);
             GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 

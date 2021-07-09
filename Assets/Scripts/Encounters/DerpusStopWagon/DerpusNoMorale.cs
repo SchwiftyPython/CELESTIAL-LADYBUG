@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Travel;
+using UnityEngine;
 
 namespace Assets.Scripts.Encounters.DerpusStopWagon
 {
@@ -16,7 +17,8 @@ namespace Assets.Scripts.Encounters.DerpusStopWagon
 
         public override void Run()
         {
-            var derpus = TravelManager.Instance.Party.Derpus;
+            var travelManager = Object.FindObjectOfType<TravelManager>();
+            var derpus = travelManager.Party.Derpus;
 
             Reward = new Reward();
 
@@ -24,18 +26,20 @@ namespace Assets.Scripts.Encounters.DerpusStopWagon
 
             Reward.AddEntityGain(derpus, EntityStatTypes.CurrentEnergy, 10);
 
-            foreach (var companion in TravelManager.Instance.Party.GetCompanions())
+            foreach (var companion in travelManager.Party.GetCompanions())
             {
                 Reward.AddEntityGain(companion, EntityStatTypes.CurrentEnergy, 10);
             }
 
             var fullResultDescription = new List<string> { Description + "\n" };
 
-            var rewardsText = TravelManager.Instance.ApplyEncounterReward(Reward);
+            var rewardsText = travelManager.ApplyEncounterReward(Reward);
 
             fullResultDescription.AddRange(rewardsText);
 
-            EventMediator.Instance.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
         }
     }
 }

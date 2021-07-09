@@ -22,7 +22,8 @@ namespace Assets.Scripts.UI
 
         private void Start()
         {
-            EventMediator.Instance.SubscribeToEvent(HoverPopupEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(HoverPopupEvent, this);
             Hide();
         }
 
@@ -31,14 +32,16 @@ namespace Assets.Scripts.UI
             _name.text = targetEntity.Name;
             _health.text = $"{targetEntity.Stats.CurrentHealth}/{targetEntity.Stats.MaxHealth}";
 
-            var nextTurn = CombatManager.Instance.TurnOrder.ToArray().ToList().IndexOf(targetEntity);
+            var combatManager = Object.FindObjectOfType<CombatManager>();
+            var nextTurn = combatManager.TurnOrder.ToArray().ToList().IndexOf(targetEntity);
 
             _nextTurn.text = $"Acts in {nextTurn} turns";
 
             var position = Input.mousePosition;
             gameObject.transform.position = new Vector2(position.x + 90f, position.y + 80f);
 
-            EventMediator.Instance.SubscribeToEvent(HidePopupEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(HidePopupEvent, this);
 
             gameObject.SetActive(true);
             GameManager.Instance.AddActiveWindow(gameObject);
@@ -46,15 +49,17 @@ namespace Assets.Scripts.UI
 
         private void Hide()
         {
-            EventMediator.Instance.UnsubscribeFromEvent(HidePopupEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.UnsubscribeFromEvent(HidePopupEvent, this);
             gameObject.SetActive(false);
             GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 
         private void OnDestroy()
         {
-            EventMediator.Instance.UnsubscribeFromEvent(HoverPopupEvent, this);
-            EventMediator.Instance.UnsubscribeFromEvent(HidePopupEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator?.UnsubscribeFromEvent(HoverPopupEvent, this);
+            eventMediator?.UnsubscribeFromEvent(HidePopupEvent, this);
             GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 

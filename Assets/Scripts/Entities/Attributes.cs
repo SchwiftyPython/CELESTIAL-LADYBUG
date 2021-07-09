@@ -13,18 +13,69 @@ namespace Assets.Scripts.Entities
 
         private const int StartingAttributeDice = 12;
 
+        private readonly Entity _parent;
+
         //todo need to update Stats when these values change
         public int Agility { get; set; }
         public int Coordination { get; set; }
-        public int Physique { get; set; }
-        public int Intellect { get; set; }
+
+        private int _physique;
+        public int Physique
+        {
+            get => _physique + GetAllModifiersForStat(EntityAttributeTypes.Physique);
+            set 
+            {
+                if (value > AttributeMax)
+                {
+                    _physique = AttributeMax;
+                }
+                else
+                {
+                    _physique = value;
+                }
+            }
+        }
+
+        private int _intellect;
+        public int Intellect
+        {
+            get => _intellect + GetAllModifiersForStat(EntityAttributeTypes.Intellect);
+            set
+            {
+                if (value > AttributeMax)
+                {
+                    _intellect = AttributeMax;
+                }
+                else
+                {
+                    _intellect = value;
+                }
+            }
+        }
+
         public int Acumen { get; set; }
-        public int Charisma { get; set; }
+
+        private int _charisma;
+        public int Charisma
+        {
+            get => _charisma + GetAllModifiersForStat(EntityAttributeTypes.Charisma);
+            set {
+                if (value > AttributeMax)
+                {
+                    _charisma = AttributeMax;
+                }
+                else
+                {
+                    _charisma = value;
+                }
+            }
+        }
 
         //public int Magic { get; set; } todo not implemented
 
-        public Attributes()
+        public Attributes(Entity parent)
         {
+            _parent = parent;
             GenerateAttributeValues();
         }
 
@@ -89,6 +140,32 @@ namespace Assets.Scripts.Entities
         private int GenerateAttributeValue()
         {
             return Random.Range(AttributeMin, AttributeMax + 1);
+        }
+
+        /// <summary>
+        /// Returns all modifiers for the given EntityAttributeType.
+        /// </summary>
+        private int GetAllModifiersForStat(EntityAttributeTypes attribute)
+        {
+            return GetAdditiveModifiers(attribute) * (1 + GetPercentageModifiers(attribute) / 100);
+        }
+
+        /// <summary>
+        /// Applies all modifiers to a new value for the given EntityAttributeType.
+        /// </summary>
+        private int ModifyNewValueForStat(EntityAttributeTypes attribute, int value)
+        {
+            return GetAdditiveModifiers(attribute) + value * (1 + GetPercentageModifiers(attribute) / 100);
+        }
+
+        private int GetAdditiveModifiers(EntityAttributeTypes attribute)
+        {
+            return (int) GlobalHelper.GetAdditiveModifiers(_parent, attribute);
+        }
+
+        private int GetPercentageModifiers(EntityAttributeTypes attribute)
+        {
+            return (int)GlobalHelper.GetPercentageModifiers(_parent, attribute);
         }
     }
 }

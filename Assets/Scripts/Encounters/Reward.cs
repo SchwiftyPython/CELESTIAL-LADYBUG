@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Effects;
 using Assets.Scripts.Entities;
 
 namespace Assets.Scripts.Encounters

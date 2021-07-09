@@ -81,9 +81,11 @@ namespace Assets.Scripts.Encounters.Normal
 
                 optionPenalty = new Penalty();
 
-                optionPenalty.AddEntityLoss(TravelManager.Instance.Party.Derpus, EntityStatTypes.CurrentMorale, 10);
+                var travelManager = Object.FindObjectOfType<TravelManager>();
 
-                foreach (var companion in TravelManager.Instance.Party.GetCompanions())
+                optionPenalty.AddEntityLoss(travelManager.Party.Derpus, EntityStatTypes.CurrentMorale, 10);
+
+                foreach (var companion in travelManager.Party.GetCompanions())
                 {
                     optionPenalty.AddEntityLoss(companion, EntityStatTypes.CurrentMorale, 10);
                 }
@@ -137,7 +139,9 @@ namespace Assets.Scripts.Encounters.Normal
 
             SubscribeToOptionSelectedEvent();
 
-            EventMediator.Instance.Broadcast(GlobalHelper.FourOptionEncounter, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.FourOptionEncounter, this);
         }
     }
 }

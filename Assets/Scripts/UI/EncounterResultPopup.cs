@@ -19,7 +19,8 @@ namespace Assets.Scripts.UI
 
         private void Awake()
         {
-            EventMediator.Instance.SubscribeToEvent(PopupEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            eventMediator.SubscribeToEvent(PopupEvent, this);
             Hide();
         }
 
@@ -52,17 +53,26 @@ namespace Assets.Scripts.UI
             gameObject.SetActive(false);
             GameManager.Instance.RemoveActiveWindow(gameObject);
 
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
             if (_encounterType == EncounterType.Camping)
             {
-                EventMediator.Instance.Broadcast(CampingEncounterFinished, this, _countsAsDayTraveled);
+                eventMediator.Broadcast(CampingEncounterFinished, this, _countsAsDayTraveled);
             }
 
-            EventMediator.Instance.Broadcast(EncounterFinished, this);
+            eventMediator.Broadcast(EncounterFinished, this);
         }
 
         private void OnDestroy()
         {
-            EventMediator.Instance.UnsubscribeFromEvent(PopupEvent, this);
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            if (eventMediator == null)
+            {
+                return;
+            }
+
+            eventMediator.UnsubscribeFromEvent(PopupEvent, this);
             GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 
