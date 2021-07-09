@@ -10,6 +10,8 @@ using Assets.Scripts.Effects.Args;
 using Assets.Scripts.Entities.Names;
 using Assets.Scripts.Items;
 using Assets.Scripts.UI;
+using GoRogue;
+using GoRogue.DiceNotation;
 using UnityEngine;
 using GameObject = GoRogue.GameFramework.GameObject;
 using Object = UnityEngine.Object;
@@ -19,6 +21,8 @@ namespace Assets.Scripts.Entities
 {
     public class Entity : GameObject
     {
+        private const float BaseCombatDifficulty = 10;
+
         private int _level;
         private int _xp;
         private bool _isPlayer;
@@ -28,7 +32,8 @@ namespace Assets.Scripts.Entities
         //todo use this instead of get component if possible
         private AiController _aiController;
 
-        private int _lastTurnMoved;
+        private bool _moved;
+        private bool _movedLastTurn;
 
         public string Name { get; set; }
         public Sex Sex { get; }
@@ -46,68 +51,6 @@ namespace Assets.Scripts.Entities
 
         public UnityEngine.GameObject CombatSpritePrefab { get; protected set; }
         public UnityEngine.GameObject CombatSpriteInstance { get; private set; }
-
-        /*public Entity(bool isPlayer, bool isDerpus = false) : base((-1, -1), 1, null, false, false, true)
-        {
-            if (isDerpus)
-            {
-                Race = new Race(Race.RaceType.Derpus);
-                EntityClass = EntityClass.Derpus;
-                Sex = Sex.Male;
-                Name = "Derpus";
-                CombatSpritePrefab = EntityPrefabStore.Instance.DerpusPrototypePrefab;
-            }
-            else
-            {
-                var rType = PickRace();
-
-                while (rType == Race.RaceType.Derpus)
-                {
-                    rType = PickRace();
-                }
-
-                Race = new Race(rType);
-
-                EntityClass = PickEntityClass();
-
-                while (EntityClass == EntityClass.Derpus)
-                {
-                    EntityClass = PickEntityClass();
-                }
-
-                Sex = PickSex();
-                Name = GenerateName(null, Sex);
-
-                //todo pick prefab based on race and/or class
-                //todo restrict to certain races and classes if player
-                if (isPlayer)
-                {
-                    CombatSpritePrefab = EntityPrefabStore.Instance.CompanionPrototypePrefab;
-                    _isPlayer = true;
-                }
-                else
-                {
-                    CombatSpritePrefab = EntityPrefabStore.Instance.EnemyPrototypePrefab;
-                    _isPlayer = false;
-                }
-            }
-
-            Attributes = new Attributes(this);
-            Skills = new Skills(this);
-
-            Abilities = new Dictionary<Type, Ability>();
-
-            GenerateStartingEquipment();
-
-            Stats = new Stats(this, Attributes, Skills);
-
-            Effects = new List<Effect>();
-
-            GeneratePortrait();
-
-            _level = 1;
-            _xp = 0;
-        }*/
 
         public Entity(Race.RaceType rType, EntityClass eClass, bool isPlayer) : base((-1, -1), 1, null, false, false, true)
         {
@@ -178,9 +121,20 @@ namespace Assets.Scripts.Entities
             return Regex.Replace(Name.Split()[0], @"[^0-9a-zA-Z\ ]+", "");
         }
 
-        public bool MovedLastTurn(int currentTurn)
+        public bool MovedLastTurn() //todo this won't work - maybe use a boolean instead
         {
-            return currentTurn - _lastTurnMoved <= 1;
+            return _movedLastTurn;
+        }
+
+        public bool MovedThisTurn()
+        {
+            return _moved;
+        }
+
+        public void UpdateMovedFlags()
+        {
+            _movedLastTurn = _moved;
+            _moved = false;
         }
 
         public void RefillActionPoints()
@@ -204,6 +158,8 @@ namespace Assets.Scripts.Entities
 
             if (Position == tile.Position)
             {
+                _moved = true;
+
                 Stats.CurrentActionPoints -= apMovementCost;
 
                 currentTile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(null);
@@ -310,6 +266,10 @@ namespace Assets.Scripts.Entities
                     Abilities.Add(ability.GetType(), ability);
                 }
             }
+
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this);
         }
 
         public void UnEquip(EquipLocation slot, bool swapAttempt)
@@ -359,13 +319,25 @@ namespace Assets.Scripts.Entities
             }
         }
 
-        public void MeleeAttack(Entity target)
+        public void MeleeAttack(Entity target, IModifierProvider modifierProvider = null)
         {
-            var hitChance = CalculateChanceToHitMelee(target);
+            var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
-            if (AttackHit(hitChance, target)) 
+            int toHitMod = 0;
+            if (modifierProvider != null)
             {
-                ApplyDamageWithEquipment(target, false);
+                toHitMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.MeleeToHit);
+            }
+
+            if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Melee, toHitMod, out bool criticalHit)) 
+            {
+                int damageMod = 0;
+                if (modifierProvider != null)
+                {
+                    damageMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.Damage);
+                }
+
+                ApplyDamageWithEquipment(target, false, damageMod, criticalHit);
 
                 if (target.IsDead())
                 {
@@ -390,13 +362,25 @@ namespace Assets.Scripts.Entities
             }
         }
 
-        public void MeleeAttackWithSlot(Entity target, EquipLocation slot)
+        public void MeleeAttackWithSlot(Entity target, EquipLocation slot, IModifierProvider modifierProvider = null)
         {
-            var hitChance = CalculateChanceToHitMelee(target);
+            var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
-            if (AttackHit(hitChance, target))
+            int toHitMod = 0;
+            if (modifierProvider != null)
             {
-                ApplyDamageWithEquipment(target, false, slot);
+                toHitMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.MeleeToHit);
+            }
+
+            if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Melee, toHitMod, out bool criticalHit))
+            {
+                int damageMod = 0;
+                if (modifierProvider != null)
+                {
+                    damageMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.Damage);
+                }
+
+                ApplyDamageWithEquipment(target, false, damageMod, criticalHit, slot);
 
                 if (target.IsDead())
                 {
@@ -421,13 +405,25 @@ namespace Assets.Scripts.Entities
             }
         }
 
-        public void RangedAttack(Entity target)
+        public void RangedAttack(Entity target, IModifierProvider modifierProvider = null)
         {
-            var hitChance = CalculateChanceToHitRanged(target);
+            var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Ranged);
 
-            if (AttackHit(hitChance, target))
+            int toHitMod = 0;
+            if (modifierProvider != null)
             {
-                ApplyDamageWithEquipment(target, true);
+                toHitMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.MeleeToHit);
+            }
+
+            if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Ranged, toHitMod, out bool criticalHit))
+            {
+                int damageMod = 0;
+                if (modifierProvider != null)
+                {
+                    damageMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.Damage);
+                }
+
+                ApplyDamageWithEquipment(target, true, damageMod, criticalHit);
 
                 if (target.IsDead())
                 {
@@ -454,20 +450,46 @@ namespace Assets.Scripts.Entities
 
         public void AttackWithAbility(Entity target, Ability ability)
         {
-            int hitChance;
+            IModifierProvider modifierProvider = ability as IModifierProvider;
+
+            int toHitMod = 0;
+
+            float hitDifficulty;
+            bool attackHit;
+            bool criticalHit;
 
             if (ability.IsRanged())
             {
-                hitChance = CalculateChanceToHitRanged(target);
+                hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Ranged);
+
+                if (modifierProvider != null)
+                {
+                    toHitMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.RangedToHit);
+                }
+
+                attackHit = AttackHit((int) hitDifficulty, target, EntitySkillTypes.Ranged, toHitMod, out criticalHit);
             }
             else
             {
-                hitChance = CalculateChanceToHitMelee(target);
+                hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
+
+                if (modifierProvider != null)
+                {
+                    toHitMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.MeleeToHit);
+                }
+
+                attackHit = AttackHit((int) hitDifficulty, target, EntitySkillTypes.Melee, toHitMod, out criticalHit);
             }
 
-            if (AttackHit(hitChance, target))
+            if (attackHit)
             {
-                ApplyDamageWithAbility(target, ability);
+                int damageMod = 0;
+                if (modifierProvider != null)
+                {
+                    damageMod = (int)modifierProvider.GetAdditiveModifiers(CombatModifierTypes.Damage);
+                }
+
+                ApplyDamageWithAbility(target, ability, damageMod, criticalHit);
 
                 if (target.IsDead())
                 {
@@ -492,17 +514,18 @@ namespace Assets.Scripts.Entities
             }
         }
 
-        public void ApplyDamageWithAbility(Entity target, Ability ability)
+        public void ApplyDamageWithAbility(Entity target, Ability ability, int damageMod, bool criticalHit)
         {
             int minDamage = 0;
             int maxDamage = 0;
 
             (minDamage, maxDamage) = ability.GetAbilityDamageRange();
 
-            ApplyDamage(target, (minDamage, maxDamage));
+            ApplyDamage(target, (minDamage, maxDamage), damageMod, criticalHit);
         }
 
-        public void ApplyDamageWithEquipment(Entity target, bool ranged, EquipLocation slot = EquipLocation.Weapon)
+        public void ApplyDamageWithEquipment(Entity target, bool ranged, int damageMod, bool criticalHit,
+            EquipLocation slot = EquipLocation.Weapon)
         {
             var equippedItem = Equipment.GetItemInSlot(slot);
 
@@ -521,26 +544,43 @@ namespace Assets.Scripts.Entities
                 }
             }
 
-            ApplyDamage(target, (minDamage, maxDamage));
+            ApplyDamage(target, (minDamage, maxDamage), damageMod, criticalHit);
         }
 
-        public void ApplyDamage(Entity target, (int, int) damageRange)
+        private void ApplyDamage(Entity target, (int, int) damageRange, int damageMod, bool criticalHit)
         {
             var (minDamage, maxDamage) = damageRange;
 
-            var damage = Random.Range(minDamage, maxDamage + 1) + Stats.Attack;
+            var damage = Random.Range(minDamage, maxDamage + 1) + damageMod;
 
             damage = GlobalHelper.ModifyNewValueForStat(this, CombatModifierTypes.Damage, damage);
 
-            var targetArmor = target.GetTotalArmorToughness();
+            if (criticalHit)
+            {
+                // const float critBoost = .05f;
+                //
+                // damage += (int)Mathf.Ceil(damage * critBoost);
 
-            var damageReduction = GetDamageReduction(damage, targetArmor);
+                var wildRoll = GlobalHelper.RollWildDie();
 
-            damage -= (int)(damage * damageReduction);
+                damage += wildRoll;
+            }
 
-            target.SubtractHealth(damage);
+            var damageReduction = target.GetDamageReduction();
 
-            var message = $"{Name} dealt {damage} damage to {target.Name}!";
+            damage -= damageReduction;
+
+            string message;
+            if (damage <= 0)
+            {
+                message = $"{target.Name} resisted all damage!"; //todo see if we can communicate to player if there is no chance for attack to do damage
+            }
+            else
+            {
+                target.SubtractHealth(damage);
+
+                message = $"{Name} dealt {damage} damage to {target.Name}!";
+            }
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 
@@ -580,26 +620,22 @@ namespace Assets.Scripts.Entities
 
         private int GetTotalArmorToughness()
         {
-            var toughnessTotal = 0;
-
-            foreach (EquipLocation location in Enum.GetValues(typeof(EquipLocation)))
+            if (Equipment == null)
             {
-                if(location == EquipLocation.Weapon)
-                {
-                    continue;
-                }
-
-                var  equippedArmor = Equipment.GetItemInSlot(location);
-
-                if (equippedArmor == null)
-                {
-                    continue;
-                }
-
-                toughnessTotal += equippedArmor.GetToughness();
+                return 0;
             }
 
-            return toughnessTotal;
+            return Equipment.GetTotalArmorToughness();
+        }
+
+        private int GetDodgeTotal()
+        {
+            if (Equipment == null)
+            {
+                return 0;
+            }
+
+            return Equipment.GetDodgeTotal();
         }
 
         public EquipableItem GetEquippedWeapon()
@@ -617,47 +653,201 @@ namespace Assets.Scripts.Entities
             return Equipment;
         }
 
-        public bool TargetInRange(Entity target)
+        private float CalculateCombatDifficulty(Entity target, EntitySkillTypes skillType)
         {
-            //todo prob not needed since everything is ability based
-            throw new NotImplementedException();
+            var totalDifficulty = BaseCombatDifficulty / 2; //todo testing to make easier for now
+
+            totalDifficulty += target.GetDodgeTotal();
+
+            //Debug.Log($"Base Combat Difficulty: {totalDifficulty}");
+
+            return totalDifficulty;
         }
 
-        public int CalculateChanceToHitMelee(Entity target)
+        public Tuple<int, List<string>> GetHitChancePositives(Entity target, EntitySkillTypes skillType)
         {
-            var total = CalculateBaseChanceToHit(target);
+            var posMod = 0;
+            var posMessages = new List<string>();
 
-            total += (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.MeleeToHit);
+            if (skillType == EntitySkillTypes.Melee)
+            {
+                if (target.IsSurrounded())
+                {
+                    posMod += 10;
+                    posMessages.Add("Target surrounded");
+                }
+            }
+            else if (skillType == EntitySkillTypes.Ranged)
+            {
+                var distanceToTarget = Distance.CHEBYSHEV.Calculate(Position, target.Position);
 
-            return total;
+                if (distanceToTarget < 6) 
+                {
+                    posMod += 3;
+                    posMessages.Add($"Distance of {distanceToTarget}");
+                }
+
+                if (!MovedLastTurn()) 
+                {
+                    posMod += 10;
+                    posMessages.Add("Attacker didn't move last turn");
+                }
+
+                var rangedToHitMod = (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.RangedToHit);
+
+                if (rangedToHitMod > 0)
+                {
+                    posMod += rangedToHitMod;
+                    posMessages.Add("From equipment");
+                }
+            }
+
+            return new Tuple<int, List<string>>(posMod, posMessages.Distinct().ToList());
         }
 
-        public int CalculateChanceToHitRanged(Entity target)
+        public Tuple<int, List<string>> GetHitChanceNegatives(Entity target, EntitySkillTypes skillType)
         {
-            var total = CalculateBaseChanceToHit(target);
+            var negMod = 0;
+            var negMessages = new List<string>();
 
-            total += (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.RangedToHit);
+            if (skillType == EntitySkillTypes.Melee)
+            {
 
-            return total;
+            }
+            else if (skillType == EntitySkillTypes.Ranged)
+            {
+                var distanceToTarget = Distance.CHEBYSHEV.Calculate(Position, target.Position);
+
+                if (distanceToTarget >= 6)
+                {
+                    negMod -= 10;
+                    negMessages.Add($"Distance of {distanceToTarget}");
+                }
+
+                if (MovedThisTurn())
+                {
+                    negMod -= 10;
+                    negMessages.Add("Attacker moved");
+                } 
+                else if (MovedLastTurn())
+                {
+                    negMod -= 10;
+                    negMessages.Add("Attacker moved last turn");
+                }
+
+                if (target.MovedLastTurn())
+                {
+                    negMod -= 8;
+                    negMessages.Add("Target moved last turn");
+                }
+
+                var rangedToHitMod = (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.RangedToHit);
+
+                if (rangedToHitMod < 0)
+                {
+                    negMod += rangedToHitMod;
+                    negMessages.Add("From equipment");
+                }
+            }
+
+            return new Tuple<int, List<string>>(negMod, negMessages.Distinct().ToList());
         }
 
-        private int CalculateBaseChanceToHit(Entity target)
+        public (int hitChance, List<string> positives, List<string> negatives) CalculateChanceToHitMelee(Entity target)
         {
-            Debug.Log($"Attacker Melee Skill: {Stats.MeleeSkill}");
-            Debug.Log($"Defender Melee Skill: {target.Stats.MeleeSkill}");
+            Debug.Log($"Attacker Melee Skill: {Skills.Melee}");
 
-            return Stats.MeleeSkill - target.Stats.MeleeSkill / 10;
+            var totalDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
+
+            var dicePotential = Skills.Melee * 6;
+
+            var chanceToHit = (int)((dicePotential - totalDifficulty) / dicePotential * 100);
+
+            var hitChancePositives = GetHitChancePositives(target, EntitySkillTypes.Melee);
+
+            var pos = hitChancePositives.Item1;
+
+            var hitChanceNegatives = GetHitChanceNegatives(target, EntitySkillTypes.Melee);
+
+            var neg = hitChanceNegatives.Item1;
+
+            chanceToHit += pos + neg;
+
+            return (chanceToHit, hitChancePositives.Item2, hitChanceNegatives.Item2);
         }
 
-        private bool AttackHit(int chanceToHit, Entity target)
+        public (int hitChance, List<string> positives, List<string> negatives) CalculateChanceToHitRanged(Entity target)
+        {
+            Debug.Log($"Attacker Ranged Skill: {Skills.Ranged}");
+
+            var totalDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Ranged);
+
+            var dicePotential = Skills.Ranged * 6;
+
+            var chanceToHit = (int)((dicePotential - totalDifficulty) / dicePotential * 100);
+
+            var hitChancePositives = GetHitChancePositives(target, EntitySkillTypes.Ranged);
+
+            var pos = hitChancePositives.Item1;
+
+            var hitChanceNegatives = GetHitChanceNegatives(target, EntitySkillTypes.Ranged);
+
+            var neg = hitChanceNegatives.Item1;
+
+            chanceToHit += pos + neg;
+
+            return (chanceToHit, hitChancePositives.Item2, hitChanceNegatives.Item2);
+        }
+
+        private bool AttackHit(int hitDifficulty, Entity target, EntitySkillTypes skillType, int toHitMod, out bool criticalHit)
         {
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 
-            //todo diceroller
-            var roll = Random.Range(1, 101);
+            int coreRoll;
+            
+            if (skillType == EntitySkillTypes.Melee)
+            {
+                coreRoll = Dice.Roll($"{Skills.Melee - 1}d6");
+                //coreRoll += (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.MeleeToHit);
+
+                var hitChancePositives = GetHitChancePositives(target, EntitySkillTypes.Melee);
+
+                var pos = hitChancePositives.Item1;
+
+                var hitChanceNegatives = GetHitChanceNegatives(target, EntitySkillTypes.Melee);
+
+                var neg = hitChanceNegatives.Item1;
+
+                coreRoll += pos + neg;
+            }
+            else if (skillType == EntitySkillTypes.Ranged)
+            {
+                coreRoll = Dice.Roll($"{Skills.Ranged - 1}d6");
+                //coreRoll += (int)GlobalHelper.GetAdditiveModifiers(this, CombatModifierTypes.RangedToHit);
+
+                var hitChancePositives = GetHitChancePositives(target, EntitySkillTypes.Ranged);
+
+                var pos = hitChancePositives.Item1;
+
+                var hitChanceNegatives = GetHitChanceNegatives(target, EntitySkillTypes.Ranged);
+
+                var neg = hitChanceNegatives.Item1;
+
+                coreRoll += pos + neg;
+            }
+            else
+            {
+                Debug.LogError($"Invalid SkillType used to attack: {skillType}");
+                criticalHit = false;
+                return false;
+            }
+
+            var wildRoll = GlobalHelper.RollWildDie();
+
+            var totalRoll = coreRoll + wildRoll + toHitMod;
 
             string message;
-            if (roll <= chanceToHit)
+            if (totalRoll >= hitDifficulty)
             {
                 if (target.HasAbility(typeof(DivineIntervention)))
                 {
@@ -667,11 +857,21 @@ namespace Assets.Scripts.Entities
 
                         eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
+                        criticalHit = false;
                         return false;
                     }
                 }
 
-                message = $"Attack hit!";
+                if (wildRoll > 6)  //todo need to apply crit to damage somehow
+                {
+                    criticalHit = true;
+                    message = "CRITICAL HIT!";
+                }
+                else
+                {
+                    criticalHit = false;
+                    message = $"Attack hit!";
+                }
 
                 eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
@@ -685,6 +885,36 @@ namespace Assets.Scripts.Entities
             eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
             eventMediator.Broadcast(GlobalHelper.TargetMiss, this);
+
+            criticalHit = false;
+            return false;
+        }
+
+        public bool IsSurrounded()
+        {
+            var currentTile = ((CombatMap) (CurrentMap)).GetTileAt(Position);
+
+            var numEnemies = 0;
+
+            foreach (var tile in currentTile.GetAdjacentTiles())
+            {
+                var entity = tile.GetEntity();
+
+                if (entity == null)
+                {
+                    continue;
+                }
+
+                if (IsPlayer() != entity.IsPlayer())
+                {
+                    numEnemies++;
+
+                    if (numEnemies > 1)
+                    {
+                        return true;
+                    }
+                }
+            }
 
             return false;
         }
@@ -821,13 +1051,17 @@ namespace Assets.Scripts.Entities
             AddEnergy(45); //todo make a constant somewhere
         }
 
-        private float GetDamageReduction(int damage, int armor)
+        private int GetDamageReduction()
         {
-            var reduction = (damage - armor) * (400f / (400f + armor));
+            var armor = GetTotalArmorToughness();
 
-            Debug.Log($"Damage reduction = {reduction}%");
+            var physiqueRoll = Dice.Roll($"{Attributes.Physique}d6");
 
-            return reduction / 100;
+            var reduction = armor; //+ physiqueRoll; //might be too much with physique roll
+
+            Debug.Log($"Damage reduction = {reduction}");
+
+            return reduction;
         }
 
         private string GenerateName(List<string> possibleNameFiles, Sex sex)

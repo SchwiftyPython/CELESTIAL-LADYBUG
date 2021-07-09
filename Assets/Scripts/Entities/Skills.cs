@@ -7,14 +7,15 @@ namespace Assets.Scripts.Entities
 {
     public class Skills
     {
-        private const int SkillMin = 0;
-        private const int SkillMax = 5;
+        private const int SkillMin = 1;
+        private const int SkillMax = 50;
 
         private const int StartingSkillDice = 7;
+        private const int StartingSkillMax = 5;
 
         private Entity _parent;
 
-        private int _dodge;
+        /*private int _dodge;
         public int Dodge 
         {
             get
@@ -43,9 +44,13 @@ namespace Assets.Scripts.Entities
                     _dodge = value;
                 }
             }
-        }
+        }*/
+
+        //todo probably should define setters and getters here
+        public int Melee { get; set; }
+        public int Ranged { get; set; }
         public int Lockpicking { get; set; }
-        public int Toughness { get; set; }
+        public int Endurance { get; set; }
         public int Healing { get; set; }
         public int Survival { get; set; }
 
@@ -87,13 +92,19 @@ namespace Assets.Scripts.Entities
             GenerateSkillValues();
         }
 
+        //todo this assumes level 1 entity
+        //could take in a level (int) to create higher level fellers
+        //or even better would be to use whatever level up system we slam together
         public void GenerateSkillValues()
         {
+            //todo also need to consider that some classes don't melee or use ranged 
+            //could define these values per class 
             var startingValues = new Dictionary<EntitySkillTypes, int>
             {
-                { EntitySkillTypes.Dodge, SkillMin },
+                { EntitySkillTypes.Melee, SkillMin },
+                { EntitySkillTypes.Ranged, SkillMin },
                 { EntitySkillTypes.Lockpicking, SkillMin },
-                { EntitySkillTypes.Toughness, SkillMin },
+                { EntitySkillTypes.Endurance, SkillMin },
                 { EntitySkillTypes.Healing, SkillMin },
                 { EntitySkillTypes.Survival, SkillMin },
                 { EntitySkillTypes.Persuasion, SkillMin }
@@ -107,7 +118,7 @@ namespace Assets.Scripts.Entities
 
                 var attributeKey = startingValues.ElementAt(attributeIndex).Key;
 
-                if (startingValues[attributeKey] >= SkillMax)
+                if (startingValues[attributeKey] >= StartingSkillMax)
                 {
                     continue;
                 }
@@ -120,14 +131,17 @@ namespace Assets.Scripts.Entities
             {
                 switch (startingValue.Key)
                 {
-                    case EntitySkillTypes.Dodge:
-                        Dodge = startingValue.Value;
+                    case EntitySkillTypes.Melee:
+                        Melee = startingValue.Value;
+                        break;
+                    case EntitySkillTypes.Ranged:
+                        Ranged = startingValue.Value;
                         break;
                     case EntitySkillTypes.Lockpicking:
                         Lockpicking = startingValue.Value;
                         break;
-                    case EntitySkillTypes.Toughness:
-                        Toughness = startingValue.Value;
+                    case EntitySkillTypes.Endurance:
+                        Endurance = startingValue.Value;
                         break;
                     case EntitySkillTypes.Healing:
                         Healing = startingValue.Value;

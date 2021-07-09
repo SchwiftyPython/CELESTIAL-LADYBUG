@@ -4,7 +4,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Assets.Scripts.Abilities;
+using Assets.Scripts.Combat;
 using Assets.Scripts.Entities;
+using GoRogue;
+using GoRogue.DiceNotation;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -230,11 +234,10 @@ namespace Assets.Scripts
                 total += item.GetAdditiveModifiers(modType);
             }
 
-            var abilities = parent.Abilities;
+            List<Ability> passiveAbilities = parent.Abilities.Values.Where(a => a.IsPassive).ToList();
 
-            total += GetAdditiveModifiersInCollection(abilities.Values, modType);
+            total += GetAdditiveModifiersInCollection(passiveAbilities, modType);
             total += GetAdditiveModifiersInCollection(parent.Effects, modType);
-            //total += GetAdditiveModifiersInCollection(parent.EffectTriggers?.Effects, modType);
 
             return total;
         }
@@ -265,11 +268,10 @@ namespace Assets.Scripts
                 total += item.GetPercentageModifiers(modType);
             }
 
-            var abilities = parent.Abilities;
+            List<Ability> passiveAbilities = parent.Abilities.Values.Where(a => a.IsPassive).ToList();
 
-            total += GetPercentageModifiersInCollection(abilities.Values, modType);
+            total += GetPercentageModifiersInCollection(passiveAbilities, modType);
             total += GetPercentageModifiersInCollection(parent.Effects, modType);
-            //total += GetPercentageModifiersInCollection(parent.EffectTriggers?.Effects, modType);
 
             return total;
         }
@@ -347,9 +349,45 @@ namespace Assets.Scripts
             return lowerCase ? builder.ToString().ToLower() : builder.ToString();
         }
 
-        public static Object GetObjectOfType(Type objectType)
+        public static int RollWildDie()
         {
-            return FindObjectOfType(objectType);
+            var roll = Dice.Roll("1d6");
+
+            var total = roll;
+
+            while (roll == 6)
+            {
+                roll = Dice.Roll("1d6");
+                total += roll;
+            }
+
+            Debug.Log($"Wild Roll Total: {total}");
+
+            return total;
+        }
+
+        public static bool HasLineOfSight(Coord startPos, Coord targetCoord)
+        {
+            var line = Lines.Get(startPos, targetCoord).ToList();
+
+            var combatManager = FindObjectOfType<CombatManager>();
+
+            var map = combatManager.Map;
+
+            foreach (var coord in line)
+            {
+                if (coord == line.First() || coord == line.Last())
+                {
+                    continue;
+                }
+
+                if (!map.GetTileAt(coord).IsWalkable)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

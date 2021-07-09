@@ -159,6 +159,8 @@ namespace Assets.Scripts.Combat
 
                         ActiveEntity.RefillActionPoints();
 
+                        ActiveEntity.UpdateMovedFlags();
+
                         HighlightActiveEntitySprite();
 
                         //_combatInput.HighlightMovementRange();

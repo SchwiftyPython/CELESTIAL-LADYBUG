@@ -4,17 +4,21 @@ namespace Assets.Scripts
 {
     public enum EntitySkillTypes
     {
-        [Description("Dodge")]
-        Dodge,
+        [Description("Melee")]
+        Melee,
+        [Description("Ranged")]
+        Ranged,
         [Description("Lockpicking")]
         Lockpicking,
-        [Description("Toughness")]
-        Toughness,
+        [Description("Endurance")]
+        Endurance,
         [Description("Healing")]
         Healing,
         [Description("Survival")]
         Survival,
         [Description("Persuasion")]
-        Persuasion
+        Persuasion,
+        [Description("Dodge")]
+        Dodge
     }
 }

@@ -1205,9 +1205,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Toughness
-
-'
+  m_text: Endurance
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f4bccea45e50e984e9b93fbe219eaa8d, type: 2}
   m_sharedMaterial: {fileID: -8101100261937072485, guid: f4bccea45e50e984e9b93fbe219eaa8d,
@@ -1491,7 +1489,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Attack
+  m_text: 'Melee
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f4bccea45e50e984e9b93fbe219eaa8d, type: 2}
   m_sharedMaterial: {fileID: -8101100261937072485, guid: f4bccea45e50e984e9b93fbe219eaa8d,
@@ -1741,7 +1741,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &189159130
 GameObject:
@@ -1860,7 +1860,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &198937331
 GameObject:
@@ -3256,7 +3256,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &328883882
 GameObject:
@@ -3481,7 +3481,7 @@ GameObject:
   - component: {fileID: 338063067}
   - component: {fileID: 338063066}
   m_Layer: 5
-  m_Name: Dodge
+  m_Name: Ranged
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7993,7 +7993,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &717388785
 GameObject:
@@ -8412,8 +8412,8 @@ MonoBehaviour:
   _health: {fileID: 485875465}
   _energy: {fileID: 1943244946}
   _morale: {fileID: 1904433491}
-  _attack: {fileID: 615341114}
-  _dodge: {fileID: 1625792648}
+  _melee: {fileID: 615341114}
+  _ranged: {fileID: 1625792648}
   _lockpick: {fileID: 921101024}
   _toughness: {fileID: 1397448028}
   _healing: {fileID: 402367575}
@@ -9022,7 +9022,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &845652837
 GameObject:
@@ -9194,49 +9194,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 851073140}
   m_CullTransparentMesh: 0
---- !u!1 &853990996
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 853990998}
-  - component: {fileID: 853990997}
-  m_Layer: 0
-  m_Name: EventMediator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &853990997
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 853990996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 845b49997dee5eb48b435be656d3f8f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &853990998
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 853990996}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 910.8661, y: 546.79755, z: -152.95859}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &857901407
 GameObject:
   m_ObjectHideFlags: 0
@@ -9596,7 +9553,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &881781839
 SpriteRenderer:
@@ -10209,7 +10166,7 @@ RectTransform:
   - {fileID: 744305535}
   - {fileID: 1067809256}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -11229,7 +11186,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1027314145
 GameObject:
@@ -15408,7 +15365,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1386299630
 GameObject:
@@ -15557,7 +15514,7 @@ GameObject:
   - component: {fileID: 1395854715}
   - component: {fileID: 1395854714}
   m_Layer: 5
-  m_Name: Toughness
+  m_Name: Endurance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15947,7 +15904,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1413376650
 GameObject:
@@ -20576,7 +20533,7 @@ GameObject:
   - component: {fileID: 1801647283}
   - component: {fileID: 1801647282}
   m_Layer: 5
-  m_Name: Attack
+  m_Name: Melee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20779,7 +20736,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1833392579
 GameObject:
@@ -21298,7 +21255,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Dodge
+  m_text: 'Ranged
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f4bccea45e50e984e9b93fbe219eaa8d, type: 2}
   m_sharedMaterial: {fileID: -8101100261937072485, guid: f4bccea45e50e984e9b93fbe219eaa8d,

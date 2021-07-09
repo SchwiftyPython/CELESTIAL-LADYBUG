@@ -221,49 +221,7 @@ namespace Assets.Scripts.Entities
         }
 
         public int Initiative { get; set; }
-        public int Attack { get; set; }
-
-        private int _meleeSkill;
-        public int MeleeSkill
-        {
-            get => _meleeSkill;
-            set
-            {
-                if (value < StatMin)
-                {
-                    _meleeSkill = StatMin;
-                }
-                else if (value > StatCap)
-                {
-                    _meleeSkill = StatCap;
-                }
-                else
-                {
-                    _meleeSkill = value;
-                }
-            }
-        }
-
-        private int _rangedSkill;
-        public int RangedSkill
-        {
-            get => _rangedSkill;
-            set 
-            {
-                if (value < StatMin)
-                {
-                    _rangedSkill = StatMin;
-                }
-                else if (value > StatCap)
-                {
-                    _rangedSkill = StatCap;
-                }
-                else
-                {
-                    _rangedSkill = value;
-                }
-            }
-        }
+       
         public int Armor { get; set; } //todo maybe only for some types or can we "equip" natural armor in those cases?
         public int Critical { get; set; } //todo have this ignore damage reduction when implemented
         
@@ -278,23 +236,13 @@ namespace Assets.Scripts.Entities
             MaxHealth =  RollD6(attributes.Physique) + 20;
             CurrentHealth = MaxHealth;
 
-            MaxEnergy = RollD6(skills.Toughness) + 20;
+            MaxEnergy = RollD6(skills.Endurance) + 20;
             CurrentEnergy = MaxEnergy;
 
             MaxMorale = RollD6(attributes.Charisma) + 20;
             CurrentMorale = MaxMorale;
 
             Initiative = RollD6(attributes.Acumen) + 20;
-
-            Attack = (int) Math.Ceiling(attributes.Physique / 2.0f);
-
-            MeleeSkill = RollD6(attributes.Agility) * 3 + 10;
-
-            RangedSkill = RollD6(attributes.Coordination) * 3 + 10; 
-
-            //Armor = RollD20() + 7;
-
-            //Critical = (int)(attributes.Agility * 2.4 + attributes.Intellect * 2.4 + RollD20()); //todo use wild die for critical success or failures
 
             MaxActionPoints = 10;
             CurrentActionPoints = CurrentActionPoints;

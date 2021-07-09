@@ -59,7 +59,7 @@ namespace Assets.Scripts
                 catch (Exception e)
                 {
                     subscribers.Remove(sub);
-                    Debug.LogError(e);
+                    Debug.LogWarning("Missing Subscriber: " + e + "\nRemoved from EventMediator.");
                 }
             }
         }

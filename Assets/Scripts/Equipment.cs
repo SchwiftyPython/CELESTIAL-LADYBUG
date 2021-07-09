@@ -203,6 +203,49 @@ namespace Assets.Scripts
             return allowedItemGroups.Contains(item.GetItemGroup());
         }
 
+        public int GetTotalArmorToughness()
+        {
+            var toughnessTotal = 0;
+
+            foreach (EquipLocation location in Enum.GetValues(typeof(EquipLocation)))
+            {
+                if (location == EquipLocation.Weapon)
+                {
+                    continue;
+                }
+
+                var equippedArmor = GetItemInSlot(location);
+
+                if (equippedArmor == null)
+                {
+                    continue;
+                }
+
+                toughnessTotal += equippedArmor.GetToughness();
+            }
+
+            return toughnessTotal;
+        }
+
+        public int GetDodgeTotal()
+        {
+            var dodgeTotal = 0;
+
+            foreach (EquipLocation location in Enum.GetValues(typeof(EquipLocation)))
+            {
+                var equippedItem = GetItemInSlot(location);
+
+                if (equippedItem == null)
+                {
+                    continue;
+                }
+
+                dodgeTotal += equippedItem.GetDodgeMod();
+            }
+
+            return dodgeTotal;
+        }
+
         object ISaveable.CaptureState()
         {
             //todo 

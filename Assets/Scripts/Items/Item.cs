@@ -85,7 +85,7 @@ namespace Assets.Scripts.Items
             return ItemType.Defense.Toughness;
         }
 
-        private int GetDodgeMod()
+        public int GetDodgeMod()
         {
             if (ItemType.Defense == null)
             {
