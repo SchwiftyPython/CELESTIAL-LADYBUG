@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Combat;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.UI
@@ -8,40 +9,85 @@ namespace Assets.Scripts.UI
         private const string ShowPopupEvent = GlobalHelper.ShowPauseMenu;
         private const string HidePopupEvent = GlobalHelper.HidePauseMenu;
 
+        [SerializeField] private KeyCode toggleKey = KeyCode.Escape;
+        [SerializeField] private GameObject uiContainer = null;
+
         private void Start()
         {
             Hide();
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(toggleKey))
+            {
+                if (uiContainer.activeSelf)
+                {
+                    Hide();
+                }
+                else
+                {
+                    Show();
+                }
+            }
+        }
+
+
         public void Show()
         {
+            if (GameManager.Instance.CurrentScene.name.Equals(GlobalHelper.CombatScene))
+            {
+                var combatInput = FindObjectOfType<CombatInputController>();
+
+                if (combatInput.TileSelected() || combatInput.AbilitySelected())
+                {
+                    return;
+                }
+
+                uiContainer.SetActive(true);
+                GameManager.Instance.AddActiveWindow(uiContainer);
+
+                return;
+            }
+
+            uiContainer.SetActive(true);
+            GameManager.Instance.AddActiveWindow(uiContainer);
+
             EventMediator eventMediator = FindObjectOfType<EventMediator>();
 
-            eventMediator.SubscribeToEvent(HidePopupEvent, this);
-            eventMediator.UnsubscribeFromEvent(ShowPopupEvent, this);
-
             eventMediator.Broadcast(GlobalHelper.PauseTimer, this);
-
-            gameObject.SetActive(true);
-            GameManager.Instance.AddActiveWindow(gameObject);
         }
 
         public void Hide()
         {
+            uiContainer.SetActive(false);
+            GameManager.Instance.RemoveActiveWindow(uiContainer);
+
+            if (GameManager.Instance.CurrentScene.name.Equals(GlobalHelper.CombatScene))
+            {
+                return;
+            }
+
+            if (GameManager.Instance.AnyActiveWindows())
+            {
+                return;
+            }
+
             EventMediator eventMediator = FindObjectOfType<EventMediator>();
 
-            eventMediator.UnsubscribeFromEvent(HidePopupEvent, this);
-            eventMediator.SubscribeToEvent(ShowPopupEvent, this);
+            //todo need to keep paused when inventory is open
 
             eventMediator.Broadcast(GlobalHelper.ResumeTimer, this);
-
-            gameObject.SetActive(false);
-            GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 
         public void LoadMainMenuScene()
         {
             SceneManager.LoadScene(GlobalHelper.TitleScreenScene);
+        }
+
+        public void Retreat()
+        {
+
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

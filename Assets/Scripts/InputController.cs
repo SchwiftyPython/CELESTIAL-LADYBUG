@@ -46,7 +46,7 @@ namespace Assets.Scripts
                     eventMediator.Broadcast(GlobalHelper.ManageParty, this);
                 }
             }
-            else if (Input.GetKeyDown(KeyCode.Escape))
+            /*else if (Input.GetKeyDown(KeyCode.Escape))
             {
                 var pauseMenu = GameObject.Find("PauseMenuMask");
 
@@ -60,7 +60,7 @@ namespace Assets.Scripts
                 {
                     eventMediator.Broadcast(GlobalHelper.ShowPauseMenu, this);
                 }
-            }
+            }*/
         }
     }
 }

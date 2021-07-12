@@ -163,8 +163,6 @@ namespace Assets.Scripts.Combat
 
                         HighlightActiveEntitySprite();
 
-                        //_combatInput.HighlightMovementRange();
-
                         if (ActiveEntityPlayerControlled())
                         {
                             _currentCombatState = CombatState.PlayerTurn;
@@ -370,6 +368,14 @@ namespace Assets.Scripts.Combat
             return true;
         }
 
+        private void Retreat()
+        {
+            //todo add ai to companions
+            //target closest edge to retreat
+            //auto play rest of game with ai
+            //todo also want to mark retreat squares with white flag when map is drawn
+        }
+
         private void DisplayPostCombatPopup()
         {
             _eventMediator.Broadcast(CombatFinished, this);
@@ -408,7 +414,6 @@ namespace Assets.Scripts.Combat
             else if (eventName.Equals(GlobalHelper.ActiveEntityMoved))
             {
                 HighlightActiveEntitySprite();
-                //_combatInput.HighlightMovementRange();
             }
         }
     }
