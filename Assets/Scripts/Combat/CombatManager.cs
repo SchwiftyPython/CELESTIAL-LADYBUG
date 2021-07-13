@@ -4,6 +4,7 @@ using System.Linq;
 using Assets.Scripts.AI;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Travel;
+using Assets.Scripts.UI;
 using GoRogue;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,6 +21,13 @@ namespace Assets.Scripts.Combat
         EndTurn,
         EndCombat,
         NotActive
+    }
+
+    public enum CombatResult
+    {
+        Victory,
+        Defeat,
+        Retreat
     }
 
     public class CombatManager : MonoBehaviour, ISubscriber
@@ -47,6 +55,7 @@ namespace Assets.Scripts.Combat
         public int CurrentTurnNumber { get; private set; }
 
         public List<Entity> Enemies; //todo refactor
+        public List<Entity> Companions;
 
         public GameObject PrototypePawnHighlighterPrefab;
 
@@ -80,6 +89,7 @@ namespace Assets.Scripts.Combat
                     var party = _travelManager.Party.GetCompanions();
 
                     var combatants = new List<Entity>();
+                    Companions = new List<Entity>();
 
                     foreach (var companion in party)
                     {
@@ -89,6 +99,7 @@ namespace Assets.Scripts.Combat
                         }
 
                         combatants.Add(companion);
+                        Companions.Add(companion);
                     }
 
                     combatants.AddRange(Enemies);
@@ -182,10 +193,20 @@ namespace Assets.Scripts.Combat
                 case CombatState.EndCombat:
                     _eventMediator.UnsubscribeFromAllEvents(this);
 
-                    DisplayPostCombatPopup();
+                    CombatResult result;
 
-                    //todo maybe move this portion to the post combat popup
                     if (PlayerDead())
+                    {
+                        result = CombatResult.Defeat;
+                    }
+                    else
+                    {
+                        result = CombatResult.Victory;
+                    }
+
+                    DisplayPostCombatPopup(result);
+                    
+                    /*if (PlayerDead())
                     {
                         _eventMediator.Broadcast(GlobalHelper.GameOver, this);
                     }
@@ -200,7 +221,7 @@ namespace Assets.Scripts.Combat
                         {
                             SceneManager.LoadScene(GlobalHelper.TravelScene);
                         }
-                    }
+                    }*/
 
                     _currentCombatState = CombatState.NotActive;
 
@@ -368,7 +389,7 @@ namespace Assets.Scripts.Combat
             return true;
         }
 
-        private void Retreat()
+        public void Retreat()
         {
             //todo add ai to companions
             //target closest edge to retreat
@@ -376,8 +397,12 @@ namespace Assets.Scripts.Combat
             //todo also want to mark retreat squares with white flag when map is drawn
         }
 
-        private void DisplayPostCombatPopup()
+        private void DisplayPostCombatPopup(CombatResult result)
         {
+            var popup = FindObjectOfType<PostCombatResultsPopup>();
+
+            popup.Show(result);
+
             _eventMediator.Broadcast(CombatFinished, this);
         }
 

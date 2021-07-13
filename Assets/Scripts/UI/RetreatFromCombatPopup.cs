@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Combat;
+using UnityEngine;
 
 namespace Assets.Scripts.UI
 {
@@ -27,7 +28,10 @@ namespace Assets.Scripts.UI
         public void Retreat()
         {
             Hide();
-            //todo tell Combat Manager to do retreat stuff
+
+            var combatManager = FindObjectOfType<CombatManager>();
+
+            combatManager.Retreat();
         }
     }
 }
