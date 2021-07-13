@@ -70,10 +70,8 @@ namespace Assets.Scripts.UI
             {
                 var stats = Instantiate(companionPrefab, companionContainer.transform);
 
-                //todo call prefab script to populate itself
+                stats.GetComponent<PostCombatCompanionStats>().Populate(companion);
             }
         }
-
-
     }
 }

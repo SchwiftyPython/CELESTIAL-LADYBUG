@@ -30,6 +30,14 @@ namespace Assets.Scripts.Combat
         Retreat
     }
 
+    public struct CompanionCombatStats
+    {
+        public int Kills;
+        public int DamageDealt;
+        public int DamageReceived;
+        public int Xp;
+    }
+
     public class CombatManager : MonoBehaviour, ISubscriber
     {
         private const string EndTurnEvent = GlobalHelper.EndTurn;
@@ -55,7 +63,7 @@ namespace Assets.Scripts.Combat
         public int CurrentTurnNumber { get; private set; }
 
         public List<Entity> Enemies; //todo refactor
-        public List<Entity> Companions;
+        public Dictionary<Entity, CompanionCombatStats> Companions;
 
         public GameObject PrototypePawnHighlighterPrefab;
 
@@ -89,7 +97,7 @@ namespace Assets.Scripts.Combat
                     var party = _travelManager.Party.GetCompanions();
 
                     var combatants = new List<Entity>();
-                    Companions = new List<Entity>();
+                    Companions = new Dictionary<Entity, CompanionCombatStats>();
 
                     foreach (var companion in party)
                     {
@@ -99,7 +107,7 @@ namespace Assets.Scripts.Combat
                         }
 
                         combatants.Add(companion);
-                        Companions.Add(companion);
+                        Companions.Add(companion, new CompanionCombatStats());
                     }
 
                     combatants.AddRange(Enemies);
