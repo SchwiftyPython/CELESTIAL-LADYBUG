@@ -167,7 +167,7 @@ GameObject:
   - component: {fileID: 2908897149051105526}
   - component: {fileID: 2908897149051105525}
   m_Layer: 5
-  m_Name: XPLabel
+  m_Name: HPLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -219,7 +219,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: XP
+  m_text: HP
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f4bccea45e50e984e9b93fbe219eaa8d, type: 2}
   m_sharedMaterial: {fileID: -8101100261937072485, guid: f4bccea45e50e984e9b93fbe219eaa8d,
@@ -377,7 +377,7 @@ GameObject:
   - component: {fileID: 2908897149192582475}
   - component: {fileID: 2908897149192582474}
   m_Layer: 5
-  m_Name: HitPointsValue
+  m_Name: KillsValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2109,7 +2109,7 @@ GameObject:
   - component: {fileID: 2908897150856798395}
   - component: {fileID: 2908897150856798394}
   m_Layer: 5
-  m_Name: XPParent
+  m_Name: HPParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2185,7 +2185,7 @@ GameObject:
   - component: {fileID: 2908897150892523503}
   - component: {fileID: 2908897150892523502}
   m_Layer: 5
-  m_Name: XPValue
+  m_Name: HPValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2208,7 +2208,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 15, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 70, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2908897150892523503
 CanvasRenderer:
@@ -2237,7 +2237,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 26
+  m_text: 26/100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f4bccea45e50e984e9b93fbe219eaa8d, type: 2}
   m_sharedMaterial: {fileID: -8101100261937072485, guid: f4bccea45e50e984e9b93fbe219eaa8d,
@@ -2466,6 +2466,7 @@ GameObject:
   - component: {fileID: 2908897151016504677}
   - component: {fileID: 2908897151016504679}
   - component: {fileID: 2908897151016504678}
+  - component: {fileID: 189887626}
   m_Layer: 5
   m_Name: PostCombatCompanionStats
   m_TagString: Untagged
@@ -2537,6 +2538,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &189887626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2908897151016504676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ad336abd25acca4db909cc5e82e1361, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cPortrait: {fileID: 2908897150329956332}
+  cName: {fileID: 2908897150366251519}
+  kills: {fileID: 2908897149192582474}
+  damageDealt: {fileID: 2908897150759446918}
+  damageReceived: {fileID: 2908897149643434861}
+  hp: {fileID: 2908897150892523502}
 --- !u!1 &2908897151024756817
 GameObject:
   m_ObjectHideFlags: 0

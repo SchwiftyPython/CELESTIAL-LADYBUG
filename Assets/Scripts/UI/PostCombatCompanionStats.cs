@@ -13,17 +13,17 @@ namespace Assets.Scripts.UI
         [SerializeField] private TextMeshProUGUI kills;
         [SerializeField] private TextMeshProUGUI damageDealt;
         [SerializeField] private TextMeshProUGUI damageReceived;
-        [SerializeField] private TextMeshProUGUI xp;
+        [SerializeField] private TextMeshProUGUI hp;
 
-        public void Populate(KeyValuePair<Entity, CompanionCombatStats> companionsStats)
+        public void Populate(KeyValuePair<Entity, CompanionCombatStats> companionStats)
         {
-            SetPortrait(companionsStats.Key.Portrait);
+            SetPortrait(companionStats.Key.Portrait);
 
-            cName.text = companionsStats.Key.FirstName();
-            kills.text = companionsStats.Value.Kills.ToString();
-            damageDealt.text = companionsStats.Value.DamageDealt.ToString();
-            damageReceived.text = companionsStats.Value.DamageReceived.ToString();
-            xp.text = companionsStats.Value.Xp.ToString();
+            cName.text = companionStats.Key.FirstName();
+            kills.text = companionStats.Value.Kills.ToString();
+            damageDealt.text = companionStats.Value.DamageDealt.ToString();
+            damageReceived.text = companionStats.Value.DamageReceived.ToString();
+            hp.text = $"{companionStats.Key.Stats.CurrentHealth}/{companionStats.Key.Stats.MaxHealth}" ;
         }
 
         private void SetPortrait(Dictionary<Portrait.Slot, string> portraitKeys)
@@ -33,7 +33,8 @@ namespace Assets.Scripts.UI
             var spriteStore = FindObjectOfType<SpriteStore>();
 
             foreach (var slot in portraitKeys.Keys)
-            { var slotSprite = spriteStore.GetPortraitSpriteForSlotByKey(slot, portraitKeys[slot]);
+            { 
+                var slotSprite = spriteStore.GetPortraitSpriteForSlotByKey(slot, portraitKeys[slot]);
                 sprites.Add(slot, slotSprite);
             }
 

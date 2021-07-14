@@ -15,7 +15,7 @@ namespace Assets.Scripts.Combat
 
         public int ApCost { get; private set; }
 
-        public Floor(TileType tileType, Coord position) : base(position, true, true)
+        public Floor(TileType tileType, Coord position, int mapWidth, int mapHeight) : base(position, true, true, mapWidth, mapHeight)
         {
             ApCost = _terrainCosts[tileType];
 

@@ -80,11 +80,11 @@ namespace Assets.Scripts.Combat
                 Tile tile;
                 if (IsWallTile(selection))
                 {
-                    tile = tStore.GetWallTile(selection, position);
+                    tile = tStore.GetWallTile(selection, position, MapWidth, MapHeight);
                 }
                 else
                 {
-                    tile = TerrainStore.GetFloorTile(selection, position);
+                    tile = TerrainStore.GetFloorTile(selection, position, MapWidth, MapHeight);
                 }
 
                 map.SetTerrain(tile);

@@ -44,7 +44,7 @@ namespace Assets.Scripts.Abilities
                     return;
                 }
 
-                var damage = (int) parameter;
+                var damage = Mathf.Abs((int) parameter);
 
                 AbilityOwner.AddHealth(damage);
 

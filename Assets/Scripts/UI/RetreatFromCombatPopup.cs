@@ -5,6 +5,8 @@ namespace Assets.Scripts.UI
 {
     public class RetreatFromCombatPopup : MonoBehaviour
     {
+        [SerializeField] private GameObject popup;
+
         private void Start()
         {
             Hide();
@@ -12,12 +14,12 @@ namespace Assets.Scripts.UI
 
         public void Show()
         {
-            gameObject.SetActive(true);
+            popup.SetActive(true);
         }
 
         private void Hide()
         {
-            gameObject.SetActive(false);
+            popup.SetActive(false);
         }
 
         public void Cancel()

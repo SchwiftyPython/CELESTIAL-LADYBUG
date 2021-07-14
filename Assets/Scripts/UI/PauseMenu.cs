@@ -87,7 +87,11 @@ namespace Assets.Scripts.UI
 
         public void Retreat()
         {
+            Hide();
 
+            var retreatPopup = FindObjectOfType<RetreatFromCombatPopup>();
+
+            retreatPopup.Show();
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

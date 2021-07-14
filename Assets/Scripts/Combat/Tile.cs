@@ -26,6 +26,7 @@ namespace Assets.Scripts.Combat
         public bool Selectable { get; set; }
         public bool Visited    { get; set; }
         public int TotalApCost { get; set; }
+        public bool RetreatTile { get; private set; }
 
         public Map CurrentMap => _backingField.CurrentMap;
 
@@ -59,7 +60,7 @@ namespace Assets.Scripts.Combat
 
         public int Layer => _backingField.Layer;
 
-        public Tile(Coord position, bool isWalkable, bool isTransparent)
+        public Tile(Coord position, bool isWalkable, bool isTransparent, int mapWidth, int mapHeight)
         {
             _backingField = new GameObject(position, 0, this, true,
                 isWalkable, isTransparent);
@@ -67,6 +68,10 @@ namespace Assets.Scripts.Combat
             Selectable = false;
             Visited = false;
             TotalApCost = 0;
+
+            RetreatTile = IsWalkable && IsEdge(mapWidth, mapHeight);
+
+            //todo mark retreat tiles with white flag
         }
 
         public void SetSpriteInstance(UnityEngine.GameObject instance)
@@ -229,6 +234,12 @@ namespace Assets.Scripts.Combat
         public Entity GetEntity()
         {
             return (Entity)CurrentMap.Entities.GetItems(Position).FirstOrDefault();
+        }
+
+        private bool IsEdge(int mapWidth, int mapHeight)
+        {
+            return Position.X == 0 || Position.X == mapWidth - 1 || Position.Y == 0 ||
+                   Position.Y == mapHeight - 1;
         }
     }
 }

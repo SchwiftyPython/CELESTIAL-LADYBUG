@@ -9,6 +9,7 @@ namespace Assets.Scripts.UI
     {
         [SerializeField] private GameObject companionContainer;
         [SerializeField] private GameObject companionPrefab;
+        [SerializeField] private GameObject popup;
         [SerializeField] private TextMeshProUGUI titleText;
 
         private CombatResult _result;
@@ -22,7 +23,7 @@ namespace Assets.Scripts.UI
         {
             Populate(result);
 
-            gameObject.SetActive(true);
+            popup.SetActive(true);
         }
 
         public void Leave()
@@ -53,7 +54,7 @@ namespace Assets.Scripts.UI
 
         private void Hide()
         {
-            gameObject.SetActive(false);
+            popup.SetActive(false);
         }
 
         private void Populate(CombatResult result)
