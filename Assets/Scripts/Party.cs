@@ -8,7 +8,7 @@ namespace Assets.Scripts
 {
     public class Party
     {
-        private const int MaxSize = 8;
+        private const int MaxSize = 12;
         private const int StartSize = 6;
         private const int MoraleFoodModifier = 10;
 

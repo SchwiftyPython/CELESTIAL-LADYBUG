@@ -145,19 +145,37 @@ namespace Assets.Scripts.Entities
         //todo refactor this so the sprite moves through each square and doesn't just teleport
         public void MoveTo(Tile tile, int apMovementCost)
         {
+            if (tile == null)
+            {
+                return;
+            }
+
             if (apMovementCost > Stats.CurrentActionPoints)
             {
                 Debug.Log("AP movement cost greater than current AP!");
                 return;
             }
 
-            var currentTile = ((CombatMap)CurrentMap).GetTileAt(Position);
+            var combatManager = Object.FindObjectOfType<CombatManager>();
+            var map = combatManager.Map;
+
+            var currentTile = map.GetTileAt(Position);
 
             //this will not update the position if blocked
             Position = tile.Position;
 
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
             if (Position == tile.Position)
             {
+                if (tile.RetreatTile)
+                {
+                    combatManager.RemoveEntity(this);
+                    
+                    eventMediator.Broadcast(GlobalHelper.EndTurn, this);
+                    return;
+                }
+
                 _moved = true;
 
                 Stats.CurrentActionPoints -= apMovementCost;
@@ -174,8 +192,6 @@ namespace Assets.Scripts.Entities
                 }
 
                 tile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(this);
-
-                var eventMediator = Object.FindObjectOfType<EventMediator>();
 
                 eventMediator.Broadcast(GlobalHelper.ActiveEntityMoved, this);
 
@@ -892,7 +908,10 @@ namespace Assets.Scripts.Entities
 
         public bool IsSurrounded()
         {
-            var currentTile = ((CombatMap) (CurrentMap)).GetTileAt(Position);
+            var combatManager = Object.FindObjectOfType<CombatManager>();
+            var map = combatManager.Map;
+
+            var currentTile = map.GetTileAt(Position);
 
             var numEnemies = 0;
 

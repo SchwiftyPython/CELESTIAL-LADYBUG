@@ -25,21 +25,14 @@ namespace Assets.Scripts.Combat
                 }}
             };
 
-        public Floor GetRandomFloorTile(BiomeType bType, Coord position)
+        public static Floor GetFloorTile(TileType tType, Coord position, int mapWidth, int mapHeight)
         {
-            var tileTypes = _floorTileTypesDictionary[bType];
-
-            return new Floor(tileTypes[Random.Range(0, tileTypes.Count)], position);
+            return new Floor(tType, position, mapWidth, mapHeight);
         }
 
-        public static Floor GetFloorTile(TileType tType, Coord position)
+        public Wall GetWallTile(TileType tType, Coord position, int mapWidth, int mapHeight)
         {
-            return new Floor(tType, position);
-        }
-
-        public Wall GetWallTile(TileType tType, Coord position)
-        {
-            return new Wall(tType, position);
+            return new Wall(tType, position, mapWidth, mapHeight);
         }
 
         public Dictionary<TileType, int> GetTileTypeWeights(BiomeType bType)

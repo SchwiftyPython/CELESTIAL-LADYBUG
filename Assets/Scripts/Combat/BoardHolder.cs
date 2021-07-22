@@ -66,8 +66,13 @@ namespace Assets.Scripts.Combat
                             entityInstance.AddComponent<AiController>();
                             entityInstance.GetComponent<AiController>().SetSelf(entity);
                             entityInstance.GetComponent<SpriteRenderer>().flipX = true;
-                            entityInstance.transform.position = new Vector3(entityInstance.transform.position.x + 1,
-                                entityInstance.transform.position.y, entityInstance.transform.position.z);
+                            
+                            var position = entityInstance.transform.position;
+
+                            position = new Vector3(position.x + 1,
+                                position.y, position.z);
+
+                            entityInstance.transform.position = position;
                         }
 
                         var spriteStore = FindObjectOfType<SpriteStore>();

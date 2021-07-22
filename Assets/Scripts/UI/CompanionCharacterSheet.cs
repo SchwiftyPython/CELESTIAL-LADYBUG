@@ -78,9 +78,10 @@ namespace Assets.Scripts.UI
         {
             var sprites = new Dictionary<Portrait.Slot, Sprite>();
 
+            var spriteStore = FindObjectOfType<SpriteStore>();
+
             foreach (var slot in portraitKeys.Keys)
             {
-                var spriteStore = Object.FindObjectOfType<SpriteStore>();
                 var slotSprite = spriteStore.GetPortraitSpriteForSlotByKey(slot, portraitKeys[slot]);
                 sprites.Add(slot, slotSprite);
             }

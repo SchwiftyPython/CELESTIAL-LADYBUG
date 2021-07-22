@@ -5,7 +5,7 @@ namespace Assets.Scripts.Combat
 {
     public class Wall : Tile
     {
-        public Wall(TileType tileType, Coord position) : base(position, false, false)
+        public Wall(TileType tileType, Coord position, int mapWidth, int mapHeight) : base(position, false, false, mapWidth, mapHeight)
         {
             TileType = tileType;
 

@@ -1,4 +1,5 @@
-﻿using GoRogue;
+﻿using System.Collections.Generic;
+using GoRogue;
 using GoRogue.GameFramework;
 
 namespace Assets.Scripts.Combat
@@ -25,6 +26,26 @@ namespace Assets.Scripts.Combat
             }
 
             return GetTerrain<Tile>(position);
+        }
+
+        public List<Tile> GetRetreatTiles()
+        {
+            var retreatTiles = new List<Tile>();
+
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    var tile = GetTerrain<Tile>(new Coord(x, y));
+
+                    if (tile.RetreatTile)
+                    {
+                        retreatTiles.Add(tile);
+                    }
+                }
+            }
+
+            return retreatTiles;
         }
     }
 }
