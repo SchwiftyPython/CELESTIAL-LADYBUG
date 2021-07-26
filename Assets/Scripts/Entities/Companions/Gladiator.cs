@@ -15,7 +15,10 @@ namespace Assets.Scripts.Entities.Companions
             {EquipLocation.Body, new List<string> {"Plate Armor", "Mail Shirt"}}
         };
 
-        public Gladiator(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Gladiator, isPlayer)
+        private static readonly string _hurtSound = "";
+        private static readonly string _dieSound = "";
+
+        public Gladiator(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Gladiator, isPlayer, _hurtSound, _dieSound)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 

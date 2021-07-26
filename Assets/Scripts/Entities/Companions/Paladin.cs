@@ -15,7 +15,10 @@ namespace Assets.Scripts.Entities.Companions
             {EquipLocation.Body, new List<string> {"Plate Armor", "Mail Shirt"}}
         };
 
-        public Paladin(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Paladin, isPlayer)
+        private static readonly string _hurtSound = "";
+        private static readonly string _dieSound = "";
+
+        public Paladin(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Paladin, isPlayer, _hurtSound, _dieSound)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 

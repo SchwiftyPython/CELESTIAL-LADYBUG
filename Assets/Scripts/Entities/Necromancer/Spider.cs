@@ -5,7 +5,10 @@ namespace Assets.Scripts.Entities.Necromancer
 {
     public class Spider : Entity
     {
-        public Spider() : base(Race.RaceType.Beast, EntityClass.Beast, false)
+        private static readonly string _hurtSound = "";
+        private static readonly string _dieSound = "";
+
+        public Spider() : base(Race.RaceType.Beast, EntityClass.Beast, false, _hurtSound, _dieSound)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 

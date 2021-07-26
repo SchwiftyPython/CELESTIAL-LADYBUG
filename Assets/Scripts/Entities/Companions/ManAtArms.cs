@@ -15,7 +15,10 @@ namespace Assets.Scripts.Entities.Companions
             {EquipLocation.Shield, new List<string> {"Knight's Shield", "Wooden Shield", "Heater Shield"}}
         };
 
-        public ManAtArms(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.ManAtArms, isPlayer)
+        private static readonly string _hurtSound = "";
+        private static readonly string _dieSound = "";
+
+        public ManAtArms(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.ManAtArms, isPlayer, _hurtSound, _dieSound)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 

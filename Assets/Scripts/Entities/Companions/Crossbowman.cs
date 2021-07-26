@@ -13,7 +13,10 @@ namespace Assets.Scripts.Entities.Companions
             {EquipLocation.Body, new List<string> {"Leather Armor", "Worn Mail Shirt"}}
         };
 
-        public Crossbowman(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Crossbowman, isPlayer)
+        private static readonly string _hurtSound = "";
+        private static readonly string _dieSound = "";
+
+        public Crossbowman(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Crossbowman, isPlayer, _hurtSound, _dieSound)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 

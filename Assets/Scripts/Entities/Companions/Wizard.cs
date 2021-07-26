@@ -13,7 +13,10 @@ namespace Assets.Scripts.Entities.Companions
             {EquipLocation.Body, new List<string> {"Robe", "Wizard's Robe"}}
         };
 
-        public Wizard(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Wizard, isPlayer)
+        private static readonly string _hurtSound = "";
+        private static readonly string _dieSound = "";
+
+        public Wizard(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Wizard, isPlayer, _hurtSound, _dieSound)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 

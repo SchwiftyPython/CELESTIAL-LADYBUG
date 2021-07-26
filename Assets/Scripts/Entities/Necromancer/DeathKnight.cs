@@ -14,7 +14,10 @@ namespace Assets.Scripts.Entities.Necromancer
             {EquipLocation.Body, new List<string> {"Plate Armor", "Mail Shirt"}}
         };
 
-        public DeathKnight() : base(Race.RaceType.Undead, EntityClass.BattleMage, false)
+        private static readonly string _hurtSound = "";
+        private static readonly string _dieSound = "";
+
+        public DeathKnight() : base(Race.RaceType.Undead, EntityClass.BattleMage, false, _hurtSound, _dieSound)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 

@@ -75,6 +75,8 @@ namespace Assets.Scripts.Combat
                             entityInstance.transform.position = position;
                         }
 
+                        entityInstance.AddComponent<EntityAudio>();
+
                         var spriteStore = FindObjectOfType<SpriteStore>();
 
                         var colorSwapper = entityInstance.GetComponentsInChildren<ColorSwapper>();

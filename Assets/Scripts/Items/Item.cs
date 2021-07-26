@@ -130,6 +130,12 @@ namespace Assets.Scripts.Items
             return abilities;
         }
 
+        public string GetItemSound()
+        {
+            //todo either add to itemtypes or just give sound to groups like sword spear etc
+            return string.Empty;
+        }
+
         public bool IsTwoHanded()
         {
             return ItemType.TwoHanded;

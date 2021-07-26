@@ -13,7 +13,10 @@ namespace Assets.Scripts.Entities.Necromancer
             {EquipLocation.Body, new List<string> {"Robe", "Wizard's Robe"}}
         };
 
-        public Lich() : base(Race.RaceType.Undead, EntityClass.Wizard, false)
+        private static readonly string _hurtSound = "";
+        private static readonly string _dieSound = "";
+
+        public Lich() : base(Race.RaceType.Undead, EntityClass.Wizard, false, _hurtSound, _dieSound)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 

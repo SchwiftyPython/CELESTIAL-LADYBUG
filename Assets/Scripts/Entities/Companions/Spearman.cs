@@ -14,7 +14,10 @@ namespace Assets.Scripts.Entities.Companions
             {EquipLocation.Body, new List<string> {"Worn Mail Shirt", "Mail Shirt"}}
         };
 
-        public Spearman(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Spearman, isPlayer)
+        private static readonly string _hurtSound = "";
+        private static readonly string _dieSound = "";
+
+        public Spearman(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Spearman, isPlayer, _hurtSound, _dieSound)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 

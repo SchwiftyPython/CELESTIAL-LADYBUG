@@ -5,7 +5,10 @@ namespace Assets.Scripts.Entities.Necromancer
 {
     public class Ghost : Entity
     {
-        public Ghost() : base(Race.RaceType.Undead, EntityClass.Ethereal, false)
+        private static readonly string _hurtSound = "";
+        private static readonly string _dieSound = "";
+
+        public Ghost() : base(Race.RaceType.Undead, EntityClass.Ethereal, false, _hurtSound, _dieSound)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 

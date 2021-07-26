@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Entities.Companions;
 using UnityEngine;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts
 {
@@ -264,7 +267,7 @@ namespace Assets.Scripts
 
         private void GenerateStartingParty()
         {
-            Derpus = new Entity(Race.RaceType.Derpus, EntityClass.Derpus, true);
+            Derpus = new Entity(Race.RaceType.Derpus, EntityClass.Derpus, true, string.Empty, string.Empty);
 
             _companions = new Dictionary<string, Entity>();
 

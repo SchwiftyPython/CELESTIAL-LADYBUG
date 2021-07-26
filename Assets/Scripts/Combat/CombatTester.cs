@@ -37,11 +37,7 @@ namespace Assets.Scripts.Combat
 
             for (var i = 0; i < 1; i++)
             {
-                Entity bandit = new Ghost();
-
-                bandits.Add(bandit);
-
-                bandit = new Zombie();
+                Entity bandit = new Skeleton();
 
                 bandits.Add(bandit);
 
@@ -49,11 +45,15 @@ namespace Assets.Scripts.Combat
 
                 bandits.Add(bandit);
 
-                bandit = new Lich();
+                bandit = new Skeleton();
 
                 bandits.Add(bandit);
 
-                bandit = new Vampire(); 
+                bandit = new Skeleton();
+
+                bandits.Add(bandit);
+
+                bandit = new Skeleton(); 
 
                 bandits.Add(bandit);
             }

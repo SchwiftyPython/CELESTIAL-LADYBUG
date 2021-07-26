@@ -13,7 +13,10 @@ namespace Assets.Scripts.Entities.Necromancer
             {EquipLocation.Body, new List<string> {"Worn Mail Shirt", null}}
         };
 
-        public Skeleton() : base(Race.RaceType.Undead, EntityClass.ManAtArms, false)
+        private static readonly string _hurtSound = "event:/Skeleton Hit"; //todo might need decorator for the fmod event
+        private static readonly string _dieSound = "event:/Skeleton Hit";
+
+        public Skeleton() : base(Race.RaceType.Undead, EntityClass.ManAtArms, false, _hurtSound, _dieSound)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 
