@@ -74,6 +74,10 @@ namespace Assets.Scripts.Entities
                             ability.Terminate();
                         }
 
+                        var eAudio = _parent.CombatSpriteInstance.GetComponent<EntityAudio>();
+
+                        eAudio.Die(_parent.DieSound);
+
                         var eventMediator = Object.FindObjectOfType<EventMediator>();
                         eventMediator.Broadcast(GlobalHelper.EntityDead, _parent);
                     }

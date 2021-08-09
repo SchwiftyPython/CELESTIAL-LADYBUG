@@ -5,8 +5,8 @@ namespace Assets.Scripts.Entities.Necromancer
 {
     public class Ghost : Entity
     {
-        private static readonly string _hurtSound = "";
-        private static readonly string _dieSound = "";
+        private static readonly string _hurtSound = GlobalHelper.MonsterHitOne;
+        private static readonly string _dieSound = GlobalHelper.MonsterDieOne;
 
         public Ghost() : base(Race.RaceType.Undead, EntityClass.Ethereal, false, _hurtSound, _dieSound)
         {

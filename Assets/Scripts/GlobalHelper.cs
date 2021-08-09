@@ -10,7 +10,6 @@ using Assets.Scripts.Entities;
 using GoRogue;
 using GoRogue.DiceNotation;
 using UnityEngine;
-using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts
@@ -79,6 +78,16 @@ namespace Assets.Scripts
         public const string TitleScreenScene = "TitleScreen";
 
         #endregion SceneNames
+
+        #region SoundPaths
+
+        public const string MonsterHitOne = "event:/Monster Hit 1";
+        public const string MonsterDieOne = "event:/Monster Die 1";
+
+        public const string CompanionHitOne = "event:/Companion Hit 1";
+        public const string CompanionDieOne = "event:/Companion Die 1";
+
+        #endregion SoundPaths
 
         private static readonly System.Random SysRandom = new System.Random();
 

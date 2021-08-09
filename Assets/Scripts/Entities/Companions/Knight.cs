@@ -14,8 +14,8 @@ namespace Assets.Scripts.Entities.Companions
             {EquipLocation.Body, new List<string> {"Plate Armor", "Mail Shirt"}}
         };
 
-        private static readonly string _hurtSound = "";
-        private static readonly string _dieSound = "";
+        private static readonly string _hurtSound = GlobalHelper.CompanionHitOne;
+        private static readonly string _dieSound = GlobalHelper.CompanionDieOne;
 
         public Knight(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Knight, isPlayer, _hurtSound, _dieSound)
         {

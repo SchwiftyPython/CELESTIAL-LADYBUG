@@ -13,8 +13,8 @@ namespace Assets.Scripts.Entities.Companions
             {EquipLocation.Body, new List<string> {"Robe", "Wizard's Robe"}}
         };
 
-        private static readonly string _hurtSound = "";
-        private static readonly string _dieSound = "";
+        private static readonly string _hurtSound = GlobalHelper.CompanionHitOne;
+        private static readonly string _dieSound = GlobalHelper.CompanionDieOne;
 
         public Wizard(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Wizard, isPlayer, _hurtSound, _dieSound)
         {

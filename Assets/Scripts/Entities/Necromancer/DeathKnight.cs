@@ -14,8 +14,8 @@ namespace Assets.Scripts.Entities.Necromancer
             {EquipLocation.Body, new List<string> {"Plate Armor", "Mail Shirt"}}
         };
 
-        private static readonly string _hurtSound = "";
-        private static readonly string _dieSound = "";
+        private static readonly string _hurtSound = GlobalHelper.MonsterHitOne;
+        private static readonly string _dieSound = GlobalHelper.MonsterDieOne;
 
         public DeathKnight() : base(Race.RaceType.Undead, EntityClass.BattleMage, false, _hurtSound, _dieSound)
         {

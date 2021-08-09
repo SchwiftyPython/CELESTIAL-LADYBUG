@@ -14,8 +14,8 @@ namespace Assets.Scripts.Entities.Necromancer
             {EquipLocation.Body, new List<string> {"Worn Mail Shirt", null}}
         };
 
-        private static readonly string _hurtSound = "";
-        private static readonly string _dieSound = "";
+        private static readonly string _hurtSound = GlobalHelper.MonsterHitOne;
+        private static readonly string _dieSound = GlobalHelper.MonsterDieOne;
 
         public Zombie() : base(Race.RaceType.Undead, EntityClass.ManAtArms, false, _hurtSound, _dieSound)
         {

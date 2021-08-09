@@ -13,8 +13,8 @@ namespace Assets.Scripts.Entities.Companions
             {EquipLocation.Body, new List<string> {"Leather Armor", "Worn Mail Shirt"}}
         };
 
-        private static readonly string _hurtSound = "";
-        private static readonly string _dieSound = "";
+        private static readonly string _hurtSound = GlobalHelper.CompanionHitOne;
+        private static readonly string _dieSound = GlobalHelper.CompanionDieOne;
 
         public Crossbowman(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Crossbowman, isPlayer, _hurtSound, _dieSound)
         {

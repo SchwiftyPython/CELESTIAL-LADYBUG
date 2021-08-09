@@ -13,8 +13,8 @@ namespace Assets.Scripts.Entities.Necromancer
             {EquipLocation.Body, new List<string> {"Robe", "Wizard's Robe"}}
         };
 
-        private static readonly string _hurtSound = "";
-        private static readonly string _dieSound = "";
+        private static readonly string _hurtSound = GlobalHelper.MonsterHitOne;
+        private static readonly string _dieSound = GlobalHelper.MonsterDieOne;
 
         public Lich() : base(Race.RaceType.Undead, EntityClass.Wizard, false, _hurtSound, _dieSound)
         {

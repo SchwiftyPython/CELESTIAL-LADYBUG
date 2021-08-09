@@ -53,7 +53,7 @@ namespace Assets.Scripts.Combat
 
                 bandits.Add(bandit);
 
-                bandit = new Skeleton(); 
+                bandit = new Skeleton();
 
                 bandits.Add(bandit);
             }
@@ -63,6 +63,28 @@ namespace Assets.Scripts.Combat
             combatManager.Enemies = bandits;
 
             combatManager.Load();
+        }
+
+        private void SetAllEnemiesToOneHealth()
+        {
+            var combatManager = FindObjectOfType<CombatManager>();
+
+            foreach (var enemy in combatManager.Enemies)
+            {
+                enemy.Stats.CurrentHealth = 1;
+            }
+        }
+
+        private static void SetAllCompanionsToOneHealth()
+        {
+            Debug.LogWarning("All companions set to one health for testing.");
+
+            var travelManager = FindObjectOfType<TravelManager>();
+
+            foreach (var companion in travelManager.Party.GetCompanions())
+            {
+                companion.Stats.CurrentHealth = 1;
+            }
         }
     }
 }

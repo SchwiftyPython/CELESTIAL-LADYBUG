@@ -16,15 +16,26 @@ namespace Assets.Scripts
 
         public void TakeDamage(string soundPath)
         {
+            if (string.IsNullOrEmpty(soundPath))
+            {
+                Debug.LogWarning($"No hurt sound defined!");
+                return;
+            }
+
             var hitSound = FMODUnity.RuntimeManager.CreateInstance(soundPath);
             hitSound.start();
-
-            //FMODUnity.RuntimeManager.PlayOneShot(soundPath, transform.position);
         }
 
-        public void Die()
+        public void Die(string soundPath)
         {
-            //todo get die sound from entity
+            if (string.IsNullOrEmpty(soundPath))
+            {
+                Debug.LogWarning($"No die sound defined!");
+                return;
+            }
+
+            var dieSound = FMODUnity.RuntimeManager.CreateInstance(soundPath);
+            dieSound.start();
         }
     }
 }

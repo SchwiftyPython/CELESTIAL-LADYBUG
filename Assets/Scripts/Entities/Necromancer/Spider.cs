@@ -5,8 +5,8 @@ namespace Assets.Scripts.Entities.Necromancer
 {
     public class Spider : Entity
     {
-        private static readonly string _hurtSound = "";
-        private static readonly string _dieSound = "";
+        private static readonly string _hurtSound = GlobalHelper.MonsterHitOne;
+        private static readonly string _dieSound = GlobalHelper.MonsterDieOne;
 
         public Spider() : base(Race.RaceType.Beast, EntityClass.Beast, false, _hurtSound, _dieSound)
         {

@@ -602,10 +602,6 @@ namespace Assets.Scripts.Entities
                 target.SubtractHealth(damage);
 
                 message = $"{Name} dealt {damage} damage to {target.Name}!";
-
-                var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
-
-                eAudio.TakeDamage(HurtSound);
             }
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
@@ -960,6 +956,15 @@ namespace Assets.Scripts.Entities
         public void SubtractHealth(int amount)
         {
             Stats.CurrentHealth -= amount;
+
+            if (IsDead())
+            {
+                return;
+            }
+
+            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
+
+            eAudio.TakeDamage(HurtSound);
         }
 
         public int AddEnergy(int amount)
