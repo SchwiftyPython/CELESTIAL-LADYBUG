@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.AI;
+using Assets.Scripts.Audio;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Travel;
 using Assets.Scripts.UI;
@@ -49,6 +50,7 @@ namespace Assets.Scripts.Combat
         private EventMediator _eventMediator;
         private TravelManager _travelManager;
         private CombatInputController _combatInput;
+        private MusicController _musicController;
 
         private List<EffectTrigger<EffectArgs>> _effectTriggers;
 
@@ -76,6 +78,8 @@ namespace Assets.Scripts.Combat
             _travelManager = FindObjectOfType<TravelManager>();
 
             _combatInput = FindObjectOfType<CombatInputController>();
+
+            _musicController = FindObjectOfType<MusicController>();
         }
 
         private void Update()
@@ -148,7 +152,7 @@ namespace Assets.Scripts.Combat
                     _eventMediator.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
                     _eventMediator.Broadcast(RefreshUi, this, ActiveEntity);
 
-                    //_combatInput.HighlightMovementRange();
+                    _musicController.PlayBattleMusic();
 
                     break;
                 case CombatState.PlayerTurn:
@@ -224,14 +228,20 @@ namespace Assets.Scripts.Combat
                         if (PlayerRetreated())
                         {
                             _result = CombatResult.Retreat;
+
+                            _musicController.PlayBattleVictoryMusic();
                         }
                         else if (PlayerDead())
                         {
                             _result = CombatResult.Defeat;
+
+                            _musicController.PlayBattleGameOverMusic();
                         }
                         else
                         {
                             _result = CombatResult.Victory;
+
+                            _musicController.PlayBattleVictoryMusic();
                         }
                     }
 

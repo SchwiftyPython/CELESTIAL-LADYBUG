@@ -1,5 +1,28 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9061357032880940723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Monster Die 1
+  m_EditorClassIdentifier: 
+  Path: event:/Monster Die 1
+  guid: 1fdec61daac2a44c9e31f0604dba7402
+  Banks:
+  - {fileID: -2796171086152643167}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 769
 --- !u!114 &-6658935821727719001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15,10 +38,33 @@ MonoBehaviour:
   Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637628921102706214
+  lastModified: 637641801200098726
   LoadResult: 0
   FileSizes: []
   Exists: 1
+--- !u!114 &-6427561741306275133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Companion Die 1
+  m_EditorClassIdentifier: 
+  Path: event:/Companion Die 1
+  guid: 41f18a5a12ff6b4480c10f2cafc2f095
+  Banks:
+  - {fileID: -5034756548921988856}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 540
 --- !u!114 &-6100143119512428333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34,11 +80,30 @@ MonoBehaviour:
   Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637628921102725779
+  lastModified: 637641801200118562
   LoadResult: 0
   FileSizes:
   - Name: Desktop
-    Value: 800
+    Value: 1086
+  Exists: 1
+--- !u!114 &-5034756548921988856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Companions.bank
+  m_EditorClassIdentifier: 
+  Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Companions.bank
+  Name: Companions
+  StudioPath: bank:/Companions
+  lastModified: 637641801200680178
+  LoadResult: 0
+  FileSizes: []
   Exists: 1
 --- !u!114 &-2796171086152643167
 MonoBehaviour:
@@ -55,7 +120,7 @@ MonoBehaviour:
   Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Enemies.bank
   Name: Enemies
   StudioPath: bank:/Enemies
-  lastModified: 637628921102985530
+  lastModified: 637641801200063997
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -75,15 +140,63 @@ MonoBehaviour:
   - {fileID: -6100143119512428333}
   - {fileID: -2796171086152643167}
   - {fileID: -6658935821727719001}
+  - {fileID: -5034756548921988856}
+  - {fileID: 3920283206164665579}
   EditorEvents:
-  - {fileID: 5654225177009563498}
+  - {fileID: 255693159259529869}
+  - {fileID: -9061357032880940723}
+  - {fileID: 7077531957216066576}
+  - {fileID: -6427561741306275133}
+  - {fileID: 9221906634376375711}
   EditorParameters: []
   MasterBanks:
   - {fileID: -6658935821727719001}
   StringsBanks:
   - {fileID: -6100143119512428333}
-  stringsBankWriteTime: 637628921102725779
+  stringsBankWriteTime: 637641801200118562
   cacheVersion: 6
+--- !u!114 &255693159259529869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Monster Hit 1
+  m_EditorClassIdentifier: 
+  Path: event:/Monster Hit 1
+  guid: 2ad6330c0896144993a267bf37b62472
+  Banks:
+  - {fileID: -2796171086152643167}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 487
+--- !u!114 &3920283206164665579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Music.bank
+  m_EditorClassIdentifier: 
+  Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Music.bank
+  Name: Music
+  StudioPath: bank:/Music
+  lastModified: 637641801201002578
+  LoadResult: 0
+  FileSizes: []
+  Exists: 1
 --- !u!114 &5654225177009563498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,3 +220,49 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 487
+--- !u!114 &7077531957216066576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Companion Hit 1
+  m_EditorClassIdentifier: 
+  Path: event:/Companion Hit 1
+  guid: b33c5e87b2ae004da94b0d08db5003cd
+  Banks:
+  - {fileID: -5034756548921988856}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 181
+--- !u!114 &9221906634376375711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Battle Music
+  m_EditorClassIdentifier: 
+  Path: event:/Battle Music
+  guid: 016051fea658ca44b2d7cf9490efe50e
+  Banks:
+  - {fileID: 3920283206164665579}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 154166

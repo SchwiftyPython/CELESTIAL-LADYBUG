@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.AI;
+using Assets.Scripts.Audio;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Effects;
 using Assets.Scripts.Effects.Args;

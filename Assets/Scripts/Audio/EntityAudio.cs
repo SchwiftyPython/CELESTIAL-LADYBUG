@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Audio
 {
     public class EntityAudio : MonoBehaviour
     {
@@ -18,7 +18,7 @@ namespace Assets.Scripts
         {
             if (string.IsNullOrEmpty(soundPath))
             {
-                Debug.LogWarning($"No hurt sound defined!");
+                Debug.LogWarning("No hurt sound defined!");
                 return;
             }
 
@@ -30,7 +30,7 @@ namespace Assets.Scripts
         {
             if (string.IsNullOrEmpty(soundPath))
             {
-                Debug.LogWarning($"No die sound defined!");
+                Debug.LogWarning("No die sound defined!");
                 return;
             }
 

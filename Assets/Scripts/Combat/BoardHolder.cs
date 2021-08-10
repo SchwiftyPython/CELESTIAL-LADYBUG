@@ -1,5 +1,6 @@
 ﻿using System;
 using Assets.Scripts.AI;
+using Assets.Scripts.Audio;
 using Assets.Scripts.Entities;
 using Assets.Scripts.UI;
 using GoRogue;

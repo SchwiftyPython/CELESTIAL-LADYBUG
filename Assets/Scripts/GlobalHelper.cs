@@ -79,7 +79,7 @@ namespace Assets.Scripts
 
         #endregion SceneNames
 
-        #region SoundPaths
+        #region SoundPaths //todo move these to an Audio Controller/Store -- See MusicController.cs
 
         public const string MonsterHitOne = "event:/Monster Hit 1";
         public const string MonsterDieOne = "event:/Monster Die 1";

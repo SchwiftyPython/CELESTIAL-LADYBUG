@@ -62,6 +62,8 @@ namespace Assets.Scripts.Combat
 
             combatManager.Enemies = bandits;
 
+            SetAllCompanionsToOneHealth();
+
             combatManager.Load();
         }
 
