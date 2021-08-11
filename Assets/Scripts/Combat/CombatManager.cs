@@ -89,6 +89,8 @@ namespace Assets.Scripts.Combat
             {
                 case CombatState.Loading: //we want to wait until we have enemy combatants populated
 
+                    _musicController.EndTravelMusic();
+
                     //todo travel manager checks for testing in combat scene
                     if (_travelManager != null && _travelManager.Party != null && Enemies != null && Enemies.Count > 0)
                     {

@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Combat;
+﻿using Assets.Scripts.Audio;
+using Assets.Scripts.Combat;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -48,6 +49,10 @@ namespace Assets.Scripts.UI
                 if (!SceneManager.GetSceneByName(GlobalHelper.TravelScene).isLoaded)
                 {
                     SceneManager.LoadScene(GlobalHelper.TravelScene);
+
+                    var musicController = FindObjectOfType<MusicController>();
+
+                    musicController.PlayTravelMusic();
                 }
             }
         }

@@ -869,6 +869,9 @@ namespace Assets.Scripts.Entities
 
             var totalRoll = coreRoll + wildRoll + toHitMod;
 
+            Debug.Log($"Total Roll: {totalRoll}");
+            Debug.Log($"Difficulty: {hitDifficulty}");
+
             string message;
             if (totalRoll >= hitDifficulty)
             {

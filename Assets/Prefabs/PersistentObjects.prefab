@@ -363,7 +363,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed2bc7a2f1f7e6246b8fe6d7faf4b503, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BattleMusic: event:/Battle Music
+  battleMusic: event:/Battle Music
+  travelMusic: event:/Travel Music
+  titleMusic: event:/Title Music
 --- !u!1 &1671906415
 GameObject:
   m_ObjectHideFlags: 0

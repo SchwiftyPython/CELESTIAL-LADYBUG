@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Audio;
 using Assets.Scripts.Items;
 using Assets.Scripts.Travel;
 using UnityEngine;
@@ -34,6 +35,8 @@ namespace Assets.Scripts
 
         private GameState _currentState;
 
+        private MusicController _musicController;
+
         public Scene CurrentScene { get; private set; }
 
         public static GameManager Instance;
@@ -57,6 +60,13 @@ namespace Assets.Scripts
             _activeWindows = new List<GameObject>();
 
             SubscribeToEvents();
+        }
+
+        private void Start()
+        {
+            _musicController = FindObjectOfType<MusicController>();
+
+            _musicController.PlayTitleMusic();
         }
 
         private void Update()
@@ -127,6 +137,8 @@ namespace Assets.Scripts
 
         public void StartNewGame()
         {
+            _musicController.EndTitleMusic();
+
             //todo BUG this in fact does not start a new game lmao
 
             var spriteStore = Object.FindObjectOfType<SpriteStore>();
