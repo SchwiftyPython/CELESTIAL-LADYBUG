@@ -8,7 +8,17 @@ namespace Assets.Scripts.Audio
         [FMODUnity.EventRef] public string travelMusic;
         [FMODUnity.EventRef] public string titleMusic;
 
+        [SerializeField] private bool muteMusic;
+
         private FMOD.Studio.EventInstance _musicInstance;
+
+        private void Awake()
+        {
+            if (muteMusic)
+            {
+                MuteMusic();
+            }
+        }
 
         public void PlayBattleMusic()
         {
@@ -50,11 +60,21 @@ namespace Assets.Scripts.Audio
             _musicInstance.setParameterByName("End Title Music", 1f);
         }
 
+        public void MuteMusic()
+        {
+            _musicInstance.setParameterByName("Mute", 1f);
+        }
+
         private void PlayMusic(string path)
         {
             _musicInstance = FMODUnity.RuntimeManager.CreateInstance(path);
 
             _musicInstance.start();
+
+            if (muteMusic)
+            {
+                MuteMusic();
+            }
         }
     }
 }

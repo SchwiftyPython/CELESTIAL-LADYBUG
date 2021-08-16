@@ -366,6 +366,7 @@ MonoBehaviour:
   battleMusic: event:/Battle Music
   travelMusic: event:/Travel Music
   titleMusic: event:/Title Music
+  muteMusic: 0
 --- !u!1 &1671906415
 GameObject:
   m_ObjectHideFlags: 0

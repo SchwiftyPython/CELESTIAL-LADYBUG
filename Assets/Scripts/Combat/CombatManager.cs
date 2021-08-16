@@ -231,7 +231,9 @@ namespace Assets.Scripts.Combat
                         {
                             _result = CombatResult.Retreat;
 
-                            _musicController.PlayBattleVictoryMusic();
+                            //_musicController.PlayBattleVictoryMusic();
+
+                            _musicController.EndBattleMusic();
                         }
                         else if (PlayerDead())
                         {
@@ -243,7 +245,9 @@ namespace Assets.Scripts.Combat
                         {
                             _result = CombatResult.Victory;
 
-                            _musicController.PlayBattleVictoryMusic();
+                            //_musicController.PlayBattleVictoryMusic();
+
+                            _musicController.EndBattleMusic();
                         }
                     }
 
