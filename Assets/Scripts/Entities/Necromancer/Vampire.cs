@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Abilities;
+using Assets.Scripts.Audio;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities.Necromancer
@@ -14,10 +15,7 @@ namespace Assets.Scripts.Entities.Necromancer
             {EquipLocation.Body, new List<string> {"Robe", "Wizard's Robe"}}
         };
 
-        private static readonly string _hurtSound = GlobalHelper.MonsterHitOne;
-        private static readonly string _dieSound = GlobalHelper.MonsterDieOne;
-
-        public Vampire() : base(Race.RaceType.Undead, EntityClass.Wizard, false, _hurtSound, _dieSound)
+        public Vampire() : base(Race.RaceType.Undead, EntityClass.Wizard, false)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 
@@ -41,6 +39,11 @@ namespace Assets.Scripts.Entities.Necromancer
             Abilities.Add(intimidate.GetType(), intimidate);
 
             GenerateStartingEquipment(EntityClass.Wizard, _startingEquipmentTable);
+
+            var audioStore = Object.FindObjectOfType<AudioStore>();
+
+            HurtSound = audioStore.monsterHurt;
+            DieSound = audioStore.monsterDie;
         }
     }
 }

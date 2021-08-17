@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Audio;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities.Necromancer
@@ -13,16 +14,18 @@ namespace Assets.Scripts.Entities.Necromancer
             {EquipLocation.Body, new List<string> {"Robe", "Wizard's Robe"}}
         };
 
-        private static readonly string _hurtSound = GlobalHelper.MonsterHitOne;
-        private static readonly string _dieSound = GlobalHelper.MonsterDieOne;
-
-        public Lich() : base(Race.RaceType.Undead, EntityClass.Wizard, false, _hurtSound, _dieSound)
+        public Lich() : base(Race.RaceType.Undead, EntityClass.Wizard, false)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 
             CombatSpritePrefab = entityPrefabStore.GetCombatSpritePrefab("Lich");
 
             GenerateStartingEquipment(EntityClass.Wizard, _startingEquipmentTable);
+
+            var audioStore = Object.FindObjectOfType<AudioStore>();
+
+            HurtSound = audioStore.monsterHurt;
+            DieSound = audioStore.monsterDie;
         }
     }
 }

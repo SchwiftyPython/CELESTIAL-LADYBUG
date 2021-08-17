@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Abilities;
+using Assets.Scripts.Audio;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities.Necromancer
@@ -14,10 +15,7 @@ namespace Assets.Scripts.Entities.Necromancer
             {EquipLocation.Body, new List<string> {"Worn Mail Shirt", null}}
         };
 
-        private static readonly string _hurtSound = GlobalHelper.MonsterHitOne;
-        private static readonly string _dieSound = GlobalHelper.MonsterDieOne;
-
-        public Zombie() : base(Race.RaceType.Undead, EntityClass.ManAtArms, false, _hurtSound, _dieSound)
+        public Zombie() : base(Race.RaceType.Undead, EntityClass.ManAtArms, false)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 
@@ -30,6 +28,11 @@ namespace Assets.Scripts.Entities.Necromancer
             Abilities.Add(eEndurance.GetType(), eEndurance);
 
             GenerateStartingEquipment(EntityClass.ManAtArms, _startingEquipmentTable);
+
+            var audioStore = Object.FindObjectOfType<AudioStore>();
+
+            HurtSound = audioStore.monsterHurt;
+            DieSound = audioStore.monsterDie;
         }
     }
 }

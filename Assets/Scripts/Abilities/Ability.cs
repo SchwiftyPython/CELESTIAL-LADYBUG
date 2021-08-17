@@ -62,7 +62,7 @@ namespace Assets.Scripts.Abilities
 
             if (Range < 2)
             {
-                AbilityOwner.MeleeAttack(target);
+                AbilityOwner.AttackWithAbility(target, this);
             }
             else
             {

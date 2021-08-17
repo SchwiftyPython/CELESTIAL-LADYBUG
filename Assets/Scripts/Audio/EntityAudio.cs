@@ -2,11 +2,20 @@
 
 namespace Assets.Scripts.Audio
 {
-    public class EntityAudio : MonoBehaviour
+    //todo if all the methods can be static then we'll just make this a static class and
+    //not bother with attaching to gameobject
+
+    public class EntityAudio : MonoBehaviour 
     {
-        public void Attack()
+        public void Attack(string soundPath)
         {
-            //todo get sound for equipped weapon from entity
+            if (string.IsNullOrEmpty(soundPath))
+            {
+                Debug.LogWarning("No attack sound defined!");
+                return;
+            }
+
+            PlaySound(soundPath);
         }
 
         public void CastSpell()
@@ -22,8 +31,7 @@ namespace Assets.Scripts.Audio
                 return;
             }
 
-            var hitSound = FMODUnity.RuntimeManager.CreateInstance(soundPath);
-            hitSound.start();
+            PlaySound(soundPath);
         }
 
         public void Die(string soundPath)
@@ -34,8 +42,13 @@ namespace Assets.Scripts.Audio
                 return;
             }
 
-            var dieSound = FMODUnity.RuntimeManager.CreateInstance(soundPath);
-            dieSound.start();
+            PlaySound(soundPath);
+        }
+
+        private void PlaySound(string soundPath)
+        {
+            var sound = FMODUnity.RuntimeManager.CreateInstance(soundPath);
+            sound.start();
         }
     }
 }

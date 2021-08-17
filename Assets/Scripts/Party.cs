@@ -267,7 +267,7 @@ namespace Assets.Scripts
 
         private void GenerateStartingParty()
         {
-            Derpus = new Entity(Race.RaceType.Derpus, EntityClass.Derpus, true, string.Empty, string.Empty);
+            Derpus = new Entity(Race.RaceType.Derpus, EntityClass.Derpus, true);
 
             _companions = new Dictionary<string, Entity>();
 

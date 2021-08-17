@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Audio;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities.Necromancer
@@ -14,10 +15,7 @@ namespace Assets.Scripts.Entities.Necromancer
             {EquipLocation.Body, new List<string> {"Plate Armor", "Mail Shirt"}}
         };
 
-        private static readonly string _hurtSound = GlobalHelper.MonsterHitOne;
-        private static readonly string _dieSound = GlobalHelper.MonsterDieOne;
-
-        public DeathKnight() : base(Race.RaceType.Undead, EntityClass.BattleMage, false, _hurtSound, _dieSound)
+        public DeathKnight() : base(Race.RaceType.Undead, EntityClass.BattleMage, false)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 
@@ -26,6 +24,11 @@ namespace Assets.Scripts.Entities.Necromancer
             GenerateStartingEquipment(EntityClass.BattleMage, _startingEquipmentTable);
 
             //todo need some mount specific abilities
+
+            var audioStore = Object.FindObjectOfType<AudioStore>();
+
+            HurtSound = audioStore.monsterHurt;
+            DieSound = audioStore.monsterDie;
         }
     }
 }

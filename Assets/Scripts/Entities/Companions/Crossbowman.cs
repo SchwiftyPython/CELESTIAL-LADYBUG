@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Audio;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities.Companions
@@ -13,16 +14,18 @@ namespace Assets.Scripts.Entities.Companions
             {EquipLocation.Body, new List<string> {"Leather Armor", "Worn Mail Shirt"}}
         };
 
-        private static readonly string _hurtSound = GlobalHelper.CompanionHitOne;
-        private static readonly string _dieSound = GlobalHelper.CompanionDieOne;
-
-        public Crossbowman(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Crossbowman, isPlayer, _hurtSound, _dieSound)
+        public Crossbowman(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Crossbowman, isPlayer)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 
             CombatSpritePrefab = entityPrefabStore.GetCombatSpritePrefab("Crossbowman");
 
             GenerateStartingEquipment(EntityClass.Crossbowman, _startingEquipmentTable);
+
+            var audioStore = Object.FindObjectOfType<AudioStore>();
+
+            HurtSound = audioStore.companionHurt;
+            DieSound = audioStore.companionDie;
         }
     }
 }

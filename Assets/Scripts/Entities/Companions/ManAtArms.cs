@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Audio;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities.Companions
@@ -15,16 +16,18 @@ namespace Assets.Scripts.Entities.Companions
             {EquipLocation.Shield, new List<string> {"Knight's Shield", "Wooden Shield", "Heater Shield"}}
         };
 
-        private static readonly string _hurtSound = GlobalHelper.CompanionHitOne;
-        private static readonly string _dieSound = GlobalHelper.CompanionDieOne;
-
-        public ManAtArms(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.ManAtArms, isPlayer, _hurtSound, _dieSound)
+        public ManAtArms(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.ManAtArms, isPlayer)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 
             CombatSpritePrefab = entityPrefabStore.GetCombatSpritePrefab("ManAtArms");
 
             GenerateStartingEquipment(EntityClass.ManAtArms, _startingEquipmentTable);
+
+            var audioStore = Object.FindObjectOfType<AudioStore>();
+
+            HurtSound = audioStore.companionHurt;
+            DieSound = audioStore.companionDie;
         }
     }
 }

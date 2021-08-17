@@ -1,14 +1,12 @@
 ﻿using Assets.Scripts.Abilities;
+using Assets.Scripts.Audio;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities.Necromancer
 {
     public class Ghost : Entity
     {
-        private static readonly string _hurtSound = GlobalHelper.MonsterHitOne;
-        private static readonly string _dieSound = GlobalHelper.MonsterDieOne;
-
-        public Ghost() : base(Race.RaceType.Undead, EntityClass.Ethereal, false, _hurtSound, _dieSound)
+        public Ghost() : base(Race.RaceType.Undead, EntityClass.Ethereal, false)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 
@@ -25,6 +23,11 @@ namespace Assets.Scripts.Entities.Necromancer
             var intimidate = abilityStore.GetAbilityByName("intimidate", this);
 
             Abilities.Add(intimidate.GetType(), intimidate);
+
+            var audioStore = Object.FindObjectOfType<AudioStore>();
+
+            HurtSound = audioStore.monsterHurt;
+            DieSound = audioStore.monsterDie;
         }
     }
 }

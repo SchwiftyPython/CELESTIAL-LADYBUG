@@ -55,8 +55,9 @@ namespace Assets.Scripts.Entities
 
         public string HurtSound;
         public string DieSound;
+        public string AttackSound;
 
-        public Entity(Race.RaceType rType, EntityClass eClass, bool isPlayer, string hurtSound, string dieSound) : base((-1, -1), 1, null, false, false, true)
+        public Entity(Race.RaceType rType, EntityClass eClass, bool isPlayer) : base((-1, -1), 1, null, false, false, true)
         {
             Sex = PickSex();
 
@@ -74,9 +75,6 @@ namespace Assets.Scripts.Entities
             EntityClass = eClass;
 
             _isPlayer = isPlayer;
-
-            HurtSound = hurtSound;
-            DieSound = dieSound;
 
             Attributes = new Attributes(this);
             Skills = new Skills(this);
@@ -344,6 +342,10 @@ namespace Assets.Scripts.Entities
 
         public void MeleeAttack(Entity target, IModifierProvider modifierProvider = null)
         {
+            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
+
+            eAudio.Attack(AttackSound);
+
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
             int toHitMod = 0;
@@ -387,6 +389,10 @@ namespace Assets.Scripts.Entities
 
         public void MeleeAttackWithSlot(Entity target, EquipLocation slot, IModifierProvider modifierProvider = null)
         {
+            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
+
+            eAudio.Attack(AttackSound);
+
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
             int toHitMod = 0;
@@ -430,6 +436,10 @@ namespace Assets.Scripts.Entities
 
         public void RangedAttack(Entity target, IModifierProvider modifierProvider = null)
         {
+            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
+
+            eAudio.Attack(AttackSound);
+
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Ranged);
 
             int toHitMod = 0;
@@ -473,6 +483,10 @@ namespace Assets.Scripts.Entities
 
         public void AttackWithAbility(Entity target, Ability ability)
         {
+            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
+
+            eAudio.Attack(AttackSound);
+
             IModifierProvider modifierProvider = ability as IModifierProvider;
 
             int toHitMod = 0;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Audio;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities.Companions
@@ -14,16 +15,18 @@ namespace Assets.Scripts.Entities.Companions
             {EquipLocation.Body, new List<string> {"Plate Armor", "Mail Shirt"}}
         };
 
-        private static readonly string _hurtSound = GlobalHelper.CompanionHitOne;
-        private static readonly string _dieSound = GlobalHelper.CompanionDieOne;
-
-        public Knight(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Knight, isPlayer, _hurtSound, _dieSound)
+        public Knight(Race.RaceType rType, bool isPlayer) : base(rType, EntityClass.Knight, isPlayer)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();
 
             CombatSpritePrefab = entityPrefabStore.GetCombatSpritePrefab("Knight");
 
             GenerateStartingEquipment(EntityClass.Knight, _startingEquipmentTable);
+
+            var audioStore = Object.FindObjectOfType<AudioStore>();
+
+            HurtSound = audioStore.companionHurt;
+            DieSound = audioStore.companionDie;
         }
     }
 }
