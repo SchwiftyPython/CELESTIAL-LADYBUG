@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Assets.Scripts.Audio;
 using Assets.Scripts.Encounters;
 using Assets.Scripts.Entities;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace Assets.Scripts.Travel
         private const int FullGameDaysToDestination = 15;
 
         private int _currentDayOfTravel;
+
+        private MusicController _musicController;
 
         public int TravelDaysToDestination { get; private set; }
 
@@ -36,6 +39,8 @@ namespace Assets.Scripts.Travel
             _currentDayOfTravel = 0;
 
             TravelDaysToDestination = DemoDaysToDestination;
+
+            _musicController = FindObjectOfType<MusicController>();
         }
 
         public void NewParty()
@@ -53,6 +58,8 @@ namespace Assets.Scripts.Travel
         {
             var encounterManager = FindObjectOfType<EncounterManager>();
             encounterManager.BuildDecksForNewDay();
+
+            _musicController.PlayTravelMusic();
         }
 
         public string BuildPartyRewardTextItem(int value, PartySupplyTypes gainType)

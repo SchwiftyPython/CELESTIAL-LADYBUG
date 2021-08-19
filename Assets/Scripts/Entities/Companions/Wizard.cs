@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Audio;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities.Companions
@@ -20,6 +21,12 @@ namespace Assets.Scripts.Entities.Companions
             CombatSpritePrefab = entityPrefabStore.GetCombatSpritePrefab("Wizard");
 
             GenerateStartingEquipment(EntityClass.Wizard, _startingEquipmentTable);
+
+            var audioStore = Object.FindObjectOfType<AudioStore>();
+
+            HurtSound = audioStore.companionHurt;
+            DieSound = audioStore.companionDie;
+            AttackSound = audioStore.genericAttack; //todo can probably define attack sounds for abilities then fall back on entity attack sound if not exist
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Abilities;
+using Assets.Scripts.Audio;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities.Necromancer
@@ -38,6 +39,12 @@ namespace Assets.Scripts.Entities.Necromancer
             Abilities.Add(intimidate.GetType(), intimidate);
 
             GenerateStartingEquipment(EntityClass.Wizard, _startingEquipmentTable);
+
+            var audioStore = Object.FindObjectOfType<AudioStore>();
+
+            HurtSound = audioStore.monsterHurt;
+            DieSound = audioStore.monsterDie;
+            AttackSound = audioStore.genericAttack;
         }
     }
 }

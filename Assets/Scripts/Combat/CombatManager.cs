@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.AI;
+using Assets.Scripts.Audio;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Travel;
 using Assets.Scripts.UI;
@@ -49,6 +50,7 @@ namespace Assets.Scripts.Combat
         private EventMediator _eventMediator;
         private TravelManager _travelManager;
         private CombatInputController _combatInput;
+        private MusicController _musicController;
 
         private List<EffectTrigger<EffectArgs>> _effectTriggers;
 
@@ -76,6 +78,8 @@ namespace Assets.Scripts.Combat
             _travelManager = FindObjectOfType<TravelManager>();
 
             _combatInput = FindObjectOfType<CombatInputController>();
+
+            _musicController = FindObjectOfType<MusicController>();
         }
 
         private void Update()
@@ -84,6 +88,8 @@ namespace Assets.Scripts.Combat
             switch (_currentCombatState)
             {
                 case CombatState.Loading: //we want to wait until we have enemy combatants populated
+
+                    _musicController.EndTravelMusic();
 
                     //todo travel manager checks for testing in combat scene
                     if (_travelManager != null && _travelManager.Party != null && Enemies != null && Enemies.Count > 0)
@@ -148,7 +154,7 @@ namespace Assets.Scripts.Combat
                     _eventMediator.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
                     _eventMediator.Broadcast(RefreshUi, this, ActiveEntity);
 
-                    //_combatInput.HighlightMovementRange();
+                    _musicController.PlayBattleMusic();
 
                     break;
                 case CombatState.PlayerTurn:
@@ -224,14 +230,24 @@ namespace Assets.Scripts.Combat
                         if (PlayerRetreated())
                         {
                             _result = CombatResult.Retreat;
+
+                            //_musicController.PlayBattleVictoryMusic();
+
+                            _musicController.EndBattleMusic();
                         }
                         else if (PlayerDead())
                         {
                             _result = CombatResult.Defeat;
+
+                            _musicController.PlayBattleGameOverMusic();
                         }
                         else
                         {
                             _result = CombatResult.Victory;
+
+                            //_musicController.PlayBattleVictoryMusic();
+
+                            _musicController.EndBattleMusic();
                         }
                     }
 

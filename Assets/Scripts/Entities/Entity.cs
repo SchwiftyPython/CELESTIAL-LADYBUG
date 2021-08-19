@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.AI;
+using Assets.Scripts.Audio;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Effects;
 using Assets.Scripts.Effects.Args;
@@ -51,6 +52,10 @@ namespace Assets.Scripts.Entities
 
         public UnityEngine.GameObject CombatSpritePrefab { get; protected set; }
         public UnityEngine.GameObject CombatSpriteInstance { get; private set; }
+
+        public string HurtSound;
+        public string DieSound;
+        public string AttackSound;
 
         public Entity(Race.RaceType rType, EntityClass eClass, bool isPlayer) : base((-1, -1), 1, null, false, false, true)
         {
@@ -337,6 +342,10 @@ namespace Assets.Scripts.Entities
 
         public void MeleeAttack(Entity target, IModifierProvider modifierProvider = null)
         {
+            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
+
+            eAudio.Attack(AttackSound);
+
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
             int toHitMod = 0;
@@ -380,6 +389,10 @@ namespace Assets.Scripts.Entities
 
         public void MeleeAttackWithSlot(Entity target, EquipLocation slot, IModifierProvider modifierProvider = null)
         {
+            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
+
+            eAudio.Attack(AttackSound);
+
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
             int toHitMod = 0;
@@ -423,6 +436,10 @@ namespace Assets.Scripts.Entities
 
         public void RangedAttack(Entity target, IModifierProvider modifierProvider = null)
         {
+            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
+
+            eAudio.Attack(AttackSound);
+
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Ranged);
 
             int toHitMod = 0;
@@ -466,6 +483,10 @@ namespace Assets.Scripts.Entities
 
         public void AttackWithAbility(Entity target, Ability ability)
         {
+            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
+
+            eAudio.Attack(AttackSound);
+
             IModifierProvider modifierProvider = ability as IModifierProvider;
 
             int toHitMod = 0;
@@ -862,6 +883,9 @@ namespace Assets.Scripts.Entities
 
             var totalRoll = coreRoll + wildRoll + toHitMod;
 
+            Debug.Log($"Total Roll: {totalRoll}");
+            Debug.Log($"Difficulty: {hitDifficulty}");
+
             string message;
             if (totalRoll >= hitDifficulty)
             {
@@ -950,6 +974,15 @@ namespace Assets.Scripts.Entities
         public void SubtractHealth(int amount)
         {
             Stats.CurrentHealth -= amount;
+
+            if (IsDead())
+            {
+                return;
+            }
+
+            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
+
+            eAudio.TakeDamage(HurtSound);
         }
 
         public int AddEnergy(int amount)

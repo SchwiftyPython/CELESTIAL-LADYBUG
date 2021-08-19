@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Audio;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities.Companions
@@ -21,6 +22,12 @@ namespace Assets.Scripts.Entities.Companions
             CombatSpritePrefab = entityPrefabStore.GetCombatSpritePrefab("Knight");
 
             GenerateStartingEquipment(EntityClass.Knight, _startingEquipmentTable);
+
+            var audioStore = Object.FindObjectOfType<AudioStore>();
+
+            HurtSound = audioStore.companionHurt;
+            DieSound = audioStore.companionDie;
+            AttackSound = audioStore.genericAttack;
         }
     }
 }

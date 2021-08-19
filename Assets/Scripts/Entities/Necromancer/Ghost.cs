@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Abilities;
+using Assets.Scripts.Audio;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities.Necromancer
@@ -22,6 +23,12 @@ namespace Assets.Scripts.Entities.Necromancer
             var intimidate = abilityStore.GetAbilityByName("intimidate", this);
 
             Abilities.Add(intimidate.GetType(), intimidate);
+
+            var audioStore = Object.FindObjectOfType<AudioStore>();
+
+            HurtSound = audioStore.monsterHurt;
+            DieSound = audioStore.monsterDie;
+            AttackSound = audioStore.genericAttack;
         }
     }
 }

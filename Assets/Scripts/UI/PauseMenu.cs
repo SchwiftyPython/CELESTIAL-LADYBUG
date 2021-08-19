@@ -14,7 +14,10 @@ namespace Assets.Scripts.UI
 
         private void Start()
         {
-            Hide();
+            if (uiContainer.activeSelf)
+            {
+                Hide();
+            }
         }
 
         private void Update()

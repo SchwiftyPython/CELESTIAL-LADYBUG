@@ -1,5 +1,6 @@
 ﻿using System;
 using Assets.Scripts.Abilities;
+using Assets.Scripts.Audio;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
@@ -73,6 +74,10 @@ namespace Assets.Scripts.Entities
                         {
                             ability.Terminate();
                         }
+
+                        var eAudio = _parent.CombatSpriteInstance.GetComponent<EntityAudio>();
+
+                        eAudio.Die(_parent.DieSound);
 
                         var eventMediator = Object.FindObjectOfType<EventMediator>();
                         eventMediator.Broadcast(GlobalHelper.EntityDead, _parent);
