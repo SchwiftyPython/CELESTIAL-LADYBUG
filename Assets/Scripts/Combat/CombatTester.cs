@@ -37,19 +37,19 @@ namespace Assets.Scripts.Combat
 
             for (var i = 0; i < 1; i++)
             {
-                Entity bandit = new Spider();
+                Entity bandit = new Skeleton();
 
                 bandits.Add(bandit);
 
-                bandit = new Spider();
+                bandit = new Skeleton();
 
                 bandits.Add(bandit);
 
-                bandit = new Spider();
+                bandit = new Skeleton();
 
                 bandits.Add(bandit);
 
-                bandit = new Spider();
+                bandit = new Vampire();
 
                 bandits.Add(bandit);
 

@@ -26,6 +26,7 @@ namespace Assets.Scripts.Entities.Necromancer
 
             HurtSound = audioStore.skeletonHurt;
             DieSound = audioStore.skeletonDie;
+            AttackSound = audioStore.genericAttack;
         }
     }
 }

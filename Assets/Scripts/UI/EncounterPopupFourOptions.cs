@@ -19,6 +19,8 @@ namespace Assets.Scripts.UI
         public TextMeshProUGUI EncounterTitle;
         public TextMeshProUGUI EncounterDescription;
 
+        [FMODUnity.EventRef] public string popupSound;
+
         private void Awake()
         {
             _optionButtons = new List<GameObject>
@@ -71,6 +73,9 @@ namespace Assets.Scripts.UI
 
             gameObject.SetActive(true);
             GameManager.Instance.AddActiveWindow(gameObject);
+
+            var sound = FMODUnity.RuntimeManager.CreateInstance(popupSound);
+            sound.start();
         }
 
         public void Hide()

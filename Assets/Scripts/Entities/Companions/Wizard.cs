@@ -26,6 +26,7 @@ namespace Assets.Scripts.Entities.Companions
 
             HurtSound = audioStore.companionHurt;
             DieSound = audioStore.companionDie;
+            AttackSound = audioStore.genericAttack; //todo can probably define attack sounds for abilities then fall back on entity attack sound if not exist
         }
     }
 }

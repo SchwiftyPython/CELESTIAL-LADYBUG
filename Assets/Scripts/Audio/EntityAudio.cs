@@ -2,9 +2,6 @@
 
 namespace Assets.Scripts.Audio
 {
-    //todo if all the methods can be static then we'll just make this a static class and
-    //not bother with attaching to gameobject
-
     public class EntityAudio : MonoBehaviour 
     {
         public void Attack(string soundPath)

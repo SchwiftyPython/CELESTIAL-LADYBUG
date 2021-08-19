@@ -364,9 +364,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed2bc7a2f1f7e6246b8fe6d7faf4b503, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleMusic: event:/Battle Music
-  travelMusic: event:/Travel Music
-  titleMusic: event:/Title Music
+  battleMusic: event:/Music/Battle Music
+  travelMusic: event:/Music/Travel Music
+  titleMusic: event:/Music/Title Music
   muteMusic: 0
 --- !u!114 &6424118163489059769
 MonoBehaviour:
@@ -380,15 +380,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c3437ae04b314b4f99f29ec6476fee2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  companionHurt: event:/Companion Hit 1
-  companionDie: event:/Companion Die 1
-  monsterHurt: event:/Monster Hit 1
-  monsterDie: event:/Monster Die 1
-  skeletonHurt: event:/Skeleton Hit
-  skeletonDie: event:/Skeleton Die
-  spiderHurt: event:/Spider Hit
-  spiderDie: event:/Spider Die
-  spiderAttack: event:/Spider Attack
+  companionHurt: event:/Entities/Companion Hit 1
+  companionDie: event:/Entities/Companion Die 1
+  monsterHurt: event:/Entities/Monster Hit 1
+  monsterDie: event:/Entities/Monster Die 1
+  skeletonHurt: event:/Entities/Skeleton Hit
+  skeletonDie: event:/Entities/Skeleton Die
+  spiderHurt: event:/Entities/Spider Hit
+  spiderDie: event:/Entities/Spider Die
+  spiderAttack: event:/Entities/Spider Attack
+  genericAttack: event:/Entities/Generic Attack
+  bowAttack: event:/Entities/Bow Attack
+  genericPopup: event:/Interface/Generic Popup
+  buttonClick: event:/Interface/Button Click
+  buttonHover: event:/Interface/Button Hover
+  resultPopup: event:/Interface/Popup Result
 --- !u!1 &1671906415
 GameObject:
   m_ObjectHideFlags: 0

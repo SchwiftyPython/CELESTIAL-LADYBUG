@@ -1,14 +1,31 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Audio;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
-    //todo can we make this happen automagically somehow without having to attach it to every button in the inspector?
     public class ButtonClick : MonoBehaviour
     {
+        private string _buttonClick;
+        private string _buttonHover;
+
+        private void Start()
+        {
+            var audioStore = FindObjectOfType<AudioStore>();
+
+            _buttonClick = audioStore.buttonClick;
+            _buttonHover = audioStore.buttonHover;
+        }
+
         public void Clicked()
         {
-            var eventMediator = FindObjectOfType<EventMediator>();
-            eventMediator.Broadcast(GlobalHelper.ButtonClick, this);
+            var sound = FMODUnity.RuntimeManager.CreateInstance(_buttonClick);
+            sound.start();
+        }
+
+        public void OnHover()
+        {
+            var sound = FMODUnity.RuntimeManager.CreateInstance(_buttonHover);
+            sound.start();
         }
     }
 }

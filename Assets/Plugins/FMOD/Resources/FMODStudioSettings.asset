@@ -435,7 +435,9 @@ MonoBehaviour:
   Banks:
   - Companions
   - Enemies
+  - Interface
   - Music
+  - Neutral
   BanksToLoad: []
   LiveUpdatePort: 9264
   EnableMemoryTracking: 0

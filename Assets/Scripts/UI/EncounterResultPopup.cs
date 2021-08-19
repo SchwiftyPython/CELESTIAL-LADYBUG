@@ -17,6 +17,8 @@ namespace Assets.Scripts.UI
         public TextMeshProUGUI EncounterTitle;
         public TextMeshProUGUI ResultDescription;
 
+        [FMODUnity.EventRef] public string popupSound;
+
         private void Awake()
         {
             var eventMediator = Object.FindObjectOfType<EventMediator>();
@@ -46,6 +48,9 @@ namespace Assets.Scripts.UI
             gameObject.SetActive(true);
 
             GameManager.Instance.AddActiveWindow(gameObject);
+
+            var sound = FMODUnity.RuntimeManager.CreateInstance(popupSound);
+            sound.start();
         }
 
         public void Hide()
