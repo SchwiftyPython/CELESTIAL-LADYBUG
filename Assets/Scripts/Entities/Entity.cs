@@ -980,6 +980,11 @@ namespace Assets.Scripts.Entities
                 return;
             }
 
+            if (CombatSpriteInstance == null)
+            {
+                return;
+            }
+
             var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
 
             eAudio.TakeDamage(HurtSound);

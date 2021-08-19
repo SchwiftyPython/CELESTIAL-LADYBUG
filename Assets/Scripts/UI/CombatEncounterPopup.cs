@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Encounters;
+using Assets.Scripts.Utilities.UI;
 using TMPro;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace Assets.Scripts.UI
         private const string EncounterPopupEvent = GlobalHelper.CombatEncounter;
         private const string RetreatFailedPopupEvent = GlobalHelper.RetreatEncounterFailed;
 
+        private TextWriter _textWriter;
         private List<GameObject> _optionButtons;
 
         public GameObject OptionButtonOne;
@@ -29,6 +31,11 @@ namespace Assets.Scripts.UI
             var eventMediator = Object.FindObjectOfType<EventMediator>();
             eventMediator.SubscribeToEvent(EncounterPopupEvent, this);
             eventMediator.SubscribeToEvent(RetreatFailedPopupEvent, this);
+
+            _textWriter = GetComponent<TextWriter>();
+
+            GetComponent<Button_UI>().ClickFunc = _textWriter.DisplayMessageInstantly;
+
             Hide();
         }
 
@@ -47,7 +54,8 @@ namespace Assets.Scripts.UI
         private void Show(Encounter encounter)
         {
             EncounterTitle.text = encounter.Title;
-            EncounterDescription.text = encounter.Description;
+
+            _textWriter.AddWriter(EncounterDescription, encounter.Description, GlobalHelper.DefaultTextSpeed, true);
 
             DisableAllButtons();
 

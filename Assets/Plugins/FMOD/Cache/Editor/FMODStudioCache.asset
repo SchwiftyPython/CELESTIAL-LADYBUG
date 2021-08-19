@@ -138,7 +138,7 @@ MonoBehaviour:
   Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Neutral.bank
   Name: Neutral
   StudioPath: bank:/Neutral
-  lastModified: 637648926687131908
+  lastModified: 637649780977766854
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -217,7 +217,7 @@ MonoBehaviour:
   Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Interface.bank
   Name: Interface
   StudioPath: bank:/Interface
-  lastModified: 637648926687340470
+  lastModified: 637649780976229240
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -583,7 +583,7 @@ MonoBehaviour:
   ID:
     data1: 0
     data2: 0
-  Exists: 1
+  Exists: 0
 --- !u!114 &-7462925102901692666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1007,6 +1007,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &-6737425782122566800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Title Music/End Title Music
+  m_EditorClassIdentifier: 
+  Name: End Title Music
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-6661308419457420327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1042,7 +1062,7 @@ MonoBehaviour:
   Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637648926686353186
+  lastModified: 637649780976274190
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -1208,7 +1228,7 @@ MonoBehaviour:
   ID:
     data1: 0
     data2: 0
-  Exists: 1
+  Exists: 0
 --- !u!114 &-6376784726082421395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1289,8 +1309,8 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: -5810293939743160571}
-  - {fileID: 2981162815569253676}
+  - {fileID: 6905783033007907039}
+  - {fileID: 2705948373850794436}
   MinDistance: 0
   MaxDistance: 0
   Length: 374000
@@ -1309,11 +1329,11 @@ MonoBehaviour:
   Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637648926686368333
+  lastModified: 637649780976294011
   LoadResult: 0
   FileSizes:
   - Name: Desktop
-    Value: 2100
+    Value: 2140
   Exists: 1
 --- !u!114 &-6095489977031382385
 MonoBehaviour:
@@ -1454,7 +1474,7 @@ MonoBehaviour:
   ID:
     data1: 0
     data2: 0
-  Exists: 1
+  Exists: 0
 --- !u!114 &-5786732241181269112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1558,6 +1578,29 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &-5497869069973196704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Interface/Text Write
+  m_EditorClassIdentifier: 
+  Path: event:/Interface/Text Write
+  guid: 719bd310effc1541ace0fdb1f6585250
+  Banks:
+  - {fileID: -8681733012055259582}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 0
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 7537
 --- !u!114 &-5494299122954113213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1739,7 +1782,7 @@ MonoBehaviour:
   Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Companions.bank
   Name: Companions
   StudioPath: bank:/Companions
-  lastModified: 637648926685986138
+  lastModified: 637649780974151003
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -2427,7 +2470,7 @@ MonoBehaviour:
   Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Enemies.bank
   Name: Enemies
   StudioPath: bank:/Enemies
-  lastModified: 637648926686298621
+  lastModified: 637649780975078515
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -2795,7 +2838,7 @@ MonoBehaviour:
   ID:
     data1: 0
     data2: 0
-  Exists: 1
+  Exists: 0
 --- !u!114 &-1723912438322776961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3099,6 +3142,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &-924435967612850383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Battle Music/End Battle Music
+  m_EditorClassIdentifier: 
+  Name: End Battle Music
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-705746785604567919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3198,7 +3261,7 @@ MonoBehaviour:
   ID:
     data1: 0
     data2: 0
-  Exists: 1
+  Exists: 0
 --- !u!114 &-226829569325702905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3298,12 +3361,13 @@ MonoBehaviour:
   - {fileID: 1539708531143452724}
   - {fileID: -3431956617924572427}
   - {fileID: 7881629732338554041}
+  - {fileID: -5497869069973196704}
   EditorParameters: []
   MasterBanks:
   - {fileID: -6658935821727719001}
   StringsBanks:
   - {fileID: -6100143119512428333}
-  stringsBankWriteTime: 637648926686368333
+  stringsBankWriteTime: 637649780976294011
   cacheVersion: 6
 --- !u!114 &34974994391803826
 MonoBehaviour:
@@ -3384,7 +3448,7 @@ MonoBehaviour:
   ID:
     data1: 0
     data2: 0
-  Exists: 1
+  Exists: 0
 --- !u!114 &186498990129921353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3991,10 +4055,10 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: -7571182522972128200}
-  - {fileID: -6390472935234453385}
-  - {fileID: 145749490312655858}
-  - {fileID: -1727932133470497801}
+  - {fileID: -924435967612850383}
+  - {fileID: 3472111576959007896}
+  - {fileID: 2414248960167664423}
+  - {fileID: 8414766411257086398}
   MinDistance: 0
   MaxDistance: 0
   Length: 451056
@@ -4347,6 +4411,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &2414248960167664423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Battle Music/Game Over
+  m_EditorClassIdentifier: 
+  Name: Game Over
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &2455892392225993257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4427,6 +4511,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &2705948373850794436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Travel Music/End Travel Music
+  m_EditorClassIdentifier: 
+  Name: End Travel Music
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &2738605827697761055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4486,7 +4590,7 @@ MonoBehaviour:
   ID:
     data1: 0
     data2: 0
-  Exists: 1
+  Exists: 0
 --- !u!114 &3040020036007355004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4692,6 +4796,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &3472111576959007896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Battle Music/Mute
+  m_EditorClassIdentifier: 
+  Name: Mute
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &3474308377793565230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4870,7 +4994,7 @@ MonoBehaviour:
   Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 637648926686918862
+  lastModified: 637649780977246038
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -5606,6 +5730,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &6183749261765623157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Title Music/Mute
+  m_EditorClassIdentifier: 
+  Name: Mute
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &6213754579355244596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5705,7 +5849,7 @@ MonoBehaviour:
   ID:
     data1: 0
     data2: 0
-  Exists: 1
+  Exists: 0
 --- !u!114 &6409508620091171150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5806,6 +5950,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &6905783033007907039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Travel Music/Mute
+  m_EditorClassIdentifier: 
+  Name: Mute
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &6997005791965229588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6272,8 +6436,8 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 1
   Parameters:
-  - {fileID: 6401425326267997006}
-  - {fileID: -280684112176316390}
+  - {fileID: -6737425782122566800}
+  - {fileID: 6183749261765623157}
   MinDistance: 0
   MaxDistance: 0
   Length: 140500
@@ -6357,6 +6521,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &8414766411257086398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Battle Music/Victory
+  m_EditorClassIdentifier: 
+  Name: Victory
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &8427032774149609371
 MonoBehaviour:
   m_ObjectHideFlags: 0

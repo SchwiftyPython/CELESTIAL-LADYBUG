@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Assets.Scripts.Encounters;
+using Assets.Scripts.Utilities.UI;
 using TMPro;
 using UnityEngine;
 
@@ -9,6 +11,8 @@ namespace Assets.Scripts.UI
     {
         private const string PopupEvent = GlobalHelper.FourOptionEncounter;
 
+        private Encounter _encounter;
+        private TextWriter _textWriter;
         private List<GameObject> _optionButtons;
 
         public GameObject OptionButtonOne;
@@ -31,8 +35,14 @@ namespace Assets.Scripts.UI
                 OptionButtonFour
             };
 
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
             eventMediator.SubscribeToEvent(PopupEvent, this);
+            eventMediator.SubscribeToEvent(GlobalHelper.WritingFinished, this);
+
+            _textWriter = GetComponent<TextWriter>();
+
+            GetComponent<Button_UI>().ClickFunc = _textWriter.DisplayMessageInstantly;
+
             Hide();
         }
 
@@ -54,13 +64,25 @@ namespace Assets.Scripts.UI
 
         private void Show(Encounter encounter)
         {
-            EncounterTitle.text = encounter.Title;
-            EncounterDescription.text = encounter.Description;
+            _encounter = encounter;
+
+            EncounterTitle.text = _encounter.Title;
 
             DisableAllButtons();
 
+            _textWriter.AddWriter(EncounterDescription, _encounter.Description, GlobalHelper.DefaultTextSpeed, true);
+
+            gameObject.SetActive(true);
+            GameManager.Instance.AddActiveWindow(gameObject);
+
+            var sound = FMODUnity.RuntimeManager.CreateInstance(popupSound);
+            sound.start();
+        }
+
+        private void ShowButtons()
+        {
             var optionButtonIndex = 0;
-            foreach (var optionText in encounter.Options.Keys)
+            foreach (var optionText in _encounter.Options.Keys)
             {
                 var button = _optionButtons[optionButtonIndex].GetComponent<EncounterOptionButton>();
 
@@ -70,12 +92,6 @@ namespace Assets.Scripts.UI
 
                 optionButtonIndex++;
             }
-
-            gameObject.SetActive(true);
-            GameManager.Instance.AddActiveWindow(gameObject);
-
-            var sound = FMODUnity.RuntimeManager.CreateInstance(popupSound);
-            sound.start();
         }
 
         public void Hide()
@@ -84,16 +100,27 @@ namespace Assets.Scripts.UI
             GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 
+        public void HideDelayed()
+        {
+            StartCoroutine(Delay());
+            Hide();
+        }
+
+        private IEnumerator Delay()
+        {
+            yield return new WaitForSecondsRealtime(.5f);
+        }
+
         private void OnDestroy()
         {
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
 
             if (eventMediator == null)
             {
                 return;
             }
 
-            eventMediator.UnsubscribeFromEvent(PopupEvent, this);
+            eventMediator.UnsubscribeFromAllEvents(this);
             GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 
@@ -109,6 +136,10 @@ namespace Assets.Scripts.UI
                 }
 
                 Show(encounter);
+            }
+            else if (eventName.Equals(GlobalHelper.WritingFinished))
+            {
+                ShowButtons();
             }
         }
     }

@@ -18,6 +18,7 @@ namespace Assets.Scripts
     {
         public const string DoubleSpace = "\n\n";
         public const string SingleSpace = "\n";
+        public const float DefaultTextSpeed = 0.015f;
 
         #region EventNames  //todo would it be better to make these enums?
 
@@ -29,6 +30,7 @@ namespace Assets.Scripts
         public const string RetreatEncounterFailed = "RetreatEncounterFailed";
         public const string EncounterResult = "EncounterResult";
         public const string EncounterFinished = "EncounterFinished";
+        public const string WritingFinished = "WritingFinished";
         public const string CampingEncounterFinished = "CampingEncounterFinished";
         public const string PartyEatAndHeal = "PartyEatAndHeal";
         public const string PlayerTurn = "PlayerTurn";

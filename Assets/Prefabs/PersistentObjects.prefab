@@ -395,6 +395,7 @@ MonoBehaviour:
   buttonClick: event:/Interface/Button Click
   buttonHover: event:/Interface/Button Hover
   resultPopup: event:/Interface/Popup Result
+  textWriting: event:/Interface/Text Write
 --- !u!1 &1671906415
 GameObject:
   m_ObjectHideFlags: 0

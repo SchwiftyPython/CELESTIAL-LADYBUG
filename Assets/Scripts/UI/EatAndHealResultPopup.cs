@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Utilities.UI;
 using TMPro;
 using UnityEngine;
 
@@ -9,12 +10,19 @@ namespace Assets.Scripts.UI
     {
         private const string PopupEvent = GlobalHelper.PartyEatAndHeal;
 
+        private TextWriter _textWriter;
+
         public TextMeshProUGUI ResultDescription;
 
         private void Awake()
         {
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
             eventMediator.SubscribeToEvent(PopupEvent, this);
+
+            _textWriter = GetComponent<TextWriter>();
+
+            GetComponent<Button_UI>().ClickFunc = _textWriter.DisplayMessageInstantly;
+
             Hide();
         }
 
@@ -26,7 +34,7 @@ namespace Assets.Scripts.UI
                 resultText += '\n' + line;
             }
 
-            ResultDescription.text = resultText;
+            _textWriter.AddWriter(ResultDescription, resultText, GlobalHelper.DefaultTextSpeed, true);
 
             gameObject.SetActive(true);
 
@@ -41,7 +49,7 @@ namespace Assets.Scripts.UI
 
         private void OnDestroy()
         {
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
 
             if (eventMediator == null)
             {
