@@ -75,12 +75,17 @@ namespace Assets.Scripts.Entities
                             ability.Terminate();
                         }
 
+                        var eventMediator = Object.FindObjectOfType<EventMediator>();
+                        eventMediator.Broadcast(GlobalHelper.EntityDead, _parent);
+
+                        if (_parent.CombatSpriteInstance == null)
+                        {
+                            return;
+                        }
+
                         var eAudio = _parent.CombatSpriteInstance.GetComponent<EntityAudio>();
 
                         eAudio.Die(_parent.DieSound);
-
-                        var eventMediator = Object.FindObjectOfType<EventMediator>();
-                        eventMediator.Broadcast(GlobalHelper.EntityDead, _parent);
                     }
                 }
                 else if(value > MaxHealth)

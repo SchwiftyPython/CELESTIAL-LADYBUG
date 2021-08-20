@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Encounters;
+using Assets.Scripts.Utilities.UI;
 using TMPro;
 using UnityEngine;
 
@@ -11,23 +12,34 @@ namespace Assets.Scripts.UI
         private const string EncounterFinished = GlobalHelper.EncounterFinished;
         private const string CampingEncounterFinished = GlobalHelper.CampingEncounterFinished;
 
+        private TextWriter _textWriter;
         private EncounterType _encounterType;
         private bool _countsAsDayTraveled;
 
         public TextMeshProUGUI EncounterTitle;
         public TextMeshProUGUI ResultDescription;
 
+        public GameObject OkayButton;
+
         [FMODUnity.EventRef] public string popupSound;
 
         private void Awake()
         {
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
             eventMediator.SubscribeToEvent(PopupEvent, this);
+            eventMediator.SubscribeToEvent(GlobalHelper.WritingFinished, this);
+
+            _textWriter = GetComponent<TextWriter>();
+
+            GetComponent<Button_UI>().ClickFunc = _textWriter.DisplayMessageInstantly;
+
             Hide();
         }
 
         private void Show(Encounter encounter, List<string> result)
         {
+            HideButtons();
+
             _encounterType = encounter.EncounterType;
 
             if (_encounterType == EncounterType.Camping)
@@ -43,7 +55,7 @@ namespace Assets.Scripts.UI
                 resultText += '\n' + line;
             }
 
-            ResultDescription.text = resultText;
+            _textWriter.AddWriter(ResultDescription, resultText, GlobalHelper.DefaultTextSpeed, true);
 
             gameObject.SetActive(true);
 
@@ -53,12 +65,22 @@ namespace Assets.Scripts.UI
             sound.start();
         }
 
+        private void ShowButtons()
+        {
+            OkayButton.SetActive(true);
+        }
+
+        private void HideButtons()
+        {
+            OkayButton.SetActive(false);
+        }
+
         public void Hide()
         {
             gameObject.SetActive(false);
             GameManager.Instance.RemoveActiveWindow(gameObject);
 
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
 
             if (_encounterType == EncounterType.Camping)
             {
@@ -70,7 +92,7 @@ namespace Assets.Scripts.UI
 
         private void OnDestroy()
         {
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
 
             if (eventMediator == null)
             {
@@ -100,6 +122,10 @@ namespace Assets.Scripts.UI
                 }
 
                 Show(encounter, result);
+            }
+            else if (eventName.Equals(GlobalHelper.WritingFinished))
+            {
+                ShowButtons();
             }
         }
     }

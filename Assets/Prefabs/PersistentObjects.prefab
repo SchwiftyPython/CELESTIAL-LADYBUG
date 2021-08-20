@@ -367,7 +367,7 @@ MonoBehaviour:
   battleMusic: event:/Music/Battle Music
   travelMusic: event:/Music/Travel Music
   titleMusic: event:/Music/Title Music
-  muteMusic: 0
+  muteMusic: 1
 --- !u!114 &6424118163489059769
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,6 +395,7 @@ MonoBehaviour:
   buttonClick: event:/Interface/Button Click
   buttonHover: event:/Interface/Button Hover
   resultPopup: event:/Interface/Popup Result
+  textWriting: event:/Interface/Text Write
 --- !u!1 &1671906415
 GameObject:
   m_ObjectHideFlags: 0
