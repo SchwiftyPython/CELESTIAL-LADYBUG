@@ -36,6 +36,7 @@ namespace Assets.Scripts.Audio
         [FMODUnity.EventRef] public string buttonClick;
         [FMODUnity.EventRef] public string buttonHover;
         [FMODUnity.EventRef] public string resultPopup;
+        [FMODUnity.EventRef] public string textWriting;
 
         public EntitySoundDto GetEntitySound(string key)
         {
