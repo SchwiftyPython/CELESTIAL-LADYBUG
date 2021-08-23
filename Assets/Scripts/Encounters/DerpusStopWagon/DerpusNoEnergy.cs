@@ -29,9 +29,7 @@ namespace Assets.Scripts.Encounters.DerpusStopWagon
 
             var fullResultDescription = new List<string> { Description + "\n" };
 
-            var rewardsText = travelManager.ApplyEncounterReward(Reward);
-
-            fullResultDescription.AddRange(rewardsText);
+            travelManager.ApplyEncounterReward(Reward);
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 

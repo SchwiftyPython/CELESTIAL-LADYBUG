@@ -35,9 +35,8 @@ namespace Assets.Scripts.Encounters.Normal
             fullResultDescription.Add(Description + "\n");
 
             var travelManager = Object.FindObjectOfType<TravelManager>();
-            var rewardsText = travelManager.ApplyEncounterReward(Reward);
-
-            fullResultDescription.AddRange(rewardsText);
+            
+            travelManager.ApplyEncounterReward(Reward);
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
             eventMediator.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);

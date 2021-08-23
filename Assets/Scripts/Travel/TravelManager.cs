@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Assets.Scripts.Audio;
 using Assets.Scripts.Encounters;
 using Assets.Scripts.Entities;
+using Assets.Scripts.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,6 +17,7 @@ namespace Assets.Scripts.Travel
         private int _currentDayOfTravel;
 
         private MusicController _musicController;
+        private TravelMessenger _travelMessenger;
 
         public int TravelDaysToDestination { get; private set; }
 
@@ -41,6 +43,8 @@ namespace Assets.Scripts.Travel
             TravelDaysToDestination = DemoDaysToDestination;
 
             _musicController = FindObjectOfType<MusicController>();
+
+            _travelMessenger = FindObjectOfType<TravelMessenger>();
         }
 
         public void NewParty()
@@ -87,21 +91,26 @@ namespace Assets.Scripts.Travel
             return $"{companion.Name} lost {value} {GlobalHelper.GetEnumDescription(lossType)}!";
         }
 
-        //todo refactor
-        public List<string> ApplyEncounterReward(Reward reward)
+        public void ApplyEncounterReward(Reward reward)
         {
-            var rewardsText = new List<string>(); //todo add each reward text to this list then return. UI can handle formatting.
-
             if (reward.Effects != null && reward.Effects.Count > 0)
             {
                 //todo apply effects
             }
 
-            if (reward.PartyGains != null && reward.PartyGains.Count > 0)
+            ApplyPartyReward(reward);
+            ApplyEntityReward(reward);
+        }
+
+        public void ApplyPartyReward(Reward partyReward)
+        {
+            var rewardsText = new List<string>();
+
+            if (partyReward.PartyGains != null && partyReward.PartyGains.Count > 0)
             {
-                foreach (var partyGain in reward.PartyGains)
+                foreach (var partyGain in partyReward.PartyGains)
                 {
-                    var gainType = (PartySupplyTypes) partyGain.Key;
+                    var gainType = (PartySupplyTypes)partyGain.Key;
 
                     switch (gainType)
                     {
@@ -123,9 +132,21 @@ namespace Assets.Scripts.Travel
                 }
             }
 
-            if (reward.EntityStatGains != null && reward.EntityStatGains.Count > 0)
+            if (_travelMessenger == null)
             {
-                foreach (var entityGain in reward.EntityStatGains)
+                _travelMessenger = FindObjectOfType<TravelMessenger>();
+            }
+
+            _travelMessenger.QueuePartyMessages(rewardsText);
+        }
+
+        public void ApplyEntityReward(Reward entityReward)
+        {
+            //var rewardsText = new List<string>();
+
+            if (entityReward.EntityStatGains != null && entityReward.EntityStatGains.Count > 0)
+            {
+                foreach (var entityGain in entityReward.EntityStatGains)
                 {
                     var targetEntity = entityGain.Key;
 
@@ -164,15 +185,18 @@ namespace Assets.Scripts.Travel
                                     break;
                             }
 
-                            rewardsText.Add(BuildCompanionRewardTextItem(companion, moddedGain, gainType));
+                            //var message = BuildCompanionRewardTextItem(companion, moddedGain, gainType); //modded gain was used to reflect actual gains, but kinda confusing in practice
+                            var message = BuildCompanionRewardTextItem(companion, statGain.Value, gainType); 
+
+                            _travelMessenger.QueueEntityMessage(message, companion);
                         }
                     }
                 }
             }
 
-            if (reward.EntityAttributeGains != null && reward.EntityAttributeGains.Count > 0)
+            if (entityReward.EntityAttributeGains != null && entityReward.EntityAttributeGains.Count > 0)
             {
-                foreach (var entityGain in reward.EntityAttributeGains)
+                foreach (var entityGain in entityReward.EntityAttributeGains)
                 {
                     var targetEntity = entityGain.Key;
 
@@ -218,13 +242,15 @@ namespace Assets.Scripts.Travel
                                     throw new ArgumentOutOfRangeException();
                             }
 
-                            rewardsText.Add(BuildCompanionRewardTextItem(companion, attributeGain.Value, gainType));
+                            //rewardsText.Add(BuildCompanionRewardTextItem(companion, attributeGain.Value, gainType));
+
+                            var message = BuildCompanionRewardTextItem(companion, attributeGain.Value, gainType); 
+
+                            _travelMessenger.QueueEntityMessage(message, companion);
                         }
                     }
                 }
             }
-
-            return rewardsText;
         }
 
         //todo refactor
@@ -303,7 +329,7 @@ namespace Assets.Scripts.Travel
                                     break;
                             }
 
-                            penaltiesText.Add(BuildCompanionLossTextItem(companion, statLoss.Value, lossType));
+                            penaltiesText.Add(BuildCompanionLossTextItem(companion, statLoss.Value, lossType)); 
                         }
                     }
                 }
