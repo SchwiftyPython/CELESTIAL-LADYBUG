@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Entities.Companions;
+using Assets.Scripts.UI;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -99,25 +100,32 @@ namespace Assets.Scripts
             var eatResult = Eat();
             var healResult = Heal();
 
-            var totalResult = new List<string>();
+            var totalResult = new List<TravelMessenger.PartyMessageDto>();
 
             totalResult.AddRange(eatResult);
             totalResult.AddRange(healResult);
 
-            EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
+            var travelMessenger = Object.FindObjectOfType<TravelMessenger>();
 
-            eventMediator.Broadcast(GlobalHelper.PartyEatAndHeal, this, totalResult);
+            travelMessenger.QueuePartyMessages(totalResult);
         }
 
-        //todo refactor may not need a list here
-        public List<string> Eat()
+        public List<TravelMessenger.PartyMessageDto> Eat()
         {
+            var travelMessenger = Object.FindObjectOfType<TravelMessenger>();
+
             if (_companions == null || _companions.Count < 1)
             {
-                return new List<string>{"No mouths to feed!"};
+                var partyDto = new TravelMessenger.PartyMessageDto
+                {
+                    Message = "No mouths to feed!",
+                    TextColor = new Color32(1, 1, 1, 1)
+                };
+
+                return new List<TravelMessenger.PartyMessageDto> {partyDto};
             }
 
-            var eatResult = new List<string>();
+            var eatResult = new List<TravelMessenger.PartyMessageDto>();
 
             //todo choose random order to feed companions. This allows for some to eat and not others when food is low. Then subtract morale for the hungry.
 
@@ -130,7 +138,13 @@ namespace Assets.Scripts
                     companion.SubtractMorale(MoraleFoodModifier);
                 }
 
-                eatResult.Add("Not enough food! Party morale drops!");
+                var partyDto = new TravelMessenger.PartyMessageDto
+                {
+                    Message = "Not enough food! Party morale drops!",
+                    TextColor = travelMessenger.penaltyColor
+                };
+
+                eatResult.Add(partyDto);
 
                 Debug.Log("Not enough food! Party morale drops!"); 
             }
@@ -138,7 +152,13 @@ namespace Assets.Scripts
             {
                 Food -= _companions.Count * FoodConsumedPerCompanion;
 
-                eatResult.Add($"Party ate {_companions.Count * FoodConsumedPerCompanion} food!");
+                var partyDto = new TravelMessenger.PartyMessageDto
+                {
+                    Message = $"Party ate {_companions.Count * FoodConsumedPerCompanion} food!",
+                    TextColor = travelMessenger.rewardColor
+                };
+
+                eatResult.Add(partyDto);
 
                 Debug.Log($"Party ate {_companions.Count * FoodConsumedPerCompanion} food!"); 
             }
@@ -161,21 +181,35 @@ namespace Assets.Scripts
             }
         }
 
-        public List<string> Heal()
+        public List<TravelMessenger.PartyMessageDto> Heal()
         {
             if (_companions == null || _companions.Count < 1)
             {
-                return new List<string>{"No one to heal!"};
+                var partyDto = new TravelMessenger.PartyMessageDto
+                {
+                    Message = "No one to heal!",
+                    TextColor = new Color32(1, 1, 1, 1)
+                };
+
+                return new List<TravelMessenger.PartyMessageDto> { partyDto };
             }
+
+            var travelMessenger = Object.FindObjectOfType<TravelMessenger>();
 
             if (HealthPotions <= 0)
             {
                 Debug.Log("No health potions! Can't heal!");
 
-                return new List<string> { "No health potions! Can't heal!" };
+                var partyDto = new TravelMessenger.PartyMessageDto
+                {
+                    Message = "No health potions! Can't heal!",
+                    TextColor = travelMessenger.penaltyColor
+                };
+
+                return new List<TravelMessenger.PartyMessageDto> { partyDto };
             }
 
-            var healResult = new List<string>();
+            var healResult = new List<TravelMessenger.PartyMessageDto>();
 
             //todo choose random order to heal companions.
 
@@ -190,7 +224,13 @@ namespace Assets.Scripts
                 {
                     companion.UseHealthPotion();
 
-                    healResult.Add($"{companion.FirstName()} used a health potion!");
+                    var partyDto = new TravelMessenger.PartyMessageDto
+                    {
+                        Message = $"{companion.FirstName()} used a health potion!",
+                        TextColor = travelMessenger.rewardColor
+                    };
+
+                    healResult.Add(partyDto);
 
                     HealthPotions--;
                 }

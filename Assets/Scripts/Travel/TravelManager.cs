@@ -104,7 +104,12 @@ namespace Assets.Scripts.Travel
 
         public void ApplyPartyReward(Reward partyReward)
         {
-            var rewardsText = new List<string>();
+            if (_travelMessenger == null)
+            {
+                _travelMessenger = FindObjectOfType<TravelMessenger>();
+            }
+
+            var rewardsText = new List<TravelMessenger.PartyMessageDto>();
 
             if (partyReward.PartyGains != null && partyReward.PartyGains.Count > 0)
             {
@@ -128,13 +133,14 @@ namespace Assets.Scripts.Travel
                             break;
                     }
 
-                    rewardsText.Add(BuildPartyRewardTextItem(partyGain.Value, gainType));
-                }
-            }
+                    var partyDto = new TravelMessenger.PartyMessageDto
+                    {
+                        Message = BuildPartyRewardTextItem(partyGain.Value, gainType),
+                        TextColor = _travelMessenger.rewardColor
+                    };
 
-            if (_travelMessenger == null)
-            {
-                _travelMessenger = FindObjectOfType<TravelMessenger>();
+                    rewardsText.Add(partyDto);
+                }
             }
 
             _travelMessenger.QueuePartyMessages(rewardsText);
@@ -142,8 +148,6 @@ namespace Assets.Scripts.Travel
 
         public void ApplyEntityReward(Reward entityReward)
         {
-            //var rewardsText = new List<string>();
-
             if (entityReward.EntityStatGains != null && entityReward.EntityStatGains.Count > 0)
             {
                 foreach (var entityGain in entityReward.EntityStatGains)
@@ -172,7 +176,7 @@ namespace Assets.Scripts.Travel
                             switch (gainType)
                             {
                                 case EntityStatTypes.CurrentMorale:
-                                    moddedGain = companion.AddMorale(statGain.Value);
+                                    moddedGain = companion.AddMorale(statGain.Value); //modded gain was used to reflect actual gains, but kinda confusing in practice
                                     break;
                                 case EntityStatTypes.CurrentHealth:
                                     moddedGain = companion.AddHealth(statGain.Value);
@@ -185,10 +189,14 @@ namespace Assets.Scripts.Travel
                                     break;
                             }
 
-                            //var message = BuildCompanionRewardTextItem(companion, moddedGain, gainType); //modded gain was used to reflect actual gains, but kinda confusing in practice
-                            var message = BuildCompanionRewardTextItem(companion, statGain.Value, gainType); 
+                            var entityDto = new TravelMessenger.EntityMessageDto
+                            {
+                                Message = BuildCompanionRewardTextItem(companion, statGain.Value, gainType),
+                                Portrait = companion.Portrait,
+                                TextColor = _travelMessenger.rewardColor
+                            };
 
-                            _travelMessenger.QueueEntityMessage(message, companion);
+                            _travelMessenger.QueueEntityMessage(entityDto);
                         }
                     }
                 }
@@ -242,30 +250,43 @@ namespace Assets.Scripts.Travel
                                     throw new ArgumentOutOfRangeException();
                             }
 
-                            //rewardsText.Add(BuildCompanionRewardTextItem(companion, attributeGain.Value, gainType));
+                            var entityDto = new TravelMessenger.EntityMessageDto
+                            {
+                                Message = BuildCompanionRewardTextItem(companion, attributeGain.Value, gainType),
+                                Portrait = companion.Portrait,
+                                TextColor = _travelMessenger.rewardColor
+                            };
 
-                            var message = BuildCompanionRewardTextItem(companion, attributeGain.Value, gainType); 
-
-                            _travelMessenger.QueueEntityMessage(message, companion);
+                            _travelMessenger.QueueEntityMessage(entityDto);
                         }
                     }
                 }
             }
         }
 
-        //todo refactor
-        public List<string> ApplyEncounterPenalty(Penalty penalty)
+        public void ApplyEncounterPenalty(Penalty penalty)
         {
-            var penaltiesText = new List<string>();
-
             if (penalty.Effects != null && penalty.Effects.Count > 0)
             {
                 //todo apply effects
             }
 
-            if (penalty.PartyLosses != null && penalty.PartyLosses.Count > 0)
+            ApplyPartyPenalty(penalty);
+            ApplyEntityPenalty(penalty);
+        }
+
+        private void ApplyPartyPenalty(Penalty partyPenalty)
+        {
+            if (_travelMessenger == null)
             {
-                foreach (var partyLoss in penalty.PartyLosses)
+                _travelMessenger = FindObjectOfType<TravelMessenger>();
+            }
+
+            var penaltiesText = new List<TravelMessenger.PartyMessageDto>();
+
+            if (partyPenalty.PartyLosses != null && partyPenalty.PartyLosses.Count > 0)
+            {
+                foreach (var partyLoss in partyPenalty.PartyLosses)
                 {
                     var lossType = partyLoss.Key;
 
@@ -285,13 +306,24 @@ namespace Assets.Scripts.Travel
                             break;
                     }
 
-                    penaltiesText.Add(BuildPartyLossTextItem(partyLoss.Value, lossType));
+                    var partyDto = new TravelMessenger.PartyMessageDto
+                    {
+                        Message = BuildPartyLossTextItem(partyLoss.Value, lossType),
+                        TextColor = _travelMessenger.penaltyColor
+                    };
+
+                    penaltiesText.Add(partyDto);
                 }
             }
 
-            if (penalty.EntityLosses != null && penalty.EntityLosses.Count > 0)
+            _travelMessenger.QueuePartyMessages(penaltiesText);
+        }
+
+        private void ApplyEntityPenalty(Penalty entityPenalty)
+        {
+            if (entityPenalty.EntityLosses != null && entityPenalty.EntityLosses.Count > 0)
             {
-                foreach (var entityLoss in penalty.EntityLosses)
+                foreach (var entityLoss in entityPenalty.EntityLosses)
                 {
                     var targetEntity = entityLoss.Key;
 
@@ -329,13 +361,18 @@ namespace Assets.Scripts.Travel
                                     break;
                             }
 
-                            penaltiesText.Add(BuildCompanionLossTextItem(companion, statLoss.Value, lossType)); 
+                            var entityDto = new TravelMessenger.EntityMessageDto
+                            {
+                                Message = BuildCompanionLossTextItem(companion, statLoss.Value, lossType),
+                                Portrait = companion.Portrait,
+                                TextColor = _travelMessenger.penaltyColor
+                            };
+
+                            _travelMessenger.QueueEntityMessage(entityDto);
                         }
                     }
                 }
             }
-
-            return penaltiesText;
         }
 
         private void OnDestroy()
