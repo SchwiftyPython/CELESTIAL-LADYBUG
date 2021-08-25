@@ -22,7 +22,7 @@ namespace Assets.Scripts.Encounters.DerpusStopWagon
 
             Reward = new Reward();
 
-            Reward.AddEntityGain(derpus, EntityStatTypes.CurrentEnergy, derpus.Stats.MaxMorale / 2);
+            Reward.AddEntityGain(derpus, EntityStatTypes.CurrentMorale, derpus.Stats.MaxMorale / 2);
 
             Reward.AddEntityGain(derpus, EntityStatTypes.CurrentEnergy, 10);
 

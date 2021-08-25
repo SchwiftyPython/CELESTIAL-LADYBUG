@@ -43,7 +43,7 @@ namespace Assets.Scripts.Utilities.UI
             _sound.start();
         }
 
-        public void AddWriter(TextMeshProUGUI uiText, string textToWrite, float timePerCharacter, bool invisibleCharacters, Color32 textColor)
+        public void AddWriter(TextMeshProUGUI uiText, string textToWrite, float timePerCharacter, bool invisibleCharacters, Color textColor)
         {
             if (_eventMediator == null)
             {

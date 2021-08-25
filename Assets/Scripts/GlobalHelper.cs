@@ -31,6 +31,7 @@ namespace Assets.Scripts
         public const string EncounterResult = "EncounterResult";
         public const string EncounterFinished = "EncounterFinished";
         public const string WritingFinished = "WritingFinished";
+        public const string TravelMessagesFinished = "TravelMessagesFinished";
         public const string CampingEncounterFinished = "CampingEncounterFinished";
         public const string PartyEatAndHeal = "PartyEatAndHeal";
         public const string PlayerTurn = "PlayerTurn";

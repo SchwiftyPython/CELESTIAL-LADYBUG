@@ -345,6 +345,15 @@ namespace Assets.Scripts.Travel
                         {
                             var lossType = statLoss.Key;
 
+                            var entityDto = new TravelMessenger.EntityMessageDto
+                            {
+                                Message = BuildCompanionLossTextItem(companion, statLoss.Value, lossType),
+                                Portrait = companion.Portrait,
+                                TextColor = _travelMessenger.penaltyColor
+                            };
+
+                            _travelMessenger.QueueEntityMessage(entityDto);
+
                             switch (lossType)
                             {
                                 case EntityStatTypes.CurrentMorale:
@@ -360,15 +369,6 @@ namespace Assets.Scripts.Travel
                                     Debug.Log($"Invalid loss type! {lossType}");
                                     break;
                             }
-
-                            var entityDto = new TravelMessenger.EntityMessageDto
-                            {
-                                Message = BuildCompanionLossTextItem(companion, statLoss.Value, lossType),
-                                Portrait = companion.Portrait,
-                                TextColor = _travelMessenger.penaltyColor
-                            };
-
-                            _travelMessenger.QueueEntityMessage(entityDto);
                         }
                     }
                 }
@@ -418,6 +418,15 @@ namespace Assets.Scripts.Travel
                 }
 
                 Party.RemoveCompanion(deadGuy);
+
+                var entityDto = new TravelMessenger.EntityMessageDto
+                {
+                    Message = $"{deadGuy.Name} died!",
+                    TextColor = _travelMessenger.penaltyColor,
+                    Portrait = deadGuy.Portrait
+                };
+
+                _travelMessenger.QueueEntityMessage(entityDto);
             }
         }
     }

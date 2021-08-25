@@ -71,13 +71,11 @@ namespace Assets.Scripts
             }
 
             _companions.Remove(companion.Name);
+        }
 
-            if (_companions.Count <= 0)
-            {
-                EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
-
-                eventMediator.Broadcast(GlobalHelper.GameOver, this);
-            }
+        public bool PartyDead()
+        {
+            return _companions.Count <= 0;
         }
 
         public Entity GetCompanion(string companionName)
@@ -100,14 +98,19 @@ namespace Assets.Scripts
             var eatResult = Eat();
             var healResult = Heal();
 
-            var totalResult = new List<TravelMessenger.PartyMessageDto>();
-
-            totalResult.AddRange(eatResult);
-            totalResult.AddRange(healResult);
+            // var totalResult = new List<TravelMessenger.PartyMessageDto>();
+            //
+            // totalResult.AddRange(eatResult);
+            // totalResult.AddRange(healResult);
 
             var travelMessenger = Object.FindObjectOfType<TravelMessenger>();
 
-            travelMessenger.QueuePartyMessages(totalResult);
+            travelMessenger.QueuePartyMessages(eatResult);
+
+            foreach (var message in healResult)
+            {
+                travelMessenger.QueueEntityMessage(message);
+            }
         }
 
         public List<TravelMessenger.PartyMessageDto> Eat()
@@ -181,35 +184,25 @@ namespace Assets.Scripts
             }
         }
 
-        public List<TravelMessenger.PartyMessageDto> Heal()
+        public List<TravelMessenger.EntityMessageDto> Heal()
         {
-            if (_companions == null || _companions.Count < 1)
-            {
-                var partyDto = new TravelMessenger.PartyMessageDto
-                {
-                    Message = "No one to heal!",
-                    TextColor = new Color32(1, 1, 1, 1)
-                };
-
-                return new List<TravelMessenger.PartyMessageDto> { partyDto };
-            }
-
             var travelMessenger = Object.FindObjectOfType<TravelMessenger>();
 
             if (HealthPotions <= 0)
             {
                 Debug.Log("No health potions! Can't heal!");
 
-                var partyDto = new TravelMessenger.PartyMessageDto
+                var partyDto = new TravelMessenger.EntityMessageDto
                 {
                     Message = "No health potions! Can't heal!",
-                    TextColor = travelMessenger.penaltyColor
+                    TextColor = travelMessenger.penaltyColor,
+                    Portrait = null
                 };
 
-                return new List<TravelMessenger.PartyMessageDto> { partyDto };
+                return new List<TravelMessenger.EntityMessageDto> { partyDto };
             }
 
-            var healResult = new List<TravelMessenger.PartyMessageDto>();
+            var healResult = new List<TravelMessenger.EntityMessageDto>();
 
             //todo choose random order to heal companions.
 
@@ -224,10 +217,11 @@ namespace Assets.Scripts
                 {
                     companion.UseHealthPotion();
 
-                    var partyDto = new TravelMessenger.PartyMessageDto
+                    var partyDto = new TravelMessenger.EntityMessageDto
                     {
                         Message = $"{companion.FirstName()} used a health potion!",
-                        TextColor = travelMessenger.rewardColor
+                        TextColor = travelMessenger.rewardColor,
+                        Portrait = companion.Portrait
                     };
 
                     healResult.Add(partyDto);
@@ -303,6 +297,24 @@ namespace Assets.Scripts
             }
 
             return bestShot;
+        }
+
+        private void SetAllMoraleToOne()
+        {
+            Derpus.Stats.CurrentMorale = 1;
+
+            foreach (var companion in _companions.Values)
+            {
+                companion.Stats.CurrentMorale = 1;
+            }
+        }
+
+        private void SetAllHealthToOne()
+        {
+            foreach (var companion in _companions.Values)
+            {
+                companion.Stats.CurrentHealth = 1;
+            }
         }
 
         private void GenerateStartingParty()

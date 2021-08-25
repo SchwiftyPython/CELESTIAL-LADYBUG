@@ -18,6 +18,7 @@ namespace Assets.Scripts
         private float _zPosition;
         private Vector2 _startPos;
 
+        private WagonMover _wagonMover;
 
         //Properties
         private float TwoAspect => cam.aspect * 2;
@@ -44,10 +45,7 @@ namespace Assets.Scripts
         {
             _paused = false;
 
-            var eventMediator = FindObjectOfType<EventMediator>();
-
-            eventMediator.SubscribeToEvent(PauseEvent, this);
-            eventMediator.SubscribeToEvent(ResumeEvent, this);
+            _wagonMover = FindObjectOfType<WagonMover>();
 
             cam = Camera.main;
             _startPos = transform.position;
@@ -83,6 +81,18 @@ namespace Assets.Scripts
                 float screens = (int)((totalTravel.x + boundsOffset) / ViewWidth);
                 transform.position += new Vector3(screens * ViewWidth, 0);
             }
+        }
+
+        public void Animate()
+        {
+            _paused = false;
+            _wagonMover.Animate();
+        }
+
+        public void Stop()
+        {
+            _paused = true;
+            _wagonMover.Stop();
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

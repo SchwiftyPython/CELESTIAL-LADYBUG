@@ -1,12 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Security.Policy;
 using Assets.Scripts.Audio;
-using Assets.Scripts.Entities;
+using Assets.Scripts.Encounters;
 using Assets.Scripts.Utilities.UI;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
@@ -65,6 +63,10 @@ namespace Assets.Scripts.UI
 
         public void DisplayAllMessages()
         {
+            var parallax = FindObjectOfType<Parallax>();
+
+            parallax.Animate();
+
             StartCoroutine(DisplayMessagesWithDelay());
         }
 
@@ -111,6 +113,10 @@ namespace Assets.Scripts.UI
             }
 
             ClearMessageQueues();
+
+            var encounterManager = FindObjectOfType<EncounterManager>();
+
+            StartCoroutine(encounterManager.RunNextQueuedEncounter());
         }
 
         private IEnumerator Delay()
@@ -179,6 +185,12 @@ namespace Assets.Scripts.UI
         {
             ClearExcessOnScreenMessages();
 
+            if (emDto.Portrait == null)
+            {
+                DisplayPartyMessage(new PartyMessageDto{Message = emDto.Message, TextColor = emDto.TextColor});
+                return;
+            }
+
             var messageInstance = Instantiate(messagePrefab, messagePrefab.transform.position, Quaternion.identity);
 
             messageInstance.transform.SetParent(messageParent);
@@ -218,8 +230,6 @@ namespace Assets.Scripts.UI
                 var slotSprite = spriteStore.GetPortraitSpriteForSlotByKey(slot, portraitKeys[slot]);
                 sprites.Add(slot, slotSprite);
             }
-
-            //var portrait = portraitParent.GetComponent<Portrait>();
 
             portrait.SetPortrait(sprites);
         }

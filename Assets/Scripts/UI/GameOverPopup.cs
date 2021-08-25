@@ -10,7 +10,7 @@ namespace Assets.Scripts.UI
 
         private void Start()
         {
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
             eventMediator.SubscribeToEvent(ShowPopupEvent, this);
             Hide();
         }
@@ -22,7 +22,10 @@ namespace Assets.Scripts.UI
 
         private void Show()
         {
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var parallax = FindObjectOfType<Parallax>();
+            parallax.Stop();
+
+            var eventMediator = FindObjectOfType<EventMediator>();
             eventMediator.SubscribeToEvent(HidePopupEvent, this);
 
             gameObject.SetActive(true);
@@ -31,7 +34,7 @@ namespace Assets.Scripts.UI
 
         private void Hide()
         {
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
             eventMediator.UnsubscribeFromEvent(HidePopupEvent, this);
             gameObject.SetActive(false);
             GameManager.Instance.RemoveActiveWindow(gameObject);
@@ -39,7 +42,7 @@ namespace Assets.Scripts.UI
 
         private void OnDestroy()
         {
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
 
             if (eventMediator == null)
             {
