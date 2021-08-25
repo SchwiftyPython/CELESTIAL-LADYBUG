@@ -6,15 +6,15 @@ namespace Assets.Scripts
     {
         [Description("Max Health")]
         MaxHealth,
-        [Description("Current Health")]
+        [Description("Health")]
         CurrentHealth,
         [Description("Max Energy")]
         MaxEnergy,
-        [Description("Current Energy")]
+        [Description("Energy")]
         CurrentEnergy,
         [Description("Max Morale")]
         MaxMorale,
-        [Description("Current Morale")]
+        [Description("Morale")]
         CurrentMorale,
         [Description("Initiative")]
         Initiative,

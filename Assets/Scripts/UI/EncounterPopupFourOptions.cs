@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Encounters;
 using Assets.Scripts.Utilities.UI;
 using TMPro;
@@ -13,6 +14,7 @@ namespace Assets.Scripts.UI
 
         private Encounter _encounter;
         private TextWriter _textWriter;
+        private TravelMessenger _travelMessenger;
         private List<GameObject> _optionButtons;
 
         public GameObject OptionButtonOne;
@@ -40,10 +42,12 @@ namespace Assets.Scripts.UI
             eventMediator.SubscribeToEvent(GlobalHelper.WritingFinished, this);
 
             _textWriter = GetComponent<TextWriter>();
+            _travelMessenger = FindObjectOfType<TravelMessenger>();
 
             GetComponent<Button_UI>().ClickFunc = _textWriter.DisplayMessageInstantly;
 
-            Hide();
+            gameObject.SetActive(false);
+            GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 
         private void EnableAllButtons()
@@ -64,6 +68,10 @@ namespace Assets.Scripts.UI
 
         private void Show(Encounter encounter)
         {
+            _travelMessenger.ClearMessageQueues();
+
+            //todo might want to hide messages at this point too? 
+
             _encounter = encounter;
 
             EncounterTitle.text = _encounter.Title;
@@ -81,8 +89,13 @@ namespace Assets.Scripts.UI
 
         private void ShowButtons()
         {
+            if (_encounter == null)
+            {
+                return;
+            }
+
             var optionButtonIndex = 0;
-            foreach (var optionText in _encounter.Options.Keys)
+            foreach (var optionText in _encounter.Options.Keys.ToArray())
             {
                 var button = _optionButtons[optionButtonIndex].GetComponent<EncounterOptionButton>();
 
@@ -96,19 +109,19 @@ namespace Assets.Scripts.UI
 
         public void Hide()
         {
+            StartCoroutine(HideDelayed());
+        }
+
+        private IEnumerator HideDelayed()
+        {
+            yield return StartCoroutine(Delay());
             gameObject.SetActive(false);
             GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 
-        public void HideDelayed()
-        {
-            StartCoroutine(Delay());
-            Hide();
-        }
-
         private IEnumerator Delay()
         {
-            yield return new WaitForSecondsRealtime(.5f);
+            yield return new WaitForSecondsRealtime(.25f);
         }
 
         private void OnDestroy()

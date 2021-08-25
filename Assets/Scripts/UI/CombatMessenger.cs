@@ -8,7 +8,7 @@ namespace Assets.Scripts.UI
 {
     public class CombatMessenger : MonoBehaviour, ISubscriber
     {
-        private const int MaxMessagesOnScreen = 90;
+        private const int MaxMessagesOnScreen = 45;
 
         private Queue<GameObject> _messagesOnScreen;
 

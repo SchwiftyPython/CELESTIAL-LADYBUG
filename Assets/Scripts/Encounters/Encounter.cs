@@ -42,29 +42,17 @@ namespace Assets.Scripts.Encounters
 
             var travelManager = Object.FindObjectOfType<TravelManager>();
 
-            List<string> rewardsText = null; 
             if (selectedOption.HasReward())
             {
-                rewardsText = travelManager.ApplyEncounterReward(selectedOption.Reward);
+                travelManager.ApplyEncounterReward(selectedOption.Reward);
             }
 
-            List<string> penaltiesText = null; 
             if (selectedOption.HasPenalty())
             {
-                penaltiesText = travelManager.ApplyEncounterPenalty(selectedOption.Penalty);
+                travelManager.ApplyEncounterPenalty(selectedOption.Penalty);
             }
 
             var fullResultDescription = new List<string> {selectedOption.ResultText + "\n"};
-
-            if (rewardsText != null)
-            {
-                fullResultDescription.AddRange(rewardsText);
-            }
-
-            if (penaltiesText != null)
-            {
-                fullResultDescription.AddRange(penaltiesText);
-            }
 
             EncounterType = selectedOption.TargetEncounterType;
 

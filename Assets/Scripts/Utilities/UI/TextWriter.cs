@@ -43,6 +43,31 @@ namespace Assets.Scripts.Utilities.UI
             _sound.start();
         }
 
+        public void AddWriter(TextMeshProUGUI uiText, string textToWrite, float timePerCharacter, bool invisibleCharacters, Color textColor)
+        {
+            if (_eventMediator == null)
+            {
+                _eventMediator = FindObjectOfType<EventMediator>();
+            }
+
+            if (string.IsNullOrEmpty(_textWritingSound))
+            {
+                var audioStore = FindObjectOfType<AudioStore>();
+
+                _textWritingSound = audioStore.textWriting;
+            }
+
+            _uiText = uiText;
+            _uiText.color = textColor;
+            _textToWrite = textToWrite;
+            _timePerCharacter = timePerCharacter;
+            _invisibleCharacters = invisibleCharacters;
+            _characterIndex = 0;
+
+            _sound = FMODUnity.RuntimeManager.CreateInstance(_textWritingSound);
+            _sound.start();
+        }
+
         private void Update()
         {
             if (_uiText != null)
