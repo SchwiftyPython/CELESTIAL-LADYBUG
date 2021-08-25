@@ -28,9 +28,8 @@ namespace Assets.Scripts.Encounters.MentalBreak
             var fullResultDescription = new List<string> { Description + "\n" };
 
             var travelManager = Object.FindObjectOfType<TravelManager>();
-            var penaltiesText = travelManager.ApplyEncounterPenalty(Penalty);
 
-            fullResultDescription.AddRange(penaltiesText);
+            travelManager.ApplyEncounterPenalty(Penalty);
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 

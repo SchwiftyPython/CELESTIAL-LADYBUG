@@ -87,37 +87,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StrongRed: {r: 0.74509805, g: 0.2901961, b: 0.18431373, a: 1}
-  ModerateOrange: {r: 0.84313726, g: 0.4627451, b: 0.2627451, a: 0}
-  VerySoftOrange: {r: 0.91764706, g: 0.83137256, b: 0.6666667, a: 0}
-  SoftOrange: {r: 0.89411765, g: 0.6509804, b: 0.44705883, a: 0}
-  BurntOrange: {r: 0.72156864, g: 0.43529412, b: 0.3137255, a: 0}
-  DarkModerateRed: {r: 0.4509804, g: 0.24313726, b: 0.22352941, a: 0}
-  VeryDarkDesatPink: {r: 0.24313726, g: 0.15294118, b: 0.19215687, a: 0}
-  DarkRed: {r: 0.63529414, g: 0.14901961, b: 0.2, a: 0}
-  BrightRed: {r: 0.89411765, g: 0.23137255, b: 0.26666668, a: 0}
-  VividOrange: {r: 0.96862745, g: 0.4627451, b: 0.13333334, a: 0}
-  BrightOrange: {r: 0.99607843, g: 0.68235296, b: 0.20392157, a: 0}
-  SoftYellow: {r: 0.99607843, g: 0.90588236, b: 0.38039216, a: 0}
-  ModerateLimeGreen: {r: 0.3882353, g: 0.78039217, b: 0.3019608, a: 0}
-  DarkLimeGreen: {r: 0.24313726, g: 0.5372549, b: 0.28235295, a: 0}
-  VeryDarkLimeGreen: {r: 0.14901961, g: 0.36078432, b: 0.25882354, a: 0}
-  VeryDarkDesatCyan: {r: 0.09803922, g: 0.23529412, b: 0.24313726, a: 0}
-  DarkBlue: {r: 0.07058824, g: 0.30588236, b: 0.5372549, a: 0}
-  PureBlue: {r: 0, g: 0.6, b: 0.85882354, a: 0}
-  BrightCyan: {r: 0.17254902, g: 0.9098039, b: 0.9607843, a: 0}
-  White: {r: 1, g: 1, b: 1, a: 0}
-  LightGrayBlue: {r: 0.7529412, g: 0.79607844, b: 0.8627451, a: 0}
-  GrayBlue: {r: 0.54509807, g: 0.60784316, b: 0.7058824, a: 0}
-  DarkDesatBlue: {r: 0.3529412, g: 0.4117647, b: 0.53333336, a: 0}
-  VeryDarkDesatBlue: {r: 0.22745098, g: 0.26666668, b: 0.4, a: 0}
-  DesatBlue: {r: 0.14901961, g: 0.16862746, b: 0.26666668, a: 0}
-  VeryDarkBlue: {r: 0.09411765, g: 0.078431375, b: 0.14509805, a: 0}
-  PurePink: {r: 1, g: 0, b: 0.26666668, a: 0}
-  VeryDarkDesatMagenta: {r: 0.40784314, g: 0.21960784, b: 0.42352942, a: 0}
-  ModeratePink: {r: 0.70980394, g: 0.3137255, b: 0.53333336, a: 0}
-  SoftRed: {r: 0.9647059, g: 0.45882353, b: 0.47843137, a: 0}
-  Orange: {r: 0.9098039, g: 0.7176471, b: 0.5882353, a: 0}
-  DesatOrange: {r: 0.7607843, g: 0.52156866, b: 0.4117647, a: 0}
+  ModerateOrange: {r: 0.84313726, g: 0.4627451, b: 0.2627451, a: 1}
+  VerySoftOrange: {r: 0.91764706, g: 0.83137256, b: 0.6666667, a: 1}
+  SoftOrange: {r: 0.89411765, g: 0.6509804, b: 0.44705883, a: 1}
+  BurntOrange: {r: 0.72156864, g: 0.43529412, b: 0.3137255, a: 1}
+  DarkModerateRed: {r: 0.4509804, g: 0.24313726, b: 0.22352941, a: 1}
+  VeryDarkDesatPink: {r: 0.24313726, g: 0.15294118, b: 0.19215687, a: 1}
+  DarkRed: {r: 0.63529414, g: 0.14901961, b: 0.2, a: 1}
+  BrightRed: {r: 0.89411765, g: 0.23137255, b: 0.26666668, a: 1}
+  VividOrange: {r: 0.96862745, g: 0.4627451, b: 0.13333334, a: 1}
+  BrightOrange: {r: 0.99607843, g: 0.68235296, b: 0.20392157, a: 1}
+  SoftYellow: {r: 0.99607843, g: 0.90588236, b: 0.38039216, a: 1}
+  ModerateLimeGreen: {r: 0.3882353, g: 0.78039217, b: 0.3019608, a: 1}
+  DarkLimeGreen: {r: 0.24313726, g: 0.5372549, b: 0.28235295, a: 1}
+  VeryDarkLimeGreen: {r: 0.14901961, g: 0.36078432, b: 0.25882354, a: 1}
+  VeryDarkDesatCyan: {r: 0.09803922, g: 0.23529412, b: 0.24313726, a: 1}
+  DarkBlue: {r: 0.07058824, g: 0.30588236, b: 0.5372549, a: 1}
+  PureBlue: {r: 0, g: 0.6, b: 0.85882354, a: 1}
+  BrightCyan: {r: 0.17254902, g: 0.9098039, b: 0.9607843, a: 1}
+  White: {r: 1, g: 1, b: 1, a: 0.99215686}
+  LightGrayBlue: {r: 0.7529412, g: 0.79607844, b: 0.8627451, a: 1}
+  GrayBlue: {r: 0.54509807, g: 0.60784316, b: 0.7058824, a: 1}
+  DarkDesatBlue: {r: 0.3529412, g: 0.4117647, b: 0.53333336, a: 1}
+  VeryDarkDesatBlue: {r: 0.22745098, g: 0.26666668, b: 0.4, a: 1}
+  DesatBlue: {r: 0.14901961, g: 0.16862746, b: 0.26666668, a: 1}
+  VeryDarkBlue: {r: 0.09411765, g: 0.078431375, b: 0.14509805, a: 1}
+  PurePink: {r: 1, g: 0, b: 0.26666668, a: 1}
+  VeryDarkDesatMagenta: {r: 0.40784314, g: 0.21960784, b: 0.42352942, a: 1}
+  ModeratePink: {r: 0.70980394, g: 0.3137255, b: 0.53333336, a: 1}
+  SoftRed: {r: 0.9647059, g: 0.45882353, b: 0.47843137, a: 1}
+  Orange: {r: 0.9098039, g: 0.7176471, b: 0.5882353, a: 1}
+  DesatOrange: {r: 0.7607843, g: 0.52156866, b: 0.4117647, a: 1}
 --- !u!1 &515205976
 GameObject:
   m_ObjectHideFlags: 0
@@ -396,6 +396,8 @@ MonoBehaviour:
   buttonHover: event:/Interface/Button Hover
   resultPopup: event:/Interface/Popup Result
   textWriting: event:/Interface/Text Write
+  reward: event:/Interface/Reward
+  penalty: event:/Interface/Penalty
 --- !u!1 &1671906415
 GameObject:
   m_ObjectHideFlags: 0

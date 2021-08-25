@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Assets.Scripts.Audio;
 using Assets.Scripts.Encounters;
 using Assets.Scripts.Entities;
+using Assets.Scripts.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,6 +17,7 @@ namespace Assets.Scripts.Travel
         private int _currentDayOfTravel;
 
         private MusicController _musicController;
+        private TravelMessenger _travelMessenger;
 
         public int TravelDaysToDestination { get; private set; }
 
@@ -41,6 +43,8 @@ namespace Assets.Scripts.Travel
             TravelDaysToDestination = DemoDaysToDestination;
 
             _musicController = FindObjectOfType<MusicController>();
+
+            _travelMessenger = FindObjectOfType<TravelMessenger>();
         }
 
         public void NewParty()
@@ -87,21 +91,31 @@ namespace Assets.Scripts.Travel
             return $"{companion.Name} lost {value} {GlobalHelper.GetEnumDescription(lossType)}!";
         }
 
-        //todo refactor
-        public List<string> ApplyEncounterReward(Reward reward)
+        public void ApplyEncounterReward(Reward reward)
         {
-            var rewardsText = new List<string>(); //todo add each reward text to this list then return. UI can handle formatting.
-
             if (reward.Effects != null && reward.Effects.Count > 0)
             {
                 //todo apply effects
             }
 
-            if (reward.PartyGains != null && reward.PartyGains.Count > 0)
+            ApplyPartyReward(reward);
+            ApplyEntityReward(reward);
+        }
+
+        public void ApplyPartyReward(Reward partyReward)
+        {
+            if (_travelMessenger == null)
             {
-                foreach (var partyGain in reward.PartyGains)
+                _travelMessenger = FindObjectOfType<TravelMessenger>();
+            }
+
+            var rewardsText = new List<TravelMessenger.PartyMessageDto>();
+
+            if (partyReward.PartyGains != null && partyReward.PartyGains.Count > 0)
+            {
+                foreach (var partyGain in partyReward.PartyGains)
                 {
-                    var gainType = (PartySupplyTypes) partyGain.Key;
+                    var gainType = (PartySupplyTypes)partyGain.Key;
 
                     switch (gainType)
                     {
@@ -119,13 +133,24 @@ namespace Assets.Scripts.Travel
                             break;
                     }
 
-                    rewardsText.Add(BuildPartyRewardTextItem(partyGain.Value, gainType));
+                    var partyDto = new TravelMessenger.PartyMessageDto
+                    {
+                        Message = BuildPartyRewardTextItem(partyGain.Value, gainType),
+                        TextColor = _travelMessenger.rewardColor
+                    };
+
+                    rewardsText.Add(partyDto);
                 }
             }
 
-            if (reward.EntityStatGains != null && reward.EntityStatGains.Count > 0)
+            _travelMessenger.QueuePartyMessages(rewardsText);
+        }
+
+        public void ApplyEntityReward(Reward entityReward)
+        {
+            if (entityReward.EntityStatGains != null && entityReward.EntityStatGains.Count > 0)
             {
-                foreach (var entityGain in reward.EntityStatGains)
+                foreach (var entityGain in entityReward.EntityStatGains)
                 {
                     var targetEntity = entityGain.Key;
 
@@ -151,7 +176,7 @@ namespace Assets.Scripts.Travel
                             switch (gainType)
                             {
                                 case EntityStatTypes.CurrentMorale:
-                                    moddedGain = companion.AddMorale(statGain.Value);
+                                    moddedGain = companion.AddMorale(statGain.Value); //modded gain was used to reflect actual gains, but kinda confusing in practice
                                     break;
                                 case EntityStatTypes.CurrentHealth:
                                     moddedGain = companion.AddHealth(statGain.Value);
@@ -164,15 +189,22 @@ namespace Assets.Scripts.Travel
                                     break;
                             }
 
-                            rewardsText.Add(BuildCompanionRewardTextItem(companion, moddedGain, gainType));
+                            var entityDto = new TravelMessenger.EntityMessageDto
+                            {
+                                Message = BuildCompanionRewardTextItem(companion, statGain.Value, gainType),
+                                Portrait = companion.Portrait,
+                                TextColor = _travelMessenger.rewardColor
+                            };
+
+                            _travelMessenger.QueueEntityMessage(entityDto);
                         }
                     }
                 }
             }
 
-            if (reward.EntityAttributeGains != null && reward.EntityAttributeGains.Count > 0)
+            if (entityReward.EntityAttributeGains != null && entityReward.EntityAttributeGains.Count > 0)
             {
-                foreach (var entityGain in reward.EntityAttributeGains)
+                foreach (var entityGain in entityReward.EntityAttributeGains)
                 {
                     var targetEntity = entityGain.Key;
 
@@ -218,28 +250,43 @@ namespace Assets.Scripts.Travel
                                     throw new ArgumentOutOfRangeException();
                             }
 
-                            rewardsText.Add(BuildCompanionRewardTextItem(companion, attributeGain.Value, gainType));
+                            var entityDto = new TravelMessenger.EntityMessageDto
+                            {
+                                Message = BuildCompanionRewardTextItem(companion, attributeGain.Value, gainType),
+                                Portrait = companion.Portrait,
+                                TextColor = _travelMessenger.rewardColor
+                            };
+
+                            _travelMessenger.QueueEntityMessage(entityDto);
                         }
                     }
                 }
             }
-
-            return rewardsText;
         }
 
-        //todo refactor
-        public List<string> ApplyEncounterPenalty(Penalty penalty)
+        public void ApplyEncounterPenalty(Penalty penalty)
         {
-            var penaltiesText = new List<string>();
-
             if (penalty.Effects != null && penalty.Effects.Count > 0)
             {
                 //todo apply effects
             }
 
-            if (penalty.PartyLosses != null && penalty.PartyLosses.Count > 0)
+            ApplyPartyPenalty(penalty);
+            ApplyEntityPenalty(penalty);
+        }
+
+        private void ApplyPartyPenalty(Penalty partyPenalty)
+        {
+            if (_travelMessenger == null)
             {
-                foreach (var partyLoss in penalty.PartyLosses)
+                _travelMessenger = FindObjectOfType<TravelMessenger>();
+            }
+
+            var penaltiesText = new List<TravelMessenger.PartyMessageDto>();
+
+            if (partyPenalty.PartyLosses != null && partyPenalty.PartyLosses.Count > 0)
+            {
+                foreach (var partyLoss in partyPenalty.PartyLosses)
                 {
                     var lossType = partyLoss.Key;
 
@@ -259,13 +306,24 @@ namespace Assets.Scripts.Travel
                             break;
                     }
 
-                    penaltiesText.Add(BuildPartyLossTextItem(partyLoss.Value, lossType));
+                    var partyDto = new TravelMessenger.PartyMessageDto
+                    {
+                        Message = BuildPartyLossTextItem(partyLoss.Value, lossType),
+                        TextColor = _travelMessenger.penaltyColor
+                    };
+
+                    penaltiesText.Add(partyDto);
                 }
             }
 
-            if (penalty.EntityLosses != null && penalty.EntityLosses.Count > 0)
+            _travelMessenger.QueuePartyMessages(penaltiesText);
+        }
+
+        private void ApplyEntityPenalty(Penalty entityPenalty)
+        {
+            if (entityPenalty.EntityLosses != null && entityPenalty.EntityLosses.Count > 0)
             {
-                foreach (var entityLoss in penalty.EntityLosses)
+                foreach (var entityLoss in entityPenalty.EntityLosses)
                 {
                     var targetEntity = entityLoss.Key;
 
@@ -287,6 +345,15 @@ namespace Assets.Scripts.Travel
                         {
                             var lossType = statLoss.Key;
 
+                            var entityDto = new TravelMessenger.EntityMessageDto
+                            {
+                                Message = BuildCompanionLossTextItem(companion, statLoss.Value, lossType),
+                                Portrait = companion.Portrait,
+                                TextColor = _travelMessenger.penaltyColor
+                            };
+
+                            _travelMessenger.QueueEntityMessage(entityDto);
+
                             switch (lossType)
                             {
                                 case EntityStatTypes.CurrentMorale:
@@ -302,14 +369,10 @@ namespace Assets.Scripts.Travel
                                     Debug.Log($"Invalid loss type! {lossType}");
                                     break;
                             }
-
-                            penaltiesText.Add(BuildCompanionLossTextItem(companion, statLoss.Value, lossType));
                         }
                     }
                 }
             }
-
-            return penaltiesText;
         }
 
         private void OnDestroy()
@@ -355,6 +418,15 @@ namespace Assets.Scripts.Travel
                 }
 
                 Party.RemoveCompanion(deadGuy);
+
+                var entityDto = new TravelMessenger.EntityMessageDto
+                {
+                    Message = $"{deadGuy.Name} died!",
+                    TextColor = _travelMessenger.penaltyColor,
+                    Portrait = deadGuy.Portrait
+                };
+
+                _travelMessenger.QueueEntityMessage(entityDto);
             }
         }
     }

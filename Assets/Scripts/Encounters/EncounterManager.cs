@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Assets.Scripts.Decks;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Travel;
 using UnityEngine;
 
 namespace Assets.Scripts.Encounters
@@ -24,7 +26,7 @@ namespace Assets.Scripts.Encounters
 
         private void Start()
         {
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
 
             eventMediator.SubscribeToEvent(MentalBreak, this);
             eventMediator.SubscribeToEvent(GlobalHelper.DerpusNoEnergy, this);
@@ -46,7 +48,11 @@ namespace Assets.Scripts.Encounters
                 {
                     PauseTimer();
 
-                    var eventMediator = Object.FindObjectOfType<EventMediator>();
+                    var parallax = FindObjectOfType<Parallax>();
+
+                    parallax.Stop();
+
+                    var eventMediator = FindObjectOfType<EventMediator>();
 
                     eventMediator.Broadcast(PauseTimerEvent, this);
 
@@ -69,19 +75,24 @@ namespace Assets.Scripts.Encounters
                 normalEncounterSize++;
             }
 
-            var encounterStore = Object.FindObjectOfType<EncounterStore>();
+            var encounterStore = FindObjectOfType<EncounterStore>();
 
             _normalEncounterDeck = new EncounterDeck(encounterStore.GetNormalEncounters(), normalEncounterSize);
 
-            var combatEncounters = encounterStore.GetCombatEncounters();
-
-            _normalEncounterDeck.AddCard(combatEncounters[Random.Range(0, combatEncounters.Count)]);
+            // var combatEncounters = encounterStore.GetCombatEncounters(); //todo testing
+            //
+            // _normalEncounterDeck.AddCard(combatEncounters[Random.Range(0, combatEncounters.Count)]);
 
             _normalEncounterDeck.Shuffle();
 
             if (_campingDeck == null || _campingDeck.Size < 1)
             {
                 _campingDeck = new EncounterDeck(encounterStore.GetCampingEncounters(), 5);
+            }
+
+            if (_encounterInProgress)
+            {
+                return;
             }
 
             ResetTimer();
@@ -96,11 +107,11 @@ namespace Assets.Scripts.Encounters
                 encounter = _campingDeck.Draw();
             }
 
-            encounter.Run();
-
             _encounterInProgress = true;
 
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            encounter.Run();
+
+            var eventMediator = FindObjectOfType<EventMediator>();
 
             eventMediator.SubscribeToEvent(EncounterFinished, this);
         }
@@ -115,7 +126,7 @@ namespace Assets.Scripts.Encounters
             _encounterQueue.Enqueue(encounter);
         }
 
-        private void RunQueuedEncounters()
+        public void RunQueuedEncounters()
         {
             if (_encounterQueue != null && _encounterQueue.Count > 0)
             {
@@ -126,6 +137,42 @@ namespace Assets.Scripts.Encounters
             }
 
             _encounterQueue?.Clear();
+        }
+
+        public IEnumerator RunNextQueuedEncounter()
+        {
+            var travelManager = FindObjectOfType<TravelManager>();
+
+            if (travelManager.Party.PartyDead())
+            {
+                var eventMediator = FindObjectOfType<EventMediator>();
+
+                eventMediator.Broadcast(GlobalHelper.GameOver, this);
+            }
+            else if (_encounterQueue == null || _encounterQueue.Count < 1)
+            {
+                ResetTimer();
+
+                var eventMediator = FindObjectOfType<EventMediator>();
+
+                _encounterInProgress = false;
+
+                eventMediator.Broadcast(ResumeTimerEvent, this);
+            }
+            else
+            {
+                yield return StartCoroutine(Delay());
+
+                var parallax = FindObjectOfType<Parallax>();
+
+                parallax.Stop();
+
+                var encounter = _encounterQueue.Dequeue();
+
+                _encounterInProgress = true;
+
+                encounter.Run();
+            }
         }
 
         private void PauseTimer()
@@ -144,23 +191,28 @@ namespace Assets.Scripts.Encounters
             ResumeTimer();
         }
 
+        private IEnumerator Delay()
+        {
+            yield return new WaitForSeconds(1.5f);
+        }
+
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
         {
-            var encounterStore = Object.FindObjectOfType<EncounterStore>();
+            var encounterStore = FindObjectOfType<EncounterStore>();
 
             if (eventName.Equals(EncounterFinished))
             {
-                ResetTimer();
-
-                var eventMediator = Object.FindObjectOfType<EventMediator>();
-
-                eventMediator.UnsubscribeFromEvent(EncounterFinished, this);
-
-                RunQueuedEncounters();
-
-                _encounterInProgress = false;
-
-                eventMediator.Broadcast(ResumeTimerEvent, this);
+                // ResetTimer();
+                //
+                // var eventMediator = FindObjectOfType<EventMediator>();
+                //
+                // eventMediator.UnsubscribeFromEvent(EncounterFinished, this);
+                //
+                // RunQueuedEncounters();
+                //
+                // _encounterInProgress = false;
+                //
+                // eventMediator.Broadcast(ResumeTimerEvent, this);
             }
             else if (eventName.Equals(MentalBreak))
             {

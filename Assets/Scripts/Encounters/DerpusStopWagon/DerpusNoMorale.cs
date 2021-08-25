@@ -22,7 +22,7 @@ namespace Assets.Scripts.Encounters.DerpusStopWagon
 
             Reward = new Reward();
 
-            Reward.AddEntityGain(derpus, EntityStatTypes.CurrentEnergy, derpus.Stats.MaxMorale / 2);
+            Reward.AddEntityGain(derpus, EntityStatTypes.CurrentMorale, derpus.Stats.MaxMorale / 2);
 
             Reward.AddEntityGain(derpus, EntityStatTypes.CurrentEnergy, 10);
 
@@ -33,9 +33,7 @@ namespace Assets.Scripts.Encounters.DerpusStopWagon
 
             var fullResultDescription = new List<string> { Description + "\n" };
 
-            var rewardsText = travelManager.ApplyEncounterReward(Reward);
-
-            fullResultDescription.AddRange(rewardsText);
+            travelManager.ApplyEncounterReward(Reward);
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 
