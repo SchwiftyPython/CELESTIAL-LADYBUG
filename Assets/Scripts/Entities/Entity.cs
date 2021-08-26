@@ -1133,14 +1133,9 @@ namespace Assets.Scripts.Entities
 
         private void GeneratePortrait()
         {
-            Portrait = new Dictionary<Portrait.Slot, string>();
-
             var spriteStore = Object.FindObjectOfType<SpriteStore>();
 
-            foreach (Portrait.Slot slot in Enum.GetValues(typeof(Portrait.Slot)))
-            {
-                Portrait.Add(slot, spriteStore.GetRandomSpriteKeyForSlot(slot));
-            }
+            Portrait = spriteStore.GetRandomPortraitPreset();
         }
 
         private Sex PickSex()

@@ -57,6 +57,11 @@ namespace Assets.Scripts.UI
         {
             foreach (Slot slot in Enum.GetValues(typeof(Slot)))
             {
+                if (!sprites.ContainsKey(slot))
+                {
+                    continue;
+                }
+
                 var sprite = sprites[slot];
 
                 SetSprite(slot, sprite);
