@@ -24,6 +24,36 @@ namespace Assets.Scripts
 
         #region PortraitSprites
 
+        private readonly List<Dictionary<Portrait.Slot, List<string>>> _portraitPresets = new List<Dictionary<Portrait.Slot, List<string>>>
+        {
+            {
+                new Dictionary<Portrait.Slot, List<string>>
+                {
+                    {Portrait.Slot.Skin, new List<string>{"base", "base_3"}},
+                    {Portrait.Slot.Chest, new List<string>{ "chest_padded", "chest_padded_2", "chest_padded_3", "chest_robe", "chest_robe_2", "chest_robe_3", "chest_plate"}},
+                    {Portrait.Slot.Hair, new List<string>{ "hair_short", "hair_short_2", "hair_short_3", "hair_balding"}}
+                }
+            },
+            {
+                new Dictionary<Portrait.Slot, List<string>>
+                {
+                    {Portrait.Slot.Skin, new List<string>{"base", "base_3"}},
+                    {Portrait.Slot.FacialHair, new List<string>{"facial_handlebar", "facial_chinstrap"}},
+                    {Portrait.Slot.Chest, new List<string>{ "chest_padded", "chest_padded_2", "chest_padded_3", "chest_robe", "chest_robe_2", "chest_robe_3", "chest_plate"}},
+                    {Portrait.Slot.Hair, new List<string>{ "hair_short", "hair_short_2", "hair_short_3", "hair_balding"}}
+                }
+            },
+            {
+                new Dictionary<Portrait.Slot, List<string>>
+                {
+                    {Portrait.Slot.Skin, new List<string>{"base", "base_2", "base_3", "base_4"}},
+                    {Portrait.Slot.FacialHair, new List<string>{"facial_handlebar", "facial_chinstrap", "facial_goatee"}},
+                    {Portrait.Slot.Chest, new List<string>{ "chest_padded_2", "chest_padded_3", "chest_robe", "chest_robe_2", "chest_robe_3", "chest_plate"}},
+                    {Portrait.Slot.Hair, new List<string>{ "hair_short", "hair_short_2", "hair_short_3", "hair_balding", "hair_long", "hair_long_2"}}
+                }
+            },
+        };
+
         private Dictionary<string, Sprite> _pSkinDictionary;
         private Dictionary<string, Sprite> _pEarDictionary;
         private Dictionary<string, Sprite> _pChestDictionary;
@@ -100,6 +130,20 @@ namespace Assets.Scripts
             var eventMediator = FindObjectOfType<EventMediator>();
 
             eventMediator.Broadcast(GlobalHelper.SpritesLoaded, this);
+        }
+
+        public Dictionary<Portrait.Slot, string> GetRandomPortraitPreset()
+        {
+            var presetOptions = _portraitPresets.ElementAt(Random.Range(0, _portraitPresets.Count));
+
+            var preset = new Dictionary<Portrait.Slot, string>();
+
+            foreach (var slot in presetOptions)
+            {
+                preset.Add(slot.Key, slot.Value[Random.Range(0, slot.Value.Count)]);
+            }
+
+            return preset;
         }
 
         public Sprite GetRandomSpriteForSlot(Portrait.Slot slot)
