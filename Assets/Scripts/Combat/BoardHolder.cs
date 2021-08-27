@@ -78,6 +78,10 @@ namespace Assets.Scripts.Combat
 
                         entityInstance.AddComponent<EntityAudio>();
 
+                        var entityAudio = entityInstance.GetComponent<EntityAudio>();
+
+                        entityAudio.AttackSound = entity.AttackSound;
+
                         var spriteStore = FindObjectOfType<SpriteStore>();
 
                         var colorSwapper = entityInstance.GetComponentsInChildren<ColorSwapper>();

@@ -342,9 +342,7 @@ namespace Assets.Scripts.Entities
 
         public void MeleeAttack(Entity target, IModifierProvider modifierProvider = null)
         {
-            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
-
-            eAudio.Attack(AttackSound);
+            PlayAttackAnimation();
 
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
@@ -389,9 +387,7 @@ namespace Assets.Scripts.Entities
 
         public void MeleeAttackWithSlot(Entity target, EquipLocation slot, IModifierProvider modifierProvider = null)
         {
-            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
-
-            eAudio.Attack(AttackSound);
+            PlayAttackAnimation();
 
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
@@ -436,9 +432,7 @@ namespace Assets.Scripts.Entities
 
         public void RangedAttack(Entity target, IModifierProvider modifierProvider = null)
         {
-            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
-
-            eAudio.Attack(AttackSound);
+            PlayAttackAnimation();
 
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Ranged);
 
@@ -483,9 +477,7 @@ namespace Assets.Scripts.Entities
 
         public void AttackWithAbility(Entity target, Ability ability)
         {
-            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
-
-            eAudio.Attack(AttackSound);
+            PlayAttackAnimation();
 
             IModifierProvider modifierProvider = ability as IModifierProvider;
 
@@ -549,6 +541,13 @@ namespace Assets.Scripts.Entities
 
                 }
             }
+        }
+
+        private void PlayAttackAnimation()
+        {
+            var animator = CombatSpriteInstance.GetComponent<Animator>();
+
+            animator.SetBool("IsAttacking", true);
         }
 
         public void ApplyDamageWithAbility(Entity target, Ability ability, int damageMod, bool criticalHit)

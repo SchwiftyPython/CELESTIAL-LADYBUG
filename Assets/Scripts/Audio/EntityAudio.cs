@@ -2,8 +2,10 @@
 
 namespace Assets.Scripts.Audio
 {
-    public class EntityAudio : MonoBehaviour 
+    public class EntityAudio : MonoBehaviour
     {
+        public string AttackSound { set; get; }
+
         public void Attack(string soundPath)
         {
             if (string.IsNullOrEmpty(soundPath))
@@ -13,6 +15,17 @@ namespace Assets.Scripts.Audio
             }
 
             PlaySound(soundPath);
+        }
+
+        public void Attack()
+        {
+            if (string.IsNullOrEmpty(AttackSound))
+            {
+                Debug.LogWarning("No attack sound defined!");
+                return;
+            }
+
+            PlaySound(AttackSound);
         }
 
         public void CastSpell()
