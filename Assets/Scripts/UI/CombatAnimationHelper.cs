@@ -1,15 +1,16 @@
 ﻿using Assets.Scripts.Audio;
+using Assets.Scripts.Entities;
 using UnityEngine;
 
 namespace Assets.Scripts.UI
 {
     public class CombatAnimationHelper : MonoBehaviour
     {
+        public Entity Parent;
+
         public void StopAttackAnimation()
         {
-            var animator = GetComponent<Animator>();
-
-            animator.SetBool("IsAttacking", false);
+            Parent.PlayIdleAnimation();
         }
 
         public void PlayAttackSound()

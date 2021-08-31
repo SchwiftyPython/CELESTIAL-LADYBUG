@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CrossbowmanAttack
+  m_Name: MAAAttack
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -20,19 +20,19 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: -7422821754912631705, guid: 48d0be9bf56a20042b5e8ea89dc50f62,
+      value: {fileID: -2485932594442591232, guid: 458516596822982429952aa6094bc447,
         type: 3}
     - time: 0.25
-      value: {fileID: 5708884040314764827, guid: 48d0be9bf56a20042b5e8ea89dc50f62,
+      value: {fileID: 2610582966625034362, guid: 458516596822982429952aa6094bc447,
         type: 3}
     - time: 0.5
-      value: {fileID: 2418001897860310572, guid: 48d0be9bf56a20042b5e8ea89dc50f62,
+      value: {fileID: 7418859365180391461, guid: 458516596822982429952aa6094bc447,
         type: 3}
     - time: 0.75
-      value: {fileID: -1180390394316973918, guid: 48d0be9bf56a20042b5e8ea89dc50f62,
+      value: {fileID: 3341174119611391701, guid: 458516596822982429952aa6094bc447,
         type: 3}
     attribute: m_Sprite
-    path: CrossbowmanIdleSkinSwap
+    path: MAAIdleSkinSwap
     classID: 212
     script: {fileID: 0}
   m_SampleRate: 4
@@ -43,17 +43,17 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 298460629
+      path: 845648438
       attribute: 0
       script: {fileID: 0}
       typeID: 212
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: -7422821754912631705, guid: 48d0be9bf56a20042b5e8ea89dc50f62, type: 3}
-    - {fileID: 5708884040314764827, guid: 48d0be9bf56a20042b5e8ea89dc50f62, type: 3}
-    - {fileID: 2418001897860310572, guid: 48d0be9bf56a20042b5e8ea89dc50f62, type: 3}
-    - {fileID: -1180390394316973918, guid: 48d0be9bf56a20042b5e8ea89dc50f62, type: 3}
+    - {fileID: -2485932594442591232, guid: 458516596822982429952aa6094bc447, type: 3}
+    - {fileID: 2610582966625034362, guid: 458516596822982429952aa6094bc447, type: 3}
+    - {fileID: 7418859365180391461, guid: 458516596822982429952aa6094bc447, type: 3}
+    - {fileID: 3341174119611391701, guid: 458516596822982429952aa6094bc447, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -64,7 +64,7 @@ AnimationClip:
     m_Level: 0
     m_CycleOffset: 0
     m_HasAdditiveReferencePose: 0
-    m_LoopTime: 0
+    m_LoopTime: 1
     m_LoopBlend: 0
     m_LoopBlendOrientation: 0
     m_LoopBlendPositionY: 0
@@ -82,16 +82,14 @@ AnimationClip:
   - time: 0.5
     functionName: PlayAttackSound
     data: 
-    objectReferenceParameter: {fileID: 7492705910782805848, guid: 35fe9714c71b32742b0f2e4cc8505201,
-      type: 3}
+    objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 1
     functionName: StopAttackAnimation
     data: 
-    objectReferenceParameter: {fileID: 7492705910782805848, guid: 35fe9714c71b32742b0f2e4cc8505201,
-      type: 3}
+    objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

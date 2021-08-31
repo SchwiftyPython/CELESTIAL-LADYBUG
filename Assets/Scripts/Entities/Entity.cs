@@ -53,6 +53,9 @@ namespace Assets.Scripts.Entities
         public UnityEngine.GameObject CombatSpritePrefab { get; protected set; }
         public UnityEngine.GameObject CombatSpriteInstance { get; private set; }
 
+        public Texture IdleSkinSwap;
+        public Texture AttackSkinSwap;
+
         public string HurtSound;
         public string DieSound;
         public string AttackSound;
@@ -548,6 +551,31 @@ namespace Assets.Scripts.Entities
             var animator = CombatSpriteInstance.GetComponent<Animator>();
 
             animator.SetBool("IsAttacking", true);
+
+            var swapper = CombatSpriteInstance.GetComponentInChildren<ColorSwapper>();
+
+            if (swapper == null)
+            {
+                return;
+            }
+
+            swapper.ChangeTexture(AttackSkinSwap);
+        }
+
+        public void PlayIdleAnimation()
+        {
+            var animator = CombatSpriteInstance.GetComponent<Animator>();
+
+            animator.SetBool("IsAttacking", false);
+
+            var swapper = CombatSpriteInstance.GetComponentInChildren<ColorSwapper>();
+
+            if (swapper == null)
+            {
+                return;
+            }
+
+            swapper.ChangeTexture(IdleSkinSwap);
         }
 
         public void ApplyDamageWithAbility(Entity target, Ability ability, int damageMod, bool criticalHit)

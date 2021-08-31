@@ -88,6 +88,13 @@ namespace Assets.Scripts.Combat
 
                         spriteStore.SetColorSwaps(colorSwapper, entity);
 
+                        var animationHelper = entityInstance.GetComponent<CombatAnimationHelper>();
+
+                        if (animationHelper != null)
+                        {
+                            animationHelper.Parent = entity;
+                        }
+
                         tileInstance.GetComponent<TerrainSlotUi>().SetEntity(entity);
                     }
                 }

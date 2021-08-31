@@ -26,7 +26,12 @@ namespace Assets.Scripts.Entities.Companions
 
             HurtSound = audioStore.companionHurt;
             DieSound = audioStore.companionDie;
-            AttackSound = audioStore.bowAttack; 
+            AttackSound = audioStore.bowAttack;
+
+            var spriteStore = Object.FindObjectOfType<SpriteStore>();
+
+            IdleSkinSwap = spriteStore.CrossbowmanIdleSwap;
+            AttackSkinSwap = spriteStore.CrossbowmanAttackSwap;
         }
     }
 }
