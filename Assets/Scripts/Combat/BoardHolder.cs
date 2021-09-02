@@ -78,11 +78,22 @@ namespace Assets.Scripts.Combat
 
                         entityInstance.AddComponent<EntityAudio>();
 
+                        var entityAudio = entityInstance.GetComponent<EntityAudio>();
+
+                        entityAudio.AttackSound = entity.AttackSound;
+
                         var spriteStore = FindObjectOfType<SpriteStore>();
 
                         var colorSwapper = entityInstance.GetComponentsInChildren<ColorSwapper>();
 
                         spriteStore.SetColorSwaps(colorSwapper, entity);
+
+                        var animationHelper = entityInstance.GetComponent<CombatAnimationHelper>();
+
+                        if (animationHelper != null)
+                        {
+                            animationHelper.Parent = entity;
+                        }
 
                         tileInstance.GetComponent<TerrainSlotUi>().SetEntity(entity);
                     }
