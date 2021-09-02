@@ -81,6 +81,7 @@ namespace Assets.Scripts.Combat
                         var entityAudio = entityInstance.GetComponent<EntityAudio>();
 
                         entityAudio.AttackSound = entity.AttackSound;
+                        entityAudio.HurtSound = entity.HurtSound;
 
                         var spriteStore = FindObjectOfType<SpriteStore>();
 

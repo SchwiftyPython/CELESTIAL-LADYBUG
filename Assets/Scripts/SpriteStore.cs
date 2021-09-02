@@ -114,12 +114,19 @@ namespace Assets.Scripts
         public Sprite[] AbilitySprites;
         public Sprite[] EffectSprites;
 
+        #region SkinSwaps
+
         public Texture SpearmanIdleSwap;
         public Texture SpearmanAttackSwap;
+        public Texture SpearmanHitSwap;
         public Texture ManAtArmsIdleSwap;
         public Texture ManAtArmsAttackSwap;
+        public Texture ManAtArmsHitSwap;
         public Texture CrossbowmanIdleSwap;
         public Texture CrossbowmanAttackSwap;
+        public Texture CrossbowmanHitSwap;
+
+        #endregion SkinSwaps
 
         public void Setup()
         {

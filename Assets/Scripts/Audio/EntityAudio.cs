@@ -5,6 +5,7 @@ namespace Assets.Scripts.Audio
     public class EntityAudio : MonoBehaviour
     {
         public string AttackSound { set; get; }
+        public string HurtSound { set; get; }
 
         public void Attack(string soundPath)
         {
@@ -42,6 +43,17 @@ namespace Assets.Scripts.Audio
             }
 
             PlaySound(soundPath);
+        }
+
+        public void TakeDamage()
+        {
+            if (string.IsNullOrEmpty(HurtSound))
+            {
+                Debug.LogWarning("No hurt sound defined!");
+                return;
+            }
+
+            PlaySound(HurtSound);
         }
 
         public void Die(string soundPath)
