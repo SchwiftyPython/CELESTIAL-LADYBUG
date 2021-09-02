@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -554,12 +555,19 @@ namespace Assets.Scripts.Entities
 
             var swapper = CombatSpriteInstance.GetComponentInChildren<ColorSwapper>();
 
-            if (swapper == null)
+            if (swapper != null)
+            {
+                swapper.ChangeTexture(AttackSkinSwap);
+            }
+
+            var ai = CombatSpriteInstance.GetComponent<AiController>();
+
+            if (ai == null)
             {
                 return;
             }
 
-            swapper.ChangeTexture(AttackSkinSwap);
+            ai.animating = true;
         }
 
         public void PlayIdleAnimation()
@@ -570,12 +578,19 @@ namespace Assets.Scripts.Entities
 
             var swapper = CombatSpriteInstance.GetComponentInChildren<ColorSwapper>();
 
-            if (swapper == null)
+            if (swapper != null)
+            {
+                swapper.ChangeTexture(IdleSkinSwap);
+            }
+
+            var ai = CombatSpriteInstance.GetComponent<AiController>();
+
+            if (ai == null)
             {
                 return;
             }
 
-            swapper.ChangeTexture(IdleSkinSwap);
+            ai.animating = false;
         }
 
         public void ApplyDamageWithAbility(Entity target, Ability ability, int damageMod, bool criticalHit)

@@ -49,7 +49,7 @@ namespace Assets.Scripts.Combat
 
                 bandits.Add(bandit);
 
-                bandit = new Vampire();
+                bandit = new Zombie();
 
                 bandits.Add(bandit);
 

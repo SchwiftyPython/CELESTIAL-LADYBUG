@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Abilities;
@@ -7,6 +8,7 @@ using Assets.Scripts.Entities;
 using GoRogue;
 using GoRogue.Pathing;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.AI
@@ -22,6 +24,8 @@ namespace Assets.Scripts.AI
         private Queue<Coord> _pathToTarget;
         private bool _actionAvailable;
         private bool _fleeing;
+
+        public bool animating;
 
         public Entity Self { get; private set; }
         public Entity TargetEntity { get; private set; }
@@ -51,7 +55,7 @@ namespace Assets.Scripts.AI
             _fleeing = false;
         }
 
-        public void TakeTurn()
+        public IEnumerator TakeTurn()
         {
             _actionAvailable = true;
 
@@ -112,6 +116,16 @@ namespace Assets.Scripts.AI
                 currentTry++;
             }
 
+            while (animating)
+            {
+                yield return null;
+            }
+
+            EndTurn();
+        }
+
+        private void EndTurn()
+        {
             var eventMediator = FindObjectOfType<EventMediator>();
             eventMediator.Broadcast(GlobalHelper.EndTurn, this);
         }
