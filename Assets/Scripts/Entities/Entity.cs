@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -52,6 +53,9 @@ namespace Assets.Scripts.Entities
 
         public UnityEngine.GameObject CombatSpritePrefab { get; protected set; }
         public UnityEngine.GameObject CombatSpriteInstance { get; private set; }
+
+        public Texture IdleSkinSwap;
+        public Texture AttackSkinSwap;
 
         public string HurtSound;
         public string DieSound;
@@ -342,9 +346,7 @@ namespace Assets.Scripts.Entities
 
         public void MeleeAttack(Entity target, IModifierProvider modifierProvider = null)
         {
-            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
-
-            eAudio.Attack(AttackSound);
+            PlayAttackAnimation();
 
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
@@ -389,9 +391,7 @@ namespace Assets.Scripts.Entities
 
         public void MeleeAttackWithSlot(Entity target, EquipLocation slot, IModifierProvider modifierProvider = null)
         {
-            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
-
-            eAudio.Attack(AttackSound);
+            PlayAttackAnimation();
 
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
@@ -436,9 +436,7 @@ namespace Assets.Scripts.Entities
 
         public void RangedAttack(Entity target, IModifierProvider modifierProvider = null)
         {
-            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
-
-            eAudio.Attack(AttackSound);
+            PlayAttackAnimation();
 
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Ranged);
 
@@ -483,9 +481,7 @@ namespace Assets.Scripts.Entities
 
         public void AttackWithAbility(Entity target, Ability ability)
         {
-            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
-
-            eAudio.Attack(AttackSound);
+            PlayAttackAnimation();
 
             IModifierProvider modifierProvider = ability as IModifierProvider;
 
@@ -549,6 +545,52 @@ namespace Assets.Scripts.Entities
 
                 }
             }
+        }
+
+        private void PlayAttackAnimation()
+        {
+            var animator = CombatSpriteInstance.GetComponent<Animator>();
+
+            animator.SetBool("IsAttacking", true);
+
+            var swapper = CombatSpriteInstance.GetComponentInChildren<ColorSwapper>();
+
+            if (swapper != null)
+            {
+                swapper.ChangeTexture(AttackSkinSwap);
+            }
+
+            var ai = CombatSpriteInstance.GetComponent<AiController>();
+
+            if (ai == null)
+            {
+                return;
+            }
+
+            ai.animating = true;
+        }
+
+        public void PlayIdleAnimation()
+        {
+            var animator = CombatSpriteInstance.GetComponent<Animator>();
+
+            animator.SetBool("IsAttacking", false);
+
+            var swapper = CombatSpriteInstance.GetComponentInChildren<ColorSwapper>();
+
+            if (swapper != null)
+            {
+                swapper.ChangeTexture(IdleSkinSwap);
+            }
+
+            var ai = CombatSpriteInstance.GetComponent<AiController>();
+
+            if (ai == null)
+            {
+                return;
+            }
+
+            ai.animating = false;
         }
 
         public void ApplyDamageWithAbility(Entity target, Ability ability, int damageMod, bool criticalHit)

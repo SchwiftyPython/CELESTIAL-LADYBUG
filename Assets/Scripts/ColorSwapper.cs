@@ -25,5 +25,12 @@ namespace Assets.Scripts
             mat.SetColor("_ColorSwapGreen", scheme.GreenSwap);
             mat.SetColor("_ColorSwapBlue", scheme.BlueSwap);
         }
+
+        public void ChangeTexture(Texture tex)
+        {
+            var material = GetComponent<Renderer>().material;
+
+            material.SetTexture("_ColorSwapTex", tex);
+        }
     }
 }

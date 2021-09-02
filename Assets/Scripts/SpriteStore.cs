@@ -5,7 +5,6 @@ using Assets.Scripts.Abilities;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Effects;
 using Assets.Scripts.Entities;
-using Assets.Scripts.Travel;
 using Assets.Scripts.UI;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -114,6 +113,13 @@ namespace Assets.Scripts
 
         public Sprite[] AbilitySprites;
         public Sprite[] EffectSprites;
+
+        public Texture SpearmanIdleSwap;
+        public Texture SpearmanAttackSwap;
+        public Texture ManAtArmsIdleSwap;
+        public Texture ManAtArmsAttackSwap;
+        public Texture CrossbowmanIdleSwap;
+        public Texture CrossbowmanAttackSwap;
 
         public void Setup()
         {

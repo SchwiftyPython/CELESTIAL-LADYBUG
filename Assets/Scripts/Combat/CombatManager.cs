@@ -177,7 +177,7 @@ namespace Assets.Scripts.Combat
                         return;
                     }
 
-                    aiController.TakeTurn();
+                    StartCoroutine(aiController.TakeTurn());
                     break;
                 case CombatState.AiTurn:
                     _eventMediator.Broadcast(GlobalHelper.AiTurn, this);
@@ -189,7 +189,7 @@ namespace Assets.Scripts.Combat
                         return;
                     }
 
-                    ActiveEntity.CombatSpriteInstance.GetComponent<AiController>().TakeTurn();
+                    AiTakeTurn();
                     break;
                 case CombatState.EndTurn:
                     if (IsCombatFinished())
@@ -266,6 +266,11 @@ namespace Assets.Scripts.Combat
         public void Load()
         {
             _currentCombatState = CombatState.Loading;
+        }
+
+        private void AiTakeTurn()
+        {
+            StartCoroutine(ActiveEntity.CombatSpriteInstance.GetComponent<AiController>().TakeTurn());
         }
 
         private GameObject GetPawnHighlighterInstance()
@@ -427,7 +432,7 @@ namespace Assets.Scripts.Combat
                 entityInstance.GetComponent<AiController>().Flee();
             }
 
-            ActiveEntity.CombatSpriteInstance.GetComponent<AiController>().TakeTurn();
+            StartCoroutine(ActiveEntity.CombatSpriteInstance.GetComponent<AiController>().TakeTurn());
         }
 
         private void DisplayPostCombatPopup(CombatResult result)
