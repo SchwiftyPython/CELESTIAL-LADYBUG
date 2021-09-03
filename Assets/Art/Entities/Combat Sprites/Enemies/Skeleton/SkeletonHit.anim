@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GhostAttack
+  m_Name: SkeletonHit
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -20,16 +20,16 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: -3987011388434069450, guid: a4f82e4a839b09042ba04b2017fa8222,
+      value: {fileID: 8125776019550189955, guid: 16be4a4037ea0be4897c139f00e4f25a,
         type: 3}
     - time: 0.25
-      value: {fileID: -2977981801198352798, guid: a4f82e4a839b09042ba04b2017fa8222,
+      value: {fileID: -5629832822256333211, guid: 16be4a4037ea0be4897c139f00e4f25a,
         type: 3}
     - time: 0.5
-      value: {fileID: 4295156431522766159, guid: a4f82e4a839b09042ba04b2017fa8222,
+      value: {fileID: -3872363980157793990, guid: 16be4a4037ea0be4897c139f00e4f25a,
         type: 3}
     - time: 0.75
-      value: {fileID: -6958155311487899049, guid: a4f82e4a839b09042ba04b2017fa8222,
+      value: {fileID: 3220092263129747569, guid: 16be4a4037ea0be4897c139f00e4f25a,
         type: 3}
     attribute: m_Sprite
     path: 
@@ -50,10 +50,10 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: -3987011388434069450, guid: a4f82e4a839b09042ba04b2017fa8222, type: 3}
-    - {fileID: -2977981801198352798, guid: a4f82e4a839b09042ba04b2017fa8222, type: 3}
-    - {fileID: 4295156431522766159, guid: a4f82e4a839b09042ba04b2017fa8222, type: 3}
-    - {fileID: -6958155311487899049, guid: a4f82e4a839b09042ba04b2017fa8222, type: 3}
+    - {fileID: 8125776019550189955, guid: 16be4a4037ea0be4897c139f00e4f25a, type: 3}
+    - {fileID: -5629832822256333211, guid: 16be4a4037ea0be4897c139f00e4f25a, type: 3}
+    - {fileID: -3872363980157793990, guid: 16be4a4037ea0be4897c139f00e4f25a, type: 3}
+    - {fileID: 3220092263129747569, guid: 16be4a4037ea0be4897c139f00e4f25a, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -79,22 +79,15 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.5
-    functionName: PlayAttackSound
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.75
-    functionName: TriggerTargetAnimation
+  - time: 0.25
+    functionName: PlayHitSound
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 1
-    functionName: StopAttackAnimation
+    functionName: StopHitAnimation
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
