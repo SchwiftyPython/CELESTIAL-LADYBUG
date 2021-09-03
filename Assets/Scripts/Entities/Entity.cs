@@ -56,6 +56,7 @@ namespace Assets.Scripts.Entities
 
         public Texture IdleSkinSwap;
         public Texture AttackSkinSwap;
+        public Texture HitSkinSwap;
 
         public string HurtSound;
         public string DieSound;
@@ -346,8 +347,6 @@ namespace Assets.Scripts.Entities
 
         public void MeleeAttack(Entity target, IModifierProvider modifierProvider = null)
         {
-            PlayAttackAnimation();
-
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
             int toHitMod = 0;
@@ -358,6 +357,8 @@ namespace Assets.Scripts.Entities
 
             if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Melee, toHitMod, out bool criticalHit)) 
             {
+                PlayAttackAnimation(target, true);
+
                 int damageMod = 0;
                 if (modifierProvider != null)
                 {
@@ -387,12 +388,14 @@ namespace Assets.Scripts.Entities
 
                 }
             }
+            else
+            {
+                PlayAttackAnimation(target, false);
+            }
         }
 
         public void MeleeAttackWithSlot(Entity target, EquipLocation slot, IModifierProvider modifierProvider = null)
         {
-            PlayAttackAnimation();
-
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
             int toHitMod = 0;
@@ -403,6 +406,8 @@ namespace Assets.Scripts.Entities
 
             if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Melee, toHitMod, out bool criticalHit))
             {
+                PlayAttackAnimation(target, true);
+
                 int damageMod = 0;
                 if (modifierProvider != null)
                 {
@@ -432,12 +437,14 @@ namespace Assets.Scripts.Entities
 
                 }
             }
+            else
+            {
+                PlayAttackAnimation(target, false);
+            }
         }
 
         public void RangedAttack(Entity target, IModifierProvider modifierProvider = null)
         {
-            PlayAttackAnimation();
-
             var hitDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Ranged);
 
             int toHitMod = 0;
@@ -448,6 +455,8 @@ namespace Assets.Scripts.Entities
 
             if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Ranged, toHitMod, out bool criticalHit))
             {
+                PlayAttackAnimation(target, true);
+
                 int damageMod = 0;
                 if (modifierProvider != null)
                 {
@@ -477,12 +486,14 @@ namespace Assets.Scripts.Entities
 
                 }
             }
+            else
+            {
+                PlayAttackAnimation(target, false);
+            }
         }
 
         public void AttackWithAbility(Entity target, Ability ability)
         {
-            PlayAttackAnimation();
-
             IModifierProvider modifierProvider = ability as IModifierProvider;
 
             int toHitMod = 0;
@@ -516,6 +527,8 @@ namespace Assets.Scripts.Entities
 
             if (attackHit)
             {
+                PlayAttackAnimation(target, true);
+
                 int damageMod = 0;
                 if (modifierProvider != null)
                 {
@@ -545,10 +558,20 @@ namespace Assets.Scripts.Entities
 
                 }
             }
+            else
+            {
+                PlayAttackAnimation(target, false);
+            }
         }
 
-        private void PlayAttackAnimation()
+        private void PlayAttackAnimation(Entity target, bool attackHit)
         {
+            var animationHelper = CombatSpriteInstance.GetComponent<CombatAnimationHelper>();
+
+            animationHelper.Target = target;
+
+            animationHelper.attackHit = attackHit;
+
             var animator = CombatSpriteInstance.GetComponent<Animator>();
 
             animator.SetBool("IsAttacking", true);
@@ -581,6 +604,29 @@ namespace Assets.Scripts.Entities
             if (swapper != null)
             {
                 swapper.ChangeTexture(IdleSkinSwap);
+            }
+
+            var ai = CombatSpriteInstance.GetComponent<AiController>();
+
+            if (ai == null)
+            {
+                return;
+            }
+
+            ai.animating = false;
+        }
+
+        public void PlayHitAnimation()
+        {
+            var animator = CombatSpriteInstance.GetComponent<Animator>();
+
+            animator.SetTrigger("Hit");
+
+            var swapper = CombatSpriteInstance.GetComponentInChildren<ColorSwapper>();
+
+            if (swapper != null)
+            {
+                swapper.ChangeTexture(HitSkinSwap);
             }
 
             var ai = CombatSpriteInstance.GetComponent<AiController>();
@@ -1027,9 +1073,9 @@ namespace Assets.Scripts.Entities
                 return;
             }
 
-            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
-
-            eAudio.TakeDamage(HurtSound);
+            // var animator = CombatSpriteInstance.GetComponent<Animator>();
+            //
+            // animator.SetTrigger("Hit");
         }
 
         public int AddEnergy(int amount)

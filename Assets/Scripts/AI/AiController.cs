@@ -8,7 +8,6 @@ using Assets.Scripts.Entities;
 using GoRogue;
 using GoRogue.Pathing;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.AI

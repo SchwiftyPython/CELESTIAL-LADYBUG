@@ -33,6 +33,7 @@ namespace Assets.Scripts.Entities.Companions
 
             IdleSkinSwap = spriteStore.SpearmanIdleSwap;
             AttackSkinSwap = spriteStore.SpearmanAttackSwap;
+            HitSkinSwap = spriteStore.SpearmanHitSwap;
         }
     }
 }
