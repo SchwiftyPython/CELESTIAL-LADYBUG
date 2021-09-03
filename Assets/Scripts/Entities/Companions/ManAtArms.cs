@@ -34,6 +34,7 @@ namespace Assets.Scripts.Entities.Companions
 
             IdleSkinSwap = spriteStore.ManAtArmsIdleSwap;
             AttackSkinSwap = spriteStore.ManAtArmsAttackSwap;
+            HitSkinSwap = spriteStore.ManAtArmsHitSwap;
         }
     }
 }

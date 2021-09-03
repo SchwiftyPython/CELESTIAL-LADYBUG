@@ -41,11 +41,11 @@ namespace Assets.Scripts.Combat
 
                 bandits.Add(bandit);
 
-                bandit = new Zombie();
+                bandit = new Ghost();
 
                 bandits.Add(bandit);
 
-                bandit = new Skeleton();
+                bandit = new Vampire();
 
                 bandits.Add(bandit);
 
