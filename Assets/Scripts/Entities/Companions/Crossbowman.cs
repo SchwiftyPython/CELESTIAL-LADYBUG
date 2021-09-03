@@ -32,6 +32,8 @@ namespace Assets.Scripts.Entities.Companions
 
             IdleSkinSwap = spriteStore.CrossbowmanIdleSwap;
             AttackSkinSwap = spriteStore.CrossbowmanAttackSwap;
+            HitSkinSwap = spriteStore.CrossbowmanHitSwap;
+            DeadSkinSwap = spriteStore.CrossbowmanDeadSwap;
         }
     }
 }

@@ -467,7 +467,7 @@ namespace Assets.Scripts.Combat
                     return;
                 }
 
-                RemoveEntity(deadEntity);
+                //RemoveEntity(deadEntity);
 
                 if (IsCombatFinished())
                 {

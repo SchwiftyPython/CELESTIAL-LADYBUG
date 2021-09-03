@@ -82,6 +82,7 @@ namespace Assets.Scripts.Combat
 
                         entityAudio.AttackSound = entity.AttackSound;
                         entityAudio.HurtSound = entity.HurtSound;
+                        entityAudio.DeathSound = entity.DieSound;
 
                         var spriteStore = FindObjectOfType<SpriteStore>();
 
