@@ -187,7 +187,7 @@ namespace Assets.Scripts.Encounters
 
         private void ResetTimer()
         {
-            TimeTilNextEncounter = Random.Range(7, 11);
+            TimeTilNextEncounter = Random.Range(7, 9);
             ResumeTimer();
         }
 
@@ -200,21 +200,7 @@ namespace Assets.Scripts.Encounters
         {
             var encounterStore = FindObjectOfType<EncounterStore>();
 
-            if (eventName.Equals(EncounterFinished))
-            {
-                // ResetTimer();
-                //
-                // var eventMediator = FindObjectOfType<EventMediator>();
-                //
-                // eventMediator.UnsubscribeFromEvent(EncounterFinished, this);
-                //
-                // RunQueuedEncounters();
-                //
-                // _encounterInProgress = false;
-                //
-                // eventMediator.Broadcast(ResumeTimerEvent, this);
-            }
-            else if (eventName.Equals(MentalBreak))
+            if (eventName.Equals(MentalBreak))
             {
                 if(!(broadcaster is Entity companion))
                 {
