@@ -63,6 +63,8 @@ namespace Assets.Scripts.Encounters
 
         public void BuildDecksForNewDay()
         {
+            //todo check for test deck boolean
+
             var normalEncounterSize = 3;
 
             const int extraEncounterChance = 5;
@@ -79,9 +81,9 @@ namespace Assets.Scripts.Encounters
 
             _normalEncounterDeck = new EncounterDeck(encounterStore.GetNormalEncounters(), normalEncounterSize);
 
-            // var combatEncounters = encounterStore.GetCombatEncounters(); //todo testing
-            //
-            // _normalEncounterDeck.AddCard(combatEncounters[Random.Range(0, combatEncounters.Count)]);
+            var combatEncounters = encounterStore.GetCombatEncounters(); 
+            
+            _normalEncounterDeck.AddCard(combatEncounters[Random.Range(0, combatEncounters.Count)]);
 
             _normalEncounterDeck.Shuffle();
 

@@ -260,6 +260,27 @@ namespace Assets.Scripts
             return _companions.ElementAt(index).Value;
         }
 
+        public List<Entity> GetRandomCompanions(int numCompanions)
+        {
+            if (_companions == null || _companions.Count < 1)
+            {
+                return new List<Entity> { Derpus };
+            }
+
+            var remaining = new List<Entity>(_companions.Values);
+
+            var picked = new List<Entity>();
+
+            while (remaining.Count > 0 && picked.Count < numCompanions)
+            {
+                var index = Random.Range(0, remaining.Count);
+
+                picked.Add(remaining[index]);
+            }
+
+            return picked;
+        }
+
         //todo wrapper method for these that takes in a stat type
         public Entity GetCompanionWithHighestIntellect()
         {
