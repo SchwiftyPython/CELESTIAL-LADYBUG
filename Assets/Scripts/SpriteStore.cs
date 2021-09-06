@@ -119,12 +119,15 @@ namespace Assets.Scripts
         public Texture SpearmanIdleSwap;
         public Texture SpearmanAttackSwap;
         public Texture SpearmanHitSwap;
+        public Texture SpearmanDeadSwap;
         public Texture ManAtArmsIdleSwap;
         public Texture ManAtArmsAttackSwap;
         public Texture ManAtArmsHitSwap;
+        public Texture ManAtArmsDeadSwap;
         public Texture CrossbowmanIdleSwap;
         public Texture CrossbowmanAttackSwap;
         public Texture CrossbowmanHitSwap;
+        public Texture CrossbowmanDeadSwap;
 
         #endregion SkinSwaps
 

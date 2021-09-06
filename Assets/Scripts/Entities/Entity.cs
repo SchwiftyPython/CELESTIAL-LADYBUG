@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.AI;
@@ -57,6 +58,7 @@ namespace Assets.Scripts.Entities
         public Texture IdleSkinSwap;
         public Texture AttackSkinSwap;
         public Texture HitSkinSwap;
+        public Texture DeadSkinSwap;
 
         public string HurtSound;
         public string DieSound;
@@ -637,6 +639,43 @@ namespace Assets.Scripts.Entities
             }
 
             ai.animating = false;
+        }
+
+        public IEnumerator PlayDeathAnimation()
+        {
+            if (CombatSpriteInstance == null)
+            {
+                yield return null;
+            }
+
+            var animator = CombatSpriteInstance.GetComponent<Animator>();
+
+            animator.SetTrigger("Dead");
+
+            var swapper = CombatSpriteInstance.GetComponentInChildren<ColorSwapper>();
+
+            if (swapper != null)
+            {
+                swapper.ChangeTexture(DeadSkinSwap);
+            }
+
+            var ai = CombatSpriteInstance.GetComponent<AiController>();
+
+            if (ai != null)
+            {
+                ai.animating = false;
+            }
+
+            yield return Delay();
+
+            var combatManager = Object.FindObjectOfType<CombatManager>();
+
+            combatManager.RemoveEntity(this);
+        }
+
+        private IEnumerator Delay()
+        {
+            yield return new WaitForSeconds(1.0f);
         }
 
         public void ApplyDamageWithAbility(Entity target, Ability ability, int damageMod, bool criticalHit)

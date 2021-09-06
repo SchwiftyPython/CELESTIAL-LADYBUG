@@ -6,6 +6,7 @@ namespace Assets.Scripts.Audio
     {
         public string AttackSound { set; get; }
         public string HurtSound { set; get; }
+        public string DeathSound { set; get; }
 
         public void Attack(string soundPath)
         {
@@ -65,6 +66,17 @@ namespace Assets.Scripts.Audio
             }
 
             PlaySound(soundPath);
+        }
+
+        public void Die()
+        {
+            if (string.IsNullOrEmpty(DeathSound))
+            {
+                Debug.LogWarning("No die sound defined!");
+                return;
+            }
+
+            PlaySound(DeathSound);
         }
 
         private void PlaySound(string soundPath)
