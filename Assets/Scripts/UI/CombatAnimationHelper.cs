@@ -26,6 +26,10 @@ namespace Assets.Scripts.UI
             {
                 Target.PlayHitAnimation();
             }
+            else
+            {
+                StartCoroutine(Target.PlayDeathAnimation());
+            }
         }
 
         public void PlayAttackSound()
@@ -45,6 +49,13 @@ namespace Assets.Scripts.UI
         public void StopHitAnimation()
         {
             Parent.PlayIdleAnimation();
+        }
+
+        public void PlayDeathSound()
+        {
+            var eAudio = GetComponent<EntityAudio>();
+
+            eAudio.Die();
         }
     }
 }

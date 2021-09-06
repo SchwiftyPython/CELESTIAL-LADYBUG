@@ -45,11 +45,11 @@ namespace Assets.Scripts.Combat
 
                 bandits.Add(bandit);
 
-                bandit = new Vampire();
+                bandit = new Skeleton();
 
                 bandits.Add(bandit);
 
-                bandit = new Zombie();
+                bandit = new Vampire();
 
                 bandits.Add(bandit);
 
@@ -63,6 +63,8 @@ namespace Assets.Scripts.Combat
             combatManager.Enemies = bandits;
 
             combatManager.Load();
+
+            SetAllCompanionsToOneHealth();
         }
 
         private void SetAllEnemiesToOneHealth()

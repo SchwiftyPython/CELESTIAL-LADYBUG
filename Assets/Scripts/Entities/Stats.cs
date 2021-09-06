@@ -78,14 +78,14 @@ namespace Assets.Scripts.Entities
                         var eventMediator = Object.FindObjectOfType<EventMediator>();
                         eventMediator.Broadcast(GlobalHelper.EntityDead, _parent);
 
-                        if (_parent.CombatSpriteInstance == null)
-                        {
-                            return;
-                        }
-
-                        var eAudio = _parent.CombatSpriteInstance.GetComponent<EntityAudio>();
-
-                        eAudio.Die(_parent.DieSound);
+                        // if (_parent.CombatSpriteInstance == null)
+                        // {
+                        //     return;
+                        // }
+                        //
+                        // var eAudio = _parent.CombatSpriteInstance.GetComponent<EntityAudio>();
+                        //
+                        // eAudio.Die(_parent.DieSound);
                     }
                 }
                 else if(value > MaxHealth)
