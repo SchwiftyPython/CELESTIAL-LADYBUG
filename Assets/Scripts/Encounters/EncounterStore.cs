@@ -23,7 +23,10 @@ namespace Assets.Scripts.Encounters
             {"disabled wagon", () => new DisabledWagon()},
             {"nasty storm", () => new NastyStorm()},
             {"rock skipping contest", () => new RockSkippingContest()},
-            {"cauldron roulette", () => new CauldronRoulette()}
+            {"cauldron roulette", () => new CauldronRoulette()},
+            {"squeaky wheel", () => new SqueakyWheel()},
+            {"potion master", () => new PotionMaster()},
+            {"creepy shop", () => new CreepyShop()},
         };
 
         private readonly Dictionary<string, Func<Encounter>> _campingEncounters = new Dictionary<string, Func<Encounter>>
@@ -38,7 +41,8 @@ namespace Assets.Scripts.Encounters
 
         private readonly Dictionary<string, Func<Encounter>> _combatEncounters = new Dictionary<string, Func<Encounter>>
         {
-            {"bandit attack", () => new BanditAttack()}
+            {"bandit attack", () => new BanditAttack()},
+            {"looting bandits", () => new LootingBandits()},
         };
 
         private readonly Dictionary<string, Func<Entity, Encounter>> _mentalBreakEncounters = new Dictionary<string, Func<Entity, Encounter>>
@@ -50,6 +54,11 @@ namespace Assets.Scripts.Encounters
         {
             {"no energy", () => new DerpusNoEnergy()},
             {"no morale", () => new DerpusNoMorale()}
+        };
+
+        private readonly Dictionary<string, Func<Encounter>> _testEncounters = new Dictionary<string, Func<Encounter>>
+        {
+            
         };
 
         public List<Encounter> GetNormalEncounters()
@@ -105,6 +114,18 @@ namespace Assets.Scripts.Encounters
         public Encounter GetDerpusNoMoraleEncounter()
         {
             return _derpusStopWagonEncounters["no morale"].Invoke();
+        }
+
+        public List<Encounter> GetTestEncounters()
+        {
+            var encounters = new List<Encounter>();
+
+            foreach (var encounter in _testEncounters)
+            {
+                encounters.Add(encounter.Value.Invoke());
+            }
+
+            return encounters;
         }
     }
 }

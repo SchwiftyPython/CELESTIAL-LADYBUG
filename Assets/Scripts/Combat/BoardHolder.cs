@@ -66,7 +66,15 @@ namespace Assets.Scripts.Combat
                         {
                             entityInstance.AddComponent<AiController>();
                             entityInstance.GetComponent<AiController>().SetSelf(entity);
-                            entityInstance.GetComponent<SpriteRenderer>().flipX = true;
+
+                            var spriteRenderer = entityInstance.GetComponent<SpriteRenderer>();
+
+                            if (spriteRenderer == null)
+                            {
+                                spriteRenderer = entityInstance.GetComponentInChildren<SpriteRenderer>();
+                            }
+
+                            spriteRenderer.flipX = true;
                             
                             var position = entityInstance.transform.position;
 

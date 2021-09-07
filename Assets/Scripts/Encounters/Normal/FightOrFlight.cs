@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Travel;
+using GoRogue.DiceNotation;
 using UnityEngine;
 
 namespace Assets.Scripts.Encounters.Normal
@@ -33,8 +34,11 @@ namespace Assets.Scripts.Encounters.Normal
 
             const int scaleSuccess = 10;
 
-            //todo diceroller here
-            var agilityCheck = chosenCompanion.Attributes.Agility + Random.Range(1, 21);
+            var agilityCheck = Dice.Roll($"{chosenCompanion.Attributes.Agility - 1}d6");
+
+            var wildRoll = GlobalHelper.RollWildDie();
+
+            agilityCheck += wildRoll;
 
             Debug.Log($"Value Needed: {scaleSuccess}");
             Debug.Log(

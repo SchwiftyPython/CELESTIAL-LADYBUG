@@ -19,10 +19,13 @@ namespace Assets.Scripts.Encounters
 
         private EncounterDeck _normalEncounterDeck;
         private EncounterDeck _campingDeck;
+        private EncounterDeck _testDeck;
 
         private Queue<Encounter> _encounterQueue;
 
         public float TimeTilNextEncounter;
+
+        public bool UseTestDeck;
 
         private void Start()
         {
@@ -63,29 +66,34 @@ namespace Assets.Scripts.Encounters
 
         public void BuildDecksForNewDay()
         {
-            //todo check for test deck boolean
-
-            var normalEncounterSize = 3;
-
-            const int extraEncounterChance = 5;
-
-            //todo diceroller
-            var roll = Random.Range(1, 101);
-
-            if (roll <= extraEncounterChance)
-            {
-                normalEncounterSize++;
-            }
-
             var encounterStore = FindObjectOfType<EncounterStore>();
 
-            _normalEncounterDeck = new EncounterDeck(encounterStore.GetNormalEncounters(), normalEncounterSize);
+            if (UseTestDeck)
+            {
+                BuildTestDeck();
+            }
+            else
+            {
+                var normalEncounterSize = 3;
 
-            var combatEncounters = encounterStore.GetCombatEncounters(); 
-            
-            _normalEncounterDeck.AddCard(combatEncounters[Random.Range(0, combatEncounters.Count)]);
+                const int extraEncounterChance = 5;
 
-            _normalEncounterDeck.Shuffle();
+                //todo diceroller
+                var roll = Random.Range(1, 101);
+
+                if (roll <= extraEncounterChance)
+                {
+                    normalEncounterSize++;
+                }
+
+                _normalEncounterDeck = new EncounterDeck(encounterStore.GetNormalEncounters(), normalEncounterSize);
+
+                var combatEncounters = encounterStore.GetCombatEncounters();
+
+                _normalEncounterDeck.AddCard(combatEncounters[Random.Range(0, combatEncounters.Count)]);
+
+                _normalEncounterDeck.Shuffle();
+            }
 
             if (_campingDeck == null || _campingDeck.Size < 1)
             {
@@ -100,10 +108,30 @@ namespace Assets.Scripts.Encounters
             ResetTimer();
         }
 
+        private void BuildTestDeck()
+        {
+            var encounterStore = FindObjectOfType<EncounterStore>();
+
+            var testEncounters = encounterStore.GetTestEncounters();
+
+            _testDeck = new EncounterDeck(testEncounters, testEncounters.Count);
+
+            _testDeck.Shuffle();
+        }
+
         private void DrawNextEncounter()
         {
-            var encounter = _normalEncounterDeck.Draw();
-            
+            Encounter encounter;
+
+            if (UseTestDeck)
+            {
+                encounter = _testDeck.Draw();
+            }
+            else
+            {
+                encounter = _normalEncounterDeck.Draw();
+            }
+
             if (encounter == null)
             {
                 encounter = _campingDeck.Draw();

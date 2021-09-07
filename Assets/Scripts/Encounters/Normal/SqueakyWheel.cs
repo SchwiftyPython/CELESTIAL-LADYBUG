@@ -9,7 +9,7 @@ namespace Assets.Scripts.Encounters.Normal
     {
         public SqueakyWheel()
         {
-            Rarity = Rarity.Rare;
+            Rarity = Rarity.Common;
             EncounterType = EncounterType.Normal;
             Title = "Squeaky Wheel Gets The Grease";
         }
@@ -25,11 +25,19 @@ namespace Assets.Scripts.Encounters.Normal
 
             const int fixSuccess = 10;
 
-            Reward optionReward = null;
-            Penalty optionPenalty = null;
+            Reward optionReward;
+            Penalty optionPenalty;
 
             foreach (var chosenCompanion in chosenCompanions)
             {
+                if (Options.ContainsKey(chosenCompanion.FirstName()))
+                {
+                    continue;
+                }
+
+                optionReward = null;
+                optionPenalty = null;
+
                 var optionTitle = $"{chosenCompanion.FirstName()}";
 
                 string optionResultText;

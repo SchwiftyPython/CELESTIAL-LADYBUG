@@ -1,29 +1,29 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Entities.Companions;
-using Assets.Scripts.Entities.Necromancer;
+using Assets.Scripts.Travel;
 using GoRogue.DiceNotation;
 using UnityEngine;
 
 namespace Assets.Scripts.Encounters.Combat
 {
-    public class BanditAttack : Encounter
+    public class LootingBandits : Encounter
     {
         private const int MinBandits = 3;
         private const int MaxBandits = 5;
 
-        public BanditAttack()
+        public LootingBandits()
         {
             Rarity = Rarity.Common;
             EncounterType = EncounterType.Combat;
-            Title = "Bandit Attack";
+            Title = "Looting Bandits";
         }
 
         public override void Run()
         {
             var numBandits = Random.Range(MinBandits, MaxBandits + 1);
 
-            Description = $"{numBandits} bandits have blocked the trail with their weapons drawn!";
+            Description = $"{numBandits} bandits have blocked the trail. Their leader steps forward and demands you turn over all your supplies.";
 
             var bandits = new List<Entity>();
 
@@ -47,35 +47,25 @@ namespace Assets.Scripts.Encounters.Combat
 
             Options = new Dictionary<string, Option>();
 
-            var optionTitle = "Retreat";
+            var optionTitle = "Give up the supplies.";
 
-            string optionResultText;
+            string optionResultText = "The group stands aside and watches as the bandits make off with their supplies.";
 
-            const int retreatSuccessValue = 47;
+            var optionOnePenalty = new Penalty();
 
-            var retreatCheck = Dice.Roll("1d100");
+            var travelManager = Object.FindObjectOfType<TravelManager>();
 
-            var retreatSuccess = retreatCheck <= retreatSuccessValue;
+            optionOnePenalty.AddPartyLoss(PartySupplyTypes.Gold, travelManager.Party.Gold);
+            optionOnePenalty.AddPartyLoss(PartySupplyTypes.HealthPotions, travelManager.Party.HealthPotions);
+            optionOnePenalty.AddPartyLoss(PartySupplyTypes.Food, travelManager.Party.Food);
 
-            Debug.Log($"Value Needed: {retreatSuccessValue}");
-            Debug.Log($"Rolled: {retreatCheck}");
+            var optionOne = new Option(optionTitle, optionResultText, null, optionOnePenalty, EncounterType);
 
-            if (retreatSuccess)
-            {
-                optionResultText = "You manage to evade the attackers and escape safely.";
-            }
-            else
-            {
-                optionResultText = "You try to get away, but the attackers are too fast! Prepare for battle!";
-            }
+            Options.Add(optionTitle, optionOne);
 
-            var retreatOption = new RetreatCombatOption(optionTitle, optionResultText, bandits, retreatSuccess);
+            optionTitle = "Fight!";
 
-            Options.Add(optionTitle, retreatOption);
-
-            optionTitle = "To arms!";
-
-            optionResultText = "You prepare for battle...";
+            optionResultText = "Those supplies are essential to the group's survival. They must fight!";
 
             var fightOption = new FightCombatOption(optionTitle, optionResultText, bandits);
 

@@ -72,7 +72,7 @@ namespace Assets.Scripts.Encounters
                         eventMediator.Broadcast(GlobalHelper.RetreatEncounterFailed, this, fullResultDescription);
                     }
                 }
-                else //if to arms option selected
+                else if(selectedOption is FightCombatOption fightCombatOption)
                 {
                     SceneManager.LoadScene(GlobalHelper.CombatScene);
 
@@ -82,7 +82,15 @@ namespace Assets.Scripts.Encounters
 
                     combatManager.Load();
                 }
-               
+                else if (fullResultDescription.Count > 1 || !fullResultDescription.First().Equals("\n"))
+                {
+                    eventMediator.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
+                }
+                else
+                {
+                    eventMediator.Broadcast(GlobalHelper.EncounterFinished, this);
+                }
+
             }
             else if (fullResultDescription.Count > 1 || !fullResultDescription.First().Equals("\n"))
             {

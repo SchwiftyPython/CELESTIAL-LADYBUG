@@ -320,6 +320,25 @@ namespace Assets.Scripts
             return bestShot;
         }
 
+        public Entity GetCompanionWithHighestCoordination()
+        {
+            if (_companions == null || _companions.Count < 1)
+            {
+                return Derpus;
+            }
+
+            Entity bestCoord = null;
+            foreach (var companion in _companions.Values)
+            {
+                if (bestCoord == null || companion.Attributes.Coordination > bestCoord.Attributes.Coordination)
+                {
+                    bestCoord = companion;
+                }
+            }
+
+            return bestCoord;
+        }
+
         private void SetAllMoraleToOne()
         {
             Derpus.Stats.CurrentMorale = 1;
