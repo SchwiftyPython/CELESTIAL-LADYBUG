@@ -76,7 +76,7 @@ namespace Assets.Scripts.Travel
             return $"Lost {value} {GlobalHelper.GetEnumDescription(lossType)}!";
         }
 
-        public string BuildCompanionRewardTextItem(Entity companion, int value, EntityStatTypes gainType)
+        public string BuildCompanionRewardTextItem(Entity companion, int value, EntityStatTypes gainType) //todo can gain type be an enum?
         {
             return $"{companion.Name} gained {value} {GlobalHelper.GetEnumDescription(gainType)}!";
         }
@@ -86,7 +86,22 @@ namespace Assets.Scripts.Travel
             return $"{companion.Name} gained {attributeGainValue} {GlobalHelper.GetEnumDescription(gainType)}!";
         }
 
+        private string BuildCompanionRewardTextItem(Entity companion, int attributeGainValue, EntitySkillTypes gainType)
+        {
+            return $"{companion.Name} gained {attributeGainValue} {GlobalHelper.GetEnumDescription(gainType)}!";
+        }
+
+        private string BuildPartyAdditionTextItem(Entity companion)
+        {
+            return $"{companion.Name} joins the party!";
+        }
+
         public string BuildCompanionLossTextItem(Entity companion, int value, EntityStatTypes lossType)
+        {
+            return $"{companion.Name} lost {value} {GlobalHelper.GetEnumDescription(lossType)}!";
+        }
+
+        public string BuildCompanionLossTextItem(Entity companion, int value, EntityAttributeTypes lossType)
         {
             return $"{companion.Name} lost {value} {GlobalHelper.GetEnumDescription(lossType)}!";
         }
@@ -100,6 +115,7 @@ namespace Assets.Scripts.Travel
 
             ApplyPartyReward(reward);
             ApplyEntityReward(reward);
+            ApplyPartyAdditions(reward);
         }
 
         public void ApplyPartyReward(Reward partyReward)
@@ -262,6 +278,92 @@ namespace Assets.Scripts.Travel
                     }
                 }
             }
+
+            if (entityReward.EntitySkillGains != null && entityReward.EntitySkillGains.Count > 0)
+            {
+                foreach (var entityGain in entityReward.EntitySkillGains)
+                {
+                    var targetEntity = entityGain.Key;
+
+                    Entity companion;
+
+                    if (targetEntity.IsDerpus())
+                    {
+                        companion = Party.Derpus;
+                    }
+                    else
+                    {
+                        //it's possible the entity isn't in the party anymore so this is how we check off the top of my head
+                        companion = Party.GetCompanion(targetEntity.Name);
+                    }
+
+                    if (companion != null)
+                    {
+                        foreach (var skillGain in entityGain.Value)
+                        {
+                            var gainType = skillGain.Key;
+
+                            switch (gainType)
+                            {
+                                case EntitySkillTypes.Melee:
+                                    companion.Skills.Melee += skillGain.Value;
+                                    break;
+                                case EntitySkillTypes.Ranged:
+                                    companion.Skills.Ranged += skillGain.Value;
+                                    break;
+                                case EntitySkillTypes.Lockpicking:
+                                    companion.Skills.Lockpicking += skillGain.Value;
+                                    break;
+                                case EntitySkillTypes.Endurance:
+                                    companion.Skills.Endurance += skillGain.Value;
+                                    break;
+                                case EntitySkillTypes.Healing:
+                                    companion.Skills.Healing += skillGain.Value;
+                                    break;
+                                case EntitySkillTypes.Survival:
+                                    companion.Skills.Survival += skillGain.Value;
+                                    break;
+                                case EntitySkillTypes.Persuasion:
+                                    companion.Skills.Persuasion += skillGain.Value;
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+
+                            var entityDto = new TravelMessenger.EntityMessageDto
+                            {
+                                Message = BuildCompanionRewardTextItem(companion, skillGain.Value, gainType),
+                                Portrait = companion.Portrait,
+                                TextColor = _travelMessenger.rewardColor
+                            };
+
+                            _travelMessenger.QueueEntityMessage(entityDto);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ApplyPartyAdditions(Reward reward)
+        {
+            if (reward.PartyAdditions == null || reward.PartyAdditions.Count < 1)
+            {
+                return;
+            }
+
+            foreach (var companion in reward.PartyAdditions)
+            {
+                Party.AddCompanion(companion);
+
+                var entityDto = new TravelMessenger.EntityMessageDto
+                {
+                    Message = BuildPartyAdditionTextItem(companion),
+                    Portrait = companion.Portrait,
+                    TextColor = _travelMessenger.rewardColor
+                };
+
+                _travelMessenger.QueueEntityMessage(entityDto);
+            }
         }
 
         public void ApplyEncounterPenalty(Penalty penalty)
@@ -321,9 +423,9 @@ namespace Assets.Scripts.Travel
 
         private void ApplyEntityPenalty(Penalty entityPenalty)
         {
-            if (entityPenalty.EntityLosses != null && entityPenalty.EntityLosses.Count > 0)
+            if (entityPenalty.EntityStatLosses != null && entityPenalty.EntityStatLosses.Count > 0)
             {
-                foreach (var entityLoss in entityPenalty.EntityLosses)
+                foreach (var entityLoss in entityPenalty.EntityStatLosses)
                 {
                     var targetEntity = entityLoss.Key;
 
@@ -369,6 +471,67 @@ namespace Assets.Scripts.Travel
                                     Debug.Log($"Invalid loss type! {lossType}");
                                     break;
                             }
+                        }
+                    }
+                }
+            }
+
+            if (entityPenalty.EntityAttributeLosses != null && entityPenalty.EntityAttributeLosses.Count > 0)
+            {
+                foreach (var entityLoss in entityPenalty.EntityAttributeLosses)
+                {
+                    var targetEntity = entityLoss.Key;
+
+                    Entity companion;
+
+                    if (targetEntity.IsDerpus())
+                    {
+                        companion = Party.Derpus;
+                    }
+                    else
+                    {
+                        //it's possible the entity isn't in the party anymore so this is how we check off the top of my head
+                        companion = Party.GetCompanion(targetEntity.Name);
+                    }
+
+                    if (companion != null)
+                    {
+                        foreach (var attributeLoss in entityLoss.Value)
+                        {
+                            var lossType = attributeLoss.Key;
+
+                            switch (lossType)
+                            {
+                                case EntityAttributeTypes.Agility:
+                                    companion.Attributes.Agility -= attributeLoss.Value;
+                                    break;
+                                case EntityAttributeTypes.Coordination:
+                                    companion.Attributes.Coordination -= attributeLoss.Value;
+                                    break;
+                                case EntityAttributeTypes.Physique:
+                                    companion.Attributes.Physique -= attributeLoss.Value;
+                                    break;
+                                case EntityAttributeTypes.Intellect:
+                                    companion.Attributes.Intellect -= attributeLoss.Value;
+                                    break;
+                                case EntityAttributeTypes.Acumen:
+                                    companion.Attributes.Acumen -= attributeLoss.Value;
+                                    break;
+                                case EntityAttributeTypes.Charisma:
+                                    companion.Attributes.Charisma -= attributeLoss.Value;
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+
+                            var entityDto = new TravelMessenger.EntityMessageDto
+                            {
+                                Message = BuildCompanionLossTextItem(companion, attributeLoss.Value, lossType),
+                                Portrait = companion.Portrait,
+                                TextColor = _travelMessenger.penaltyColor
+                            };
+
+                            _travelMessenger.QueueEntityMessage(entityDto);
                         }
                     }
                 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Encounters;
+using Assets.Scripts.Travel;
 using UnityEngine;
 
 namespace Assets.Scripts.Decks
@@ -21,6 +22,10 @@ namespace Assets.Scripts.Decks
 
         public sealed override void Build(List<Encounter> cardPool, int deckSize, RarityCapper capper)
         {
+            var travelManager = Object.FindObjectOfType<TravelManager>();
+
+            var currentBiome = travelManager.CurrentBiome;
+
             Cards = new Queue<Encounter>();
             Size = deckSize;
 
@@ -32,35 +37,33 @@ namespace Assets.Scripts.Decks
                 var validCard = false;
                 var numTries = 0;
 
-                var index = Random.Range(0, cardPool.Count);
-
-                usedIndexes.Add(index);
-
                 Encounter card = null;
 
                 while (!validCard && numTries < maxTries)
                 {
                     numTries++;
 
+                    var index = Random.Range(0, cardPool.Count);
+
                     if (usedIndexes.Contains(index))
                     {
                         continue;
                     }
 
+                    usedIndexes.Add(index);
+
                     card = cardPool[index];
 
-                    if (!capper.IsCapped(card.Rarity))
+                    if (!capper.IsCapped(card.Rarity) && card.ValidBiome(currentBiome))
                     {
                         validCard = true;
                     }
-
-                    index = Random.Range(0, cardPool.Count);
                 }
 
-                if (card == null)
-                {
-                    card = cardPool[Random.Range(0, cardPool.Count)];
-                }
+                // if (card == null)
+                // {
+                //     card = cardPool[Random.Range(0, cardPool.Count)];
+                // }
 
                 AddCard(card);
             }

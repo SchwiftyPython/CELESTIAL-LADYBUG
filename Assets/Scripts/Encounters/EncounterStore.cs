@@ -27,6 +27,8 @@ namespace Assets.Scripts.Encounters
             {"squeaky wheel", () => new SqueakyWheel()},
             {"potion master", () => new PotionMaster()},
             {"creepy shop", () => new CreepyShop()},
+            {"crustacean laceration", () => new CrustaceanLaceration()},
+            {"how rude", () => new HowRude()},
         };
 
         private readonly Dictionary<string, Func<Encounter>> _campingEncounters = new Dictionary<string, Func<Encounter>>
@@ -36,13 +38,15 @@ namespace Assets.Scripts.Encounters
             {"holy inferno", () => new HolyInferno()},
             {"star blanket", () => new StarBlanket()},
             {"conk out", () => new ConkOut()},
-            {"peaceful village", () => new PeacefulVillage()}
+            {"peaceful village", () => new PeacefulVillage()},
+            {"arachnid archery", () => new ArachnidArchery()},
         };
 
         private readonly Dictionary<string, Func<Encounter>> _combatEncounters = new Dictionary<string, Func<Encounter>>
         {
             {"bandit attack", () => new BanditAttack()},
             {"looting bandits", () => new LootingBandits()},
+            {"trail of the dead", () => new TrailOfTheDead()},
         };
 
         private readonly Dictionary<string, Func<Entity, Encounter>> _mentalBreakEncounters = new Dictionary<string, Func<Entity, Encounter>>

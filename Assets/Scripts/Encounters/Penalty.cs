@@ -7,26 +7,46 @@ namespace Assets.Scripts.Encounters
 {
     public class Penalty
     {
-        public Dictionary<Entity, List<KeyValuePair<EntityStatTypes, int>>> EntityLosses;
+        public Dictionary<Entity, List<KeyValuePair<EntityStatTypes, int>>> EntityStatLosses;
+        public Dictionary<Entity, List<KeyValuePair<EntityAttributeTypes, int>>> EntityAttributeLosses;
         public Dictionary<PartySupplyTypes, int> PartyLosses;
         public List<Effect> Effects;
 
         public void AddEntityLoss(Entity targetEntity, EntityStatTypes statType, int amountLost)
         {
-            if (EntityLosses == null)
+            if (EntityStatLosses == null)
             {
-                EntityLosses = new Dictionary<Entity, List<KeyValuePair<EntityStatTypes, int>>>();
+                EntityStatLosses = new Dictionary<Entity, List<KeyValuePair<EntityStatTypes, int>>>();
             }
 
             var loss = new KeyValuePair<EntityStatTypes, int>(statType, amountLost);
 
-            if (!EntityLosses.ContainsKey(targetEntity))
+            if (!EntityStatLosses.ContainsKey(targetEntity))
             {
-                EntityLosses.Add(targetEntity, new List<KeyValuePair<EntityStatTypes, int>>{loss});
+                EntityStatLosses.Add(targetEntity, new List<KeyValuePair<EntityStatTypes, int>>{loss});
             }
             else
             {
-                EntityLosses[targetEntity].Add(loss);
+                EntityStatLosses[targetEntity].Add(loss);
+            }
+        }
+
+        public void AddEntityLoss(Entity targetEntity, EntityAttributeTypes attributeType, int amountLost)
+        {
+            if (EntityAttributeLosses == null)
+            {
+                EntityAttributeLosses = new Dictionary<Entity, List<KeyValuePair<EntityAttributeTypes, int>>>();
+            }
+
+            var loss = new KeyValuePair<EntityAttributeTypes, int>(attributeType, amountLost);
+
+            if (!EntityAttributeLosses.ContainsKey(targetEntity))
+            {
+                EntityAttributeLosses.Add(targetEntity, new List<KeyValuePair<EntityAttributeTypes, int>> { loss });
+            }
+            else
+            {
+                EntityAttributeLosses[targetEntity].Add(loss);
             }
         }
 

@@ -8,7 +8,9 @@ namespace Assets.Scripts.Encounters
     {
         public Dictionary<Entity, List<KeyValuePair<EntityStatTypes, int>>> EntityStatGains;
         public Dictionary<Entity, List<KeyValuePair<EntityAttributeTypes, int>>> EntityAttributeGains;
+        public Dictionary<Entity, List<KeyValuePair<EntitySkillTypes, int>>> EntitySkillGains;
         public Dictionary<PartySupplyTypes, int> PartyGains;
+        public List<Entity> PartyAdditions;
         public List<Effect> Effects;
 
         public void AddEntityGain(Entity targetEntity, EntityStatTypes statType, int amountGained)
@@ -49,6 +51,25 @@ namespace Assets.Scripts.Encounters
             }
         }
 
+        public void AddEntityGain(Entity targetEntity, EntitySkillTypes skillType, int amountGained)
+        {
+            if (EntitySkillGains == null)
+            {
+                EntitySkillGains = new Dictionary<Entity, List<KeyValuePair<EntitySkillTypes, int>>>();
+            }
+
+            var gain = new KeyValuePair<EntitySkillTypes, int>(skillType, amountGained);
+
+            if (!EntitySkillGains.ContainsKey(targetEntity))
+            {
+                EntitySkillGains.Add(targetEntity, new List<KeyValuePair<EntitySkillTypes, int>> { gain });
+            }
+            else
+            {
+                EntitySkillGains[targetEntity].Add(gain);
+            }
+        }
+
         public void AddPartyGain(PartySupplyTypes supplyType, int amountGained)
         {
             if (PartyGains == null)
@@ -64,6 +85,16 @@ namespace Assets.Scripts.Encounters
             {
                 PartyGains[supplyType] += amountGained;
             }
+        }
+
+        public void AddToParty(Entity companion)
+        {
+            if (PartyAdditions == null)
+            {
+                PartyAdditions = new List<Entity>();
+            }
+
+            PartyAdditions.Add(companion);
         }
     }
 }

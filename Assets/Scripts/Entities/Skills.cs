@@ -15,37 +15,6 @@ namespace Assets.Scripts.Entities
 
         private Entity _parent;
 
-        /*private int _dodge;
-        public int Dodge 
-        {
-            get
-            {
-                var moddedDodge = _dodge + GetAllModifiersForStat(EntitySkillTypes.Dodge);
-
-                if (moddedDodge > SkillMax)
-                {
-                    return SkillMax;
-                }
-
-                return moddedDodge;
-            }
-            private set
-            {
-                if (value < SkillMin)
-                {
-                    _dodge = SkillMin;
-                }
-                else if (value > SkillMax)
-                {
-                    _dodge = SkillMax;
-                }
-                else
-                {
-                    _dodge = value;
-                }
-            }
-        }*/
-
         //todo probably should define setters and getters here
         public int Melee { get; set; }
         public int Ranged { get; set; }
@@ -68,7 +37,7 @@ namespace Assets.Scripts.Entities
 
                 return _persuasion;
             }
-            private set
+            set
             {
                 if (value < SkillMin)
                 {

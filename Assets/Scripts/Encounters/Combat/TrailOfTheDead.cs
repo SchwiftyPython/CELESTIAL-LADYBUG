@@ -1,47 +1,40 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Entities.Companions;
+using Assets.Scripts.Entities.Necromancer;
+using Assets.Scripts.Travel;
 using GoRogue.DiceNotation;
 using UnityEngine;
 
 namespace Assets.Scripts.Encounters.Combat
 {
-    public class BanditAttack : Encounter
+    public class TrailOfTheDead : Encounter
     {
-        private const int MinBandits = 3;
-        private const int MaxBandits = 5;
+        private const int MinZombies = 6;
+        private const int MaxZombies = 8;
 
-        public BanditAttack()
+        public TrailOfTheDead()
         {
-            Rarity = Rarity.Common;
+            Rarity = Rarity.Uncommon;
             EncounterType = EncounterType.Combat;
-            Title = "Bandit Attack";
+            Title = "Trail of the Dead";
         }
 
         public override void Run()
         {
-            var numBandits = Random.Range(MinBandits, MaxBandits + 1);
+            var numBandits = Random.Range(MinZombies, MaxZombies + 1);
 
-            Description = $"{numBandits} bandits have blocked the trail with their weapons drawn!";
+            var travelManager = Object.FindObjectOfType<TravelManager>();
 
-            var bandits = new List<Entity>();
+            var chosenCompanion = travelManager.Party.GetRandomCompanion();
+
+            Description = $"The party is passing through a particularly dark part of the trail. {chosenCompanion.FirstName()} is nervously snapping their gaze side to side when they notice several figures lumbering towards them! The wagon is surrounded by zombies!";
+
+            var zombies = new List<Entity>();
 
             for (var i = 0; i < numBandits; i++)
             {
-                var banditIndex = Dice.Roll("1d2");
-
-                Entity bandit;
-
-                if (banditIndex == 1)
-                {
-                    bandit = new ManAtArms(Race.RaceType.Human, false);
-                }
-                else
-                {
-                    bandit = new Crossbowman(Race.RaceType.Human, false);
-                }
-
-                bandits.Add(bandit);
+                zombies.Add(new Zombie());
             }
 
             Options = new Dictionary<string, Option>();
@@ -55,20 +48,17 @@ namespace Assets.Scripts.Encounters.Combat
             var retreatCheck = Dice.Roll("1d100");
 
             var retreatSuccess = retreatCheck <= retreatSuccessValue;
-
-            Debug.Log($"Value Needed: {retreatSuccessValue}");
-            Debug.Log($"Rolled: {retreatCheck}");
-
+            
             if (retreatSuccess)
             {
-                optionResultText = "They manage to evade the attackers and escape safely.";
+                optionResultText = "They manage to evade the undead attackers and escape safely.";
             }
             else
             {
                 optionResultText = "They try to get away, but the attackers are too fast! Prepare for battle!";
             }
 
-            var retreatOption = new RetreatCombatOption(optionTitle, optionResultText, bandits, retreatSuccess);
+            var retreatOption = new RetreatCombatOption(optionTitle, optionResultText, zombies, retreatSuccess);
 
             Options.Add(optionTitle, retreatOption);
 
@@ -76,7 +66,7 @@ namespace Assets.Scripts.Encounters.Combat
 
             optionResultText = "Prepare for battle...";
 
-            var fightOption = new FightCombatOption(optionTitle, optionResultText, bandits);
+            var fightOption = new FightCombatOption(optionTitle, optionResultText, zombies);
 
             Options.Add(optionTitle, fightOption);
 

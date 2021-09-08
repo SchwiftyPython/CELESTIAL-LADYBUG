@@ -29,6 +29,8 @@ namespace Assets.Scripts.Encounters
 
         public bool CountsAsDayTraveled;
 
+        public List<BiomeType> BiomeTypes;
+
         public abstract void Run();
 
         public void OptionSelected(Option selectedOption)
@@ -82,15 +84,6 @@ namespace Assets.Scripts.Encounters
 
                     combatManager.Load();
                 }
-                else if (fullResultDescription.Count > 1 || !fullResultDescription.First().Equals("\n"))
-                {
-                    eventMediator.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);
-                }
-                else
-                {
-                    eventMediator.Broadcast(GlobalHelper.EncounterFinished, this);
-                }
-
             }
             else if (fullResultDescription.Count > 1 || !fullResultDescription.First().Equals("\n"))
             {
@@ -105,6 +98,16 @@ namespace Assets.Scripts.Encounters
         public bool HasOptions()
         {
             return Options != null && Options.Count > 0;
+        }
+
+        public bool ValidBiome(BiomeType bType)
+        {
+            if (BiomeTypes == null || BiomeTypes.Count < 1)
+            {
+                return true;
+            }
+
+            return BiomeTypes.Contains(bType);
         }
 
         protected void SubscribeToOptionSelectedEvent()

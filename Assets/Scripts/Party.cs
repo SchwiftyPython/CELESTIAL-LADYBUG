@@ -339,6 +339,59 @@ namespace Assets.Scripts
             return bestCoord;
         }
 
+        public Entity GetCompanionWithHighestHealing()
+        {
+            if (_companions == null || _companions.Count < 1)
+            {
+                return Derpus;
+            }
+
+            Entity bestHealing = null;
+            foreach (var companion in _companions.Values)
+            {
+                if (bestHealing == null || companion.Skills.Healing > bestHealing.Skills.Healing)
+                {
+                    bestHealing = companion;
+                }
+            }
+
+            return bestHealing;
+        }
+
+        public Entity GetCompanionWithLowestEndurance()
+        {
+            if (_companions == null || _companions.Count < 1)
+            {
+                return Derpus;
+            }
+
+            Entity worstEndurance = null;
+            foreach (var companion in _companions.Values)
+            {
+                if (worstEndurance == null || companion.Skills.Endurance < worstEndurance.Skills.Endurance)
+                {
+                    worstEndurance = companion;
+                }
+            }
+
+            return worstEndurance;
+        }
+
+        public int GetTotalPartyEndurance()
+        {
+            return _companions.Sum(companion => companion.Value.Skills.Endurance);
+        }
+
+        public int GetTotalPartyPhysique()
+        {
+            return _companions.Sum(companion => companion.Value.Attributes.Physique);
+        }
+
+        public bool IsFull()
+        {
+            return _companions.Count >= MaxSize;
+        }
+
         private void SetAllMoraleToOne()
         {
             Derpus.Stats.CurrentMorale = 1;

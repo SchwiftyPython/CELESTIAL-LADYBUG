@@ -43,6 +43,11 @@ namespace Assets.Scripts.UI
 
         private void Populate()
         {
+            if (_companion == null)
+            {
+                return;
+            }
+
             SetPortrait(_companion.Portrait);
 
             _name.text = _companion.Name;

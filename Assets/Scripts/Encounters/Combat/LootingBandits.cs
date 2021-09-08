@@ -59,7 +59,7 @@ namespace Assets.Scripts.Encounters.Combat
             optionOnePenalty.AddPartyLoss(PartySupplyTypes.HealthPotions, travelManager.Party.HealthPotions);
             optionOnePenalty.AddPartyLoss(PartySupplyTypes.Food, travelManager.Party.Food);
 
-            var optionOne = new Option(optionTitle, optionResultText, null, optionOnePenalty, EncounterType);
+            var optionOne = new Option(optionTitle, optionResultText, null, optionOnePenalty, EncounterType.Normal);
 
             Options.Add(optionTitle, optionOne);
 
