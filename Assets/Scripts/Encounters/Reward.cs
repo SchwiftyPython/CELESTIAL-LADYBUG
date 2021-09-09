@@ -96,5 +96,15 @@ namespace Assets.Scripts.Encounters
 
             PartyAdditions.Add(companion);
         }
+
+        public void EveryoneGain(Party party, EntityStatTypes statType, int amountGained)
+        {
+            AddEntityGain(party.Derpus, statType, amountGained);
+
+            foreach (var companion in party.GetCompanions())
+            {
+                AddEntityGain(companion, statType, amountGained);
+            }
+        }
     }
 }

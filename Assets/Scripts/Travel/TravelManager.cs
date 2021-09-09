@@ -467,6 +467,9 @@ namespace Assets.Scripts.Travel
                                 case EntityStatTypes.CurrentEnergy:
                                     companion.SubtractEnergy(statLoss.Value);
                                     break;
+                                case EntityStatTypes.MaxMorale:
+                                    companion.Stats.MaxMorale -= statLoss.Value;
+                                    break;
                                 default:
                                     Debug.Log($"Invalid loss type! {lossType}");
                                     break;

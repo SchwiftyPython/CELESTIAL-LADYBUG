@@ -10,7 +10,7 @@ namespace Assets.Scripts.Encounters.Normal
         {
             Rarity = Rarity.Rare;
             EncounterType = EncounterType.Normal;
-            Title = "How Rude";
+            Title = "How Rude!";
         }
 
         public override void Run()
@@ -23,7 +23,7 @@ namespace Assets.Scripts.Encounters.Normal
 
             if (travelManager.Party.IsFull())
             {
-                Description = $"The party passes by a {rudeFella.EntityClass} face down on the ground. They stir and wobble to their knees. \n\n\"Oi! Ye wagon is a hunk of junk!\"\n\nDerpus continues to tug the wagon along with tears in his eyes.";
+                Description = $"The party passes by a {rudeFella.EntityClass.ToString().ToLower()} face down on the ground. They stir and wobble to their knees. \n\n\"Oi! Ye wagon is a hunk of junk!\"\n\nDerpus continues to tug the wagon along with tears in his eyes.";
 
                 Penalty = new Penalty();
 
@@ -33,7 +33,7 @@ namespace Assets.Scripts.Encounters.Normal
             }
             else
             {
-                Description = $"The party passes by a {rudeFella.EntityClass} face down on the ground. Later, they make a stop to rest and notice the {rudeFella.EntityClass} clinging to the bottom of the wagon! \n\n\"Haha! I'm comin' with ya!\"";
+                Description = $"The party passes by a {rudeFella.EntityClass.ToString().ToLower()} face down on the ground. Later, they make a stop to rest and notice the {rudeFella.EntityClass.ToString().ToLower()} clinging to the bottom of the wagon! \n\n\"Haha! I'm comin' with ya!\"";
 
                 Reward = new Reward();
 

@@ -12,8 +12,8 @@ namespace Assets.Scripts
 {
     public class Party
     {
-        private const int MaxSize = 12;
-        private const int StartSize = 6;
+        private const int MaxSize = 6;
+        private const int StartSize = 4;
         private const int MoraleFoodModifier = 10;
 
         public const int FoodConsumedPerCompanion = 1;
@@ -97,11 +97,6 @@ namespace Assets.Scripts
         {
             var eatResult = Eat();
             var healResult = Heal();
-
-            // var totalResult = new List<TravelMessenger.PartyMessageDto>();
-            //
-            // totalResult.AddRange(eatResult);
-            // totalResult.AddRange(healResult);
 
             var travelMessenger = Object.FindObjectOfType<TravelMessenger>();
 
@@ -275,7 +270,11 @@ namespace Assets.Scripts
             {
                 var index = Random.Range(0, remaining.Count);
 
-                picked.Add(remaining[index]);
+                var companion = remaining[index];
+
+                picked.Add(companion);
+
+                remaining.Remove(companion);
             }
 
             return picked;
