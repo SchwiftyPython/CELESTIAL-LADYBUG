@@ -7,7 +7,7 @@ namespace Assets.Scripts.Encounters.Normal
 {
     public class LendingAHand : Encounter
     {
-        public LendingAHand()
+        public LendingAHand() //todo continuity -- leave him there and he could pop up later for revenge!
         {
             Rarity = Rarity.Common;
             EncounterType = EncounterType.Normal;
