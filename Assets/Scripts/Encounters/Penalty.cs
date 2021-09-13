@@ -66,5 +66,15 @@ namespace Assets.Scripts.Encounters
                 PartyLosses[supplyType] += amountLost;
             }
         }
+
+        public void EveryoneLoss(Party party, EntityStatTypes statType, int amountLost)
+        {
+            AddEntityLoss(party.Derpus, statType, amountLost);
+
+            foreach (var companion in party.GetCompanions())
+            {
+                AddEntityLoss(companion, statType, amountLost);
+            }
+        }
     }
 }

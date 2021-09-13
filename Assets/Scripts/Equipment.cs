@@ -168,6 +168,14 @@ namespace Assets.Scripts
             //eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this);
         }
 
+        public void RemoveAllItems()
+        {
+            foreach (var slot in _equippedItems.Keys)
+            {
+                RemoveItem(slot);
+            }
+        }
+
         public bool AbilityEquipped(Ability ability)
         {
             foreach (var item in _equippedItems.Values)

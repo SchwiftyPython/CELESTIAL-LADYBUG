@@ -31,6 +31,16 @@ namespace Assets.Scripts.Encounters
 
         public List<BiomeType> BiomeTypes;
 
+        public Party Party
+        {
+            get
+            {
+                var travelManager = Object.FindObjectOfType<TravelManager>();
+
+                return travelManager.Party;
+            }
+        }
+
         public abstract void Run();
 
         public void OptionSelected(Option selectedOption)

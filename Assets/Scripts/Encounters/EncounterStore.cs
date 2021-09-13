@@ -33,6 +33,8 @@ namespace Assets.Scripts.Encounters
             {"positively disgusting", () => new PositivelyDisgusting()},
             {"hot spring relaxin", () => new HotSpringRelaxin()},
             {"lending a hand", () => new LendingAHand()},
+            {"bummer", () => new Bummer()},
+            {"free hat", () => new FreeHat()},
         };
 
         private readonly Dictionary<string, Func<Encounter>> _campingEncounters = new Dictionary<string, Func<Encounter>>
@@ -45,6 +47,9 @@ namespace Assets.Scripts.Encounters
             {"peaceful village", () => new PeacefulVillage()},
             {"arachnid archery", () => new ArachnidArchery()},
             {"sweet tooth", () => new SweetTooth()},
+            {"forty hands", () => new FortyHands()},
+            {"nice threads", () => new NiceThreads()},
+            {"true love", () => new TrueLove()},
         };
 
         private readonly Dictionary<string, Func<Encounter>> _combatEncounters = new Dictionary<string, Func<Encounter>>
@@ -67,7 +72,6 @@ namespace Assets.Scripts.Encounters
 
         private readonly Dictionary<string, Func<Encounter>> _testEncounters = new Dictionary<string, Func<Encounter>>
         {
-            
             
         };
 

@@ -324,6 +324,11 @@ namespace Assets.Scripts.Entities
             eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this);
         }
 
+        public void UnEquipAll()
+        {
+            Equipment.RemoveAllItems();
+        }
+
         public bool HasAbility(Type abilityType)
         {
             foreach (var ability in Abilities)

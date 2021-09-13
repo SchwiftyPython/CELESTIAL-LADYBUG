@@ -200,6 +200,9 @@ namespace Assets.Scripts.Travel
                                 case EntityStatTypes.CurrentEnergy:
                                     moddedGain = companion.AddEnergy(statGain.Value);
                                     break;
+                                case EntityStatTypes.MaxMorale:
+                                    companion.Stats.MaxMorale += statGain.Value;
+                                    break;
                                 default:
                                     Debug.Log($"Invalid gain type! {gainType}");
                                     break;
