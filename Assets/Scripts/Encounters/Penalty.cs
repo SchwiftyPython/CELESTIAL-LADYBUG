@@ -10,6 +10,7 @@ namespace Assets.Scripts.Encounters
         public Dictionary<Entity, List<KeyValuePair<EntityStatTypes, int>>> EntityStatLosses;
         public Dictionary<Entity, List<KeyValuePair<EntityAttributeTypes, int>>> EntityAttributeLosses;
         public Dictionary<PartySupplyTypes, int> PartyLosses;
+        public List<Entity> PartyRemovals;
         public List<Effect> Effects;
 
         public void AddEntityLoss(Entity targetEntity, EntityStatTypes statType, int amountLost)
@@ -65,6 +66,16 @@ namespace Assets.Scripts.Encounters
             {
                 PartyLosses[supplyType] += amountLost;
             }
+        }
+
+        public void RemoveFromParty(Entity companion)
+        {
+            if (PartyRemovals == null)
+            {
+                PartyRemovals = new List<Entity>();
+            }
+
+            PartyRemovals.Add(companion);
         }
 
         public void EveryoneLoss(Party party, EntityStatTypes statType, int amountLost)

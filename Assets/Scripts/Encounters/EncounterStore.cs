@@ -35,6 +35,7 @@ namespace Assets.Scripts.Encounters
             {"lending a hand", () => new LendingAHand()},
             {"bummer", () => new Bummer()},
             {"free hat", () => new FreeHat()},
+            {"devils lunch", () => new DevilsLunch()},
         };
 
         private readonly Dictionary<string, Func<Encounter>> _campingEncounters = new Dictionary<string, Func<Encounter>>
@@ -50,6 +51,10 @@ namespace Assets.Scripts.Encounters
             {"forty hands", () => new FortyHands()},
             {"nice threads", () => new NiceThreads()},
             {"true love", () => new TrueLove()},
+            {"awful sick", () => new AwfulSick()},
+            {"noisy neighbors", () => new NoisyNeighbors()},
+            {"bad haircut", () => new BadHaircut()},
+            {"fresh meat", () => new FreshMeat()},
         };
 
         private readonly Dictionary<string, Func<Encounter>> _combatEncounters = new Dictionary<string, Func<Encounter>>
@@ -72,7 +77,7 @@ namespace Assets.Scripts.Encounters
 
         private readonly Dictionary<string, Func<Encounter>> _testEncounters = new Dictionary<string, Func<Encounter>>
         {
-            
+            {"ghost fart", () => new GhostFart()}
         };
 
         public List<Encounter> GetNormalEncounters()

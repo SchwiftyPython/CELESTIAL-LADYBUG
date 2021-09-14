@@ -86,6 +86,8 @@ namespace Assets.Scripts.Encounters
                 }
                 else if(selectedOption is FightCombatOption fightCombatOption)
                 {
+                    //todo if option has result text, show that first in a popup then closing the popup will trigger below code elsewhere
+
                     SceneManager.LoadScene(GlobalHelper.CombatScene);
 
                     var combatManager = Object.FindObjectOfType<CombatManager>();

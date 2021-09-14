@@ -68,7 +68,7 @@ namespace Assets.Scripts.Entities
         {
             Sex = PickSex();
 
-            if (rType != Race.RaceType.Derpus)
+            if (rType != Race.RaceType.Derpus && string.IsNullOrEmpty(Name))
             {
                 Name = GenerateName(null, Sex);
             }

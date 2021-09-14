@@ -96,6 +96,11 @@ namespace Assets.Scripts.Travel
             return $"{companion.Name} joins the party!";
         }
 
+        private string BuildPartyRemovalTextItem(Entity companion)
+        {
+            return $"{companion.Name} leaves the party!";
+        }
+
         public string BuildCompanionLossTextItem(Entity companion, int value, EntityStatTypes lossType)
         {
             return $"{companion.Name} lost {value} {GlobalHelper.GetEnumDescription(lossType)}!";
@@ -369,6 +374,28 @@ namespace Assets.Scripts.Travel
             }
         }
 
+        private void ApplyPartyRemovals(Penalty penalty)
+        {
+            if (penalty.PartyRemovals == null || penalty.PartyRemovals.Count < 1)
+            {
+                return;
+            }
+
+            foreach (var companion in penalty.PartyRemovals)
+            {
+                Party.RemoveCompanion(companion);
+
+                var entityDto = new TravelMessenger.EntityMessageDto
+                {
+                    Message = BuildPartyRemovalTextItem(companion),
+                    Portrait = companion.Portrait,
+                    TextColor = _travelMessenger.penaltyColor
+                };
+
+                _travelMessenger.QueueEntityMessage(entityDto);
+            }
+        }
+
         public void ApplyEncounterPenalty(Penalty penalty)
         {
             if (penalty.Effects != null && penalty.Effects.Count > 0)
@@ -378,6 +405,7 @@ namespace Assets.Scripts.Travel
 
             ApplyPartyPenalty(penalty);
             ApplyEntityPenalty(penalty);
+            ApplyPartyRemovals(penalty);
         }
 
         private void ApplyPartyPenalty(Penalty partyPenalty)
