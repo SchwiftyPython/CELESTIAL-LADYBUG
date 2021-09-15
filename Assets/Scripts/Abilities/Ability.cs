@@ -17,8 +17,9 @@ namespace Assets.Scripts.Abilities
         public bool HostileTargetsOnly { get; private set; }
         public bool IsPassive { get; private set; }
         public Sprite Icon { get; protected set; }
+        public bool UsesEquipment { get; protected set; }
 
-        protected Ability(string name, string description, int apCost, int range, Entity abilityOwner, bool hostileTargetsOnly, bool passive)
+        protected Ability(string name, string description, int apCost, int range, Entity abilityOwner, bool hostileTargetsOnly, bool passive, bool usesEquipment = true)
         {
             Name = name;
             Description = description;
@@ -45,6 +46,7 @@ namespace Assets.Scripts.Abilities
             AbilityOwner = abilityOwner;
             HostileTargetsOnly = hostileTargetsOnly;
             IsPassive = passive;
+            UsesEquipment = usesEquipment;
 
             GetIconForAbility(this);
         }

@@ -9,7 +9,7 @@ namespace Assets.Scripts.Abilities
         private const int DamageMin = 3;
         private const int DamageMax = 6;
 
-        public VampireBite(Entity abilityOwner) : base("Vampire Bite", "Vampire gains life equal to damage dealt to target.", 6, 1, abilityOwner, true, false)
+        public VampireBite(Entity abilityOwner) : base("Vampire Bite", "Vampire gains life equal to damage dealt to target.", 6, 1, abilityOwner, true, false, false)
         {
         }
 

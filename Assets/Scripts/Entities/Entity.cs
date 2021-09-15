@@ -775,6 +775,11 @@ namespace Assets.Scripts.Entities
 
         public bool HasMissileWeaponEquipped()
         {
+            if (Equipment == null)
+            {
+                return false;
+            }
+
             var equippedWeapon = Equipment.GetItemInSlot(EquipLocation.Weapon);
 
             if (equippedWeapon == null)
@@ -785,6 +790,11 @@ namespace Assets.Scripts.Entities
             var (min, max) = equippedWeapon.GetRangedDamageRange();
 
             return min > 0 && max > 0;
+        }
+
+        public bool IsStunned()
+        {
+            return HasEffect(new Stun());
         }
 
         private int GetTotalArmorToughness()
@@ -1187,15 +1197,9 @@ namespace Assets.Scripts.Entities
                 Effects = new List<Effect>();
             }
 
-            if (!effect.CanStack())
+            if (!effect.CanStack() && HasEffect(effect))
             {
-                foreach (var existingEffect in Effects)
-                {
-                    if (existingEffect.GetType() == effect.GetType())
-                    {
-                        return;
-                    }
-                }
+                return;
             }
 
             Effects.Add(effect);
@@ -1227,6 +1231,19 @@ namespace Assets.Scripts.Entities
 
                 effect.Trigger(new BasicEffectArgs(this));
             }
+        }
+
+        public bool HasEffect(Effect effect)
+        {
+            foreach (var existingEffect in Effects)
+            {
+                if (existingEffect.GetType() == effect.GetType())
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public int RollForInitiative()

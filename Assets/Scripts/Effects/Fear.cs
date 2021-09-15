@@ -40,33 +40,36 @@ namespace Assets.Scripts.Effects
             var eventMediator = Object.FindObjectOfType<EventMediator>();
             eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
-            var combatManager = Object.FindObjectOfType<CombatManager>();
-            var targets = combatManager.TurnOrder.ToList();
-
-            targets.Remove(basicEffectArgs.Target);
-
-            targets = GlobalHelper.ShuffleList(targets);
-
-            bool attackUsed = false;
-
-            foreach (var target in targets.ToArray())
+            if (!basicEffectArgs.Target.IsStunned())
             {
-                foreach (var ability in basicEffectArgs.Target.Abilities.Values)
+                var combatManager = Object.FindObjectOfType<CombatManager>();
+                var targets = combatManager.TurnOrder.ToList();
+
+                targets.Remove(basicEffectArgs.Target);
+
+                targets = GlobalHelper.ShuffleList(targets);
+
+                bool attackUsed = false;
+
+                foreach (var target in targets.ToArray())
                 {
-                    if (ability.IsPassive || !ability.TargetInRange(target) || !ability.HostileTargetsOnly ||
-                        ability.ApCost > basicEffectArgs.Target.Stats.CurrentActionPoints)
+                    foreach (var ability in basicEffectArgs.Target.Abilities.Values)
                     {
-                        continue;
+                        if (ability.IsPassive || !ability.TargetInRange(target) || !ability.HostileTargetsOnly ||
+                            ability.ApCost > basicEffectArgs.Target.Stats.CurrentActionPoints)
+                        {
+                            continue;
+                        }
+
+                        ability.Use(target);
+                        attackUsed = true;
+                        break;
                     }
 
-                    ability.Use(target);
-                    attackUsed = true;
-                    break;
-                }
-
-                if (attackUsed)
-                {
-                    break;
+                    if (attackUsed)
+                    {
+                        break;
+                    }
                 }
             }
 

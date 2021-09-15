@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.Entities.Necromancer;
+﻿using Assets.Scripts.Abilities;
+using Assets.Scripts.Entities.Necromancer;
+using UnityEngine;
 
 namespace Assets.Scripts.Entities.Special
 {
@@ -8,7 +10,12 @@ namespace Assets.Scripts.Entities.Special
         {
             Name = "Burrito Ghost";
 
-            //todo fart ability
+            var abilityStore = Object.FindObjectOfType<AbilityStore>();
+
+            var fart = abilityStore.GetAbilityByName("fart", this);
+
+            Abilities.Add(fart.GetType(), fart);
+
             //todo make a little tougher than normal ghosts
         }
     }

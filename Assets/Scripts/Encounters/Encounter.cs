@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Travel;
+using Assets.Scripts.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
@@ -86,15 +87,20 @@ namespace Assets.Scripts.Encounters
                 }
                 else if(selectedOption is FightCombatOption fightCombatOption)
                 {
-                    //todo if option has result text, show that first in a popup then closing the popup will trigger below code elsewhere
+                    if (!string.IsNullOrEmpty(fightCombatOption.ResultText))
+                    {
+                        eventMediator.Broadcast(GlobalHelper.ShowCombatPreview, this, fightCombatOption);
+                    }
+                    else
+                    {
+                        SceneManager.LoadScene(GlobalHelper.CombatScene);
 
-                    SceneManager.LoadScene(GlobalHelper.CombatScene);
+                        var combatManager = Object.FindObjectOfType<CombatManager>();
 
-                    var combatManager = Object.FindObjectOfType<CombatManager>();
+                        combatManager.Enemies = ((FightCombatOption)selectedOption).Enemies;
 
-                    combatManager.Enemies = ((FightCombatOption) selectedOption).Enemies;
-
-                    combatManager.Load();
+                        combatManager.Load();
+                    }
                 }
             }
             else if (fullResultDescription.Count > 1 || !fullResultDescription.First().Equals("\n"))
