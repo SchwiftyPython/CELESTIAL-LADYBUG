@@ -36,6 +36,7 @@ namespace Assets.Scripts.Encounters
             {"bummer", () => new Bummer()},
             {"free hat", () => new FreeHat()},
             {"devils lunch", () => new DevilsLunch()},
+            {"ghost fart", () => new GhostFart()}
         };
 
         private readonly Dictionary<string, Func<Encounter>> _campingEncounters = new Dictionary<string, Func<Encounter>>
@@ -77,7 +78,7 @@ namespace Assets.Scripts.Encounters
 
         private readonly Dictionary<string, Func<Encounter>> _testEncounters = new Dictionary<string, Func<Encounter>>
         {
-            {"ghost fart", () => new GhostFart()}
+            {"unleash power", () => new UnleashPower()}
         };
 
         public List<Encounter> GetNormalEncounters()

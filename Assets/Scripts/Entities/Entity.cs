@@ -1246,6 +1246,19 @@ namespace Assets.Scripts.Entities
             return false;
         }
 
+        public bool CanApplyEffect(Effect effect)
+        {
+            foreach (var ability in Abilities)
+            {
+                if (ability.Value.ExemptFromEffect(effect))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         public int RollForInitiative()
         {
             //todo

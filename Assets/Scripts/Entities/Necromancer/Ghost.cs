@@ -12,17 +12,20 @@ namespace Assets.Scripts.Entities.Necromancer
 
             CombatSpritePrefab = entityPrefabStore.GetCombatSpritePrefab("Ghost");
 
-            //todo some creepy boi abilities
+            //todo maybe some creepy boi abilities
             //pass through obstacles
             //buff other undead
             //possession
-            //generic ghost attack
 
             var abilityStore = Object.FindObjectOfType<AbilityStore>();
 
             var intimidate = abilityStore.GetAbilityByName("intimidate", this);
 
             Abilities.Add(intimidate.GetType(), intimidate);
+
+            var spookyTouch = abilityStore.GetAbilityByName("spooky touch", this);
+
+            Abilities.Add(spookyTouch.GetType(), spookyTouch);
 
             var audioStore = Object.FindObjectOfType<AudioStore>();
 

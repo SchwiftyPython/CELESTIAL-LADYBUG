@@ -42,6 +42,7 @@ namespace Assets.Scripts.Abilities
             {"bite", abilityOwner => new Bite(abilityOwner)},
             {"vampire bite", abilityOwner => new VampireBite(abilityOwner)},
             {"fart", abilityOwner => new Fart(abilityOwner)},
+            {"spooky touch", abilityOwner => new SpookyTouch(abilityOwner)},
         };
 
         public Ability GetAbilityByName(string abilityName, Entity abilityOwner)

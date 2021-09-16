@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Combat;
+using Assets.Scripts.Effects;
 using Assets.Scripts.Entities;
 using GoRogue;
 using GoRogue.GameFramework;
@@ -18,6 +20,7 @@ namespace Assets.Scripts.Abilities
         public bool IsPassive { get; private set; }
         public Sprite Icon { get; protected set; }
         public bool UsesEquipment { get; protected set; }
+        public List<Effect> EffectExemptions { get; protected set; }
 
         protected Ability(string name, string description, int apCost, int range, Entity abilityOwner, bool hostileTargetsOnly, bool passive, bool usesEquipment = true)
         {
@@ -110,6 +113,24 @@ namespace Assets.Scripts.Abilities
         public bool IsRanged()
         {
             return Range > 1;
+        }
+
+        public bool ExemptFromEffect(Effect effect)
+        {
+            if (EffectExemptions == null || EffectExemptions.Count < 1)
+            {
+                return false;
+            }
+
+            foreach (var exemption in EffectExemptions)
+            {
+                if (exemption.GetType() == effect.GetType())
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public virtual (int, int) GetAbilityDamageRange()

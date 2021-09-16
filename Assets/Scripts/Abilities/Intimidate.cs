@@ -11,10 +11,14 @@ namespace Assets.Scripts.Abilities
         private List<Tile> _fearTiles;
         private readonly Fear _fearEffect;
 
+        //todo maybe list of effect exemptions in ability class?
+
         public Intimidate(Entity abilityOwner) : base("Intimidate", "Anyone adjacent gains Fear effect.", -1, 1, abilityOwner, true, true)
         {
             _fearTiles = new List<Tile>();
             _fearEffect = new Fear(true, Fear.INFINITE);
+
+            EffectExemptions = new List<Effect>{_fearEffect};
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 

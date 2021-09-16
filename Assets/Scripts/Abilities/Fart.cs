@@ -17,6 +17,8 @@ namespace Assets.Scripts.Abilities
         public Fart(Entity abilityOwner) : base("Fart", $"Blast lethal methane at an unlucky foe. {StunChance}% chance to Stun.", 4, 2, abilityOwner, true, false, false)
         {
             _stunEffect = new Stun();
+
+            //todo fart sound overrides ghost attack sound
         }
 
         public override (int, int) GetAbilityDamageRange()

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Assets.Scripts.Abilities;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Effects.Args;
 using GoRogue;
@@ -30,18 +31,19 @@ namespace Assets.Scripts.Effects
                 return;
             }
 
-            if (Random.Range(1, 101) > PanicChance)
-            {
-                return;
-            }
-
-            var message = $"{basicEffectArgs.Target.Name} panics!";
-
             var eventMediator = Object.FindObjectOfType<EventMediator>();
-            eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
-            if (!basicEffectArgs.Target.IsStunned())
+            if (!basicEffectArgs.Target.IsStunned() && basicEffectArgs.Target.CanApplyEffect(this))
             {
+                if (Random.Range(1, 101) > PanicChance)
+                {
+                    return;
+                }
+
+                var message = $"{basicEffectArgs.Target.Name} panics!";
+
+                eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+
                 var combatManager = Object.FindObjectOfType<CombatManager>();
                 var targets = combatManager.TurnOrder.ToList();
 
