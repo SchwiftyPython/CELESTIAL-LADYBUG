@@ -111,6 +111,11 @@ namespace Assets.Scripts.Travel
             return $"{companion.Name} lost {value} {GlobalHelper.GetEnumDescription(lossType)}!";
         }
 
+        public string BuildCompanionLossTextItem(Entity companion, int value, EntitySkillTypes lossType)
+        {
+            return $"{companion.Name} lost {value} {GlobalHelper.GetEnumDescription(lossType)}!";
+        }
+
         public void ApplyEncounterReward(Reward reward)
         {
             if (reward.Effects != null && reward.Effects.Count > 0)
@@ -563,6 +568,70 @@ namespace Assets.Scripts.Travel
                                 Message = BuildCompanionLossTextItem(companion, attributeLoss.Value, lossType),
                                 Portrait = companion.Portrait,
                                 TextColor = _travelMessenger.penaltyColor
+                            };
+
+                            _travelMessenger.QueueEntityMessage(entityDto);
+                        }
+                    }
+                }
+            }
+
+            if (entityPenalty.EntitySkillLosses != null && entityPenalty.EntitySkillLosses.Count > 0)
+            {
+                foreach (var entityLoss in entityPenalty.EntitySkillLosses)
+                {
+                    var targetEntity = entityLoss.Key;
+
+                    Entity companion;
+
+                    if (targetEntity.IsDerpus())
+                    {
+                        companion = Party.Derpus;
+                    }
+                    else
+                    {
+                        //it's possible the entity isn't in the party anymore so this is how we check off the top of my head
+                        companion = Party.GetCompanion(targetEntity.Name);
+                    }
+
+                    if (companion != null)
+                    {
+                        foreach (var skillLoss in entityLoss.Value)
+                        {
+                            var lossType = skillLoss.Key;
+
+                            switch (lossType)
+                            {
+                                case EntitySkillTypes.Melee:
+                                    companion.Skills.Melee -= skillLoss.Value;
+                                    break;
+                                case EntitySkillTypes.Ranged:
+                                    companion.Skills.Ranged -= skillLoss.Value;
+                                    break;
+                                case EntitySkillTypes.Lockpicking:
+                                    companion.Skills.Lockpicking -= skillLoss.Value;
+                                    break;
+                                case EntitySkillTypes.Endurance:
+                                    companion.Skills.Endurance -= skillLoss.Value;
+                                    break;
+                                case EntitySkillTypes.Healing:
+                                    companion.Skills.Healing -= skillLoss.Value;
+                                    break;
+                                case EntitySkillTypes.Survival:
+                                    companion.Skills.Survival -= skillLoss.Value;
+                                    break;
+                                case EntitySkillTypes.Persuasion:
+                                    companion.Skills.Persuasion -= skillLoss.Value;
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
+
+                            var entityDto = new TravelMessenger.EntityMessageDto
+                            {
+                                Message = BuildCompanionLossTextItem(companion, skillLoss.Value, lossType),
+                                Portrait = companion.Portrait,
+                                TextColor = _travelMessenger.rewardColor
                             };
 
                             _travelMessenger.QueueEntityMessage(entityDto);

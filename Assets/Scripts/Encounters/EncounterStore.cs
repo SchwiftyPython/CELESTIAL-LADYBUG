@@ -36,7 +36,9 @@ namespace Assets.Scripts.Encounters
             {"bummer", () => new Bummer()},
             {"free hat", () => new FreeHat()},
             {"devils lunch", () => new DevilsLunch()},
-            {"ghost fart", () => new GhostFart()}
+            {"ghost fart", () => new GhostFart()},
+            {"unleash power", () => new UnleashPower()},
+            {"its whats for dinner", () => new ItsWhatsForDinner()},
         };
 
         private readonly Dictionary<string, Func<Encounter>> _campingEncounters = new Dictionary<string, Func<Encounter>>
@@ -63,11 +65,14 @@ namespace Assets.Scripts.Encounters
             {"bandit attack", () => new BanditAttack()},
             {"looting bandits", () => new LootingBandits()},
             {"trail of the dead", () => new TrailOfTheDead()},
+            {"spooky random encounter", () => new SpookyRandomEncounter()},
         };
 
         private readonly Dictionary<string, Func<Entity, Encounter>> _mentalBreakEncounters = new Dictionary<string, Func<Entity, Encounter>>
         {
-            {"dazed mugging", dazedCompanion => new DazedMugging(dazedCompanion)}
+            {"dazed mugging", dazedCompanion => new DazedMugging(dazedCompanion)},
+            {"abandon party", quitter => new AbandonParty(quitter)},  //todo test
+            {"nervous nellie", quitter => new NervousNellie(quitter)},  //todo test
         };
 
         private readonly Dictionary<string, Func<Encounter>> _derpusStopWagonEncounters = new Dictionary<string, Func<Encounter>>
@@ -78,7 +83,12 @@ namespace Assets.Scripts.Encounters
 
         private readonly Dictionary<string, Func<Encounter>> _testEncounters = new Dictionary<string, Func<Encounter>>
         {
-            {"unleash power", () => new UnleashPower()}
+            {"gone fishin", () => new GoneFishin()},
+            {"nervous bandits", () => new NervousBandits()},
+            {"klutz", () => new Klutz()},
+            {"stuck", () => new Stuck()},
+            {"mysterious sack", () => new MysteriousSack()},
+            {"no firewood", () => new NoFirewood()},
         };
 
         public List<Encounter> GetNormalEncounters()

@@ -18,6 +18,7 @@ namespace Assets.Scripts.Encounters.Combat
             Rarity = Rarity.Uncommon;
             EncounterType = EncounterType.Combat;
             Title = "Trail of the Dead";
+            //todo BiomeTypes = new List<BiomeType> { BiomeType.Spooky };
         }
 
         public override void Run()
@@ -51,11 +52,11 @@ namespace Assets.Scripts.Encounters.Combat
             
             if (retreatSuccess)
             {
-                optionResultText = "They manage to evade the undead attackers and escape safely.";
+                optionResultText = "You manage to evade the undead attackers and escape safely.";
             }
             else
             {
-                optionResultText = "They try to get away, but the attackers are too fast! Prepare for battle!";
+                optionResultText = "You try to get away, but the attackers are too fast! Prepare for battle!";
             }
 
             var retreatOption = new RetreatCombatOption(optionTitle, optionResultText, zombies, retreatSuccess);

@@ -26,7 +26,7 @@ namespace Assets.Scripts.Encounters.Normal
             var companyName = _companyNames[Random.Range(0, _companyNames.Count)];
 
             Description =
-                $"The party spots a large gathering and decides to check it out.\n\n'WELCOME TO THE {companyName} COMPANY RETREAT!' a huge banner exclaims.\n\nYou are about to tell everyone break's over when an ENTHUSIASTIC gentleman with a ponytail challenges your party to 'unleash their inner power'. His arm is extended towards a bed of hot coals surrounded by totally thrilled employees.\n\nWho will take the challenge?";
+                $"The party spots a large gathering and decides to check it out.\n\n'WELCOME TO THE {companyName.ToUpper()} COMPANY RETREAT!' a huge banner exclaims.\n\nYou are about to tell everyone break's over when an ENTHUSIASTIC gentleman with a ponytail challenges your party to 'unleash their inner power'. His arm is extended towards a bed of hot coals surrounded by totally thrilled employees.\n\nWho will take the challenge?";
 
             Options = new Dictionary<string, Option>();
 
@@ -55,7 +55,7 @@ namespace Assets.Scripts.Encounters.Normal
                 }
                 else
                 {
-                    optionResultText = $"{sacrifice.FirstName()} tries walking on the sides of their feet to keep from burning their soles, but ends up slipping and flopping on the hot coals like a fish out of water!";
+                    optionResultText = $"{sacrifice.FirstName()} tries walking on the sides of their feet to keep from burning their soles, but ends up slipping and slams onto the hot coals!";
 
                     optionPenalty.AddEntityLoss(sacrifice, EntityStatTypes.CurrentMorale, 5);
                     optionPenalty.AddEntityLoss(sacrifice, EntityStatTypes.CurrentHealth, 5);
@@ -65,6 +65,20 @@ namespace Assets.Scripts.Encounters.Normal
 
                 Options.Add(sacrifice.Name, option);
             }
+
+            var optionTitle = "Get out of there";
+
+            optionResultText = $"The man whips his ponytail round and round in a rage!\n\n\"You'll never know true enlightenment!\"";
+
+            var optionFour = new Option(optionTitle, optionResultText, null, null, EncounterType.Normal);
+
+            Options.Add(optionTitle, optionFour);
+
+            SubscribeToOptionSelectedEvent();
+
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.FourOptionEncounter, this);
         }
     }
 }

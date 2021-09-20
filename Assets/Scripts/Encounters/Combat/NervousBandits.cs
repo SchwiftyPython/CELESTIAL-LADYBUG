@@ -7,23 +7,62 @@ using UnityEngine;
 
 namespace Assets.Scripts.Encounters.Combat
 {
-    public class LootingBandits : Encounter
+    public class NervousBandits : Encounter
     {
-        private const int MinBandits = 3;
-        private const int MaxBandits = 5;
+        private const int MinBandits = 2;
+        private const int MaxBandits = 4;
 
-        public LootingBandits()
+        public NervousBandits()
         {
             Rarity = Rarity.Common;
             EncounterType = EncounterType.Combat;
-            Title = "Looting Bandits";
+            Title = "Nervous Bandits";
         }
 
         public override void Run()
         {
             var numBandits = Random.Range(MinBandits, MaxBandits + 1);
 
-            Description = $"{numBandits} bandits have blocked the trail. Their leader steps forward and demands that you turn over all your supplies.";
+            Description = $"{numBandits} bandits have blocked the trail. ";
+
+            const int foodThreshold = 6;
+
+            Description += "Their leader steps forward and shakily demands that you turn over ";
+
+            Penalty = new Penalty();
+
+            if (Party.Food > foodThreshold && Party.Gold > 4 && Party.HealthPotions > 4)
+            {
+                Description += $"{Party.Gold / 4} gold, ";
+
+                Description += $"{Party.HealthPotions / 4} potions, ";
+
+                Description += "and the rest of your food!";
+
+                Penalty.AddPartyLoss(PartySupplyTypes.Gold, Party.Gold / 4);
+                Penalty.AddPartyLoss(PartySupplyTypes.HealthPotions, Party.HealthPotions / 4);
+                Penalty.AddPartyLoss(PartySupplyTypes.Food, Party.Food);
+
+            }
+            else
+            {
+                Description += "half of all your supplies!";
+
+                if (Party.Gold > 1)
+                {
+                    Penalty.AddPartyLoss(PartySupplyTypes.Gold, Party.Gold / 2);
+                }
+
+                if (Party.HealthPotions > 1)
+                {
+                    Penalty.AddPartyLoss(PartySupplyTypes.HealthPotions, Party.HealthPotions / 2);
+                }
+
+                if (Party.Food > 1)
+                {
+                    Penalty.AddPartyLoss(PartySupplyTypes.Food, Party.Food / 2);
+                }
+            }
 
             var bandits = new List<Entity>();
 
@@ -51,13 +90,9 @@ namespace Assets.Scripts.Encounters.Combat
 
             string optionResultText = "The group stands aside and watches as the bandits make off with their supplies.";
 
-            var optionOnePenalty = new Penalty();
+            var optionOnePenalty = Penalty;
 
-            var travelManager = Object.FindObjectOfType<TravelManager>();
-
-            optionOnePenalty.AddPartyLoss(PartySupplyTypes.Gold, travelManager.Party.Gold);
-            optionOnePenalty.AddPartyLoss(PartySupplyTypes.HealthPotions, travelManager.Party.HealthPotions);
-            optionOnePenalty.AddPartyLoss(PartySupplyTypes.Food, travelManager.Party.Food);
+            Penalty = null;
 
             var optionOne = new Option(optionTitle, optionResultText, null, optionOnePenalty, EncounterType.Normal);
 

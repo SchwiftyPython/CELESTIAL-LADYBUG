@@ -9,6 +9,7 @@ namespace Assets.Scripts.Encounters
     {
         public Dictionary<Entity, List<KeyValuePair<EntityStatTypes, int>>> EntityStatLosses;
         public Dictionary<Entity, List<KeyValuePair<EntityAttributeTypes, int>>> EntityAttributeLosses;
+        public Dictionary<Entity, List<KeyValuePair<EntitySkillTypes, int>>> EntitySkillLosses;
         public Dictionary<PartySupplyTypes, int> PartyLosses;
         public List<Entity> PartyRemovals;
         public List<Effect> Effects;
@@ -48,6 +49,25 @@ namespace Assets.Scripts.Encounters
             else
             {
                 EntityAttributeLosses[targetEntity].Add(loss);
+            }
+        }
+
+        public void AddEntityLoss(Entity targetEntity, EntitySkillTypes skillType, int amountLost)
+        {
+            if (EntitySkillLosses == null)
+            {
+                EntitySkillLosses = new Dictionary<Entity, List<KeyValuePair<EntitySkillTypes, int>>>();
+            }
+
+            var loss = new KeyValuePair<EntitySkillTypes, int>(skillType, amountLost);
+
+            if (!EntitySkillLosses.ContainsKey(targetEntity))
+            {
+                EntitySkillLosses.Add(targetEntity, new List<KeyValuePair<EntitySkillTypes, int>> { loss });
+            }
+            else
+            {
+                EntitySkillLosses[targetEntity].Add(loss);
             }
         }
 

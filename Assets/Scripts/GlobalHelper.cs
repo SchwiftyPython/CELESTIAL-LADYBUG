@@ -130,6 +130,11 @@ namespace Assets.Scripts
             return System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(s.ToLower());
         }
 
+        public static string CapitalizeAllLetters(string s)
+        {
+            return s.ToUpper();
+        }
+
         public static string SplitStringByCapitalLetters(string s)
         {
             var splitString = "";

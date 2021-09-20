@@ -26,6 +26,8 @@ namespace Assets.Scripts
         public int HealthPotions { get; set; }
         public int Gold { get; set; }
 
+        public int Size => _companions.Count;
+
         public Party()
         {
             GenerateStartingParty();
