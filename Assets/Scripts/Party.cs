@@ -321,6 +321,25 @@ namespace Assets.Scripts
             return bestShot;
         }
 
+        public Entity GetCompanionWithHighestSurvivalSkill()
+        {
+            if (_companions == null || _companions.Count < 1)
+            {
+                return Derpus;
+            }
+
+            Entity bestSurvival = null;
+            foreach (var companion in _companions.Values)
+            {
+                if (bestSurvival == null || companion.Skills.Survival > bestSurvival.Skills.Survival)
+                {
+                    bestSurvival = companion;
+                }
+            }
+
+            return bestSurvival;
+        }
+
         public Entity GetCompanionWithHighestCoordination()
         {
             if (_companions == null || _companions.Count < 1)

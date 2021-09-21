@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Assets.Scripts.Audio;
 using Assets.Scripts.Encounters;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Items;
 using Assets.Scripts.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -96,6 +97,11 @@ namespace Assets.Scripts.Travel
             return $"{companion.Name} joins the party!";
         }
 
+        private string BuildItemAdditionTextItem(EquipableItem item)
+        {
+            return $"{item.GetDisplayName()} added to inventory!";
+        }
+
         private string BuildPartyRemovalTextItem(Entity companion)
         {
             return $"{companion.Name} leaves the party!";
@@ -126,6 +132,7 @@ namespace Assets.Scripts.Travel
             ApplyPartyReward(reward);
             ApplyEntityReward(reward);
             ApplyPartyAdditions(reward);
+            ApplyInventoryAdditions(reward);
         }
 
         public void ApplyPartyReward(Reward partyReward)
@@ -376,6 +383,29 @@ namespace Assets.Scripts.Travel
                 };
 
                 _travelMessenger.QueueEntityMessage(entityDto);
+            }
+        }
+
+        private void ApplyInventoryAdditions(Reward reward)
+        {
+            if (reward.InventoryGains == null || reward.InventoryGains.Count < 1)
+            {
+                return;
+            }
+
+            var inventory = Inventory.GetPartyInventory();
+
+            foreach (var item in reward.InventoryGains)
+            {
+                inventory.AddToFirstEmptySlot(item, 1);
+
+                var partyDto = new TravelMessenger.PartyMessageDto
+                {
+                    Message = BuildItemAdditionTextItem(item),
+                    TextColor = _travelMessenger.rewardColor
+                };
+
+                _travelMessenger.QueuePartyMessages(new List<TravelMessenger.PartyMessageDto> { partyDto });
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Effects;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Items;
 
 namespace Assets.Scripts.Encounters
 {
@@ -11,6 +12,7 @@ namespace Assets.Scripts.Encounters
         public Dictionary<Entity, List<KeyValuePair<EntitySkillTypes, int>>> EntitySkillGains;
         public Dictionary<PartySupplyTypes, int> PartyGains;
         public List<Entity> PartyAdditions;
+        public List<EquipableItem> InventoryGains;
         public List<Effect> Effects;
 
         public void AddEntityGain(Entity targetEntity, EntityStatTypes statType, int amountGained)
@@ -95,6 +97,16 @@ namespace Assets.Scripts.Encounters
             }
 
             PartyAdditions.Add(companion);
+        }
+
+        public void AddToInventory(EquipableItem item)
+        {
+            if (InventoryGains == null)
+            {
+                InventoryGains = new List<EquipableItem>();
+            }
+
+            InventoryGains.Add(item);
         }
 
         public void EveryoneGain(Party party, EntityStatTypes statType, int amountGained)

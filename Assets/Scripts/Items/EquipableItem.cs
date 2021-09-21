@@ -45,5 +45,10 @@ namespace Assets.Scripts.Items
 
             return (ItemType.Ranged.MinDamage, ItemType.Ranged.MaxDamage);
         }
+
+        public int GetPrice()
+        {
+            return ItemType.Price;
+        }
     }
 }

@@ -89,6 +89,8 @@ namespace Assets.Scripts.Encounters
             {"stuck", () => new Stuck()},
             {"mysterious sack", () => new MysteriousSack()},
             {"no firewood", () => new NoFirewood()},
+            {"centaur trader", () => new CentaurTrader()},
+            {"mushroom samba", () => new MushroomSamba()},
         };
 
         public List<Encounter> GetNormalEncounters()
