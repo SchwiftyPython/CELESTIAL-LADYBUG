@@ -1,32 +1,39 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Combat;
 using Assets.Scripts.Encounters;
+using Assets.Scripts.Entities;
 using Assets.Scripts.Utilities.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.UI
 {
     public class EncounterResultPopup : MonoBehaviour, ISubscriber
     {
-        private const string PopupEvent = GlobalHelper.EncounterResult;
+        private const string NormalPopupEvent = GlobalHelper.EncounterResult;
+        private const string CombatPreviewPopupEvent = GlobalHelper.ShowCombatPreview;
         private const string EncounterFinished = GlobalHelper.EncounterFinished;
         private const string CampingEncounterFinished = GlobalHelper.CampingEncounterFinished;
 
         private TextWriter _textWriter;
         private EncounterType _encounterType;
         private bool _countsAsDayTraveled;
+        private List<Entity> _enemies;
 
         public TextMeshProUGUI EncounterTitle;
         public TextMeshProUGUI ResultDescription;
 
         public GameObject OkayButton;
+        public GameObject StartCombatButton;
 
         [FMODUnity.EventRef] public string popupSound;
 
         private void Awake()
         {
             var eventMediator = FindObjectOfType<EventMediator>();
-            eventMediator.SubscribeToEvent(PopupEvent, this);
+            eventMediator.SubscribeToEvent(NormalPopupEvent, this);
+            eventMediator.SubscribeToEvent(CombatPreviewPopupEvent, this);
             eventMediator.SubscribeToEvent(GlobalHelper.WritingFinished, this);
 
             _textWriter = GetComponent<TextWriter>();
@@ -34,6 +41,26 @@ namespace Assets.Scripts.UI
             GetComponent<Button_UI>().ClickFunc = _textWriter.DisplayMessageInstantly;
 
             Hide();
+        }
+
+        public void ShowCombatPreview(Encounter encounter, string result, List<Entity> enemies)
+        {
+            HideButtons();
+
+            _encounterType = EncounterType.Combat;
+
+            EncounterTitle.text = encounter.Title;
+
+            _enemies = enemies;
+
+            _textWriter.AddWriter(ResultDescription, result, GlobalHelper.DefaultTextSpeed, true);
+
+            gameObject.SetActive(true);
+
+            GameManager.Instance.AddActiveWindow(gameObject);
+
+            var sound = FMODUnity.RuntimeManager.CreateInstance(popupSound);
+            sound.start();
         }
 
         private void Show(Encounter encounter, List<string> result)
@@ -67,12 +94,20 @@ namespace Assets.Scripts.UI
 
         private void ShowButtons()
         {
-            OkayButton.SetActive(true);
+            if (_encounterType == EncounterType.Combat)
+            {
+                StartCombatButton.SetActive(true);
+            }
+            else
+            {
+                OkayButton.SetActive(true);
+            }
         }
 
         private void HideButtons()
         {
             OkayButton.SetActive(false);
+            StartCombatButton.SetActive(false);
         }
 
         public void Hide()
@@ -90,6 +125,20 @@ namespace Assets.Scripts.UI
             eventMediator.Broadcast(EncounterFinished, this);
         }
 
+        public void LoadCombatScene()
+        {
+            gameObject.SetActive(false);
+            GameManager.Instance.RemoveActiveWindow(gameObject);
+
+            SceneManager.LoadScene(GlobalHelper.CombatScene);
+
+            var combatManager = FindObjectOfType<CombatManager>();
+
+            combatManager.Enemies = _enemies;
+
+            combatManager.Load();
+        }
+
         private void OnDestroy()
         {
             var eventMediator = FindObjectOfType<EventMediator>();
@@ -99,13 +148,13 @@ namespace Assets.Scripts.UI
                 return;
             }
 
-            eventMediator.UnsubscribeFromEvent(PopupEvent, this);
+            eventMediator.UnsubscribeFromEvent(NormalPopupEvent, this);
             GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
         {
-            if (eventName.Equals(PopupEvent))
+            if (eventName.Equals(NormalPopupEvent))
             {
                 var encounter = broadcaster as Encounter;
 
@@ -122,6 +171,24 @@ namespace Assets.Scripts.UI
                 }
 
                 Show(encounter, result);
+            }
+            else if (eventName.Equals(CombatPreviewPopupEvent))
+            {
+                var encounter = broadcaster as Encounter;
+
+                if (encounter == null)
+                {
+                    return;
+                }
+
+                var option = parameter as FightCombatOption;
+
+                if (option == null || option.Enemies == null || option.Enemies.Count < 1)
+                {
+                    return;
+                }
+
+                ShowCombatPreview(encounter, option.ResultText, option.Enemies);
             }
             else if (eventName.Equals(GlobalHelper.WritingFinished))
             {

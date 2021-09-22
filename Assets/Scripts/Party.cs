@@ -26,6 +26,8 @@ namespace Assets.Scripts
         public int HealthPotions { get; set; }
         public int Gold { get; set; }
 
+        public int Size => _companions.Count;
+
         public Party()
         {
             GenerateStartingParty();
@@ -317,6 +319,25 @@ namespace Assets.Scripts
             }
 
             return bestShot;
+        }
+
+        public Entity GetCompanionWithHighestSurvivalSkill()
+        {
+            if (_companions == null || _companions.Count < 1)
+            {
+                return Derpus;
+            }
+
+            Entity bestSurvival = null;
+            foreach (var companion in _companions.Values)
+            {
+                if (bestSurvival == null || companion.Skills.Survival > bestSurvival.Skills.Survival)
+                {
+                    bestSurvival = companion;
+                }
+            }
+
+            return bestSurvival;
         }
 
         public Entity GetCompanionWithHighestCoordination()

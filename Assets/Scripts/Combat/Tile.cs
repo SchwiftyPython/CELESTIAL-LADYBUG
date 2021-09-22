@@ -158,7 +158,12 @@ namespace Assets.Scripts.Combat
 
             var presentEntity = (Entity)CurrentMap.Entities.GetItems(Position).FirstOrDefault();
 
-            presentEntity?.ApplyEffect(effect);
+            if (presentEntity == null || !presentEntity.CanApplyEffect(effect))
+            {
+                return;
+            }
+
+            presentEntity.ApplyEffect(effect);
         }
 
         public void RemoveEffect(Effect effect)

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Assets.Scripts.Abilities;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Effects.Args;
 using GoRogue;
@@ -30,43 +31,47 @@ namespace Assets.Scripts.Effects
                 return;
             }
 
-            if (Random.Range(1, 101) > PanicChance)
-            {
-                return;
-            }
-
-            var message = $"{basicEffectArgs.Target.Name} panics!";
-
             var eventMediator = Object.FindObjectOfType<EventMediator>();
-            eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
-            var combatManager = Object.FindObjectOfType<CombatManager>();
-            var targets = combatManager.TurnOrder.ToList();
-
-            targets.Remove(basicEffectArgs.Target);
-
-            targets = GlobalHelper.ShuffleList(targets);
-
-            bool attackUsed = false;
-
-            foreach (var target in targets.ToArray())
+            if (!basicEffectArgs.Target.IsStunned() && basicEffectArgs.Target.CanApplyEffect(this))
             {
-                foreach (var ability in basicEffectArgs.Target.Abilities.Values)
+                if (Random.Range(1, 101) > PanicChance)
                 {
-                    if (ability.IsPassive || !ability.TargetInRange(target) || !ability.HostileTargetsOnly ||
-                        ability.ApCost > basicEffectArgs.Target.Stats.CurrentActionPoints)
-                    {
-                        continue;
-                    }
-
-                    ability.Use(target);
-                    attackUsed = true;
-                    break;
+                    return;
                 }
 
-                if (attackUsed)
+                var message = $"{basicEffectArgs.Target.Name} panics!";
+
+                eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+
+                var combatManager = Object.FindObjectOfType<CombatManager>();
+                var targets = combatManager.TurnOrder.ToList();
+
+                targets.Remove(basicEffectArgs.Target);
+
+                targets = GlobalHelper.ShuffleList(targets);
+
+                bool attackUsed = false;
+
+                foreach (var target in targets.ToArray())
                 {
-                    break;
+                    foreach (var ability in basicEffectArgs.Target.Abilities.Values)
+                    {
+                        if (ability.IsPassive || !ability.TargetInRange(target) || !ability.HostileTargetsOnly ||
+                            ability.ApCost > basicEffectArgs.Target.Stats.CurrentActionPoints)
+                        {
+                            continue;
+                        }
+
+                        ability.Use(target);
+                        attackUsed = true;
+                        break;
+                    }
+
+                    if (attackUsed)
+                    {
+                        break;
+                    }
                 }
             }
 

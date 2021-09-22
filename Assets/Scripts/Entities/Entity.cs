@@ -68,7 +68,7 @@ namespace Assets.Scripts.Entities
         {
             Sex = PickSex();
 
-            if (rType != Race.RaceType.Derpus)
+            if (rType != Race.RaceType.Derpus && string.IsNullOrEmpty(Name))
             {
                 Name = GenerateName(null, Sex);
             }
@@ -322,6 +322,11 @@ namespace Assets.Scripts.Entities
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 
             eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this);
+        }
+
+        public void UnEquipAll()
+        {
+            Equipment.RemoveAllItems();
         }
 
         public bool HasAbility(Type abilityType)
@@ -770,6 +775,11 @@ namespace Assets.Scripts.Entities
 
         public bool HasMissileWeaponEquipped()
         {
+            if (Equipment == null)
+            {
+                return false;
+            }
+
             var equippedWeapon = Equipment.GetItemInSlot(EquipLocation.Weapon);
 
             if (equippedWeapon == null)
@@ -780,6 +790,11 @@ namespace Assets.Scripts.Entities
             var (min, max) = equippedWeapon.GetRangedDamageRange();
 
             return min > 0 && max > 0;
+        }
+
+        public bool IsStunned()
+        {
+            return HasEffect(new Stun());
         }
 
         private int GetTotalArmorToughness()
@@ -1182,15 +1197,9 @@ namespace Assets.Scripts.Entities
                 Effects = new List<Effect>();
             }
 
-            if (!effect.CanStack())
+            if (!effect.CanStack() && HasEffect(effect))
             {
-                foreach (var existingEffect in Effects)
-                {
-                    if (existingEffect.GetType() == effect.GetType())
-                    {
-                        return;
-                    }
-                }
+                return;
             }
 
             Effects.Add(effect);
@@ -1222,6 +1231,32 @@ namespace Assets.Scripts.Entities
 
                 effect.Trigger(new BasicEffectArgs(this));
             }
+        }
+
+        public bool HasEffect(Effect effect)
+        {
+            foreach (var existingEffect in Effects)
+            {
+                if (existingEffect.GetType() == effect.GetType())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool CanApplyEffect(Effect effect)
+        {
+            foreach (var ability in Abilities)
+            {
+                if (ability.Value.ExemptFromEffect(effect))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public int RollForInitiative()

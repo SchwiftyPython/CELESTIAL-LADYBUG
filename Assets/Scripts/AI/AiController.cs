@@ -97,7 +97,7 @@ namespace Assets.Scripts.AI
                         continue;
                     }
 
-                    if ((ability.Range == 1 || ability.Range > 1 && Self.HasMissileWeaponEquipped()) && Self.Stats.CurrentActionPoints >= ability.ApCost)
+                    if ((ability.Range == 1 || Self.HasMissileWeaponEquipped() || !ability.UsesEquipment) && Self.Stats.CurrentActionPoints >= ability.ApCost)
                     {
                         usableAbilities.Add(ability);
                     }

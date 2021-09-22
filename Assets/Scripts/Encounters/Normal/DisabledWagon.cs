@@ -6,7 +6,7 @@ namespace Assets.Scripts.Encounters.Normal
 {
     public class DisabledWagon : Encounter
     {
-        public DisabledWagon()
+        public DisabledWagon() //todo continuity -- leave him there and he could pop up later for revenge!
         {
             Rarity = Rarity.Common;
             EncounterType = EncounterType.Normal;

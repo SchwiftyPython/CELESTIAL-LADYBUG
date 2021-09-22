@@ -30,7 +30,22 @@ namespace Assets.Scripts.Encounters
             {"crustacean laceration", () => new CrustaceanLaceration()},
             {"how rude", () => new HowRude()},
             {"extreme food challenge", () => new ExtremeFoodChallenge()},
-            {"positively disgusting", () => new PositivelyDisgusting()}
+            {"positively disgusting", () => new PositivelyDisgusting()},
+            {"hot spring relaxin", () => new HotSpringRelaxin()},
+            {"lending a hand", () => new LendingAHand()},
+            {"bummer", () => new Bummer()},
+            {"free hat", () => new FreeHat()},
+            {"devils lunch", () => new DevilsLunch()},
+            {"ghost fart", () => new GhostFart()},
+            {"unleash power", () => new UnleashPower()},
+            {"its whats for dinner", () => new ItsWhatsForDinner()},
+            {"gone fishin", () => new GoneFishin()},
+            {"klutz", () => new Klutz()},
+            {"stuck", () => new Stuck()},
+            {"mushroom samba", () => new MushroomSamba()},
+            {"impromptu parade", () => new ImpromptuParade()},
+            {"mysterious sack", () => new MysteriousSack()},
+            {"centaur trader", () => new CentaurTrader()},
         };
 
         private readonly Dictionary<string, Func<Encounter>> _campingEncounters = new Dictionary<string, Func<Encounter>>
@@ -42,7 +57,16 @@ namespace Assets.Scripts.Encounters
             {"conk out", () => new ConkOut()},
             {"peaceful village", () => new PeacefulVillage()},
             {"arachnid archery", () => new ArachnidArchery()},
-            {"lending a hand", () => new LendingAHand()},
+            {"sweet tooth", () => new SweetTooth()},
+            {"forty hands", () => new FortyHands()},
+            {"nice threads", () => new NiceThreads()},
+            {"true love", () => new TrueLove()},
+            {"awful sick", () => new AwfulSick()},
+            {"noisy neighbors", () => new NoisyNeighbors()},
+            {"bad haircut", () => new BadHaircut()},
+            {"fresh meat", () => new FreshMeat()},
+            {"no firewood", () => new NoFirewood()},
+            {"welcome to the pit", () => new WelcomeToThePit()},
         };
 
         private readonly Dictionary<string, Func<Encounter>> _combatEncounters = new Dictionary<string, Func<Encounter>>
@@ -50,11 +74,15 @@ namespace Assets.Scripts.Encounters
             {"bandit attack", () => new BanditAttack()},
             {"looting bandits", () => new LootingBandits()},
             {"trail of the dead", () => new TrailOfTheDead()},
+            {"spooky random encounter", () => new SpookyRandomEncounter()},
+            {"nervous bandits", () => new NervousBandits()},
         };
 
         private readonly Dictionary<string, Func<Entity, Encounter>> _mentalBreakEncounters = new Dictionary<string, Func<Entity, Encounter>>
         {
-            {"dazed mugging", dazedCompanion => new DazedMugging(dazedCompanion)}
+            {"dazed mugging", dazedCompanion => new DazedMugging(dazedCompanion)},
+            {"abandon party", quitter => new AbandonParty(quitter)},  
+            {"nervous nellie", nellie => new NervousNellie(nellie)}, 
         };
 
         private readonly Dictionary<string, Func<Encounter>> _derpusStopWagonEncounters = new Dictionary<string, Func<Encounter>>

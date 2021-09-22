@@ -15,7 +15,7 @@ namespace Assets.Scripts.Encounters.MentalBreak
             Rarity = Rarity.Uncommon;
             EncounterType = EncounterType.MentalBreak;
             Title = "Dazed Mugging";
-            Description = $"{dazedCompanion.Name} wanders away from the group in a daze and is mugged by a roving band of ne'er-do-wells.";
+            Description = $"{dazedCompanion.Name} wanders away from the group in a daze and is mugged by a couple of gnomes!";
         }
 
         public override void Run()

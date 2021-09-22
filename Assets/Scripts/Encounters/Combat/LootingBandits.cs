@@ -23,7 +23,7 @@ namespace Assets.Scripts.Encounters.Combat
         {
             var numBandits = Random.Range(MinBandits, MaxBandits + 1);
 
-            Description = $"{numBandits} bandits have blocked the trail. Their leader steps forward and demands you turn over all your supplies.";
+            Description = $"{numBandits} bandits have blocked the trail. Their leader steps forward and demands that you turn over all your supplies.";
 
             var bandits = new List<Entity>();
 

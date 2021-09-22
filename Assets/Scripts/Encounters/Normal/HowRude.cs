@@ -6,7 +6,7 @@ namespace Assets.Scripts.Encounters.Normal
 {
     public class HowRude : Encounter
     {
-        public HowRude()
+        public HowRude()  //todo another potential continuity
         {
             Rarity = Rarity.Rare;
             EncounterType = EncounterType.Normal;

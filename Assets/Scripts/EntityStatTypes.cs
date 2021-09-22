@@ -20,10 +20,6 @@ namespace Assets.Scripts
         Initiative,
         [Description("Attack")]
         Attack,
-        [Description("Melee Skill")]
-        MeleeSkill,
-        [Description("Ranged Skill")]
-        RangedSkill,
         [Description("Armor")]
         Armor,
         [Description("Critical")]

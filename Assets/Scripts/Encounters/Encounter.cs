@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Travel;
+using Assets.Scripts.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
@@ -30,6 +31,16 @@ namespace Assets.Scripts.Encounters
         public bool CountsAsDayTraveled;
 
         public List<BiomeType> BiomeTypes;
+
+        public Party Party
+        {
+            get
+            {
+                var travelManager = Object.FindObjectOfType<TravelManager>();
+
+                return travelManager.Party;
+            }
+        }
 
         public abstract void Run();
 
@@ -76,13 +87,20 @@ namespace Assets.Scripts.Encounters
                 }
                 else if(selectedOption is FightCombatOption fightCombatOption)
                 {
-                    SceneManager.LoadScene(GlobalHelper.CombatScene);
+                    if (!string.IsNullOrEmpty(fightCombatOption.ResultText))
+                    {
+                        eventMediator.Broadcast(GlobalHelper.ShowCombatPreview, this, fightCombatOption);
+                    }
+                    else
+                    {
+                        SceneManager.LoadScene(GlobalHelper.CombatScene);
 
-                    var combatManager = Object.FindObjectOfType<CombatManager>();
+                        var combatManager = Object.FindObjectOfType<CombatManager>();
 
-                    combatManager.Enemies = ((FightCombatOption) selectedOption).Enemies;
+                        combatManager.Enemies = ((FightCombatOption)selectedOption).Enemies;
 
-                    combatManager.Load();
+                        combatManager.Load();
+                    }
                 }
             }
             else if (fullResultDescription.Count > 1 || !fullResultDescription.First().Equals("\n"))

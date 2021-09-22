@@ -92,17 +92,29 @@ namespace Assets.Scripts.UI
             var optionButtonIndex = 0;
             foreach (var optionText in encounter.Options.Keys)
             {
+                if (optionButtonIndex >= _optionButtons.Count)
+                {
+                    break;
+                }
+
                 var button = _optionButtons[optionButtonIndex].GetComponent<EncounterOptionButton>();
 
-                button.SetOptionText(optionText);
+                if (encounter.Options[optionText] is FightCombatOption)
+                {
+                    button.SetOptionText(optionText);
 
-                button.Show();
-
-                //todo we want to make retreat not interactive for now -- refactor if clunky looking
-                if (encounter.Options[optionText] is RetreatCombatOption)
+                    button.Show();
+                }
+                else
                 {
                     button.gameObject.SetActive(false);
                 }
+
+                //todo we want to make retreat not interactive for now -- refactor if clunky looking
+                // if (encounter.Options[optionText] is RetreatCombatOption)
+                // {
+                //     button.gameObject.SetActive(false);
+                // }
 
                 optionButtonIndex++;
             }

@@ -9,7 +9,9 @@ namespace Assets.Scripts.Encounters
     {
         public Dictionary<Entity, List<KeyValuePair<EntityStatTypes, int>>> EntityStatLosses;
         public Dictionary<Entity, List<KeyValuePair<EntityAttributeTypes, int>>> EntityAttributeLosses;
+        public Dictionary<Entity, List<KeyValuePair<EntitySkillTypes, int>>> EntitySkillLosses;
         public Dictionary<PartySupplyTypes, int> PartyLosses;
+        public List<Entity> PartyRemovals;
         public List<Effect> Effects;
 
         public void AddEntityLoss(Entity targetEntity, EntityStatTypes statType, int amountLost)
@@ -50,6 +52,25 @@ namespace Assets.Scripts.Encounters
             }
         }
 
+        public void AddEntityLoss(Entity targetEntity, EntitySkillTypes skillType, int amountLost)
+        {
+            if (EntitySkillLosses == null)
+            {
+                EntitySkillLosses = new Dictionary<Entity, List<KeyValuePair<EntitySkillTypes, int>>>();
+            }
+
+            var loss = new KeyValuePair<EntitySkillTypes, int>(skillType, amountLost);
+
+            if (!EntitySkillLosses.ContainsKey(targetEntity))
+            {
+                EntitySkillLosses.Add(targetEntity, new List<KeyValuePair<EntitySkillTypes, int>> { loss });
+            }
+            else
+            {
+                EntitySkillLosses[targetEntity].Add(loss);
+            }
+        }
+
         public void AddPartyLoss(PartySupplyTypes supplyType, int amountLost)
         {
             if (PartyLosses == null)
@@ -64,6 +85,26 @@ namespace Assets.Scripts.Encounters
             else
             {
                 PartyLosses[supplyType] += amountLost;
+            }
+        }
+
+        public void RemoveFromParty(Entity companion)
+        {
+            if (PartyRemovals == null)
+            {
+                PartyRemovals = new List<Entity>();
+            }
+
+            PartyRemovals.Add(companion);
+        }
+
+        public void EveryoneLoss(Party party, EntityStatTypes statType, int amountLost)
+        {
+            AddEntityLoss(party.Derpus, statType, amountLost);
+
+            foreach (var companion in party.GetCompanions())
+            {
+                AddEntityLoss(companion, statType, amountLost);
             }
         }
     }

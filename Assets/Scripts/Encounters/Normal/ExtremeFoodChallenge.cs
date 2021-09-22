@@ -64,12 +64,12 @@ namespace Assets.Scripts.Encounters.Normal
                 switch (challenge)
                 {
                     case "The Deadliest Catch":
-                        optionResultText = $"{challenger.FirstName()} shovels fish into their cakehole with one hand and slaw and beans with the other! With a loud belch they crash to the floor victorious!";
+                        optionResultText = $"{challenger.FirstName()} SHOVELS fish into their cakehole with one hand and slaw and beans with the other! With a loud belch they crash to the floor victorious!";
                         optionReward.AddEntityGain(challenger, EntityAttributeTypes.Intellect, 1);
                         optionReward.AddEntityGain(challenger, EntitySkillTypes.Endurance, 1);
                         break;
                     case "5 Foot Megabeast Pizza":
-                        optionResultText = $"{challenger.FirstName()} rolls the pizza into a burrito and shows no mercy! They briefly enter a sweaty catatonic state, but snap out of it with a thunderous burp!";
+                        optionResultText = $"{challenger.FirstName()} ROLLS the pizza into a burrito and shows no mercy! They briefly enter a sweaty catatonic state, but snap out of it with a thunderous burp!";
                         optionReward.AddEntityGain(challenger, EntityAttributeTypes.Physique, 1);
                         optionReward.AddEntityGain(challenger, EntitySkillTypes.Endurance, 1);
                         break;
