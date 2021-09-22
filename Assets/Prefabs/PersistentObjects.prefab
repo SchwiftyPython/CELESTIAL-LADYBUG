@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TimeTilNextEncounter: 0
-  UseTestDeck: 1
+  UseTestDeck: 0
 --- !u!1 &1069228423
 GameObject:
   m_ObjectHideFlags: 0

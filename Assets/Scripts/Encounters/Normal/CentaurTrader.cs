@@ -58,11 +58,11 @@ namespace Assets.Scripts.Encounters.Normal
 
                 var armorReward = new Reward();
 
-                armorReward.AddToInventory(weapon);
+                armorReward.AddToInventory(armor);
 
                 var armorPenalty = new Penalty();
 
-                armorPenalty.AddPartyLoss(PartySupplyTypes.Gold, weapon.GetPrice());
+                armorPenalty.AddPartyLoss(PartySupplyTypes.Gold, armor.GetPrice());
 
                 var armorOption = new Option(optionTitle, optionResultText, armorReward, armorPenalty,
                     EncounterType.Normal);

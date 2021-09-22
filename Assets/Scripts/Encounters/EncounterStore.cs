@@ -39,6 +39,13 @@ namespace Assets.Scripts.Encounters
             {"ghost fart", () => new GhostFart()},
             {"unleash power", () => new UnleashPower()},
             {"its whats for dinner", () => new ItsWhatsForDinner()},
+            {"gone fishin", () => new GoneFishin()},
+            {"klutz", () => new Klutz()},
+            {"stuck", () => new Stuck()},
+            {"mushroom samba", () => new MushroomSamba()},
+            {"impromptu parade", () => new ImpromptuParade()},
+            {"mysterious sack", () => new MysteriousSack()},
+            {"centaur trader", () => new CentaurTrader()},
         };
 
         private readonly Dictionary<string, Func<Encounter>> _campingEncounters = new Dictionary<string, Func<Encounter>>
@@ -58,6 +65,8 @@ namespace Assets.Scripts.Encounters
             {"noisy neighbors", () => new NoisyNeighbors()},
             {"bad haircut", () => new BadHaircut()},
             {"fresh meat", () => new FreshMeat()},
+            {"no firewood", () => new NoFirewood()},
+            {"welcome to the pit", () => new WelcomeToThePit()},
         };
 
         private readonly Dictionary<string, Func<Encounter>> _combatEncounters = new Dictionary<string, Func<Encounter>>
@@ -66,13 +75,14 @@ namespace Assets.Scripts.Encounters
             {"looting bandits", () => new LootingBandits()},
             {"trail of the dead", () => new TrailOfTheDead()},
             {"spooky random encounter", () => new SpookyRandomEncounter()},
+            {"nervous bandits", () => new NervousBandits()},
         };
 
         private readonly Dictionary<string, Func<Entity, Encounter>> _mentalBreakEncounters = new Dictionary<string, Func<Entity, Encounter>>
         {
             {"dazed mugging", dazedCompanion => new DazedMugging(dazedCompanion)},
-            {"abandon party", quitter => new AbandonParty(quitter)},  //todo test
-            {"nervous nellie", quitter => new NervousNellie(quitter)},  //todo test
+            {"abandon party", quitter => new AbandonParty(quitter)},  
+            {"nervous nellie", nellie => new NervousNellie(nellie)}, 
         };
 
         private readonly Dictionary<string, Func<Encounter>> _derpusStopWagonEncounters = new Dictionary<string, Func<Encounter>>
@@ -83,14 +93,7 @@ namespace Assets.Scripts.Encounters
 
         private readonly Dictionary<string, Func<Encounter>> _testEncounters = new Dictionary<string, Func<Encounter>>
         {
-            {"gone fishin", () => new GoneFishin()},
-            {"nervous bandits", () => new NervousBandits()},
-            {"klutz", () => new Klutz()},
-            {"stuck", () => new Stuck()},
-            {"mysterious sack", () => new MysteriousSack()},
-            {"no firewood", () => new NoFirewood()},
-            {"centaur trader", () => new CentaurTrader()},
-            {"mushroom samba", () => new MushroomSamba()},
+            
         };
 
         public List<Encounter> GetNormalEncounters()

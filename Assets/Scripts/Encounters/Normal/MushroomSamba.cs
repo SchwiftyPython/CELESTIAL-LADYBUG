@@ -18,7 +18,7 @@ namespace Assets.Scripts.Encounters.Normal
         {
             var forager = Party.GetCompanionWithHighestSurvivalSkill();
 
-            Description = $"{forager.FirstName()} gets bored and wanders off the trail a bit. They come back with an armful of mushrooms.\n\n\"Of course they're safe! See?\"\n\nThey pop one in their mouth and swallow.";
+            Description = $"{forager.FirstName()} gets bored and wanders off the trail a bit. They come back with an armful of mushrooms.\n\n\"Of course they're safe! See?\"\n\nThey pop one in their mouth and swallow. ";
 
             const int success = 15;
 

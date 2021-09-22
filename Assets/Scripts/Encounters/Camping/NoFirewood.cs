@@ -47,7 +47,7 @@ namespace Assets.Scripts.Encounters.Camping
 
                 optionPenalty.AddEntityLoss(volunteer, EntityStatTypes.CurrentEnergy, 20);
 
-                var option = new Option(volunteer.Name, optionResultText, null, optionPenalty, EncounterType.Camping);
+                var option = new Option(volunteer.Name, optionResultText, optionReward, optionPenalty, EncounterType.Camping);
 
                 Options.Add(volunteer.Name, option);
             }
