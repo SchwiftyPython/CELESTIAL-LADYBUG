@@ -5,6 +5,7 @@ using Assets.Scripts.Abilities;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Effects;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Travel;
 using Assets.Scripts.UI;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -104,7 +105,12 @@ namespace Assets.Scripts
         public Sprite[] GrassyMudSprites;
         public Sprite[] TemperateTreeSprites;
 
-        private Dictionary<TileType, Sprite[]> _combatTerrainSprites;
+        public Sprite[] SandSprites;
+        public Sprite[] SandDecoratorSprites;
+        public Sprite[] SandRockSprites;
+        public Sprite[] SandTreeSprites;
+
+        private Dictionary<BiomeType, Dictionary<TileType, Sprite[]>> _combatTerrainSprites; //todo might be better off as a class if unwieldy
 
         #endregion TerrainSprites
 
@@ -274,14 +280,18 @@ namespace Assets.Scripts
             return _effectSpriteDictionary[effect.Name.ToLower()];
         }
 
-        public Sprite[] GetFloorSprites(TileType tType)
+        public Sprite[] GetFloorSprites(BiomeType bType, TileType tType)
         {
-            return _combatTerrainSprites[tType];
+            var biomeFloorSprites = _combatTerrainSprites[bType];
+
+            return biomeFloorSprites[tType];
         }
 
-        public Sprite[] GetWallSprites(TileType tType)
+        public Sprite[] GetWallSprites(BiomeType bType, TileType tType)
         {
-            return _combatTerrainSprites[tType];
+            var biomeWallSprites = _combatTerrainSprites[bType];
+
+            return biomeWallSprites[tType];
         }
 
         public void SetColorSwaps(IEnumerable<ColorSwapper> colorSwapper, Entity entity)
@@ -483,12 +493,26 @@ namespace Assets.Scripts
 
         private void PopulateCombatTerrain()
         {
-            _combatTerrainSprites = new Dictionary<TileType, Sprite[]>
+            _combatTerrainSprites = new Dictionary<BiomeType, Dictionary<TileType, Sprite[]>>
             {
-                {TileType.Grass, GrassSprites},
-                {TileType.GrassDecorators, GrassDecoratorSprites},
-                {TileType.Mud, GrassyMudSprites},
-                {TileType.Tree, TemperateTreeSprites}
+                {
+                    BiomeType.Grassland, new Dictionary<TileType, Sprite[]>
+                    {
+                        { TileType.Grass, GrassSprites },
+                        { TileType.GrassDecorators, GrassDecoratorSprites },
+                        { TileType.Mud, GrassyMudSprites },
+                        { TileType.Tree, TemperateTreeSprites }
+                    }
+                },
+                {
+                    BiomeType.Desert, new Dictionary<TileType, Sprite[]>
+                    {
+                        { TileType.Sand, SandSprites },
+                        { TileType.SandDecorators, SandDecoratorSprites },
+                        { TileType.Rock, SandRockSprites },
+                        { TileType.Tree, SandTreeSprites }
+                    }
+                },
             };
         }
 

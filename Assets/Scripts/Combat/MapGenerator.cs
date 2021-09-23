@@ -80,11 +80,11 @@ namespace Assets.Scripts.Combat
                 Tile tile;
                 if (IsWallTile(selection))
                 {
-                    tile = tStore.GetWallTile(selection, position, MapWidth, MapHeight);
+                    tile = tStore.GetWallTile(biome, selection, position, MapWidth, MapHeight);
                 }
                 else
                 {
-                    tile = TerrainStore.GetFloorTile(selection, position, MapWidth, MapHeight);
+                    tile = TerrainStore.GetFloorTile(biome, selection, position, MapWidth, MapHeight);
                 }
 
                 map.SetTerrain(tile);
@@ -101,8 +101,11 @@ namespace Assets.Scripts.Combat
                 case TileType.Grass:
                 case TileType.GrassDecorators:
                 case TileType.Mud:
+                case TileType.Sand:
+                case TileType.SandDecorators:
                     return false;
                 case TileType.Tree:
+                case TileType.Rock:
                     return true;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(tType), tType, null);

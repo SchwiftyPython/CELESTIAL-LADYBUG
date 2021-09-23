@@ -24,7 +24,7 @@ namespace Assets.Scripts.Travel
 
         public Party Party { get; private set; }
 
-        public BiomeType CurrentBiome { get; private set; }
+        public BiomeType CurrentBiome { get; set; }
 
         private void Awake()
         {

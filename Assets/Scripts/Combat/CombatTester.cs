@@ -12,6 +12,8 @@ namespace Assets.Scripts.Combat
         private const int MinBandits = 3;
         private const int MaxBandits = 5;
 
+        public BiomeType testingBiome;
+
         public bool testingEnabled;
 
         private void Start()
@@ -31,17 +33,15 @@ namespace Assets.Scripts.Combat
 
             travelManager.NewParty();
 
+            travelManager.CurrentBiome = testingBiome;
+
             var numBandits = Random.Range(MinBandits, MaxBandits + 1);
 
             var bandits = new List<Entity>();
 
             for (var i = 0; i < 1; i++)
             {
-                Entity bandit = new Zombie();
-
-                bandits.Add(bandit);
-
-                bandit = new Ghost();
+                Entity bandit = new Skeleton();
 
                 bandits.Add(bandit);
 
@@ -49,11 +49,15 @@ namespace Assets.Scripts.Combat
 
                 bandits.Add(bandit);
 
-                bandit = new Vampire();
+                bandit = new Skeleton();
 
                 bandits.Add(bandit);
 
-                bandit = new Spider();
+                bandit = new Skeleton();
+
+                bandits.Add(bandit);
+
+                bandit = new Skeleton();
 
                 bandits.Add(bandit);
             }
