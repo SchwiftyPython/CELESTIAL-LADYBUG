@@ -10,19 +10,19 @@ namespace Assets.Scripts.Combat
         private readonly Dictionary<BiomeType, List<TileType>> _floorTileTypesDictionary =
             new Dictionary<BiomeType, List<TileType>>
             {
-                {BiomeType.Grassland, new List<TileType> {TileType.Grass, TileType.Mud}},
+                {BiomeType.Forest, new List<TileType> {TileType.Grass, TileType.Mud}},
                 {BiomeType.Desert, new List<TileType> {TileType.Sand}},
             };
 
         private readonly Dictionary<BiomeType, Dictionary<TileType, int>> _tileTypeWeights =
             new Dictionary<BiomeType, Dictionary<TileType, int>>
             {
-                {BiomeType.Grassland, new Dictionary<TileType, int>
+                {BiomeType.Forest, new Dictionary<TileType, int>
                 {
                     {TileType.Grass, 110},
                     {TileType.GrassDecorators, 10},
                     {TileType.Mud, 5},
-                    {TileType.Tree, 5},
+                    {TileType.Tree, 10},
                 }},
                 {BiomeType.Desert, new Dictionary<TileType, int>
                 {

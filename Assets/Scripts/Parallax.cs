@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Travel;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -40,9 +41,28 @@ namespace Assets.Scripts
         //Loop requirement
         public SpriteRenderer loopSpriteRenderer;
 
+        public BiomeType biome;
+        public Color BackgroundColor;
+
         // Start is called before the first frame update
         private void Awake()
         {
+            var travelManager = FindObjectOfType<TravelManager>();
+
+            if (biome == travelManager.CurrentBiome)
+            {
+                gameObject.SetActive(true);
+                cam.backgroundColor = BackgroundColor;
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
+
+            var eventMediator = FindObjectOfType<EventMediator>();
+
+            eventMediator.SubscribeToEvent(GlobalHelper.BiomeChanged, this);
+
             _paused = false;
 
             _wagonMover = FindObjectOfType<WagonMover>();
@@ -104,6 +124,21 @@ namespace Assets.Scripts
             else if (eventName.Equals(ResumeEvent))
             {
                 _paused = false;
+            }
+            else if (eventName.Equals(GlobalHelper.BiomeChanged))
+            {
+                var travelManager = FindObjectOfType<TravelManager>();
+
+                if (biome == travelManager.CurrentBiome)
+                {
+                    gameObject.SetActive(true);
+
+                    cam.backgroundColor = BackgroundColor;
+                }
+                else
+                {
+                    gameObject.SetActive(false);
+                }
             }
         }
     }

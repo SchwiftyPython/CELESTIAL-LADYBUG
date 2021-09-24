@@ -496,7 +496,7 @@ namespace Assets.Scripts
             _combatTerrainSprites = new Dictionary<BiomeType, Dictionary<TileType, Sprite[]>>
             {
                 {
-                    BiomeType.Grassland, new Dictionary<TileType, Sprite[]>
+                    BiomeType.Forest, new Dictionary<TileType, Sprite[]>
                     {
                         { TileType.Grass, GrassSprites },
                         { TileType.GrassDecorators, GrassDecoratorSprites },
