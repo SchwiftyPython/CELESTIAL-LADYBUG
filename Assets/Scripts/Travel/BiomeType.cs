@@ -5,7 +5,7 @@
         Forest,
         Desert,
         //Grassland,
-        //Spooky,
+        Spooky,
         //Evil
     }
 }

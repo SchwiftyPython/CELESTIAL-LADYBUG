@@ -734,6 +734,20 @@ MonoBehaviour:
   - {fileID: 7181050048499140198, guid: 677085892e48a784a832931da76f618f, type: 3}
   SandTreeSprites:
   - {fileID: -496754615240606449, guid: 677085892e48a784a832931da76f618f, type: 3}
+  SpookyGroundSprites:
+  - {fileID: -5050995444897126823, guid: 744b894af52bb5f4ab4950146fb6d2bd, type: 3}
+  SpookyDecoratorSprites:
+  - {fileID: 3130343338074959407, guid: 744b894af52bb5f4ab4950146fb6d2bd, type: 3}
+  - {fileID: 7360056855677354542, guid: 744b894af52bb5f4ab4950146fb6d2bd, type: 3}
+  - {fileID: -5258540386873581503, guid: 744b894af52bb5f4ab4950146fb6d2bd, type: 3}
+  - {fileID: 3370885990138429170, guid: 744b894af52bb5f4ab4950146fb6d2bd, type: 3}
+  - {fileID: 650373399441831496, guid: 744b894af52bb5f4ab4950146fb6d2bd, type: 3}
+  - {fileID: 5310002723257874579, guid: 744b894af52bb5f4ab4950146fb6d2bd, type: 3}
+  - {fileID: -2871217148506904793, guid: 744b894af52bb5f4ab4950146fb6d2bd, type: 3}
+  - {fileID: 7777311157863683998, guid: 744b894af52bb5f4ab4950146fb6d2bd, type: 3}
+  - {fileID: 7284102987640763207, guid: 744b894af52bb5f4ab4950146fb6d2bd, type: 3}
+  SpookyTreeSprites:
+  - {fileID: 8237460798556589764, guid: 744b894af52bb5f4ab4950146fb6d2bd, type: 3}
   AbilitySprites:
   - {fileID: 21300000, guid: a9812ed049e19704389dd690d8b41953, type: 3}
   - {fileID: 21300000, guid: 1a5b75fcb171fcc44b3deceb27bb49d2, type: 3}

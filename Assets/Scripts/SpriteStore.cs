@@ -110,6 +110,10 @@ namespace Assets.Scripts
         public Sprite[] SandRockSprites;
         public Sprite[] SandTreeSprites;
 
+        public Sprite[] SpookyGroundSprites;
+        public Sprite[] SpookyDecoratorSprites;
+        public Sprite[] SpookyTreeSprites;
+
         private Dictionary<BiomeType, Dictionary<TileType, Sprite[]>> _combatTerrainSprites; //todo might be better off as a class if unwieldy
 
         #endregion TerrainSprites
@@ -511,6 +515,14 @@ namespace Assets.Scripts
                         { TileType.SandDecorators, SandDecoratorSprites },
                         { TileType.Rock, SandRockSprites },
                         { TileType.Tree, SandTreeSprites }
+                    }
+                },
+                {
+                    BiomeType.Spooky, new Dictionary<TileType, Sprite[]>
+                    {
+                        { TileType.Grass, SpookyGroundSprites },
+                        { TileType.GrassDecorators, SpookyDecoratorSprites },
+                        { TileType.Tree, SpookyTreeSprites }
                     }
                 },
             };

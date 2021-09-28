@@ -19,7 +19,7 @@ namespace Assets.Scripts.Travel
 
         private const int BiomeChangeFrequency = 3;
 
-        private const BiomeType StartingBiome = BiomeType.Forest;
+        private const BiomeType StartingBiome = BiomeType.Spooky;
         //private const BiomeType EndBiome = BiomeType.Evil; todo
 
         private Queue<BiomeType> _biomeQueue;

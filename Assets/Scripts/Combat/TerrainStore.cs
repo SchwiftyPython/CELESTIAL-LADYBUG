@@ -12,6 +12,7 @@ namespace Assets.Scripts.Combat
             {
                 {BiomeType.Forest, new List<TileType> {TileType.Grass, TileType.Mud}},
                 {BiomeType.Desert, new List<TileType> {TileType.Sand}},
+                {BiomeType.Spooky, new List<TileType> {TileType.Grass}},
             };
 
         private readonly Dictionary<BiomeType, Dictionary<TileType, int>> _tileTypeWeights =
@@ -30,6 +31,12 @@ namespace Assets.Scripts.Combat
                     {TileType.SandDecorators, 5},
                     {TileType.Rock, 5},
                     {TileType.Tree, 2},
+                }},
+                {BiomeType.Spooky, new Dictionary<TileType, int>
+                {
+                    {TileType.Grass, 110},
+                    {TileType.GrassDecorators, 5},
+                    {TileType.Tree, 10},
                 }}
             };
 
