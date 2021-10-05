@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Entities.Necromancer;
+using Assets.Scripts.Entities.Rampart;
 using Assets.Scripts.Items;
 using Assets.Scripts.Travel;
 using UnityEngine;
@@ -41,7 +42,7 @@ namespace Assets.Scripts.Combat
 
             for (var i = 0; i < 1; i++)
             {
-                Entity bandit = new Skeleton();
+                Entity bandit = new Deer();
 
                 bandits.Add(bandit);
 

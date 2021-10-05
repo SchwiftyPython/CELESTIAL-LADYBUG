@@ -112,6 +112,7 @@ namespace Assets.Scripts
 
         public Sprite[] SpookyGroundSprites;
         public Sprite[] SpookyDecoratorSprites;
+        public Sprite[] SpookyGravestoneSprites;
         public Sprite[] SpookyTreeSprites;
 
         private Dictionary<BiomeType, Dictionary<TileType, Sprite[]>> _combatTerrainSprites; //todo might be better off as a class if unwieldy
@@ -522,6 +523,7 @@ namespace Assets.Scripts
                     {
                         { TileType.Grass, SpookyGroundSprites },
                         { TileType.GrassDecorators, SpookyDecoratorSprites },
+                        { TileType.Gravestone, SpookyGravestoneSprites },
                         { TileType.Tree, SpookyTreeSprites }
                     }
                 },

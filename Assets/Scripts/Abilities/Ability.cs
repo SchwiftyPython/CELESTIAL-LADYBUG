@@ -16,13 +16,13 @@ namespace Assets.Scripts.Abilities
         public int ApCost { get; private set; }
         public int Range { get; private set; }
         public Entity AbilityOwner { get; private set; }
-        public bool HostileTargetsOnly { get; private set; }
+        public TargetType TargetType { get; private set; }
         public bool IsPassive { get; private set; }
         public Sprite Icon { get; protected set; }
         public bool UsesEquipment { get; protected set; }
         public List<Effect> EffectExemptions { get; protected set; }
 
-        protected Ability(string name, string description, int apCost, int range, Entity abilityOwner, bool hostileTargetsOnly, bool passive, bool usesEquipment = true)
+        protected Ability(string name, string description, int apCost, int range, Entity abilityOwner, TargetType targetType, bool passive, bool usesEquipment = true)
         {
             Name = name;
             Description = description;
@@ -47,7 +47,7 @@ namespace Assets.Scripts.Abilities
             }
 
             AbilityOwner = abilityOwner;
-            HostileTargetsOnly = hostileTargetsOnly;
+            TargetType = targetType;
             IsPassive = passive;
             UsesEquipment = usesEquipment;
 
@@ -102,12 +102,17 @@ namespace Assets.Scripts.Abilities
                 return false;
             }
 
-            if (HostileTargetsOnly)
+            if (TargetType == TargetType.Hostile)
             {
                 return AbilityOwner.IsPlayer() != target.IsPlayer();
             }
 
-            return AbilityOwner.IsPlayer() == target.IsPlayer();
+            if (TargetType == TargetType.Friendly)
+            {
+                return AbilityOwner.IsPlayer() == target.IsPlayer();
+            }
+
+            return true;
         }
 
         public bool IsRanged()

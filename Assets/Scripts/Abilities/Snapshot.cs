@@ -8,7 +8,7 @@ namespace Assets.Scripts.Abilities
     {
         private const int ToHitMod = -4;
 
-        public Snapshot(Entity abilityOwner) : base("Snapshot", $"Take a quick shot at the cost of accuracy.\n{ToHitMod}% chance to hit", 4, 5, abilityOwner, true, false)
+        public Snapshot(Entity abilityOwner) : base("Snapshot", $"Take a quick shot at the cost of accuracy.\n{ToHitMod}% chance to hit", 4, 5, abilityOwner, TargetType.Friendly, false)
         {
         }
 

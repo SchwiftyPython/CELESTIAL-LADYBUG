@@ -106,6 +106,7 @@ namespace Assets.Scripts.Combat
                     return false;
                 case TileType.Tree:
                 case TileType.Rock:
+                case TileType.Gravestone:
                     return true;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(tType), tType, null);

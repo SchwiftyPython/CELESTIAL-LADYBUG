@@ -1,7 +1,7 @@
 ﻿using System.Linq;
-using Assets.Scripts.Abilities;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Effects.Args;
+using Assets.Scripts.Entities;
 using GoRogue;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -13,7 +13,9 @@ namespace Assets.Scripts.Effects
         private const int FearDuration = 4;
         private const int PanicChance = 20;
 
-        public Fear(bool locationDependent, int duration = FearDuration) : base("Fear", $"{PanicChance}% chance that target loses turn and attacks at random if able.", duration, locationDependent, false)
+        public Fear(Entity owner, bool locationDependent, int duration = FearDuration) : base("Fear",
+            $"{PanicChance}% chance that target loses turn and attacks at random if able.", duration, locationDependent,
+            false, TargetType.Hostile, owner)
         {
         }
 
@@ -57,7 +59,7 @@ namespace Assets.Scripts.Effects
                 {
                     foreach (var ability in basicEffectArgs.Target.Abilities.Values)
                     {
-                        if (ability.IsPassive || !ability.TargetInRange(target) || !ability.HostileTargetsOnly ||
+                        if (ability.IsPassive || !ability.TargetInRange(target) || ability.TargetType == TargetType.Friendly ||
                             ability.ApCost > basicEffectArgs.Target.Stats.CurrentActionPoints)
                         {
                             continue;

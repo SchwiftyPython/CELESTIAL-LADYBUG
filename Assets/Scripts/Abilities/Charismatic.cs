@@ -8,7 +8,7 @@ namespace Assets.Scripts.Abilities
         private const int CharismaMod = 1;
 
         public Charismatic(Entity abilityOwner) : base("Charismatic", $"+{CharismaMod} Charisma.", -1, -1,
-            abilityOwner, false, true)
+            abilityOwner, TargetType.Friendly, true)
         {
         }
 

@@ -7,7 +7,7 @@ namespace Assets.Scripts.Abilities
     {
         private const int GoldBonus = 5;
 
-        public Wealthy(Entity abilityOwner) : base("Wealthy", $"+{GoldBonus}% earned gold.", -1, -1, abilityOwner, false,
+        public Wealthy(Entity abilityOwner) : base("Wealthy", $"+{GoldBonus}% earned gold.", -1, -1, abilityOwner, TargetType.Friendly,
             true)
         {
         }

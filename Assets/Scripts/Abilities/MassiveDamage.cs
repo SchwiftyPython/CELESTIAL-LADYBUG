@@ -8,7 +8,7 @@ namespace Assets.Scripts.Abilities
     {
         private const int DamageMod = 5;
 
-        public MassiveDamage(Entity abilityOwner) : base("Massive Damage", $"+{DamageMod}% damage", -1, -1, abilityOwner, false, true)
+        public MassiveDamage(Entity abilityOwner) : base("Massive Damage", $"+{DamageMod}% damage", -1, -1, abilityOwner, TargetType.Friendly, true)
         {
         }
 

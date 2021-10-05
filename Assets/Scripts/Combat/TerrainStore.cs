@@ -35,8 +35,9 @@ namespace Assets.Scripts.Combat
                 {BiomeType.Spooky, new Dictionary<TileType, int>
                 {
                     {TileType.Grass, 110},
-                    {TileType.GrassDecorators, 5},
-                    {TileType.Tree, 10},
+                    {TileType.GrassDecorators, 10},
+                    {TileType.Gravestone, 10},
+                    {TileType.Tree, 6},
                 }}
             };
 

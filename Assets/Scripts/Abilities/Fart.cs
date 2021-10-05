@@ -14,9 +14,9 @@ namespace Assets.Scripts.Abilities
 
         private readonly Effect _stunEffect;
 
-        public Fart(Entity abilityOwner) : base("Fart", $"Blast lethal methane at an unlucky foe. {StunChance}% chance to Stun.", 4, 2, abilityOwner, true, false, false)
+        public Fart(Entity abilityOwner) : base("Fart", $"Blast lethal methane at an unlucky foe. {StunChance}% chance to Stun.", 4, 2, abilityOwner, TargetType.Hostile, false, false)
         {
-            _stunEffect = new Stun();
+            _stunEffect = new Stun(abilityOwner);
 
             //todo fart sound overrides ghost attack sound
         }

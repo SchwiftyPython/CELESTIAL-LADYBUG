@@ -7,7 +7,7 @@ namespace Assets.Scripts.Abilities
         private const int DamageMin = 2;
         private const int DamageMax = 4;
 
-        public Bite(Entity abilityOwner) : base("Bite", "Teeth meet flesh.", 4, 1, abilityOwner, true, false, false)
+        public Bite(Entity abilityOwner) : base("Bite", "Teeth meet flesh.", 4, 1, abilityOwner, TargetType.Hostile, false, false)
         {
         }
 

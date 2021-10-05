@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Effects.Args;
+using Assets.Scripts.Entities;
 using GoRogue;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace Assets.Scripts.Effects
     {
         private const int StunDuration = 1;
 
-        public Stun(int duration = StunDuration) : base("Stun", "Target cannot move or attack.", duration, false, false)
+        public Stun(Entity owner, int duration = StunDuration) : base("Stun", "Target cannot move or attack.", duration, false, false, TargetType.Hostile, owner)
         {
         }
 

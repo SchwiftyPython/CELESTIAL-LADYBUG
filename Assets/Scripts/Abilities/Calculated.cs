@@ -9,7 +9,7 @@ namespace Assets.Scripts.Abilities
     {
         private const int ToHitBonus = 3;
 
-        public Calculated(Entity abilityOwner) : base("Calculated", $"+{ToHitBonus} to hit on ranged attacks.", -1, -1, abilityOwner, false, true)
+        public Calculated(Entity abilityOwner) : base("Calculated", $"+{ToHitBonus} to hit on ranged attacks.", -1, -1, abilityOwner, TargetType.Friendly, true)
         {
         }
 

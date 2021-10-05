@@ -25,7 +25,7 @@ namespace Assets.Scripts.UI
 
         private void Start()
         {
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
 
             eventMediator.SubscribeToEvent(HoverPopupEvent, this);
             Hide();
@@ -37,11 +37,11 @@ namespace Assets.Scripts.UI
             _abilityDescription.text = "Description not implemented yet"; //todo
             _apCost.text = ability.ApCost.ToString();
 
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
-            var combatManager = Object.FindObjectOfType<CombatManager>();
+            var eventMediator = FindObjectOfType<EventMediator>();
+            var combatManager = FindObjectOfType<CombatManager>();
 
             //todo probably need bool for if ability damage is based on weapon
-            if (ability.HostileTargetsOnly)
+            if (ability.TargetType == TargetType.Hostile)
             {
                 int damageMin;
                 int damageMax;
@@ -68,7 +68,7 @@ namespace Assets.Scripts.UI
 
         private void Hide()
         {
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
             eventMediator.UnsubscribeFromEvent(HidePopupEvent, this);
             gameObject.SetActive(false);
             GameManager.Instance.RemoveActiveWindow(gameObject);
@@ -76,7 +76,7 @@ namespace Assets.Scripts.UI
 
         private void OnDestroy()
         {
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
             eventMediator?.UnsubscribeFromEvent(HoverPopupEvent, this);
             eventMediator?.UnsubscribeFromEvent(HidePopupEvent, this);
             GameManager.Instance.RemoveActiveWindow(gameObject);

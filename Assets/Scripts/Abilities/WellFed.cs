@@ -9,7 +9,7 @@ namespace Assets.Scripts.Abilities
     {
         private const int MaxApMod = 1;
 
-        public WellFed(Entity abilityOwner) : base("Well Fed", $"+{MaxApMod} Max Action Points", -1, -1, abilityOwner, false, true)
+        public WellFed(Entity abilityOwner) : base("Well Fed", $"+{MaxApMod} Max Action Points", -1, -1, abilityOwner, TargetType.Friendly, true)
         {
             var spriteStore = Object.FindObjectOfType<SpriteStore>();
             Icon = spriteStore.GetAbilitySprite(this);

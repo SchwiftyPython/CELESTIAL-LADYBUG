@@ -8,6 +8,7 @@
         Tree,
         Rock,
         Sand,
-        SandDecorators
+        SandDecorators,
+        Gravestone
     }
 }
