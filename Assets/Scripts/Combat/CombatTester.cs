@@ -46,15 +46,15 @@ namespace Assets.Scripts.Combat
 
                 bandits.Add(bandit);
 
-                bandit = new Skeleton();
+                bandit = new DwarfWarrior(false);
 
                 bandits.Add(bandit);
 
-                bandit = new Skeleton();
+                bandit = new Hunter();
 
                 bandits.Add(bandit);
 
-                bandit = new Skeleton();
+                bandit = new Treant();
 
                 bandits.Add(bandit);
 
