@@ -15,6 +15,7 @@ namespace Assets.Scripts.Entities.Rampart
             {EquipLocation.Body, new List<string> {"Worn Mail Shirt", "Mail Shirt"}},
             {EquipLocation.Shield, new List<string> {"Knight's Shield", "Wooden Shield", "Heater Shield"}}
         };
+
         public DwarfWarrior(bool isPlayer) : base(Race.RaceType.Dwarf, EntityClass.ManAtArms, isPlayer)
         {
             var entityPrefabStore = Object.FindObjectOfType<EntityPrefabStore>();

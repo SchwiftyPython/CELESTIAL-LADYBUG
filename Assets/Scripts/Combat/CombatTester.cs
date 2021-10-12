@@ -2,6 +2,8 @@
 using Assets.Scripts.Entities;
 using Assets.Scripts.Entities.Necromancer;
 using Assets.Scripts.Entities.Rampart;
+using Assets.Scripts.Entities.Stronghold;
+using Assets.Scripts.Entities.Tower;
 using Assets.Scripts.Items;
 using Assets.Scripts.Travel;
 using UnityEngine;
@@ -42,23 +44,23 @@ namespace Assets.Scripts.Combat
 
             for (var i = 0; i < 1; i++)
             {
-                Entity bandit = new Deer();
+                Entity bandit = new Djinn();
 
                 bandits.Add(bandit);
 
-                bandit = new DwarfWarrior(false);
+                bandit = new Golem();
 
                 bandits.Add(bandit);
 
-                bandit = new Hunter();
+                bandit = new Lion();
 
                 bandits.Add(bandit);
 
-                bandit = new Treant();
+                bandit = new Mage();
 
                 bandits.Add(bandit);
 
-                bandit = new Skeleton();
+                bandit = new Minotaur();
 
                 bandits.Add(bandit);
             }

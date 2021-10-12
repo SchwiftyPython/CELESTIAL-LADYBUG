@@ -17,7 +17,8 @@ namespace Assets.Scripts.Entities
             [Description("Halfling")] Halfling,
             [Description("Undead")] Undead,
             [Description("Beast")] Beast,
-            [Description("Derpus")] Derpus
+            [Description("Derpus")] Derpus,
+            [Description("Elemental")] Elemental
         }
 
         public Race(RaceType rType)
