@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Entities.Necromancer;
+using Assets.Scripts.Entities.Rampart;
+using Assets.Scripts.Entities.Stronghold;
+using Assets.Scripts.Entities.Tower;
 using Assets.Scripts.Items;
 using Assets.Scripts.Travel;
 using UnityEngine;
@@ -11,6 +14,8 @@ namespace Assets.Scripts.Combat
     {
         private const int MinBandits = 3;
         private const int MaxBandits = 5;
+
+        public BiomeType testingBiome;
 
         public bool testingEnabled;
 
@@ -31,29 +36,31 @@ namespace Assets.Scripts.Combat
 
             travelManager.NewParty();
 
+            travelManager.CurrentBiome = testingBiome;
+
             var numBandits = Random.Range(MinBandits, MaxBandits + 1);
 
             var bandits = new List<Entity>();
 
             for (var i = 0; i < 1; i++)
             {
-                Entity bandit = new Zombie();
+                Entity bandit = new Djinn();
 
                 bandits.Add(bandit);
 
-                bandit = new Ghost();
+                bandit = new Golem();
 
                 bandits.Add(bandit);
 
-                bandit = new Skeleton();
+                bandit = new Lion();
 
                 bandits.Add(bandit);
 
-                bandit = new Vampire();
+                bandit = new Mage();
 
                 bandits.Add(bandit);
 
-                bandit = new Spider();
+                bandit = new Minotaur();
 
                 bandits.Add(bandit);
             }

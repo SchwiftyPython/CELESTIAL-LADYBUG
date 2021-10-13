@@ -7,7 +7,7 @@ namespace Assets.Scripts.Abilities
         private const int DamageMin = 3;
         private const int DamageMax = 7;
 
-        public SpookyTouch(Entity abilityOwner) : base("Spooky Touch", "Target experiences an intense jolt of pain throughout their body!", 4, 1, abilityOwner, true, false)
+        public SpookyTouch(Entity abilityOwner) : base("Spooky Touch", "Target experiences an intense jolt of pain throughout their body!", 4, 1, abilityOwner, TargetType.Hostile, false)
         {
         }
 

@@ -7,7 +7,7 @@ namespace Assets.Scripts.Abilities
     {
         private const int InterventionChance = 2; 
 
-        public DivineIntervention(Entity abilityOwner) : base("Divine Intervention", $"{InterventionChance}% chance an attack that would hit will miss.", -1, -1, abilityOwner, false, true)
+        public DivineIntervention(Entity abilityOwner) : base("Divine Intervention", $"{InterventionChance}% chance an attack that would hit will miss.", -1, -1, abilityOwner, TargetType.Friendly, true)
         {
         }
 

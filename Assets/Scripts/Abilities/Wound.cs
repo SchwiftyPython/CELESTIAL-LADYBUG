@@ -8,9 +8,9 @@ namespace Assets.Scripts.Abilities
     {
         private Effect _bleedingEffect;
 
-        public Wound(Entity abilityOwner) : base("Wound", $"Causes target to bleed.", 6, -1, abilityOwner, true, false)
+        public Wound(Entity abilityOwner) : base("Wound", $"Causes target to bleed.", 6, -1, abilityOwner, TargetType.Hostile, false)
         {
-            _bleedingEffect = new Bleeding();
+            _bleedingEffect = new Bleeding(abilityOwner);
         }
 
         public override void Use(Entity target)

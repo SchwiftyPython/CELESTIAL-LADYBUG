@@ -72,6 +72,7 @@ namespace Assets.Scripts
         public const string HidePauseMenu = "HidePauseMenu";
         public const string SpritesLoaded = "SpritesLoaded";
         public const string ShowCombatPreview = "ShowCombatPreview";
+        public const string BiomeChanged = "BiomeChanged";
 
         #endregion EventNames
 

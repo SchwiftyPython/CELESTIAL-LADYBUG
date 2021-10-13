@@ -10,7 +10,7 @@ namespace Assets.Scripts.Abilities
         private const int KnockbackDistance = 1;
 
         public Knockback(Entity abilityOwner) : base("Knockback", $"Knocks target back {KnockbackDistance} tile.", 7,
-            7, abilityOwner, true, false)
+            7, abilityOwner, TargetType.Hostile, false)
         {
         }
 

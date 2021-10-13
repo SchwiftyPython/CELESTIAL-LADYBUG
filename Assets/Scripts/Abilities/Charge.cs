@@ -9,7 +9,7 @@ namespace Assets.Scripts.Abilities
 {
     public class Charge : Ability
     {
-        public Charge(Entity abilityOwner) : base("Charge", "Charge into an enemy.", 4, 3, abilityOwner, true, false)
+        public Charge(Entity abilityOwner) : base("Charge", "Charge into an enemy.", 4, 3, abilityOwner, TargetType.Hostile, false)
         {
         }
 

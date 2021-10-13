@@ -9,7 +9,7 @@ namespace Assets.Scripts.Abilities
         private const int PhysiqueMod = 1;
 
         public WorksOut(Entity abilityOwner) : base("Works Out", $"+{PhysiqueMod} Physique", -1, -1, abilityOwner,
-            false, true)
+            TargetType.Friendly, true)
         {
         }
 

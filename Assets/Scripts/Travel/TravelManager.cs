@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Audio;
 using Assets.Scripts.Encounters;
 using Assets.Scripts.Entities;
@@ -7,6 +8,7 @@ using Assets.Scripts.Items;
 using Assets.Scripts.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Travel
 {
@@ -15,7 +17,15 @@ namespace Assets.Scripts.Travel
         private const int DemoDaysToDestination = 5;
         private const int FullGameDaysToDestination = 15;
 
+        private const int BiomeChangeFrequency = 3;
+
+        private const BiomeType StartingBiome = BiomeType.Spooky;
+        //private const BiomeType EndBiome = BiomeType.Evil; todo
+
+        private Queue<BiomeType> _biomeQueue;
+
         private int _currentDayOfTravel;
+        private int _daysTilNextBiome;
 
         private MusicController _musicController;
         private TravelMessenger _travelMessenger;
@@ -24,7 +34,7 @@ namespace Assets.Scripts.Travel
 
         public Party Party { get; private set; }
 
-        public BiomeType CurrentBiome { get; private set; }
+        public BiomeType CurrentBiome { get; set; }
 
         private void Awake()
         {
@@ -37,9 +47,11 @@ namespace Assets.Scripts.Travel
 
             eventMediator.SubscribeToEvent(GlobalHelper.EntityDead, this);
 
-            CurrentBiome = BiomeType.Grassland;
+            BuildBiomeQueue();
 
             _currentDayOfTravel = 0;
+
+            _daysTilNextBiome = BiomeChangeFrequency;
 
             TravelDaysToDestination = DemoDaysToDestination;
 
@@ -671,6 +683,45 @@ namespace Assets.Scripts.Travel
             }
         }
 
+        private void BuildBiomeQueue()
+        {
+            CurrentBiome = StartingBiome;
+
+            _biomeQueue = new Queue<BiomeType>();
+
+            var biomes = Enum.GetValues(typeof(BiomeType)).Cast<BiomeType>().ToList();
+
+            biomes.Remove(StartingBiome);
+            //biomes.Remove(EndBiome); todo
+
+            while (biomes.Count > 0)
+            {
+                var index = Random.Range(0, biomes.Count);
+
+                _biomeQueue.Enqueue(biomes[index]);
+
+                biomes.RemoveAt(index);
+            }
+
+            //todo add end biome to end of queue
+        }
+
+        private void MoveToNextBiome()
+        {
+            if (_biomeQueue == null)
+            {
+                return;
+            }
+
+            _daysTilNextBiome = BiomeChangeFrequency;
+
+            CurrentBiome = _biomeQueue.Dequeue();
+
+            var eventMediator = FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.BiomeChanged, this);
+        }
+
         private void OnDestroy()
         {
             var eventMediator = FindObjectOfType<EventMediator>();
@@ -681,13 +732,18 @@ namespace Assets.Scripts.Travel
         {
             if (eventName.Equals(GlobalHelper.CampingEncounterFinished))
             {
-                //todo need standard energy gain for camping events
-                //some bool that indicates standard energy gain
-                //if false, energy gain or loss handled elsewhere
+                //todo need to fade screen or possibly start swapping out the sprites up ahead
 
                 Party.EatAndHeal();
 
                 _currentDayOfTravel++;
+
+                _daysTilNextBiome--;
+
+                if (_daysTilNextBiome <= 0)
+                {
+                    MoveToNextBiome();
+                }
 
                 var countsAsDayTraveled = parameter != null && (bool) parameter;
 

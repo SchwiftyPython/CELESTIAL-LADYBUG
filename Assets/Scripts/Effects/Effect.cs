@@ -1,4 +1,5 @@
-﻿using GoRogue;
+﻿using Assets.Scripts.Entities;
+using GoRogue;
 using UnityEngine;
 
 namespace Assets.Scripts.Effects
@@ -8,14 +9,18 @@ namespace Assets.Scripts.Effects
         protected bool LocationDependent;
         protected bool Stacks;
         protected string Description;
+        protected TargetType TargetType;
+        protected Entity Owner;
 
         public Sprite Icon { get; protected set; }
 
-        public Effect(string name, string description, int startingDuration, bool locationDependent, bool stacks) : base(name, startingDuration)
+        public Effect(string name, string description, int startingDuration, bool locationDependent, bool stacks, TargetType targetType, Entity owner) : base(name, startingDuration)
         {
             Description = description;
             LocationDependent = locationDependent;
             Stacks = stacks;
+            TargetType = targetType;
+            Owner = owner;
 
             GetIconForEffect(this);
         }
@@ -33,6 +38,16 @@ namespace Assets.Scripts.Effects
         public string GetDescription()
         {
             return Description;
+        }
+
+        public Entity GetOwner()
+        {
+            return Owner;
+        }
+
+        public TargetType GetTargetType()
+        {
+            return TargetType;
         }
 
         public new virtual void Trigger(EffectArgs args)

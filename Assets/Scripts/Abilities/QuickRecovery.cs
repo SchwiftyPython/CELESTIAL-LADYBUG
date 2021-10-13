@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Assets.Scripts.Entities;
 
 namespace Assets.Scripts.Abilities
@@ -8,7 +7,7 @@ namespace Assets.Scripts.Abilities
     {
         private const int HealBoost = 4;
 
-        public QuickRecovery(Entity abilityOwner) : base("Quick Recovery", $"Boosts hit points recovered when healing by {HealBoost}%.", -1, -1, abilityOwner, false, true)
+        public QuickRecovery(Entity abilityOwner) : base("Quick Recovery", $"Boosts hit points recovered when healing by {HealBoost}%.", -1, -1, abilityOwner, TargetType.Hostile, true)
         {
         }
 

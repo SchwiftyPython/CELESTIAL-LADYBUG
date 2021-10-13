@@ -3095,7 +3095,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2a8127cf1fbb9648af79fefb4abb722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testingEnabled: 0
+  testingBiome: 1
+  testingEnabled: 1
 --- !u!4 &604771531
 Transform:
   m_ObjectHideFlags: 0

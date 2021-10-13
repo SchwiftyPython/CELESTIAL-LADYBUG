@@ -7,7 +7,7 @@ namespace Assets.Scripts.Abilities
     {
         private const float MaxHealthMod = 20f;
 
-        public Tank(Entity abilityOwner) : base("Tank", $"+{MaxHealthMod} Max Health" ,-1, -1, abilityOwner, false, true)
+        public Tank(Entity abilityOwner) : base("Tank", $"+{MaxHealthMod} Max Health" ,-1, -1, abilityOwner, TargetType.Friendly, true)
         {
         }
 

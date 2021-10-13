@@ -2,9 +2,10 @@
 {
     public enum BiomeType 
     {
-        Grassland,
+        Forest,
         Desert,
+        //Grassland,
         Spooky,
-        Evil
+        //Evil
     }
 }

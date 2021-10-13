@@ -241,7 +241,10 @@ namespace Assets.Scripts.Entities
                 {
                     foreach (var effect in tileEffects)
                     {
-                        ApplyEffect(effect);
+                        if (CanApplyEffect(effect))
+                        {
+                            ApplyEffect(effect);
+                        }
                     }
                 }
             }
@@ -794,7 +797,7 @@ namespace Assets.Scripts.Entities
 
         public bool IsStunned()
         {
-            return HasEffect(new Stun());
+            return HasEffect(new Stun(this));
         }
 
         private int GetTotalArmorToughness()
@@ -809,12 +812,27 @@ namespace Assets.Scripts.Entities
 
         private int GetDodgeTotal()
         {
-            if (Equipment == null)
+            var dodgeTotal = 0;
+
+            if (Effects != null && Effects.Count > 0)
             {
-                return 0;
+                foreach (var effect in Effects)
+                {
+                    if (effect is IModifierProvider provider)
+                    {
+                        dodgeTotal += (int)provider.GetAdditiveModifiers(EntitySkillTypes.Dodge);
+                    }
+                }
             }
 
-            return Equipment.GetDodgeTotal();
+            if (Equipment == null)
+            {
+                return dodgeTotal;
+            }
+
+            dodgeTotal += Equipment.GetDodgeTotal();
+
+            return dodgeTotal;
         }
 
         public EquipableItem GetEquippedWeapon()
@@ -1254,6 +1272,16 @@ namespace Assets.Scripts.Entities
                 {
                     return false;
                 }
+            }
+
+            if (effect.GetTargetType() == TargetType.Hostile)
+            {
+                return effect.GetOwner().IsPlayer() != IsPlayer();
+            }
+
+            if (effect.GetTargetType() == TargetType.Friendly)
+            {
+                return effect.GetOwner().IsPlayer() == IsPlayer();
             }
 
             return true;

@@ -8,7 +8,7 @@ namespace Assets.Scripts.Abilities
     public class ShieldBash : Ability, ISubscriber
     {
         public ShieldBash(Entity abilityOwner) : base("Shield Bash", "Knocks target back 1 tile.", 4, 1, abilityOwner,
-            true, false)
+            TargetType.Hostile, false)
         {
         }
 
