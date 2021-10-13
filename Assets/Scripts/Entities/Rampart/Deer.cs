@@ -16,11 +16,11 @@ namespace Assets.Scripts.Entities.Rampart
 
             var hoofAttack = abilityStore.GetAbilityByName("hoof slap", this);
 
-            Abilities.Add(hoofAttack.GetType(), hoofAttack);
+            AddAbility(hoofAttack);
 
             var naturesBlessing = abilityStore.GetAbilityByName("natures blessing", this);
 
-            Abilities.Add(naturesBlessing.GetType(), naturesBlessing);
+            AddAbility(naturesBlessing);
 
             var audioStore = Object.FindObjectOfType<AudioStore>();
 

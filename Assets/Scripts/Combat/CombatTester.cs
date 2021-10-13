@@ -69,7 +69,7 @@ namespace Assets.Scripts.Combat
 
             combatManager.Enemies = bandits;
 
-            combatManager.Load();
+            combatManager.LoadCombatScene();
         }
 
         private void SetAllEnemiesToOneHealth()

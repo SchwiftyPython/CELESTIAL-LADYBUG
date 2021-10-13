@@ -11,6 +11,8 @@ namespace Assets.Scripts.UI
 
         [SerializeField] private KeyCode toggleKey = KeyCode.Escape;
         [SerializeField] private GameObject uiContainer = null;
+        [SerializeField] private GameObject boardHolder = null;
+        [SerializeField] private GameObject entityHolder = null;
 
         private void Start()
         {
@@ -81,6 +83,27 @@ namespace Assets.Scripts.UI
             //todo need to keep paused when inventory is open
 
             eventMediator.Broadcast(GlobalHelper.ResumeTimer, this);
+        }
+
+        public void Save()
+        {
+            ES3AutoSaveMgr.Current.Save();
+        }
+
+        public void Load()
+        {
+            var combatManager = FindObjectOfType<CombatManager>();
+
+            combatManager.LoadFromSave();
+
+            GlobalHelper.DestroyAllChildren(entityHolder);
+            GlobalHelper.DestroyAllChildren(boardHolder);
+
+            ES3AutoSaveMgr.Current.Load();
+
+            //todo need to see what deal is with loading a different scene
+
+            boardHolder.GetComponent<BoardHolder>().Build(combatManager.Map);
         }
 
         public void LoadMainMenuScene()

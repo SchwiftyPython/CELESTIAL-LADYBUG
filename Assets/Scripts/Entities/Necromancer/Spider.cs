@@ -19,7 +19,7 @@ namespace Assets.Scripts.Entities.Necromancer
 
             var bite = abilityStore.GetAbilityByName("bite", this);
 
-            Abilities.Add(bite.GetType(), bite);
+            AddAbility(bite);
 
             var audioStore = Object.FindObjectOfType<AudioStore>();
 

@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Abilities
 {
-    public abstract class Ability 
+    public class Ability 
     {
         public string Name { get; private set; }
         public string Description { get; private set; }
@@ -22,7 +22,7 @@ namespace Assets.Scripts.Abilities
         public bool UsesEquipment { get; protected set; }
         public List<Effect> EffectExemptions { get; protected set; }
 
-        protected Ability(string name, string description, int apCost, int range, Entity abilityOwner, TargetType targetType, bool passive, bool usesEquipment = true)
+        public Ability(string name, string description, int apCost, int range, Entity abilityOwner, TargetType targetType, bool passive, bool usesEquipment = true)
         {
             Name = name;
             Description = description;

@@ -60,11 +60,11 @@ namespace Assets.Scripts.Entities
                 if (value <= CurrentStatsMin)
                 {
                     //todo need to encapsulate this if we add another will not die ability
-                    if (GameManager.Instance.InCombat() && _parent.HasAbility(typeof(EndangeredEndurance)) &&
-                        !((EndangeredEndurance) _parent.Abilities[typeof(EndangeredEndurance)])
+                    if (GameManager.Instance.InCombat() && _parent.HasAbility("Endangered Endurance") &&
+                        !((EndangeredEndurance) _parent.Abilities["Endangered Endurance"])
                             .SavedFromDeathThisBattle())
                     {
-                        _parent.Abilities[typeof(EndangeredEndurance)].Use();
+                        _parent.Abilities["Endangered Endurance"].Use();
                     }
                     else
                     {

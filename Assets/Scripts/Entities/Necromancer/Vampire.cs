@@ -27,16 +27,16 @@ namespace Assets.Scripts.Entities.Necromancer
 
             var vBite = abilityStore.GetAbilityByName("vampire bite", this);
 
-            Abilities.Add(vBite.GetType(), vBite);
+            AddAbility(vBite);
 
-            if (Abilities.ContainsKey(typeof(Intimidate)))
+            if (HasAbility("Intimidate"))
             {
                 return;
             }
 
             var intimidate = abilityStore.GetAbilityByName("intimidate", this);
 
-            Abilities.Add(intimidate.GetType(), intimidate);
+            AddAbility(intimidate);
 
             GenerateStartingEquipment(EntityClass.Wizard, _startingEquipmentTable);
 

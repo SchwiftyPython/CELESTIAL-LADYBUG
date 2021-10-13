@@ -16,11 +16,11 @@ namespace Assets.Scripts.Entities.Tower
 
             var rockSlam = abilityStore.GetAbilityByName("rock slam", this);
 
-            Abilities.Add(rockSlam.GetType(), rockSlam);
+            Abilities.Add(rockSlam.Name, rockSlam);
 
             var tank = abilityStore.GetAbilityByName("tank", this);
 
-            Abilities.Add(tank.GetType(), tank);
+            Abilities.Add(tank.Name, tank);
 
             var audioStore = Object.FindObjectOfType<AudioStore>();
 

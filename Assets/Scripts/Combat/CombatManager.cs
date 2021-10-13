@@ -14,13 +14,14 @@ namespace Assets.Scripts.Combat
 {
     public enum CombatState
     {
-        Loading,
+        LoadingScene,
         Start,
         PlayerTurn,
         AiTurn,
         EndTurn,
         EndCombat,
-        NotActive
+        NotActive,
+        LoadFromSave
     }
 
     public enum CombatResult
@@ -44,7 +45,7 @@ namespace Assets.Scripts.Combat
         private const string EntityDead = GlobalHelper.EntityDead;
         private const string RefreshUi = GlobalHelper.RefreshCombatUi;
 
-        private CombatState _currentCombatState;
+        [SerializeField] private CombatState _currentCombatState;
         private GameObject _pawnHighlighterInstance;
 
         private EventMediator _eventMediator;
@@ -54,9 +55,9 @@ namespace Assets.Scripts.Combat
 
         private List<EffectTrigger<EffectArgs>> _effectTriggers;
 
-        public CombatMap Map { get; private set; }
+        [ES3NonSerializable] public CombatMap Map { get; private set; } //todo need to save manually somehow
 
-        public Entity ActiveEntity { get; private set; }
+        [ES3Serializable] public Entity ActiveEntity { get; private set; }
 
         public Queue<Entity> TurnOrder { get; private set; }
 
@@ -87,7 +88,7 @@ namespace Assets.Scripts.Combat
             
             switch (_currentCombatState)
             {
-                case CombatState.Loading: //we want to wait until we have enemy combatants populated
+                case CombatState.LoadingScene: //we want to wait until we have enemy combatants populated
 
                     _musicController.EndTravelMusic();
 
@@ -258,19 +259,46 @@ namespace Assets.Scripts.Combat
                     break;
                 case CombatState.NotActive:
                     break;
+                case CombatState.LoadFromSave:
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        public void Load()
+        public void LoadCombatScene()
         {
-            _currentCombatState = CombatState.Loading;
+            _currentCombatState = CombatState.LoadingScene;
+        }
+
+        public void LoadFromSave()
+        {
+            _currentCombatState = CombatState.LoadFromSave;
         }
 
         private void AiTakeTurn()
         {
-            StartCoroutine(ActiveEntity.CombatSpriteInstance.GetComponent<AiController>().TakeTurn());
+            if (ActiveEntity.CombatSpriteInstance == null)
+            {
+                return;
+            }
+
+            var aiController = ActiveEntity.CombatSpriteInstance.GetComponent<AiController>();
+
+            if (aiController == null)
+            {
+                return;
+            }
+
+            try
+            {
+                StartCoroutine(aiController.TakeTurn());
+            }
+            catch (Exception e)
+            {
+                Debug.Log("AI controller error");
+                _eventMediator.Broadcast(EndTurnEvent, this);
+            }
         }
 
         private GameObject GetPawnHighlighterInstance()
@@ -371,6 +399,11 @@ namespace Assets.Scripts.Combat
 
         private void HighlightActiveEntitySprite() 
         {
+            if (_currentCombatState == CombatState.LoadFromSave || _currentCombatState == CombatState.NotActive)
+            {
+                return;
+            }
+
             if (ActiveEntity == null)
             {
                 ActiveEntity = TurnOrder.Peek();
@@ -383,7 +416,21 @@ namespace Assets.Scripts.Combat
                 return;
             }
 
-            activeTile.SpriteInstance.GetComponent<TerrainSlotUi>().HighlightTileForActiveEntity();
+            try
+            {
+                var terrainSlotUi = activeTile.SpriteInstance.GetComponent<TerrainSlotUi>();
+
+                if (terrainSlotUi == null)
+                {
+                    return;
+                }
+
+                terrainSlotUi.HighlightTileForActiveEntity();
+            }
+            catch (Exception e)
+            {
+                //This only happens when loading in test combat scene so far
+            }
         }
 
         private bool IsCombatFinished()

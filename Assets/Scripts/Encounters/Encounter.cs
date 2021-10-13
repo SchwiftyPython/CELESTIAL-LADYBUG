@@ -99,7 +99,7 @@ namespace Assets.Scripts.Encounters
 
                         combatManager.Enemies = ((FightCombatOption)selectedOption).Enemies;
 
-                        combatManager.Load();
+                        combatManager.LoadCombatScene();
                     }
                 }
             }

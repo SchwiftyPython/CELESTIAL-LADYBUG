@@ -16,11 +16,11 @@ namespace Assets.Scripts.Entities.Stronghold
 
             var clawAttack = abilityStore.GetAbilityByName("claw attack", this);
 
-            Abilities.Add(clawAttack.GetType(), clawAttack);
+            AddAbility(clawAttack);
 
             var uncannyDodge = abilityStore.GetAbilityByName("uncanny dodge", this);
 
-            Abilities.Add(uncannyDodge.GetType(), uncannyDodge);
+            AddAbility(uncannyDodge);
 
             var audioStore = Object.FindObjectOfType<AudioStore>();
 

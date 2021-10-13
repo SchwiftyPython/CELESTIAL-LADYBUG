@@ -21,11 +21,11 @@ namespace Assets.Scripts.Entities.Necromancer
 
             var intimidate = abilityStore.GetAbilityByName("intimidate", this);
 
-            Abilities.Add(intimidate.GetType(), intimidate);
+            AddAbility(intimidate);
 
             var spookyTouch = abilityStore.GetAbilityByName("spooky touch", this);
 
-            Abilities.Add(spookyTouch.GetType(), spookyTouch);
+            AddAbility(spookyTouch);
 
             var audioStore = Object.FindObjectOfType<AudioStore>();
 

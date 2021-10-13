@@ -16,11 +16,11 @@ namespace Assets.Scripts.Entities.Rampart
 
             var barkAttack = abilityStore.GetAbilityByName("bark blast", this);
 
-            Abilities.Add(barkAttack.GetType(), barkAttack);
+            AddAbility(barkAttack);
 
             var tank = abilityStore.GetAbilityByName("tank", this);
 
-            Abilities.Add(tank.GetType(), tank);
+            AddAbility(tank);
 
             var audioStore = Object.FindObjectOfType<AudioStore>();
 

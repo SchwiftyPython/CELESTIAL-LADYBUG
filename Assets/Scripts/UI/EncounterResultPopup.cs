@@ -136,7 +136,7 @@ namespace Assets.Scripts.UI
 
             combatManager.Enemies = _enemies;
 
-            combatManager.Load();
+            combatManager.LoadCombatScene();
         }
 
         private void OnDestroy()

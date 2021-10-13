@@ -48,7 +48,7 @@ namespace Assets.Scripts.Entities
         public Skills Skills { get; }
         public Dictionary<Portrait.Slot, string> Portrait { get; private set; }
         
-        public Dictionary<Type, Ability> Abilities { get; private set; }
+        public Dictionary<string, Ability> Abilities { get; private set; } 
 
         public List<Effect> Effects { get; set; }
 
@@ -86,7 +86,7 @@ namespace Assets.Scripts.Entities
             Attributes = new Attributes(this);
             Skills = new Skills(this);
 
-            Abilities = new Dictionary<Type, Ability>();
+            Abilities = new Dictionary<string, Ability>();
 
             Stats = new Stats(this, Attributes, Skills);
 
@@ -152,6 +152,21 @@ namespace Assets.Scripts.Entities
         public void RefillActionPoints()
         {
             Stats.CurrentActionPoints = Stats.MaxActionPoints;
+        }
+
+        public void AddAbility(Ability ability)
+        {
+            if (Abilities == null)
+            {
+                Abilities = new Dictionary<string, Ability>();
+            }
+
+            if (Abilities.ContainsKey(ability.Name))
+            {
+                return;
+            }
+
+            Abilities.Add(ability.Name, ability);
         }
 
         //todo refactor this so the sprite moves through each square and doesn't just teleport
@@ -287,14 +302,14 @@ namespace Assets.Scripts.Entities
 
             if (Abilities == null)
             {
-                Abilities = new Dictionary<Type, Ability>();
+                Abilities = new Dictionary<string, Ability>();
             }
 
             foreach (var ability in item.GetAbilities(this))
             {
-                if (!Abilities.ContainsKey(ability.GetType()))
+                if (!Abilities.ContainsKey(ability.Name))
                 {
-                    Abilities.Add(ability.GetType(), ability);
+                    Abilities.Add(ability.Name, ability);
                 }
             }
 
@@ -313,7 +328,7 @@ namespace Assets.Scripts.Entities
             {
                 if (!Equipment.AbilityEquipped(ability))
                 {
-                    Abilities.Remove(ability.GetType());
+                    Abilities.Remove(ability.Name);
                 }
             }
 
@@ -332,11 +347,11 @@ namespace Assets.Scripts.Entities
             Equipment.RemoveAllItems();
         }
 
-        public bool HasAbility(Type abilityType)
+        public bool HasAbility(string abilityName)
         {
             foreach (var ability in Abilities)
             {
-                if (abilityType == ability.Key)
+                if (abilityName == ability.Key)
                 {
                     return true;
                 }
@@ -347,11 +362,11 @@ namespace Assets.Scripts.Entities
 
         public void ResetOneUseCombatAbilities()
         {
-            if (HasAbility(typeof(EndangeredEndurance)) &&
-                !((EndangeredEndurance)Abilities[typeof(EndangeredEndurance)])
+            if (HasAbility("Endangered Endurance") &&
+                !((EndangeredEndurance)Abilities["Endangered Endurance"])
                     .SavedFromDeathThisBattle())
             {
-                ((EndangeredEndurance)Abilities[typeof(EndangeredEndurance)]).Reset();
+                ((EndangeredEndurance)Abilities["Endangered Endurance"]).Reset();
             }
         }
 
@@ -391,9 +406,9 @@ namespace Assets.Scripts.Entities
                 {
                     //todo check for abilities that respond to attack hit
 
-                    if (target.HasAbility(typeof(Riposte))) //todo hail mary not sure if this will work
+                    if (target.HasAbility("Riposte")) //todo hail mary not sure if this will work
                     {
-                        target.Abilities[typeof(Riposte)].Use(this);
+                        target.Abilities["Riposte"].Use(this);
                     }
 
                 }
@@ -440,9 +455,9 @@ namespace Assets.Scripts.Entities
                 {
                     //todo check for abilities that respond to attack hit
 
-                    if (target.HasAbility(typeof(Riposte))) //todo hail mary not sure if this will work
+                    if (target.HasAbility("Riposte")) //todo hail mary not sure if this will work
                     {
-                        target.Abilities[typeof(Riposte)].Use(this);
+                        target.Abilities["Riposte"].Use(this);
                     }
 
                 }
@@ -489,9 +504,9 @@ namespace Assets.Scripts.Entities
                 {
                     //todo check for abilities that respond to attack hit
 
-                    if (target.HasAbility(typeof(Riposte))) //todo hail mary not sure if this will work
+                    if (target.HasAbility("Riposte")) //todo hail mary not sure if this will work
                     {
-                        target.Abilities[typeof(Riposte)].Use(this);
+                        target.Abilities["Riposte"].Use(this);
                     }
 
                 }
@@ -561,9 +576,9 @@ namespace Assets.Scripts.Entities
                 {
                     //todo check for abilities that respond to attack hit
 
-                    if (target.HasAbility(typeof(Riposte))) //todo hail mary not sure if this will work
+                    if (target.HasAbility("Riposte")) //todo hail mary not sure if this will work
                     {
-                        target.Abilities[typeof(Riposte)].Use(this);
+                        target.Abilities["Riposte"].Use(this);
                     }
 
                 }
@@ -759,7 +774,7 @@ namespace Assets.Scripts.Entities
             eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
             eventMediator.Broadcast(GlobalHelper.DamageDealt, this, damage);
 
-            if (!target.HasAbility(typeof(DemonicIntervention)))
+            if (!target.HasAbility("Demonic Intervention"))
             {
                 return;
             }
@@ -1049,7 +1064,7 @@ namespace Assets.Scripts.Entities
             string message;
             if (totalRoll >= hitDifficulty)
             {
-                if (target.HasAbility(typeof(DivineIntervention)))
+                if (target.HasAbility("Divine Intervention"))
                 {
                     if (DivineIntervention.Intervened())
                     {
