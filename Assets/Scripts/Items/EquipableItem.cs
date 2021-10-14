@@ -7,6 +7,10 @@ namespace Assets.Scripts.Items
     /// </summary>
     public class EquipableItem : Item
     {
+        public EquipableItem()
+        {
+        }
+
         public EquipableItem(ItemType itemType) : base(itemType)
         {
         }

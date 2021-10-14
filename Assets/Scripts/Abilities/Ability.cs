@@ -15,7 +15,7 @@ namespace Assets.Scripts.Abilities
         public string Description { get; private set; }
         public int ApCost { get; private set; }
         public int Range { get; private set; }
-        public Entity AbilityOwner { get; private set; }
+        public Entity AbilityOwner { get; set; }
         public TargetType TargetType { get; private set; }
         public bool IsPassive { get; private set; }
         public Sprite Icon { get; protected set; }
@@ -30,7 +30,7 @@ namespace Assets.Scripts.Abilities
 
             if (range < 0 && !passive)
             {
-                var equippedWeapon = abilityOwner.GetEquippedWeapon();
+                var equippedWeapon = abilityOwner?.GetEquippedWeapon();
 
                 if (equippedWeapon == null)
                 {

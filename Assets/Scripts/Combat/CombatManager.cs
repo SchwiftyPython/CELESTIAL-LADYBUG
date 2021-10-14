@@ -4,6 +4,7 @@ using System.Linq;
 using Assets.Scripts.AI;
 using Assets.Scripts.Audio;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Saving;
 using Assets.Scripts.Travel;
 using Assets.Scripts.UI;
 using GoRogue;
@@ -38,8 +39,19 @@ namespace Assets.Scripts.Combat
         public int DamageReceived;
     }
 
-    public class CombatManager : MonoBehaviour, ISubscriber
+    public class CombatManager : MonoBehaviour, ISubscriber, ISaveable
     {
+        private struct CombatManagerDto
+        {
+            public CombatState CurrentState;
+            public object CombatMap;
+            public string ActiveEntityId;
+            public Queue<string> TurnOrder;
+            public int TurnNumber;
+            public List<object> Enemies;
+            public Dictionary<string, CompanionCombatStats> CompanionIds;
+        }
+
         private const string EndTurnEvent = GlobalHelper.EndTurn;
         private const string CombatFinished = GlobalHelper.CombatFinished;
         private const string EntityDead = GlobalHelper.EntityDead;
@@ -57,14 +69,14 @@ namespace Assets.Scripts.Combat
 
         [ES3NonSerializable] public CombatMap Map { get; private set; } //todo need to save manually somehow
 
-        [ES3Serializable] public Entity ActiveEntity { get; private set; }
+        [ES3NonSerializable] public Entity ActiveEntity { get; private set; }
 
         public Queue<Entity> TurnOrder { get; private set; }
 
         public int CurrentTurnNumber { get; private set; }
 
-        public List<Entity> Enemies; //todo refactor
-        public Dictionary<Entity, CompanionCombatStats> Companions;
+        [ES3NonSerializable] public List<Entity> Enemies; //todo refactor
+        [ES3NonSerializable] public Dictionary<Entity, CompanionCombatStats> Companions;
 
         public GameObject PrototypePawnHighlighterPrefab;
 
@@ -514,8 +526,6 @@ namespace Assets.Scripts.Combat
                     return;
                 }
 
-                //RemoveEntity(deadEntity);
-
                 if (IsCombatFinished())
                 {
                     _currentCombatState = CombatState.EndCombat;
@@ -525,6 +535,71 @@ namespace Assets.Scripts.Combat
             {
                 HighlightActiveEntitySprite();
             }
+        }
+
+        public object CaptureState()
+        {
+            var dto = new CombatManagerDto
+            {
+                ActiveEntityId = ActiveEntity.Id,
+                CombatMap = Map.CaptureState(),
+                TurnNumber = CurrentTurnNumber,
+                TurnOrder = new Queue<string>(),
+                CurrentState = _currentCombatState,
+                Enemies = new List<object>(),
+                CompanionIds = new Dictionary<string, CompanionCombatStats>()
+            };
+
+            foreach (var companion in Companions)
+            {
+                dto.CompanionIds.Add(companion.Key.Id, companion.Value);
+            }
+
+            foreach (var enemy in Enemies)
+            {
+                dto.Enemies.Add(enemy.CaptureState());
+            }
+
+            foreach (var entity in TurnOrder)
+            {
+                dto.TurnOrder.Enqueue(entity.Id);
+            }
+
+            return dto;
+        }
+
+        public void RestoreState(object state)
+        {
+            if (state == null)
+            {
+                return;
+            }
+
+            CombatManagerDto dto = (CombatManagerDto)state;
+
+            //todo ActiveEntity
+
+            Enemies = new List<Entity>();
+
+            foreach (var enemy in dto.Enemies)
+            {
+                var restoredEnemy = new Entity();
+
+                restoredEnemy.RestoreState(enemy);
+
+                Enemies.Add(restoredEnemy);
+            }
+
+            //todo get companions
+
+            
+            
+
+            Map = new CombatMap(MapGenerator.MapWidth, MapGenerator.MapHeight);
+
+            Map.RestoreState(dto.CombatMap);
+
+            DrawMap();
         }
     }
 }

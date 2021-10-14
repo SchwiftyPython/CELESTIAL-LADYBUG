@@ -14,6 +14,10 @@ namespace Assets.Scripts.Items
 
         [SerializeField] protected ItemType ItemType;
 
+        public Item()
+        {
+        }
+
         public Item(ItemType itemType)
         {
             ItemType = itemType;

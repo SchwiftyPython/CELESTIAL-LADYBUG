@@ -12,6 +12,7 @@ using Assets.Scripts.Effects;
 using Assets.Scripts.Effects.Args;
 using Assets.Scripts.Entities.Names;
 using Assets.Scripts.Items;
+using Assets.Scripts.Saving;
 using Assets.Scripts.UI;
 using GoRogue;
 using GoRogue.DiceNotation;
@@ -22,9 +23,36 @@ using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Entities
 {
-    public class Entity : GameObject
+    public class Entity : GameObject, ISaveable
     {
         private const float BaseCombatDifficulty = 10;
+
+        private struct EntityDto
+        {
+            public bool IsPlayer;
+            public Equipment Equipment;
+            public bool Moved;
+            public bool MovedLastTurn;
+            public string Id;
+            public string Name;
+            public Race Race;
+            public EntityClass EntityClass;
+            public Attributes Attributes;
+            public Stats Stats;
+            public Skills Skills;
+            public Dictionary<Portrait.Slot, string> Portrait;
+            public Dictionary<string, Ability> Abilities;
+            public List<Effect> Effects;
+            public UnityEngine.GameObject CombatSpritePrefab;
+            public Texture IdleSkinSwap;
+            public Texture AttackSkinSwap;
+            public Texture HitSkinSwap;
+            public Texture DeadSkinSwap;
+            public string HurtSound;
+            public string DieSound;
+            public string AttackSound;
+            public Vector2Int Position;
+        }
 
         private int _level;
         private int _xp;
@@ -38,14 +66,19 @@ namespace Assets.Scripts.Entities
         private bool _moved;
         private bool _movedLastTurn;
 
+        public string Id { get; private set; }
         public string Name { get; set; }
         public Sex Sex { get; }
-        public Race Race { get; } //todo this and class are likely modifier providers so we should make classes for these
+        public Race Race
+        {
+            get;
+            set;
+        } //todo this and class are likely modifier providers so we should make classes for these
                                   // will be easier to define starting equipment and whatnot I think
-        public EntityClass EntityClass { get; }
-        public Attributes Attributes { get; }
-        public Stats Stats { get; }
-        public Skills Skills { get; }
+        public EntityClass EntityClass { get; set; }
+        public Attributes Attributes { get; set; }
+        public Stats Stats { get; set; }
+        public Skills Skills { get; set; }
         public Dictionary<Portrait.Slot, string> Portrait { get; private set; }
         
         public Dictionary<string, Ability> Abilities { get; private set; } 
@@ -64,8 +97,15 @@ namespace Assets.Scripts.Entities
         public string DieSound;
         public string AttackSound;
 
+        public Entity() : base((-1, -1), 1, null, false, false, true)
+        {
+
+        }
+
         public Entity(Race.RaceType rType, EntityClass eClass, bool isPlayer) : base((-1, -1), 1, null, false, false, true)
         {
+            Id = Guid.NewGuid().ToString();
+
             Sex = PickSex();
 
             if (rType != Race.RaceType.Derpus && string.IsNullOrEmpty(Name))
@@ -1356,6 +1396,82 @@ namespace Assets.Scripts.Entities
         private EntityClass PickEntityClass()
         {
             return GlobalHelper.GetRandomEnumValue<EntityClass>();
+        }
+
+        public object CaptureState()
+        {
+            var dto = new EntityDto
+            {
+                Position = new Vector2Int(Position.X, Position.Y),
+                Name = Name,
+                Id = Id,
+                Abilities = Abilities,
+                Attributes = Attributes,
+                AttackSkinSwap = AttackSkinSwap,
+                AttackSound = AttackSound,
+                CombatSpritePrefab = CombatSpritePrefab,
+                DeadSkinSwap = DeadSkinSwap,
+                DieSound = DieSound,
+                Effects = Effects,
+                EntityClass = EntityClass,
+                Equipment = Equipment,
+                HitSkinSwap = HitSkinSwap,
+                HurtSound = HurtSound,
+                IdleSkinSwap = IdleSkinSwap,
+                IsPlayer = _isPlayer,
+                Moved = _moved,
+                MovedLastTurn = _movedLastTurn,
+                Portrait = Portrait,
+                Race = Race,
+                Skills = Skills,
+                Stats = Stats
+            };
+
+            return dto;
+        }
+
+        public void RestoreState(object state)
+        {
+            if (state == null)
+            {
+                return;
+            }
+
+            var entityDto = (EntityDto)state;
+
+            Position = new Coord(entityDto.Position.x, entityDto.Position.y);
+            Name = entityDto.Name;
+            Id = entityDto.Id;
+            
+            Abilities = entityDto.Abilities;
+
+            if (Abilities != null && Abilities.Count > 0)
+            {
+                foreach (var ability in Abilities.Values)
+                {
+                    ability.AbilityOwner = this;
+                }
+            }
+
+            Attributes = entityDto.Attributes;
+            AttackSkinSwap = entityDto.AttackSkinSwap;
+            AttackSound = entityDto.AttackSound;
+            CombatSpritePrefab = entityDto.CombatSpritePrefab;
+            DeadSkinSwap = entityDto.DeadSkinSwap;
+            DieSound = entityDto.DieSound;
+            Effects = entityDto.Effects;
+            EntityClass = entityDto.EntityClass;
+            Equipment = entityDto.Equipment;
+            HitSkinSwap = entityDto.HitSkinSwap;
+            HurtSound = entityDto.HurtSound;
+            IdleSkinSwap = entityDto.IdleSkinSwap;
+            _isPlayer = entityDto.IsPlayer;
+            _moved = entityDto.Moved;
+            _movedLastTurn = entityDto.MovedLastTurn;
+            Portrait = entityDto.Portrait;
+            Race = entityDto.Race;
+            Skills = entityDto.Skills;
+            Stats = entityDto.Stats;
         }
     }
 }

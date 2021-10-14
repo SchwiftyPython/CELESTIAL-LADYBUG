@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.Combat;
+﻿using System;
+using Assets.Scripts.Combat;
+using Assets.Scripts.Utilities.Save_Load;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -85,9 +87,13 @@ namespace Assets.Scripts.UI
             eventMediator.Broadcast(GlobalHelper.ResumeTimer, this);
         }
 
-        public void Save()
+        public void Save() //todo disable on enemy turn
         {
-            ES3AutoSaveMgr.Current.Save();
+            var saveSystem = FindObjectOfType<SavingSystem>();
+
+            saveSystem.Save(String.Empty); //todo gen file name 
+
+            //ES3AutoSaveMgr.Current.Save();
         }
 
         public void Load()
@@ -99,11 +105,11 @@ namespace Assets.Scripts.UI
             GlobalHelper.DestroyAllChildren(entityHolder);
             GlobalHelper.DestroyAllChildren(boardHolder);
 
-            ES3AutoSaveMgr.Current.Load();
+            var saveSystem = FindObjectOfType<SavingSystem>();
 
-            //todo need to see what deal is with loading a different scene
+            saveSystem.Load(String.Empty); //todo file select
 
-            boardHolder.GetComponent<BoardHolder>().Build(combatManager.Map);
+            //ES3AutoSaveMgr.Current.Load();
         }
 
         public void LoadMainMenuScene()

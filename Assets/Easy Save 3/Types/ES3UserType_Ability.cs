@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("<Name>k__BackingField", "<Description>k__BackingField", "<ApCost>k__BackingField", "<Range>k__BackingField", "<AbilityOwner>k__BackingField", "<TargetType>k__BackingField", "<IsPassive>k__BackingField", "<Icon>k__BackingField", "<UsesEquipment>k__BackingField")]
+	[ES3PropertiesAttribute("<Name>k__BackingField", "<Description>k__BackingField", "<ApCost>k__BackingField", "<Range>k__BackingField", "<TargetType>k__BackingField", "<IsPassive>k__BackingField", "<Icon>k__BackingField", "<UsesEquipment>k__BackingField")]
 	public class ES3UserType_Ability : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -21,7 +21,6 @@ namespace ES3Types
 			writer.WritePrivateField("<Description>k__BackingField", instance);
 			writer.WritePrivateField("<ApCost>k__BackingField", instance);
 			writer.WritePrivateField("<Range>k__BackingField", instance);
-			writer.WritePrivateField("<AbilityOwner>k__BackingField", instance);
 			writer.WritePrivateField("<TargetType>k__BackingField", instance);
 			writer.WritePrivateField("<IsPassive>k__BackingField", instance);
 			writer.WritePrivateFieldByRef("<Icon>k__BackingField", instance);
@@ -48,9 +47,6 @@ namespace ES3Types
 					case "<Range>k__BackingField":
 					reader.SetPrivateField("<Range>k__BackingField", reader.Read<System.Int32>(), instance);
 					break;
-					case "<AbilityOwner>k__BackingField":
-					reader.SetPrivateField("<AbilityOwner>k__BackingField", reader.Read<Assets.Scripts.Entities.Entity>(), instance);
-					break;
 					case "<TargetType>k__BackingField":
 					reader.SetPrivateField("<TargetType>k__BackingField", reader.Read<Assets.Scripts.TargetType>(), instance);
 					break;
@@ -72,7 +68,7 @@ namespace ES3Types
 
 		protected override object ReadObject<T>(ES3Reader reader)
 		{
-			var instance = new Assets.Scripts.Abilities.Ability(string.Empty, string.Empty, -1, -1, null, TargetType.All, false, false);
+			var instance = new Assets.Scripts.Abilities.Ability(String.Empty, string.Empty, -1, -1, null, TargetType.All, false, false);
 			ReadObject<T>(reader, instance);
 			return instance;
 		}

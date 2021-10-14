@@ -13,6 +13,7 @@ namespace Assets.Scripts
     /// Provides a store for the items equipped to an entity. Items are stored by
     /// their equip locations.  
     /// </summary>
+    [Serializable]
     public class Equipment : ISaveable
     {
         private readonly Dictionary<EntityClass, List<ItemGroup>> _allowedItemGroupsByClass =
@@ -28,9 +29,14 @@ namespace Assets.Scripts
                 {EntityClass.Paladin, new List<ItemGroup> {ItemGroup.TwoHandedSword, ItemGroup.Armor, ItemGroup.Feet, ItemGroup.Glove, ItemGroup.Helmet, ItemGroup.Ring}}
             };
 
+        [ES3Serializable]
         private Dictionary<EquipLocation, EquipableItem> _equippedItems;
 
         private EntityClass _entityClass;
+
+        public Equipment()
+        {
+        }
 
         public Equipment(EntityClass entityClass)
         {

@@ -2,6 +2,8 @@
 using Assets.Scripts.Travel;
 using GoRogue;
 using UnityEngine;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Combat
 {
@@ -18,10 +20,12 @@ namespace Assets.Scripts.Combat
 
         public int ApCost { get; private set; }
 
+        public Floor()
+        {
+        }
+
         public Floor(BiomeType biomeType, TileType tileType, Coord position, int mapWidth, int mapHeight) : base(position, true, true, mapWidth, mapHeight)
         {
-            ApCost = _terrainCosts[tileType];
-
             var spriteStore = Object.FindObjectOfType<SpriteStore>();
 
             var floorSprites = spriteStore.GetFloorSprites(biomeType, tileType);
@@ -40,6 +44,44 @@ namespace Assets.Scripts.Combat
             {
                 TileType = tileType;
             }
+
+            SetApCost();
+        }
+
+        public void SetApCost()
+        {
+            ApCost = _terrainCosts[TileType];
+        }
+
+        public new object CaptureState()
+        {
+            var dto = new TileDto
+            {
+                Texture = Texture,
+                BType = BiomeType,
+                IsFloor = true,
+                Position = new Vector2Int(Position.X, Position.Y),
+                TType = TileType
+            };
+
+            return dto;
+        }
+
+        public new void RestoreState(object state)
+        {
+            var dto = (TileDto)state;
+
+            Texture = dto.Texture;
+            BiomeType = dto.BType;
+
+            var position = new Coord(dto.Position.x, dto.Position.y);
+
+            _backingField = new GoRogue.GameFramework.GameObject(position, 0, this, true,
+                true, true);
+
+            TileType = dto.TType;
+
+            RetreatTile = IsEdge(MapGenerator.MapWidth, MapGenerator.MapHeight);
         }
     }
 }
