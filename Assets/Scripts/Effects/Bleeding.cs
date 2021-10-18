@@ -10,6 +10,10 @@ namespace Assets.Scripts.Effects
         private const int BleedDuration = 4;
         private const int Damage = 5;
 
+        public Bleeding()
+        {
+        }
+
         public Bleeding(Entity owner, int duration = BleedDuration) : base("Bleeding", $"Deals {Damage} damage each turn.", duration,
             false, false, TargetType.All, owner)
         {

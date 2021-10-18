@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("<Name>k__BackingField", "<Description>k__BackingField", "<ApCost>k__BackingField", "<Range>k__BackingField", "<AbilityOwner>k__BackingField", "<TargetType>k__BackingField", "<IsPassive>k__BackingField", "<Icon>k__BackingField", "<UsesEquipment>k__BackingField")]
+	[ES3PropertiesAttribute("_blessedTiles", "<Name>k__BackingField", "<Description>k__BackingField", "<ApCost>k__BackingField", "<Range>k__BackingField", "<TargetType>k__BackingField", "<IsPassive>k__BackingField", "<Icon>k__BackingField", "<UsesEquipment>k__BackingField")]
 	public class ES3UserType_NaturesBlessing : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -16,11 +16,11 @@ namespace ES3Types
 		{
 			var instance = (Assets.Scripts.Abilities.NaturesBlessing)obj;
 			
+			writer.WritePrivateField("_blessedTiles", instance);
 			writer.WritePrivateField("<Name>k__BackingField", instance);
 			writer.WritePrivateField("<Description>k__BackingField", instance);
 			writer.WritePrivateField("<ApCost>k__BackingField", instance);
 			writer.WritePrivateField("<Range>k__BackingField", instance);
-			writer.WritePrivateField("<AbilityOwner>k__BackingField", instance);
 			writer.WritePrivateField("<TargetType>k__BackingField", instance);
 			writer.WritePrivateField("<IsPassive>k__BackingField", instance);
 			writer.WritePrivateFieldByRef("<Icon>k__BackingField", instance);
@@ -35,6 +35,9 @@ namespace ES3Types
 				switch(propertyName)
 				{
 					
+					case "_blessedTiles":
+					reader.SetPrivateField("_blessedTiles", reader.Read<System.Collections.Generic.List<Assets.Scripts.Combat.Tile>>(), instance);
+					break;
 					case "<Name>k__BackingField":
 					reader.SetPrivateField("<Name>k__BackingField", reader.Read<System.String>(), instance);
 					break;
@@ -46,9 +49,6 @@ namespace ES3Types
 					break;
 					case "<Range>k__BackingField":
 					reader.SetPrivateField("<Range>k__BackingField", reader.Read<System.Int32>(), instance);
-					break;
-					case "<AbilityOwner>k__BackingField":
-					reader.SetPrivateField("<AbilityOwner>k__BackingField", reader.Read<Assets.Scripts.Entities.Entity>(), instance);
 					break;
 					case "<TargetType>k__BackingField":
 					reader.SetPrivateField("<TargetType>k__BackingField", reader.Read<Assets.Scripts.TargetType>(), instance);

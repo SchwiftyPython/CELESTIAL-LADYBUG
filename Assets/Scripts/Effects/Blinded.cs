@@ -10,6 +10,10 @@ namespace Assets.Scripts.Effects
         private const int BlindDuration = 4;
         private const int ToHitPenalty = -25;
 
+        public Blinded()
+        {
+        }
+
         public Blinded(Entity owner, bool locationDependent, int duration = BlindDuration) : base("Blinded", $"To hit chance reduced by {Math.Abs(ToHitPenalty)}%.",
             duration, locationDependent, false, TargetType.Hostile, owner)
         {

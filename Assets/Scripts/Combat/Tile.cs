@@ -21,7 +21,7 @@ namespace Assets.Scripts.Combat
             public Vector2Int Position;
             public Sprite Texture;
             public bool IsFloor;
-            public List<Effect> Effects; //todo might not needed if they regen when entities are placed
+            //public List<Effect> Effects; //todo might not needed if they regen when entities are placed
         }
 
         protected IGameObject _backingField;

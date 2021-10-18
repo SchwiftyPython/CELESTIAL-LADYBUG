@@ -58,7 +58,7 @@ namespace Assets.Scripts.Combat
         {
             var combatManager = UnityEngine.Object.FindObjectOfType<CombatManager>();
 
-            var entities = combatManager.Enemies; //todo get turn order
+            var entities = combatManager.TurnOrder; 
 
             foreach (var entity in entities)
             {

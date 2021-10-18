@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Entities;
 using GoRogue;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Effects
 {
@@ -10,9 +11,13 @@ namespace Assets.Scripts.Effects
         protected bool Stacks;
         protected string Description;
         protected TargetType TargetType;
-        protected Entity Owner;
+        [ES3NonSerializable] protected Entity Owner;
 
         public Sprite Icon { get; protected set; }
+
+        public Effect() : base(string.Empty, -1)
+        {
+        }
 
         public Effect(string name, string description, int startingDuration, bool locationDependent, bool stacks, TargetType targetType, Entity owner) : base(name, startingDuration)
         {
@@ -20,7 +25,7 @@ namespace Assets.Scripts.Effects
             LocationDependent = locationDependent;
             Stacks = stacks;
             TargetType = targetType;
-            Owner = owner;
+            SetOwner(owner);
 
             GetIconForEffect(this);
         }
@@ -43,6 +48,11 @@ namespace Assets.Scripts.Effects
         public Entity GetOwner()
         {
             return Owner;
+        }
+
+        public void SetOwner(Entity owner)
+        {
+            Owner = owner;
         }
 
         public TargetType GetTargetType()

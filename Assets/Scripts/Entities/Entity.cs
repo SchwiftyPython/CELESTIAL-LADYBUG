@@ -1454,12 +1454,24 @@ namespace Assets.Scripts.Entities
             }
 
             Attributes = entityDto.Attributes;
+            Attributes.SetParent(this);
+
             AttackSkinSwap = entityDto.AttackSkinSwap;
             AttackSound = entityDto.AttackSound;
             CombatSpritePrefab = entityDto.CombatSpritePrefab;
             DeadSkinSwap = entityDto.DeadSkinSwap;
             DieSound = entityDto.DieSound;
+            
             Effects = entityDto.Effects;
+
+            if (Effects != null && Effects.Count > 0)
+            {
+                foreach (var effect in Effects)
+                {
+                    effect.SetOwner(this);
+                }
+            }
+
             EntityClass = entityDto.EntityClass;
             Equipment = entityDto.Equipment;
             HitSkinSwap = entityDto.HitSkinSwap;
@@ -1470,8 +1482,12 @@ namespace Assets.Scripts.Entities
             _movedLastTurn = entityDto.MovedLastTurn;
             Portrait = entityDto.Portrait;
             Race = entityDto.Race;
+
             Skills = entityDto.Skills;
+            Skills.SetParent(this);
+
             Stats = entityDto.Stats;
+            Stats.SetParent(this);
         }
     }
 }

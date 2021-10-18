@@ -184,6 +184,11 @@ namespace Assets.Scripts.Combat
             }
         }
 
+        public void SetMap(CombatMap map)
+        {
+            _map = map;
+        }
+
         public void AbilityButtonClicked(Ability selectedAbility)
         {
             _selectedAbility = selectedAbility;
@@ -271,7 +276,7 @@ namespace Assets.Scripts.Combat
                 Canvas = GameObject.Find("UI");
             }
             _canvasGraphicRaycaster = Canvas.GetComponent<GraphicRaycaster>();
-            _canvasEventSystem = Canvas.GetComponent<EventSystem>();
+            _canvasEventSystem = FindObjectOfType<EventSystem>();
 
             var pointerEventData = new PointerEventData(_canvasEventSystem) { position = Input.mousePosition };
 
@@ -501,7 +506,13 @@ namespace Assets.Scripts.Combat
                 _highlightedTiles = new List<Tile>();
             }
 
+            if (tile.SpriteInstance == null)
+            {
+                return;
+            }
+
             _highlightedTiles.Add(tile);
+
             tile.SpriteInstance.GetComponent<SpriteRenderer>().color = HighlightedColor;
         }
 
@@ -559,7 +570,7 @@ namespace Assets.Scripts.Combat
         {
             if (eventName.Equals(CombatSceneLoaded))
             {
-                _map = parameter as CombatMap;
+               SetMap(parameter as CombatMap);
             }
             else if (eventName.Equals(PlayerTurn))
             {

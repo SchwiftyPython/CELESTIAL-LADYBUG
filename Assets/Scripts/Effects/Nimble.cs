@@ -8,6 +8,10 @@ namespace Assets.Scripts.Effects
         private const int NimbleDuration = 3;
         private const int DodgeMod = 2;
 
+        public Nimble()
+        {
+        }
+
         public Nimble(Entity owner, bool locationDependent, int duration = NimbleDuration) : base("Nimble",
             $"+{DodgeMod} to dodge.", duration, locationDependent, false, TargetType.Friendly, owner)
         {

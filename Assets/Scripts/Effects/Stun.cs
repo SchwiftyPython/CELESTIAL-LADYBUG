@@ -9,6 +9,10 @@ namespace Assets.Scripts.Effects
     {
         private const int StunDuration = 1;
 
+        public Stun()
+        {
+        }
+
         public Stun(Entity owner, int duration = StunDuration) : base("Stun", "Target cannot move or attack.", duration, false, false, TargetType.Hostile, owner)
         {
         }

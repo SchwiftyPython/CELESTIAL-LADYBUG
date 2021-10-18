@@ -5,6 +5,7 @@ using Assets.Scripts.Audio;
 using Assets.Scripts.Encounters;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Items;
+using Assets.Scripts.Saving;
 using Assets.Scripts.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,7 +13,7 @@ using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Travel
 {
-    public class TravelManager : MonoBehaviour, ISubscriber
+    public class TravelManager : MonoBehaviour, ISubscriber, ISaveable
     {
         private const int DemoDaysToDestination = 5;
         private const int FullGameDaysToDestination = 15;
@@ -21,6 +22,16 @@ namespace Assets.Scripts.Travel
 
         private const BiomeType StartingBiome = BiomeType.Spooky;
         //private const BiomeType EndBiome = BiomeType.Evil; todo
+
+        private struct TravelManagerDto
+        {
+            public Queue<BiomeType> BiomeQueue;
+            public int CurrentDayOfTravel;
+            public int DaysTilNextBiome;
+            public int TravelDaysTilDestination;
+            public object Party;
+            public BiomeType CurrentBiome;
+        }
 
         private Queue<BiomeType> _biomeQueue;
 
@@ -208,7 +219,7 @@ namespace Assets.Scripts.Travel
                     else
                     {
                         //it's possible the entity isn't in the party anymore so this is how we check off the top of my head
-                        companion = Party.GetCompanion(targetEntity.Name);
+                        companion = Party.GetCompanionByName(targetEntity.Name);
                     }
 
                     if (companion != null)
@@ -265,7 +276,7 @@ namespace Assets.Scripts.Travel
                     else
                     {
                         //it's possible the entity isn't in the party anymore so this is how we check off the top of my head
-                        companion = Party.GetCompanion(targetEntity.Name);
+                        companion = Party.GetCompanionByName(targetEntity.Name);
                     }
 
                     if (companion != null)
@@ -326,7 +337,7 @@ namespace Assets.Scripts.Travel
                     else
                     {
                         //it's possible the entity isn't in the party anymore so this is how we check off the top of my head
-                        companion = Party.GetCompanion(targetEntity.Name);
+                        companion = Party.GetCompanionByName(targetEntity.Name);
                     }
 
                     if (companion != null)
@@ -516,7 +527,7 @@ namespace Assets.Scripts.Travel
                     else
                     {
                         //it's possible the entity isn't in the party anymore so this is how we check off the top of my head
-                        companion = Party.GetCompanion(targetEntity.Name);
+                        companion = Party.GetCompanionByName(targetEntity.Name);
                     }
 
                     if (companion != null)
@@ -572,7 +583,7 @@ namespace Assets.Scripts.Travel
                     else
                     {
                         //it's possible the entity isn't in the party anymore so this is how we check off the top of my head
-                        companion = Party.GetCompanion(targetEntity.Name);
+                        companion = Party.GetCompanionByName(targetEntity.Name);
                     }
 
                     if (companion != null)
@@ -633,7 +644,7 @@ namespace Assets.Scripts.Travel
                     else
                     {
                         //it's possible the entity isn't in the party anymore so this is how we check off the top of my head
-                        companion = Party.GetCompanion(targetEntity.Name);
+                        companion = Party.GetCompanionByName(targetEntity.Name);
                     }
 
                     if (companion != null)
@@ -780,6 +791,40 @@ namespace Assets.Scripts.Travel
 
                 _travelMessenger.QueueEntityMessage(entityDto);
             }
+        }
+
+        public object CaptureState()
+        {
+            var dto = new TravelManagerDto();
+
+            dto.BiomeQueue = _biomeQueue;
+            dto.CurrentBiome = CurrentBiome;
+            dto.CurrentDayOfTravel = _currentDayOfTravel;
+            dto.DaysTilNextBiome = _daysTilNextBiome;
+            dto.TravelDaysTilDestination = TravelDaysToDestination;
+            dto.Party = Party.CaptureState();
+
+            return dto;
+        }
+
+        public void RestoreState(object state)
+        {
+            if (state == null)
+            {
+                return;
+            }
+
+            TravelManagerDto dto = (TravelManagerDto)state;
+
+            _biomeQueue = dto.BiomeQueue;
+            CurrentBiome = dto.CurrentBiome;
+            _currentDayOfTravel = dto.CurrentDayOfTravel;
+            _daysTilNextBiome = dto.DaysTilNextBiome;
+            TravelDaysToDestination = dto.TravelDaysTilDestination;
+
+            Party = new Party();
+
+            Party.RestoreState(dto.Party);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Assets.Scripts.Entities
 
         private const int StartingAttributeDice = 12;
 
-        private readonly Entity _parent;
+        [ES3NonSerializable] private Entity _parent;
 
         //todo need to update Stats when these values change
         public int Agility { get; set; }
@@ -73,10 +73,19 @@ namespace Assets.Scripts.Entities
 
         //public int Magic { get; set; } todo not implemented
 
+        public Attributes()
+        {
+        }
+
         public Attributes(Entity parent)
         {
-            _parent = parent;
+            SetParent(parent);
             GenerateAttributeValues();
+        }
+
+        public void SetParent(Entity parent)
+        {
+            _parent = parent;
         }
 
         private void GenerateAttributeValues()

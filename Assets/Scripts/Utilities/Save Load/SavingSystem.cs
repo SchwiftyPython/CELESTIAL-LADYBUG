@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Assets.Scripts.Combat;
+using Assets.Scripts.Travel;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -36,15 +37,26 @@ namespace Assets.Scripts.Utilities.Save_Load
                 
                 ES3.Save("combat manager", combatManager.CaptureState());
             }
-
-            //todo travelmanager
-            //todo encountermanager
             
+            var travelManager = FindObjectOfType<TravelManager>();
+            
+            ES3.Save("travel manager", travelManager.CaptureState());
+
+            //todo inventory
+
+            //todo encountermanager
+
         }
 
         public void Load(string saveFile)
         {
             //todo load save file
+
+            var travelManager = FindObjectOfType<TravelManager>();
+
+            var tmDto = ES3.Load("travel manager");
+
+            travelManager.RestoreState(tmDto);
 
             var combatManager = FindObjectOfType<CombatManager>();
 

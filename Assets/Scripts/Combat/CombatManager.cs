@@ -577,8 +577,6 @@ namespace Assets.Scripts.Combat
 
             CombatManagerDto dto = (CombatManagerDto)state;
 
-            //todo ActiveEntity
-
             Enemies = new List<Entity>();
 
             foreach (var enemy in dto.Enemies)
@@ -590,16 +588,58 @@ namespace Assets.Scripts.Combat
                 Enemies.Add(restoredEnemy);
             }
 
-            //todo get companions
+            ActiveEntity = _travelManager.Party.GetCompanionById(dto.ActiveEntityId);
 
-            
-            
+            Companions = new Dictionary<Entity, CompanionCombatStats>();
+
+            foreach (var id in dto.CompanionIds)
+            {
+                var companion = _travelManager.Party.GetCompanionById(id.Key);
+
+                Companions.Add(companion, id.Value);
+            }
+
+            TurnOrder = new Queue<Entity>();
+
+            foreach (var id in dto.TurnOrder)
+            {
+                Entity entity = null;
+
+                foreach (var companion in Companions.Keys)
+                {
+                    if (string.Equals(id, companion.Id, StringComparison.OrdinalIgnoreCase))
+                    {
+                        entity = companion;
+                        break;
+                    }
+                }
+
+                if (entity == null)
+                {
+                    foreach (var enemy in Enemies)
+                    {
+                        if (string.Equals(id, enemy.Id, StringComparison.OrdinalIgnoreCase))
+                        {
+                            entity = enemy;
+                            break;
+                        }
+                    }
+                }
+
+                TurnOrder.Enqueue(entity);
+            }
 
             Map = new CombatMap(MapGenerator.MapWidth, MapGenerator.MapHeight);
 
             Map.RestoreState(dto.CombatMap);
 
+            _combatInput.SetMap(Map);
+
+            _combatInput.ClearHighlights();
+
             DrawMap();
+
+            _eventMediator.Broadcast(GlobalHelper.RefreshCombatUi, this, ActiveEntity);
         }
     }
 }
