@@ -20,7 +20,7 @@ namespace Assets.Scripts.Travel
 
         private const int BiomeChangeFrequency = 3;
 
-        private const BiomeType StartingBiome = BiomeType.Spooky;
+        private const BiomeType StartingBiome = BiomeType.Forest;
         //private const BiomeType EndBiome = BiomeType.Evil; todo
 
         private struct TravelManagerDto
@@ -31,6 +31,7 @@ namespace Assets.Scripts.Travel
             public int TravelDaysTilDestination;
             public object Party;
             public BiomeType CurrentBiome;
+            public Inventory.InventorySlotRecord[] Inventory;
         }
 
         private Queue<BiomeType> _biomeQueue;
@@ -803,6 +804,7 @@ namespace Assets.Scripts.Travel
             dto.DaysTilNextBiome = _daysTilNextBiome;
             dto.TravelDaysTilDestination = TravelDaysToDestination;
             dto.Party = Party.CaptureState();
+            dto.Inventory = (Inventory.InventorySlotRecord[])Inventory.GetPartyInventory().CaptureState();
 
             return dto;
         }
@@ -821,6 +823,7 @@ namespace Assets.Scripts.Travel
             _currentDayOfTravel = dto.CurrentDayOfTravel;
             _daysTilNextBiome = dto.DaysTilNextBiome;
             TravelDaysToDestination = dto.TravelDaysTilDestination;
+            Inventory.GetPartyInventory().RestoreState(dto.Inventory);
 
             Party = new Party();
 

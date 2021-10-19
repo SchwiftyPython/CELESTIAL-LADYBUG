@@ -5,13 +5,14 @@ using System.Linq;
 using Assets.Scripts.Audio;
 using Assets.Scripts.Items;
 using Assets.Scripts.Travel;
+using Assets.Scripts.Utilities.Save_Load;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
 namespace Assets.Scripts
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : MonoBehaviour, ISaveable
     {
         private enum GameState
         {
@@ -26,8 +27,10 @@ namespace Assets.Scripts
         }
 
         private const string TitleScreenSceneName = "TitleScreen";
-        private const string TravelSceneName = "Travel";
-        private const string CombatSceneName = "Combat";
+        public const string TravelSceneName = "Travel";
+        public const int TravelSceneIndex = 1;
+        public const string CombatSceneName = "Combat";
+        public const int CombatSceneIndex = 2;
 
         private List<string> _subscribedEventNames;
 
@@ -37,7 +40,7 @@ namespace Assets.Scripts
 
         private MusicController _musicController;
 
-        public Scene CurrentScene { get; private set; }
+        public static Scene CurrentScene => SceneManager.GetActiveScene();
 
         public static GameManager Instance;
 
@@ -55,7 +58,7 @@ namespace Assets.Scripts
 
             _currentState = GameState.Title;
 
-            CurrentScene = SceneManager.GetActiveScene();
+            //CurrentScene = SceneManager.GetActiveScene();
 
             _activeWindows = new List<GameObject>();
 
@@ -67,6 +70,12 @@ namespace Assets.Scripts
             _musicController = FindObjectOfType<MusicController>();
 
             _musicController.PlayTitleMusic();
+
+            var spriteStore = FindObjectOfType<SpriteStore>();
+            spriteStore.Setup();
+
+            var itemStore = FindObjectOfType<ItemStore>();
+            itemStore.Setup();
         }
 
         private void Update()
@@ -141,15 +150,15 @@ namespace Assets.Scripts
 
             //todo BUG this in fact does not start a new game lmao
 
-            var spriteStore = Object.FindObjectOfType<SpriteStore>();
-            spriteStore.Setup();
-
-            var itemStore = Object.FindObjectOfType<ItemStore>();
-            itemStore.Setup();
+            // var spriteStore = FindObjectOfType<SpriteStore>();
+            // spriteStore.Setup();
+            //
+            // var itemStore = FindObjectOfType<ItemStore>();
+            // itemStore.Setup();
 
             LoadTravelScene();
 
-            var travelManager = Object.FindObjectOfType<TravelManager>();
+            var travelManager = FindObjectOfType<TravelManager>();
 
             travelManager.NewParty();
 
@@ -158,9 +167,32 @@ namespace Assets.Scripts
             travelManager.StartNewDay();
         }
 
+        public void ShowSavedGamesWindow()
+        {
+            //todo
+
+            var savingSystem = FindObjectOfType<SavingSystem>();
+
+            savingSystem.Load(String.Empty);
+        }
+
+        public void ShowSettingsWindow()
+        {
+
+        }
+
         public void LoadTravelScene()
         {
-            SceneManager.LoadScene(TravelSceneName);
+            StartCoroutine(WaitForSceneLoad(TravelSceneIndex));
+        }
+
+        public void LoadCombatScene()
+        {
+            StartCoroutine(WaitForSceneLoad(CombatSceneIndex));
+
+            var eventMediator = FindObjectOfType<EventMediator>();
+
+            eventMediator.Broadcast(GlobalHelper.CombatSceneLoaded, this);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
@@ -171,6 +203,16 @@ namespace Assets.Scripts
         public void WaitForSeconds(int numSeconds)
         {
             StartCoroutine(WaitForSecondsCoroutine(numSeconds));
+        }
+
+        private IEnumerator WaitForSceneLoad(int sceneNumber)
+        {
+            SceneManager.LoadScene(sceneNumber);
+
+            while (CurrentScene.buildIndex != sceneNumber)
+            {
+                yield return new WaitForSeconds(1);
+            }
         }
 
         private IEnumerator WaitForSecondsCoroutine(int numSeconds)
@@ -191,6 +233,40 @@ namespace Assets.Scripts
         {
             //todo
             //eventMediator.UnsubscribeFromAllEvents(this);
+        }
+
+        public struct GameManagerDto
+        {
+            public string CurrentSceneName;
+        }
+
+        public object CaptureState()
+        {
+            var dto = new GameManagerDto
+            {
+                CurrentSceneName = CurrentScene.name
+            };
+
+            return dto;
+        }
+
+        public void RestoreState(object state)
+        {
+            if (state == null)
+            {
+                return;
+            }
+
+            var savedScene = ((GameManagerDto)state).CurrentSceneName;
+
+            if (string.Equals(savedScene, TravelSceneName, StringComparison.OrdinalIgnoreCase))
+            {
+                LoadTravelScene();
+            }
+            else if (string.Equals(savedScene, CombatSceneName, StringComparison.OrdinalIgnoreCase))
+            {
+                LoadCombatScene();
+            }
         }
     }
 }

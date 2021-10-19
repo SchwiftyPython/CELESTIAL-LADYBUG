@@ -32,6 +32,7 @@ namespace Assets.Scripts
         [ES3Serializable]
         private Dictionary<EquipLocation, EquipableItem> _equippedItems;
 
+        [ES3Serializable]
         private EntityClass _entityClass;
 
         public Equipment()

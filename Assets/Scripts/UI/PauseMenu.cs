@@ -42,7 +42,7 @@ namespace Assets.Scripts.UI
 
         public void Show()
         {
-            if (GameManager.Instance.CurrentScene.name.Equals(GlobalHelper.CombatScene))
+            if (GameManager.CurrentScene.name.Equals(GlobalHelper.CombatScene))
             {
                 var combatInput = FindObjectOfType<CombatInputController>();
 
@@ -70,10 +70,10 @@ namespace Assets.Scripts.UI
             uiContainer.SetActive(false);
             GameManager.Instance.RemoveActiveWindow(uiContainer);
 
-            if (GameManager.Instance.CurrentScene.name.Equals(GlobalHelper.CombatScene))
-            {
-                return;
-            }
+            // if (GameManager.Instance.CurrentScene.name.Equals(GlobalHelper.CombatScene))
+            // {
+            //     return;
+            // }
 
             if (GameManager.Instance.AnyActiveWindows())
             {
@@ -91,25 +91,24 @@ namespace Assets.Scripts.UI
         {
             var saveSystem = FindObjectOfType<SavingSystem>();
 
-            saveSystem.Save(String.Empty); //todo gen file name 
-
-            //ES3AutoSaveMgr.Current.Save();
+            saveSystem.Save(String.Empty); //todo pass in save slot from save game popup
         }
 
         public void Load()
         {
-            var combatManager = FindObjectOfType<CombatManager>();
+            if (GameManager.CurrentScene.name.Equals(GlobalHelper.CombatScene))
+            {
+                var combatManager = FindObjectOfType<CombatManager>();
 
-            combatManager.LoadFromSave();
+                combatManager.LoadFromSave();
 
-            GlobalHelper.DestroyAllChildren(entityHolder);
-            GlobalHelper.DestroyAllChildren(boardHolder);
+                GlobalHelper.DestroyAllChildren(entityHolder);
+                GlobalHelper.DestroyAllChildren(boardHolder);
+            }
 
             var saveSystem = FindObjectOfType<SavingSystem>();
 
             saveSystem.Load(String.Empty); //todo file select
-
-            //ES3AutoSaveMgr.Current.Load();
         }
 
         public void LoadMainMenuScene()

@@ -1,4 +1,5 @@
 using System;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Items
 {
@@ -19,10 +20,17 @@ namespace Assets.Scripts.Items
         {
             if (ItemType.Slot == null)
             {
-                throw new Exception($"Equipment location slot for {ItemType.Name} is null!");
+                ItemStore itemStore = Object.FindObjectOfType<ItemStore>();
+
+                ItemType.Slot = itemStore.GetItemTypeByName(GetName()).Slot;
             }
 
-            return (EquipLocation) ItemType.Slot;
+            if (ItemType.Slot != null)
+            {
+                return (EquipLocation)ItemType.Slot;
+            }
+
+            throw new Exception($"Equipment location slot for {ItemType.Name} is null!");
         }
 
         public int GetRange()

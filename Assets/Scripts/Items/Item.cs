@@ -39,6 +39,11 @@ namespace Assets.Scripts.Items
             return ItemType.Stackable;
         }
 
+        public string GetName()
+        {
+            return ItemType.Name;
+        }
+
         public string GetDisplayName()
         {
             return ItemType.Name;

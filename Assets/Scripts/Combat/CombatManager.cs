@@ -50,6 +50,7 @@ namespace Assets.Scripts.Combat
             public int TurnNumber;
             public List<object> Enemies;
             public Dictionary<string, CompanionCombatStats> CompanionIds;
+            public Queue<string> CombatMessenger;
         }
 
         private const string EndTurnEvent = GlobalHelper.EndTurn;
@@ -411,7 +412,7 @@ namespace Assets.Scripts.Combat
 
         private void HighlightActiveEntitySprite() 
         {
-            if (_currentCombatState == CombatState.LoadFromSave || _currentCombatState == CombatState.NotActive)
+            if (_currentCombatState == CombatState.NotActive)
             {
                 return;
             }
@@ -565,6 +566,10 @@ namespace Assets.Scripts.Combat
                 dto.TurnOrder.Enqueue(entity.Id);
             }
 
+            var messenger = FindObjectOfType<CombatMessenger>();
+
+            dto.CombatMessenger = (Queue<string>)messenger.CaptureState();
+
             return dto;
         }
 
@@ -633,11 +638,21 @@ namespace Assets.Scripts.Combat
 
             Map.RestoreState(dto.CombatMap);
 
+            _combatInput = FindObjectOfType<CombatInputController>();
+
             _combatInput.SetMap(Map);
 
             _combatInput.ClearHighlights();
 
             DrawMap();
+
+            var messenger = FindObjectOfType<CombatMessenger>();
+
+            messenger.RestoreState(dto.CombatMessenger);
+
+            HighlightActiveEntitySprite();
+
+            _eventMediator = FindObjectOfType<EventMediator>();
 
             _eventMediator.Broadcast(GlobalHelper.RefreshCombatUi, this, ActiveEntity);
         }

@@ -1,16 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using Assets.Scripts.Combat;
+using Assets.Scripts.Encounters;
 using Assets.Scripts.Travel;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.Utilities.Save_Load
 {
-    public class SavingSystem : MonoBehaviour
+    public class SavingSystem : MonoBehaviour, ISubscriber
     {
+        private const string CombatSceneLoaded = GlobalHelper.CombatSceneLoaded;
+
         public IEnumerator LoadLastScene(string saveFile)
         {
             Dictionary<string, object> state = LoadFile(saveFile);
@@ -29,10 +33,10 @@ namespace Assets.Scripts.Utilities.Save_Load
 
             var gameManager = FindObjectOfType<GameManager>();
 
+            ES3.Save("game manager", gameManager.CaptureState());
+
             if (gameManager.InCombat())
             {
-                //todo need all the extras from combat otherwise we skip
-
                 var combatManager = FindObjectOfType<CombatManager>();
                 
                 ES3.Save("combat manager", combatManager.CaptureState());
@@ -42,9 +46,9 @@ namespace Assets.Scripts.Utilities.Save_Load
             
             ES3.Save("travel manager", travelManager.CaptureState());
 
-            //todo inventory
+            var encounterManager = FindObjectOfType<EncounterManager>();
 
-            //todo encountermanager
+            ES3.Save("encounter manager", encounterManager.CaptureState());
 
         }
 
@@ -52,17 +56,36 @@ namespace Assets.Scripts.Utilities.Save_Load
         {
             //todo load save file
 
+            var gameManager = FindObjectOfType<GameManager>();
+
+            var gmDto = (GameManager.GameManagerDto)ES3.Load("game manager");
+
+            if (string.Equals(gmDto.CurrentSceneName, GameManager.CombatSceneName, StringComparison.OrdinalIgnoreCase))
+            {
+                var eventMediator = FindObjectOfType<EventMediator>();
+
+                eventMediator.SubscribeToEvent(CombatSceneLoaded, this);
+
+                // var combatManager = FindObjectOfType<CombatManager>();
+                //
+                // var cmDto = ES3.Load("combat manager");
+                //
+                // combatManager.RestoreState(cmDto);
+            }
+
+            gameManager.RestoreState(gmDto);
+
             var travelManager = FindObjectOfType<TravelManager>();
 
             var tmDto = ES3.Load("travel manager");
 
             travelManager.RestoreState(tmDto);
 
-            var combatManager = FindObjectOfType<CombatManager>();
+            var encounterManager = FindObjectOfType<EncounterManager>();
 
-            var cmDto = ES3.Load("combat manager");
+            var emDto = ES3.Load("encounter manager");
 
-            combatManager.RestoreState(cmDto);
+            encounterManager.RestoreState(emDto);
         }
 
         public void Delete(string saveFile)
@@ -124,6 +147,22 @@ namespace Assets.Scripts.Utilities.Save_Load
         private string GetPathFromSaveFile(string saveFile)
         {
             return Path.Combine(Application.persistentDataPath, saveFile + ".sav");
+        }
+
+        public void OnNotify(string eventName, object broadcaster, object parameter = null)
+        {
+            if (string.Equals(eventName, CombatSceneLoaded, StringComparison.OrdinalIgnoreCase))
+            {
+                var combatManager = FindObjectOfType<CombatManager>();
+
+                var cmDto = ES3.Load("combat manager");
+
+                combatManager.RestoreState(cmDto);
+
+                var eventMediator = FindObjectOfType<EventMediator>();
+
+                eventMediator.UnsubscribeFromEvent(CombatSceneLoaded, this);
+            }
         }
     }
 }
