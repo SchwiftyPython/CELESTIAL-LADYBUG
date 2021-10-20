@@ -189,10 +189,6 @@ namespace Assets.Scripts
         public void LoadCombatScene()
         {
             StartCoroutine(WaitForSceneLoad(CombatSceneIndex));
-
-            var eventMediator = FindObjectOfType<EventMediator>();
-
-            eventMediator.Broadcast(GlobalHelper.CombatSceneLoaded, this);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
@@ -207,12 +203,7 @@ namespace Assets.Scripts
 
         private IEnumerator WaitForSceneLoad(int sceneNumber)
         {
-            SceneManager.LoadScene(sceneNumber);
-
-            while (CurrentScene.buildIndex != sceneNumber)
-            {
-                yield return new WaitForSeconds(1);
-            }
+            yield return SceneManager.LoadSceneAsync(sceneNumber);
         }
 
         private IEnumerator WaitForSecondsCoroutine(int numSeconds)
@@ -261,10 +252,20 @@ namespace Assets.Scripts
 
             if (string.Equals(savedScene, TravelSceneName, StringComparison.OrdinalIgnoreCase))
             {
+                if (CurrentScene.buildIndex == TravelSceneIndex)
+                {
+                    return;
+                }
+
                 LoadTravelScene();
             }
             else if (string.Equals(savedScene, CombatSceneName, StringComparison.OrdinalIgnoreCase))
             {
+                if (CurrentScene.buildIndex == CombatSceneIndex)
+                {
+                    return;
+                }
+
                 LoadCombatScene();
             }
         }

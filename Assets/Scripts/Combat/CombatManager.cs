@@ -273,6 +273,17 @@ namespace Assets.Scripts.Combat
                 case CombatState.NotActive:
                     break;
                 case CombatState.LoadFromSave:
+                    _eventMediator.UnsubscribeFromAllEvents(this);
+
+                    _eventMediator.SubscribeToEvent(EndTurnEvent, this);
+                    _eventMediator.SubscribeToEvent(GlobalHelper.EntityDead, this);
+                    _eventMediator.SubscribeToEvent(GlobalHelper.ActiveEntityMoved, this);
+                    _eventMediator.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
+                    _eventMediator.Broadcast(RefreshUi, this, ActiveEntity);
+
+                    _musicController.PlayBattleMusic();
+
+                    _currentCombatState = CombatState.PlayerTurn;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -410,13 +421,8 @@ namespace Assets.Scripts.Combat
             return ActiveEntity.IsPlayer();
         }
 
-        private void HighlightActiveEntitySprite() 
+        private void HighlightActiveEntitySprite()
         {
-            if (_currentCombatState == CombatState.NotActive)
-            {
-                return;
-            }
-
             if (ActiveEntity == null)
             {
                 ActiveEntity = TurnOrder.Peek();
@@ -429,21 +435,19 @@ namespace Assets.Scripts.Combat
                 return;
             }
 
-            try
+            if (activeTile.SpriteInstance == null)
             {
-                var terrainSlotUi = activeTile.SpriteInstance.GetComponent<TerrainSlotUi>();
-
-                if (terrainSlotUi == null)
-                {
-                    return;
-                }
-
-                terrainSlotUi.HighlightTileForActiveEntity();
+                return;
             }
-            catch (Exception e)
+
+            var terrainSlotUi = activeTile.SpriteInstance.GetComponent<TerrainSlotUi>();
+
+            if (terrainSlotUi == null)
             {
-                //This only happens when loading in test combat scene so far
+                return;
             }
+
+            terrainSlotUi.HighlightTileForActiveEntity();
         }
 
         private bool IsCombatFinished()

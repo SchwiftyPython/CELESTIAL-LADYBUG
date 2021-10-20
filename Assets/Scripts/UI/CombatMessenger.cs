@@ -38,6 +38,11 @@ namespace Assets.Scripts.UI
 
         private void ClearAllOnScreenMessages()
         {
+            if (_messagesOnScreen == null || _messagesOnScreen.Count < 1)
+            {
+                return;
+            }
+
             foreach (var messageObject in _messagesOnScreen)
             {
                 Destroy(messageObject);

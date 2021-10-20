@@ -306,6 +306,11 @@ namespace Assets.Scripts.Encounters
 
         public object CaptureState()
         {
+            if (_normalEncounterDeck == null || _campingDeck == null)
+            {
+                return new EncounterManagerDto();
+            }
+
             var dto = new EncounterManagerDto
             {
                 NormalDeck = (EncounterDeck.EncounterDeckDto)_normalEncounterDeck.CaptureState(),
