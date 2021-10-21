@@ -1,16 +1,20 @@
 ﻿using Assets.Scripts.Utilities.Save_Load;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.UI
 {
-    public class SaveSlot : MonoBehaviour
+    public class SaveSlot : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private TextMeshProUGUI dayText = null;
         [SerializeField] private TextMeshProUGUI emptyText = null;
         [SerializeField] private TextMeshProUGUI dateTimeText = null;
 
         [SerializeField] private string saveFileName = string.Empty;
+
+        [SerializeField] private LoadGameWindow loadGameWindow = null;
+        [SerializeField] private NewGameWindow newGameWindow = null;
 
         private SavingSystem _savingSystem;
 
@@ -57,6 +61,18 @@ namespace Assets.Scripts.UI
             dateTimeText.gameObject.SetActive(false);
 
             emptyText.gameObject.SetActive(true);
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (loadGameWindow != null)
+            {
+                loadGameWindow.SetNewSaveFileName(saveFileName);
+            }
+            else if (newGameWindow != null)
+            {
+                newGameWindow.SetNewSaveFileName(saveFileName);
+            }
         }
     }
 }

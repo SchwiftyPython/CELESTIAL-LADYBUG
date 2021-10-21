@@ -14,7 +14,7 @@ namespace Assets.Scripts.UI
                 return;
             }
 
-            gameManager.GetComponent<GameManager>().StartNewGame();
+            //gameManager.GetComponent<GameManager>().StartNewGame();
         }
     }
 }

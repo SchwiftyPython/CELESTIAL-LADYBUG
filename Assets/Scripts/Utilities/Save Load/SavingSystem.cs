@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Globalization;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Encounters;
 using Assets.Scripts.Travel;
@@ -12,38 +9,38 @@ using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.Utilities.Save_Load
 {
-    public class SavingSystem : MonoBehaviour, ISubscriber
+    public class SavingSystem : MonoBehaviour
     {
-        private const string CombatSceneLoaded = GlobalHelper.CombatSceneLoaded;
-
-        public IEnumerator LoadLastScene(string saveFile)
+        public void Save()
         {
-            Dictionary<string, object> state = LoadFile(saveFile);
-            int buildIndex = SceneManager.GetActiveScene().buildIndex;
-            if (state.ContainsKey("lastSceneBuildIndex"))
-            {
-                buildIndex = (int)state["lastSceneBuildIndex"];
-            }
-            yield return SceneManager.LoadSceneAsync(buildIndex);
-            RestoreState(state);
+            var gameManager = FindObjectOfType<GameManager>();
+
+            var saveFile = gameManager.SaveFileName;
+
+            Save(saveFile);
         }
 
         public void Save(string saveFile)
         {
             var gameManager = FindObjectOfType<GameManager>();
 
+            gameManager.SaveFileName = saveFile;
+
             ES3.Save("game manager", gameManager.CaptureState(), saveFile);
 
             if (gameManager.InCombat())
             {
                 var combatManager = FindObjectOfType<CombatManager>();
-                
+
                 ES3.Save("combat manager", combatManager.CaptureState(), saveFile);
             }
-            
+
             var travelManager = FindObjectOfType<TravelManager>();
-            
+
             ES3.Save("travel manager", travelManager.CaptureState(), saveFile);
+
+            ES3.Save("day info", $"DAY {travelManager.CurrentDayOfTravel}, {travelManager.Party.Size} Companions", saveFile);
+            ES3.Save("datetime info", DateTime.Now.ToString(CultureInfo.CurrentCulture), saveFile);
 
             var encounterManager = FindObjectOfType<EncounterManager>();
 
@@ -78,78 +75,27 @@ namespace Assets.Scripts.Utilities.Save_Load
 
         public SaveSlot.SaveGameInfo? GetSaveGameInfo(string fileName)
         {
-            if (!ES3.FileExists($"{fileName}.es3"))
+            if (!SaveExists(fileName))
             {
                 return null;
             }
 
             var saveGameInfo = new SaveSlot.SaveGameInfo();
 
-            saveGameInfo.DayInfo = (string)ES3.Load("day info", fileName);
-            saveGameInfo.DateTimeInfo = (string)ES3.Load("datetime info", fileName);
+            saveGameInfo.DayInfo = ES3.Load("day info", fileName).ToString();
+            saveGameInfo.DateTimeInfo = ES3.Load("datetime info", fileName).ToString();
 
             return saveGameInfo;
         }
 
+        public bool SaveExists(string fileName)
+        {
+            return ES3.FileExists(fileName);
+        }
+
         public void Delete(string saveFile)
         {
-            File.Delete(GetPathFromSaveFile(saveFile));
-        }
-
-        private Dictionary<string, object> LoadFile(string saveFile)
-        {
-            //todo replace with es3
-
-            string path = GetPathFromSaveFile(saveFile);
-            if (!File.Exists(path))
-            {
-                return new Dictionary<string, object>();
-            }
-            using (FileStream stream = File.Open(path, FileMode.Open))
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                return (Dictionary<string, object>)formatter.Deserialize(stream);
-            }
-        }
-
-        private void SaveFile(string saveFile, object state)
-        {
-            //todo replace with es3
-
-            string path = GetPathFromSaveFile(saveFile);
-            print("Saving to " + path);
-            using (FileStream stream = File.Open(path, FileMode.Create))
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(stream, state);
-            }
-        }
-
-        private void CaptureState(Dictionary<string, object> state)
-        {
-            foreach (SaveableEntity saveable in FindObjectsOfType<SaveableEntity>())
-            {
-                state[saveable.GetUniqueIdentifier()] = saveable.CaptureState();
-            }
-
-            state["lastSceneBuildIndex"] = SceneManager.GetActiveScene().buildIndex;
-        }
-
-        private void RestoreState(Dictionary<string, object> state)
-        {
-            foreach (SaveableEntity saveable in FindObjectsOfType<SaveableEntity>())
-            {
-                string id = saveable.GetUniqueIdentifier();
-                if (state.ContainsKey(id))
-                {
-                    saveable.RestoreState(state[id]);
-                }
-            }
-        }
-
-        private string GetPathFromSaveFile(string saveFile)
-        {
-            return Path.Combine(Application.persistentDataPath, saveFile + ".sav");
+            //todo
         }
 
         private void LoadCombatManager(Scene arg0, LoadSceneMode loadSceneMode)
@@ -165,22 +111,16 @@ namespace Assets.Scripts.Utilities.Save_Load
             SceneManager.sceneLoaded -= LoadCombatManager;
         }
 
-        public void OnNotify(string eventName, object broadcaster, object parameter = null)
+        private void OnApplicationQuit()
         {
-            if (string.Equals(eventName, CombatSceneLoaded, StringComparison.OrdinalIgnoreCase))
+            //todo auto save
+
+            if (string.Equals(GameManager.CurrentScene.name, "TitleScreen"))
             {
-                var combatManager = FindObjectOfType<CombatManager>();
-
-                var cmDto = ES3.Load("combat manager");
-
-                combatManager.RestoreState(cmDto);
-
-                combatManager.LoadFromSave();
-
-                var eventMediator = FindObjectOfType<EventMediator>();
-
-                eventMediator.UnsubscribeFromEvent(CombatSceneLoaded, this);
+                return;
             }
+
+            throw new NotImplementedException();
         }
     }
 }

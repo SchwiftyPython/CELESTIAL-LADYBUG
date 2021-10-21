@@ -3,18 +3,14 @@ using UnityEngine;
 
 namespace Assets.Scripts.UI
 {
-    public class LoadGameWindow : MonoBehaviour
+    public class NewGameWindow : MonoBehaviour
     {
         [SerializeField] private GameObject uiContainer = null;
-        [SerializeField] private GameObject slotOne = null;
-        [SerializeField] private GameObject slotTwo = null;
-        [SerializeField] private GameObject slotThree = null;
-        [SerializeField] private GameObject slotFour = null;
 
         private SavingSystem _savingSystem;
 
         private string _saveFileName;
-        
+
         private void Start()
         {
             if (uiContainer.activeSelf)
@@ -37,9 +33,17 @@ namespace Assets.Scripts.UI
             GameManager.Instance.RemoveActiveWindow(uiContainer);
         }
 
-        public void LoadSelectedGame()
+        public void StartGame()
         {
-            _savingSystem.Load(_saveFileName);
+            if (_savingSystem.SaveExists(_saveFileName))
+            {
+                //todo warn about overwrite
+                //todo user selects yes - delete file then call this method again
+            }
+            else
+            {
+                GameManager.Instance.StartNewGame(_saveFileName);
+            }
         }
 
         public void SetNewSaveFileName(string fileName)

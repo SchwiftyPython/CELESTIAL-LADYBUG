@@ -36,13 +36,13 @@ namespace Assets.Scripts.Travel
 
         private Queue<BiomeType> _biomeQueue;
 
-        private int _currentDayOfTravel;
         private int _daysTilNextBiome;
 
         private MusicController _musicController;
         private TravelMessenger _travelMessenger;
 
         public int TravelDaysToDestination { get; private set; }
+        public int CurrentDayOfTravel { get; private set; }
 
         public Party Party { get; private set; }
 
@@ -61,7 +61,7 @@ namespace Assets.Scripts.Travel
 
             BuildBiomeQueue();
 
-            _currentDayOfTravel = 0;
+            CurrentDayOfTravel = 1;
 
             _daysTilNextBiome = BiomeChangeFrequency;
 
@@ -748,7 +748,7 @@ namespace Assets.Scripts.Travel
 
                 Party.EatAndHeal();
 
-                _currentDayOfTravel++;
+                CurrentDayOfTravel++;
 
                 _daysTilNextBiome--;
 
@@ -800,7 +800,7 @@ namespace Assets.Scripts.Travel
 
             dto.BiomeQueue = _biomeQueue;
             dto.CurrentBiome = CurrentBiome;
-            dto.CurrentDayOfTravel = _currentDayOfTravel;
+            dto.CurrentDayOfTravel = CurrentDayOfTravel;
             dto.DaysTilNextBiome = _daysTilNextBiome;
             dto.TravelDaysTilDestination = TravelDaysToDestination;
             dto.Party = Party.CaptureState();
@@ -820,7 +820,7 @@ namespace Assets.Scripts.Travel
 
             _biomeQueue = dto.BiomeQueue;
             CurrentBiome = dto.CurrentBiome;
-            _currentDayOfTravel = dto.CurrentDayOfTravel;
+            CurrentDayOfTravel = dto.CurrentDayOfTravel;
             _daysTilNextBiome = dto.DaysTilNextBiome;
             TravelDaysToDestination = dto.TravelDaysTilDestination;
             Inventory.GetPartyInventory().RestoreState(dto.Inventory);

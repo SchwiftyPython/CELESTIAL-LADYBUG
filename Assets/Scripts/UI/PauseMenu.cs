@@ -87,11 +87,13 @@ namespace Assets.Scripts.UI
             eventMediator.Broadcast(GlobalHelper.ResumeTimer, this);
         }
 
-        public void Save() //todo disable on enemy turn
+        public void SaveAndQuit() //todo disable on enemy turn or when in the middle of encounter
         {
             var saveSystem = FindObjectOfType<SavingSystem>();
 
-            saveSystem.Save(String.Empty); //todo pass in save slot from save game popup
+            saveSystem.Save();
+
+            LoadMainMenuScene();
         }
 
         public void Load()

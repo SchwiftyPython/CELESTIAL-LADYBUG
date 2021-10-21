@@ -40,6 +40,8 @@ namespace Assets.Scripts
 
         private MusicController _musicController;
 
+        public string SaveFileName;
+
         public static Scene CurrentScene => SceneManager.GetActiveScene();
 
         public static GameManager Instance;
@@ -144,17 +146,9 @@ namespace Assets.Scripts
             return SceneManager.GetActiveScene().name.Equals(CombatSceneName);
         }
 
-        public void StartNewGame()
+        public void StartNewGame(string saveFileName)
         {
             _musicController.EndTitleMusic();
-
-            //todo BUG this in fact does not start a new game lmao
-
-            // var spriteStore = FindObjectOfType<SpriteStore>();
-            // spriteStore.Setup();
-            //
-            // var itemStore = FindObjectOfType<ItemStore>();
-            // itemStore.Setup();
 
             LoadTravelScene();
 
@@ -165,20 +159,10 @@ namespace Assets.Scripts
             travelManager.NewInventory();
 
             travelManager.StartNewDay();
-        }
 
-        public void ShowSavedGamesWindow()
-        {
-            //todo
+            var savingSystem = FindObjectOfType<SavingSystem>();  //might have to wait for travel scene to load
 
-            var savingSystem = FindObjectOfType<SavingSystem>();
-
-            savingSystem.Load(String.Empty);
-        }
-
-        public void ShowSettingsWindow()
-        {
-
+            savingSystem.Save(saveFileName);
         }
 
         public void LoadTravelScene()
