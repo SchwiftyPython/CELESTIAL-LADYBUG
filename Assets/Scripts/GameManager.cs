@@ -5,13 +5,14 @@ using System.Linq;
 using Assets.Scripts.Audio;
 using Assets.Scripts.Items;
 using Assets.Scripts.Travel;
+using Assets.Scripts.Utilities.Save_Load;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
 namespace Assets.Scripts
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : MonoBehaviour, ISaveable
     {
         private enum GameState
         {
@@ -26,10 +27,10 @@ namespace Assets.Scripts
         }
 
         private const string TitleScreenSceneName = "TitleScreen";
-        private const string TravelSceneName = "Travel";
-        private const string CombatSceneName = "Combat";
-
-        private List<string> _subscribedEventNames;
+        public const string TravelSceneName = "Travel";
+        public const int TravelSceneIndex = 1;
+        public const string CombatSceneName = "Combat";
+        public const int CombatSceneIndex = 2;
 
         private List<GameObject> _activeWindows;
 
@@ -37,7 +38,9 @@ namespace Assets.Scripts
 
         private MusicController _musicController;
 
-        public Scene CurrentScene { get; private set; }
+        public string SaveFileName;
+
+        public static Scene CurrentScene => SceneManager.GetActiveScene();
 
         public static GameManager Instance;
 
@@ -55,11 +58,7 @@ namespace Assets.Scripts
 
             _currentState = GameState.Title;
 
-            CurrentScene = SceneManager.GetActiveScene();
-
             _activeWindows = new List<GameObject>();
-
-            SubscribeToEvents();
         }
 
         private void Start()
@@ -67,6 +66,12 @@ namespace Assets.Scripts
             _musicController = FindObjectOfType<MusicController>();
 
             _musicController.PlayTitleMusic();
+
+            var spriteStore = FindObjectOfType<SpriteStore>();
+            spriteStore.Setup();
+
+            var itemStore = FindObjectOfType<ItemStore>();
+            itemStore.Setup();
         }
 
         private void Update()
@@ -135,21 +140,17 @@ namespace Assets.Scripts
             return SceneManager.GetActiveScene().name.Equals(CombatSceneName);
         }
 
-        public void StartNewGame()
+        public void StartNewGame(string saveFileName)
         {
             _musicController.EndTitleMusic();
 
-            //todo BUG this in fact does not start a new game lmao
+            SaveFileName = saveFileName;
 
-            var spriteStore = Object.FindObjectOfType<SpriteStore>();
-            spriteStore.Setup();
-
-            var itemStore = Object.FindObjectOfType<ItemStore>();
-            itemStore.Setup();
+            SceneManager.sceneLoaded += InitialSave;
 
             LoadTravelScene();
 
-            var travelManager = Object.FindObjectOfType<TravelManager>();
+            var travelManager = FindObjectOfType<TravelManager>();
 
             travelManager.NewParty();
 
@@ -160,12 +161,12 @@ namespace Assets.Scripts
 
         public void LoadTravelScene()
         {
-            SceneManager.LoadScene(TravelSceneName);
+            StartCoroutine(WaitForSceneLoad(TravelSceneIndex));
         }
 
-        public void OnNotify(string eventName, object broadcaster, object parameter = null)
+        public void LoadCombatScene()
         {
-
+            StartCoroutine(WaitForSceneLoad(CombatSceneIndex));
         }
 
         public void WaitForSeconds(int numSeconds)
@@ -173,24 +174,67 @@ namespace Assets.Scripts
             StartCoroutine(WaitForSecondsCoroutine(numSeconds));
         }
 
+        private void InitialSave(Scene arg0, LoadSceneMode loadSceneMode)
+        {
+            var savingSystem = FindObjectOfType<SavingSystem>();
+
+            savingSystem.Save(SaveFileName);
+
+            SceneManager.sceneLoaded -= InitialSave;
+        }
+
+        private IEnumerator WaitForSceneLoad(int sceneNumber)
+        {
+            yield return SceneManager.LoadSceneAsync(sceneNumber);
+        }
+
         private IEnumerator WaitForSecondsCoroutine(int numSeconds)
         {
             yield return new WaitForSeconds(numSeconds);
         }
 
-        private void SubscribeToEvents()
+        public struct GameManagerDto
         {
-            // foreach (var eventName in _subscribedEventNames)
-            // {
-            //     //todo
-            //     //eventMediator.SubscribeToEvent(eventName, this);
-            // }
+            public string CurrentSceneName;
         }
 
-        private void UnsubscribeFromEvents()
+        public object CaptureState()
         {
-            //todo
-            //eventMediator.UnsubscribeFromAllEvents(this);
+            var dto = new GameManagerDto
+            {
+                CurrentSceneName = CurrentScene.name
+            };
+
+            return dto;
+        }
+
+        public void RestoreState(object state)
+        {
+            if (state == null)
+            {
+                return;
+            }
+
+            var savedScene = ((GameManagerDto)state).CurrentSceneName;
+
+            if (string.Equals(savedScene, TravelSceneName, StringComparison.OrdinalIgnoreCase))
+            {
+                if (CurrentScene.buildIndex == TravelSceneIndex)
+                {
+                    return;
+                }
+
+                LoadTravelScene();
+            }
+            else if (string.Equals(savedScene, CombatSceneName, StringComparison.OrdinalIgnoreCase))
+            {
+                if (CurrentScene.buildIndex == CombatSceneIndex)
+                {
+                    return;
+                }
+
+                LoadCombatScene();
+            }
         }
     }
 }

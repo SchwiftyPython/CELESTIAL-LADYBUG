@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Entities.Companions;
+using Assets.Scripts.Saving;
 using Assets.Scripts.UI;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -10,13 +11,22 @@ using Random = UnityEngine.Random;
 
 namespace Assets.Scripts
 {
-    public class Party
+    public class Party : ISaveable
     {
         private const int MaxSize = 6;
         private const int StartSize = 4;
         private const int MoraleFoodModifier = 10;
 
         public const int FoodConsumedPerCompanion = 1;
+
+        private struct PartyDto
+        {
+            public List<object> Companions;
+            public object Derpus;
+            public int Food;
+            public int HealthPotions;
+            public int Gold;
+        }
 
         private Dictionary<string, Entity> _companions;
 
@@ -27,7 +37,7 @@ namespace Assets.Scripts
         public int Gold { get; set; }
 
         public int Size => _companions.Count;
-
+        
         public Party()
         {
             GenerateStartingParty();
@@ -80,7 +90,7 @@ namespace Assets.Scripts
             return _companions.Count <= 0;
         }
 
-        public Entity GetCompanion(string companionName)
+        public Entity GetCompanionByName(string companionName)
         {
             if (!_companions.ContainsKey(companionName))
             {
@@ -88,6 +98,19 @@ namespace Assets.Scripts
             }
 
             return _companions[companionName];
+        }
+
+        public Entity GetCompanionById(string id)
+        {
+            foreach (var companion in _companions.Values)
+            {
+                if (string.Equals(id, companion.Id, StringComparison.OrdinalIgnoreCase))
+                {
+                    return companion;
+                }
+            }
+
+            return null;
         }
 
         public List<Entity> GetCompanions()
@@ -444,6 +467,53 @@ namespace Assets.Scripts
 
                 AddCompanion(companion);
             }
+        }
+
+        public object CaptureState()
+        {
+            var dto = new PartyDto();
+
+            dto.Companions = new List<object>();
+            
+            foreach (var companion in _companions.Values)
+            {
+                dto.Companions.Add(companion.CaptureState());
+            }
+
+            dto.Derpus = Derpus.CaptureState();
+            dto.Food = Food;
+            dto.Gold = Gold;
+            dto.HealthPotions = HealthPotions;
+
+            return dto;
+        }
+
+        public void RestoreState(object state)
+        {
+            if (state == null)
+            {
+                return;
+            }
+
+            PartyDto dto = (PartyDto)state;
+
+            _companions = new Dictionary<string, Entity>();
+
+            foreach (var companionDto in dto.Companions)
+            {
+                var companion = new Entity();
+            
+                companion.RestoreState(companionDto);
+            
+                _companions.Add(companion.Name, companion);
+            }
+
+            Derpus = new Entity();
+            Derpus.RestoreState(dto.Derpus);
+
+            Food = dto.Food;
+            Gold = dto.Gold;
+            HealthPotions = dto.HealthPotions;
         }
     }
 }

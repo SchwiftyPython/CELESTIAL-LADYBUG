@@ -6,31 +6,44 @@ using Assets.Scripts.Encounters;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Items;
 using Assets.Scripts.UI;
+using Assets.Scripts.Utilities.Save_Load;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using ISaveable = Assets.Scripts.Saving.ISaveable;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Travel
 {
-    public class TravelManager : MonoBehaviour, ISubscriber
+    public class TravelManager : MonoBehaviour, ISubscriber, ISaveable
     {
         private const int DemoDaysToDestination = 5;
         private const int FullGameDaysToDestination = 15;
 
         private const int BiomeChangeFrequency = 3;
 
-        private const BiomeType StartingBiome = BiomeType.Spooky;
+        private const BiomeType StartingBiome = BiomeType.Forest;
         //private const BiomeType EndBiome = BiomeType.Evil; todo
+
+        private struct TravelManagerDto
+        {
+            public Queue<BiomeType> BiomeQueue;
+            public int CurrentDayOfTravel;
+            public int DaysTilNextBiome;
+            public int TravelDaysTilDestination;
+            public object Party;
+            public BiomeType CurrentBiome;
+            public Inventory.InventorySlotRecord[] Inventory;
+        }
 
         private Queue<BiomeType> _biomeQueue;
 
-        private int _currentDayOfTravel;
         private int _daysTilNextBiome;
 
         private MusicController _musicController;
         private TravelMessenger _travelMessenger;
 
         public int TravelDaysToDestination { get; private set; }
+        public int CurrentDayOfTravel { get; private set; }
 
         public Party Party { get; private set; }
 
@@ -49,7 +62,7 @@ namespace Assets.Scripts.Travel
 
             BuildBiomeQueue();
 
-            _currentDayOfTravel = 0;
+            CurrentDayOfTravel = 1;
 
             _daysTilNextBiome = BiomeChangeFrequency;
 
@@ -208,7 +221,7 @@ namespace Assets.Scripts.Travel
                     else
                     {
                         //it's possible the entity isn't in the party anymore so this is how we check off the top of my head
-                        companion = Party.GetCompanion(targetEntity.Name);
+                        companion = Party.GetCompanionByName(targetEntity.Name);
                     }
 
                     if (companion != null)
@@ -265,7 +278,7 @@ namespace Assets.Scripts.Travel
                     else
                     {
                         //it's possible the entity isn't in the party anymore so this is how we check off the top of my head
-                        companion = Party.GetCompanion(targetEntity.Name);
+                        companion = Party.GetCompanionByName(targetEntity.Name);
                     }
 
                     if (companion != null)
@@ -326,7 +339,7 @@ namespace Assets.Scripts.Travel
                     else
                     {
                         //it's possible the entity isn't in the party anymore so this is how we check off the top of my head
-                        companion = Party.GetCompanion(targetEntity.Name);
+                        companion = Party.GetCompanionByName(targetEntity.Name);
                     }
 
                     if (companion != null)
@@ -516,7 +529,7 @@ namespace Assets.Scripts.Travel
                     else
                     {
                         //it's possible the entity isn't in the party anymore so this is how we check off the top of my head
-                        companion = Party.GetCompanion(targetEntity.Name);
+                        companion = Party.GetCompanionByName(targetEntity.Name);
                     }
 
                     if (companion != null)
@@ -572,7 +585,7 @@ namespace Assets.Scripts.Travel
                     else
                     {
                         //it's possible the entity isn't in the party anymore so this is how we check off the top of my head
-                        companion = Party.GetCompanion(targetEntity.Name);
+                        companion = Party.GetCompanionByName(targetEntity.Name);
                     }
 
                     if (companion != null)
@@ -633,7 +646,7 @@ namespace Assets.Scripts.Travel
                     else
                     {
                         //it's possible the entity isn't in the party anymore so this is how we check off the top of my head
-                        companion = Party.GetCompanion(targetEntity.Name);
+                        companion = Party.GetCompanionByName(targetEntity.Name);
                     }
 
                     if (companion != null)
@@ -736,7 +749,7 @@ namespace Assets.Scripts.Travel
 
                 Party.EatAndHeal();
 
-                _currentDayOfTravel++;
+                CurrentDayOfTravel++;
 
                 _daysTilNextBiome--;
 
@@ -760,6 +773,10 @@ namespace Assets.Scripts.Travel
                 else
                 {
                     StartNewDay();
+
+                    var saveSystem = FindObjectOfType<SavingSystem>();
+
+                    saveSystem.AutoSave();
                 }
             }
             else if (eventName.Equals(GlobalHelper.EntityDead))
@@ -780,6 +797,42 @@ namespace Assets.Scripts.Travel
 
                 _travelMessenger.QueueEntityMessage(entityDto);
             }
+        }
+
+        public object CaptureState()
+        {
+            var dto = new TravelManagerDto();
+
+            dto.BiomeQueue = _biomeQueue;
+            dto.CurrentBiome = CurrentBiome;
+            dto.CurrentDayOfTravel = CurrentDayOfTravel;
+            dto.DaysTilNextBiome = _daysTilNextBiome;
+            dto.TravelDaysTilDestination = TravelDaysToDestination;
+            dto.Party = Party.CaptureState();
+            dto.Inventory = (Inventory.InventorySlotRecord[])Inventory.GetPartyInventory().CaptureState();
+
+            return dto;
+        }
+
+        public void RestoreState(object state)
+        {
+            if (state == null)
+            {
+                return;
+            }
+
+            TravelManagerDto dto = (TravelManagerDto)state;
+
+            _biomeQueue = dto.BiomeQueue;
+            CurrentBiome = dto.CurrentBiome;
+            CurrentDayOfTravel = dto.CurrentDayOfTravel;
+            _daysTilNextBiome = dto.DaysTilNextBiome;
+            TravelDaysToDestination = dto.TravelDaysTilDestination;
+            Inventory.GetPartyInventory().RestoreState(dto.Inventory);
+
+            Party = new Party();
+
+            Party.RestoreState(dto.Party);
         }
     }
 }

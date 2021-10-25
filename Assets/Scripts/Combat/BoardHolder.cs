@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Assets.Scripts.AI;
 using Assets.Scripts.Audio;
 using Assets.Scripts.Entities;
@@ -16,7 +17,7 @@ namespace Assets.Scripts.Combat
 
         public static BoardHolder Instance;
 
-        private void Start()
+        private void Awake()
         {
             if (Instance == null)
             {

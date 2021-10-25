@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Encounters;
+using Assets.Scripts.Saving;
 using Assets.Scripts.Travel;
 using UnityEngine;
 
 namespace Assets.Scripts.Decks
 {
-    public class EncounterDeck : Deck<Encounter>
+    public class EncounterDeck : Deck<Encounter>, ISaveable
     {
         private const int CommonCap = 5;
         private const int UncommonCap = 2;
@@ -79,6 +80,26 @@ namespace Assets.Scripts.Decks
             Size--;
 
             return Cards.Dequeue();
+        }
+
+        public struct EncounterDeckDto
+        {
+            public int Size;
+        }
+
+        public object CaptureState()
+        {
+            var dto = new EncounterDeckDto
+            {
+                Size = Cards.Count
+            };
+
+            return dto;
+        }
+
+        public void RestoreState(object state)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

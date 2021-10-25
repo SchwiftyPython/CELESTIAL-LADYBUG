@@ -13,8 +13,8 @@ namespace Assets.Scripts.Combat
 {
     public class MapGenerator : MonoBehaviour
     {
-        private const int MapWidth = 32;
-        private const int MapHeight = 24;
+        public static int MapWidth = 32;
+        public static int MapHeight = 24;
 
         public static MapGenerator Instance;
 
@@ -175,6 +175,5 @@ namespace Assets.Scripts.Combat
             }
 
         }
-
     }
 }

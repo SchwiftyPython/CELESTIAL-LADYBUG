@@ -15,7 +15,7 @@ namespace Assets.Scripts
     {
         [Tooltip("Allowed Size")]
         [SerializeField]
-        private int _inventorySize = 45;
+        private int inventorySize = 45;
 
         private InventorySlot[] _slots;
 
@@ -36,7 +36,7 @@ namespace Assets.Scripts
 
         public void GenerateStartingItems()
         {
-            var numItems = _inventorySize / 2;
+            var numItems = inventorySize / 2;
 
             for (var i = 0; i < numItems; i++)
             {
@@ -171,7 +171,7 @@ namespace Assets.Scripts
 
         private void Awake()
         {
-            _slots = new InventorySlot[_inventorySize];
+            _slots = new InventorySlot[inventorySize];
         }
 
         /// <summary>
@@ -226,42 +226,44 @@ namespace Assets.Scripts
         }
 
         [Serializable]
-        private struct InventorySlotRecord
+        public struct InventorySlotRecord
         {
-            public string ItemId;
+            public EquipableItem Item;
             public int Number;
         }
 
-        object ISaveable.CaptureState()
+        public object CaptureState()
         {
             //todo
 
-            var slotStrings = new InventorySlotRecord[_inventorySize];
-            for (var i = 0; i < _inventorySize; i++)
+            var slotStrings = new InventorySlotRecord[inventorySize];
+            for (var i = 0; i < inventorySize; i++)
             {
                 if (_slots[i].Item != null)
                 {
-                    slotStrings[i].ItemId = _slots[i].Item.GetItemId();
+                    slotStrings[i].Item = (EquipableItem)_slots[i].Item;
                     slotStrings[i].Number = _slots[i].Number;
                 }
             }
             return slotStrings;
         }
 
-        void ISaveable.RestoreState(object state)
+        public void RestoreState(object state)
         {
             //todo
 
             var slotStrings = (InventorySlotRecord[])state;
-            for (var i = 0; i < _inventorySize; i++)
+            for (var i = 0; i < inventorySize; i++)
             {
-                //_slots[i].Item = Item.GetFromId(slotStrings[i].ItemId);
+                _slots[i].Item = slotStrings[i].Item;
                 _slots[i].Number = slotStrings[i].Number;
             }
 
             EventMediator eventMediator = FindObjectOfType<EventMediator>();
 
             eventMediator.Broadcast(GlobalHelper.InventoryUpdated, this);
+            eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this);
+            eventMediator.Broadcast(GlobalHelper.PopulateCharacterSheet, this);
         }
     }
 }

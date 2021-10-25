@@ -14,6 +14,10 @@ namespace Assets.Scripts.Items
 
         [SerializeField] protected ItemType ItemType;
 
+        public Item()
+        {
+        }
+
         public Item(ItemType itemType)
         {
             ItemType = itemType;
@@ -33,6 +37,11 @@ namespace Assets.Scripts.Items
         public bool IsStackable()
         {
             return ItemType.Stackable;
+        }
+
+        public string GetName()
+        {
+            return ItemType.Name;
         }
 
         public string GetDisplayName()

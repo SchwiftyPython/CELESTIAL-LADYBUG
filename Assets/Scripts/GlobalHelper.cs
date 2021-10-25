@@ -73,6 +73,7 @@ namespace Assets.Scripts
         public const string SpritesLoaded = "SpritesLoaded";
         public const string ShowCombatPreview = "ShowCombatPreview";
         public const string BiomeChanged = "BiomeChanged";
+        public const string SaveLoaded = "Save Loaded";
 
         #endregion EventNames
 

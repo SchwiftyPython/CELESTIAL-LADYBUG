@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Effects;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Saving;
+using Assets.Scripts.Travel;
 using GoRogue;
 using GoRogue.GameFramework;
 using UnityEngine;
@@ -10,23 +12,35 @@ using GameObject = GoRogue.GameFramework.GameObject;
 
 namespace Assets.Scripts.Combat
 {
-    public class Tile : IGameObject
+    public class Tile : IGameObject, ISaveable
     {
-        private IGameObject _backingField;
+        public struct TileDto
+        {
+            public BiomeType BType;
+            public TileType TType;
+            public Vector2Int Position;
+            public Sprite Texture;
+            public bool IsFloor;
+            //public List<Effect> Effects; //todo might not needed if they regen when entities are placed
+        }
+
+        protected IGameObject _backingField;
 
         private List<Effect> _effects; //todo have a playerEffects list and a nonPlayerEffects list to differentiate who should get effect applied
 
-        public Sprite Texture { get; protected set; }
+        public Sprite Texture { get; set; }
 
         public UnityEngine.GameObject SpriteInstance { get; private set; }
 
         public TileType TileType { get; protected set; }
+        public BiomeType BiomeType { get; protected set; }
 
         //these are for BFS to determine movement range
         public bool Selectable { get; set; }
         public bool Visited    { get; set; }
         public int TotalApCost { get; set; }
-        public bool RetreatTile { get; private set; }
+        
+        public bool RetreatTile { get; protected set; }
 
         public Map CurrentMap => _backingField.CurrentMap;
 
@@ -59,6 +73,10 @@ namespace Assets.Scripts.Combat
         public uint ID => _backingField.ID;
 
         public int Layer => _backingField.Layer;
+
+        public Tile()
+        {
+        }
 
         public Tile(Coord position, bool isWalkable, bool isTransparent, int mapWidth, int mapHeight)
         {
@@ -241,10 +259,29 @@ namespace Assets.Scripts.Combat
             return (Entity)CurrentMap.Entities.GetItems(Position).FirstOrDefault();
         }
 
-        private bool IsEdge(int mapWidth, int mapHeight)
+        protected bool IsEdge(int mapWidth, int mapHeight)
         {
             return Position.X == 0 || Position.X == mapWidth - 1 || Position.Y == 0 ||
                    Position.Y == mapHeight - 1;
+        }
+
+        public object CaptureState()
+        {
+            var dto = new TileDto
+            {
+                Texture = Texture,
+                BType = BiomeType,
+                IsFloor = true,
+                Position = new Vector2Int(Position.X, Position.Y),
+                TType = TileType
+            };
+
+            return dto;
+        }
+
+        public void RestoreState(object state)
+        {
+            throw new NotImplementedException();
         }
     }
 }

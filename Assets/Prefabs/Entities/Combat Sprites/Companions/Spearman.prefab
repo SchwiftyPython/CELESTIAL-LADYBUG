@@ -64,6 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9501a229ef16543a80842cf6f1cd7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackHit: 0
 --- !u!1 &8726410408491745275
 GameObject:
   m_ObjectHideFlags: 0
@@ -74,9 +75,9 @@ GameObject:
   m_Component:
   - component: {fileID: 402936860171526559}
   - component: {fileID: 8726410408491745264}
-  - component: {fileID: 8726410408491745270}
   - component: {fileID: 8726410408491745269}
   - component: {fileID: 44813022}
+  - component: {fileID: 8726410408491745270}
   m_Layer: 0
   m_Name: SkinSwap
   m_TagString: Untagged
@@ -149,22 +150,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8726410408491745270
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8726410408491745275}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee158225ee1e59f4791627785501d950, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shaderTypes: 0
-  normalStrenght: 5
-  normalSmoothing: 1
-  computingNormal: 0
 --- !u!114 &8726410408491745269
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,3 +176,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   swapSlot: 1
+--- !u!114 &8726410408491745270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8726410408491745275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee158225ee1e59f4791627785501d950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shaderTypes: 0
+  normalStrenght: 5
+  normalSmoothing: 1
+  computingNormal: 0

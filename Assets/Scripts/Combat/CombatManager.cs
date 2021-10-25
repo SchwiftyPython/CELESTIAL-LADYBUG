@@ -4,6 +4,7 @@ using System.Linq;
 using Assets.Scripts.AI;
 using Assets.Scripts.Audio;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Saving;
 using Assets.Scripts.Travel;
 using Assets.Scripts.UI;
 using GoRogue;
@@ -14,13 +15,14 @@ namespace Assets.Scripts.Combat
 {
     public enum CombatState
     {
-        Loading,
+        LoadingScene,
         Start,
         PlayerTurn,
         AiTurn,
         EndTurn,
         EndCombat,
-        NotActive
+        NotActive,
+        LoadFromSave
     }
 
     public enum CombatResult
@@ -37,14 +39,26 @@ namespace Assets.Scripts.Combat
         public int DamageReceived;
     }
 
-    public class CombatManager : MonoBehaviour, ISubscriber
+    public class CombatManager : MonoBehaviour, ISubscriber, ISaveable
     {
+        private struct CombatManagerDto
+        {
+            public CombatState CurrentState;
+            public object CombatMap;
+            public string ActiveEntityId;
+            public Queue<string> TurnOrder;
+            public int TurnNumber;
+            public List<object> Enemies;
+            public Dictionary<string, CompanionCombatStats> CompanionIds;
+            public Queue<string> CombatMessenger;
+        }
+
         private const string EndTurnEvent = GlobalHelper.EndTurn;
         private const string CombatFinished = GlobalHelper.CombatFinished;
         private const string EntityDead = GlobalHelper.EntityDead;
         private const string RefreshUi = GlobalHelper.RefreshCombatUi;
 
-        private CombatState _currentCombatState;
+        [SerializeField] private CombatState _currentCombatState;
         private GameObject _pawnHighlighterInstance;
 
         private EventMediator _eventMediator;
@@ -54,16 +68,16 @@ namespace Assets.Scripts.Combat
 
         private List<EffectTrigger<EffectArgs>> _effectTriggers;
 
-        public CombatMap Map { get; private set; }
+        [ES3NonSerializable] public CombatMap Map { get; private set; } //todo need to save manually somehow
 
-        public Entity ActiveEntity { get; private set; }
+        [ES3NonSerializable] public Entity ActiveEntity { get; private set; }
 
         public Queue<Entity> TurnOrder { get; private set; }
 
         public int CurrentTurnNumber { get; private set; }
 
-        public List<Entity> Enemies; //todo refactor
-        public Dictionary<Entity, CompanionCombatStats> Companions;
+        [ES3NonSerializable] public List<Entity> Enemies; //todo refactor
+        [ES3NonSerializable] public Dictionary<Entity, CompanionCombatStats> Companions;
 
         public GameObject PrototypePawnHighlighterPrefab;
 
@@ -87,7 +101,7 @@ namespace Assets.Scripts.Combat
             
             switch (_currentCombatState)
             {
-                case CombatState.Loading: //we want to wait until we have enemy combatants populated
+                case CombatState.LoadingScene: //we want to wait until we have enemy combatants populated
 
                     _musicController.EndTravelMusic();
 
@@ -258,19 +272,62 @@ namespace Assets.Scripts.Combat
                     break;
                 case CombatState.NotActive:
                     break;
+                case CombatState.LoadFromSave:
+                    _eventMediator.UnsubscribeFromAllEvents(this);
+
+                    _eventMediator.SubscribeToEvent(EndTurnEvent, this);
+                    _eventMediator.SubscribeToEvent(GlobalHelper.EntityDead, this);
+                    _eventMediator.SubscribeToEvent(GlobalHelper.ActiveEntityMoved, this);
+                    _eventMediator.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
+                    _eventMediator.Broadcast(RefreshUi, this, ActiveEntity);
+
+                    _musicController.PlayBattleMusic();
+
+                    _currentCombatState = CombatState.PlayerTurn;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        public void Load()
+        public void LoadCombatScene()
         {
-            _currentCombatState = CombatState.Loading;
+            _currentCombatState = CombatState.LoadingScene;
+        }
+
+        public void LoadFromSave()
+        {
+            _currentCombatState = CombatState.LoadFromSave;
+        }
+
+        public bool IsPlayerTurn()
+        {
+            return _currentCombatState == CombatState.PlayerTurn;
         }
 
         private void AiTakeTurn()
         {
-            StartCoroutine(ActiveEntity.CombatSpriteInstance.GetComponent<AiController>().TakeTurn());
+            if (ActiveEntity.CombatSpriteInstance == null)
+            {
+                return;
+            }
+
+            var aiController = ActiveEntity.CombatSpriteInstance.GetComponent<AiController>();
+
+            if (aiController == null)
+            {
+                return;
+            }
+
+            try
+            {
+                StartCoroutine(aiController.TakeTurn());
+            }
+            catch (Exception e)
+            {
+                Debug.Log("AI controller error");
+                _eventMediator.Broadcast(EndTurnEvent, this);
+            }
         }
 
         private GameObject GetPawnHighlighterInstance()
@@ -369,7 +426,7 @@ namespace Assets.Scripts.Combat
             return ActiveEntity.IsPlayer();
         }
 
-        private void HighlightActiveEntitySprite() 
+        private void HighlightActiveEntitySprite()
         {
             if (ActiveEntity == null)
             {
@@ -383,7 +440,19 @@ namespace Assets.Scripts.Combat
                 return;
             }
 
-            activeTile.SpriteInstance.GetComponent<TerrainSlotUi>().HighlightTileForActiveEntity();
+            if (activeTile.SpriteInstance == null)
+            {
+                return;
+            }
+
+            var terrainSlotUi = activeTile.SpriteInstance.GetComponent<TerrainSlotUi>();
+
+            if (terrainSlotUi == null)
+            {
+                return;
+            }
+
+            terrainSlotUi.HighlightTileForActiveEntity();
         }
 
         private bool IsCombatFinished()
@@ -467,8 +536,6 @@ namespace Assets.Scripts.Combat
                     return;
                 }
 
-                //RemoveEntity(deadEntity);
-
                 if (IsCombatFinished())
                 {
                     _currentCombatState = CombatState.EndCombat;
@@ -478,6 +545,125 @@ namespace Assets.Scripts.Combat
             {
                 HighlightActiveEntitySprite();
             }
+        }
+
+        public object CaptureState()
+        {
+            var dto = new CombatManagerDto
+            {
+                ActiveEntityId = ActiveEntity.Id,
+                CombatMap = Map.CaptureState(),
+                TurnNumber = CurrentTurnNumber,
+                TurnOrder = new Queue<string>(),
+                CurrentState = _currentCombatState,
+                Enemies = new List<object>(),
+                CompanionIds = new Dictionary<string, CompanionCombatStats>()
+            };
+
+            foreach (var companion in Companions)
+            {
+                dto.CompanionIds.Add(companion.Key.Id, companion.Value);
+            }
+
+            foreach (var enemy in Enemies)
+            {
+                dto.Enemies.Add(enemy.CaptureState());
+            }
+
+            foreach (var entity in TurnOrder)
+            {
+                dto.TurnOrder.Enqueue(entity.Id);
+            }
+
+            var messenger = FindObjectOfType<CombatMessenger>();
+
+            dto.CombatMessenger = (Queue<string>)messenger.CaptureState();
+
+            return dto;
+        }
+
+        public void RestoreState(object state)
+        {
+            if (state == null)
+            {
+                return;
+            }
+
+            CombatManagerDto dto = (CombatManagerDto)state;
+
+            Enemies = new List<Entity>();
+
+            foreach (var enemy in dto.Enemies)
+            {
+                var restoredEnemy = new Entity();
+
+                restoredEnemy.RestoreState(enemy);
+
+                Enemies.Add(restoredEnemy);
+            }
+
+            ActiveEntity = _travelManager.Party.GetCompanionById(dto.ActiveEntityId);
+
+            Companions = new Dictionary<Entity, CompanionCombatStats>();
+
+            foreach (var id in dto.CompanionIds)
+            {
+                var companion = _travelManager.Party.GetCompanionById(id.Key);
+
+                Companions.Add(companion, id.Value);
+            }
+
+            TurnOrder = new Queue<Entity>();
+
+            foreach (var id in dto.TurnOrder)
+            {
+                Entity entity = null;
+
+                foreach (var companion in Companions.Keys)
+                {
+                    if (string.Equals(id, companion.Id, StringComparison.OrdinalIgnoreCase))
+                    {
+                        entity = companion;
+                        break;
+                    }
+                }
+
+                if (entity == null)
+                {
+                    foreach (var enemy in Enemies)
+                    {
+                        if (string.Equals(id, enemy.Id, StringComparison.OrdinalIgnoreCase))
+                        {
+                            entity = enemy;
+                            break;
+                        }
+                    }
+                }
+
+                TurnOrder.Enqueue(entity);
+            }
+
+            Map = new CombatMap(MapGenerator.MapWidth, MapGenerator.MapHeight);
+
+            Map.RestoreState(dto.CombatMap);
+
+            _combatInput = FindObjectOfType<CombatInputController>();
+
+            _combatInput.SetMap(Map);
+
+            _combatInput.ClearHighlights();
+
+            DrawMap();
+
+            var messenger = FindObjectOfType<CombatMessenger>();
+
+            messenger.RestoreState(dto.CombatMessenger);
+
+            HighlightActiveEntitySprite();
+
+            _eventMediator = FindObjectOfType<EventMediator>();
+
+            _eventMediator.Broadcast(GlobalHelper.RefreshCombatUi, this, ActiveEntity);
         }
     }
 }

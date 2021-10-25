@@ -28,11 +28,7 @@ namespace Assets.Scripts.Encounters.Normal
 
             string optionResultText = "Everyone agrees it's not worth the risk and leaves the lab untouched.";
 
-            var optionOneReward = new Reward();
-
-            optionOneReward.AddPartyGain(PartySupplyTypes.Food, 6);
-
-            var optionOne = new Option(optionTitle, optionResultText, optionOneReward, null, EncounterType);
+            var optionOne = new Option(optionTitle, optionResultText, null, null, EncounterType);
 
             Options.Add(optionTitle, optionOne);
 
@@ -56,7 +52,6 @@ namespace Assets.Scripts.Encounters.Normal
                 optionResultText = $"{chosenCompanion.FirstName()} attempts to finish the potions. \n\nThey finish them easily and end up with 5 potions.";
 
                 optionTwoReward = new Reward();
-                optionOneReward.AddPartyGain(PartySupplyTypes.Food, 6);
                 optionTwoReward.AddPartyGain(PartySupplyTypes.HealthPotions, 5);
             }
             else if (coordCheck >= finishSuccess)
@@ -64,7 +59,6 @@ namespace Assets.Scripts.Encounters.Normal
                 optionResultText = $"{chosenCompanion.FirstName()} attempts to finish the potions. \n\nThey ruin a few of the potions, but nobody gets hurt.";
 
                 optionTwoReward = new Reward();
-                optionOneReward.AddPartyGain(PartySupplyTypes.Food, 6);
                 optionTwoReward.AddPartyGain(PartySupplyTypes.HealthPotions, 3);
             }
             else

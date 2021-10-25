@@ -13,7 +13,7 @@ namespace Assets.Scripts.Entities
         private const int StartingSkillDice = 7;
         private const int StartingSkillMax = 5;
 
-        private Entity _parent;
+        [ES3NonSerializable] private Entity _parent;
 
         //todo probably should define setters and getters here
         public int Melee { get; set; }
@@ -54,11 +54,20 @@ namespace Assets.Scripts.Entities
             }
         }
 
+        public Skills()
+        {
+        }
+
         public Skills(Entity parent)
         {
-            _parent = parent;
+            SetParent(parent);
 
             GenerateSkillValues();
+        }
+
+        public void SetParent(Entity parent)
+        {
+            _parent = parent;
         }
 
         //todo this assumes level 1 entity

@@ -9,20 +9,20 @@ using UnityEngine;
 
 namespace Assets.Scripts.Abilities
 {
-    public abstract class Ability 
+    public class Ability 
     {
         public string Name { get; private set; }
         public string Description { get; private set; }
         public int ApCost { get; private set; }
         public int Range { get; private set; }
-        public Entity AbilityOwner { get; private set; }
+        public Entity AbilityOwner { get; set; }
         public TargetType TargetType { get; private set; }
         public bool IsPassive { get; private set; }
         public Sprite Icon { get; protected set; }
         public bool UsesEquipment { get; protected set; }
         public List<Effect> EffectExemptions { get; protected set; }
 
-        protected Ability(string name, string description, int apCost, int range, Entity abilityOwner, TargetType targetType, bool passive, bool usesEquipment = true)
+        public Ability(string name, string description, int apCost, int range, Entity abilityOwner, TargetType targetType, bool passive, bool usesEquipment = true)
         {
             Name = name;
             Description = description;
@@ -30,7 +30,7 @@ namespace Assets.Scripts.Abilities
 
             if (range < 0 && !passive)
             {
-                var equippedWeapon = abilityOwner.GetEquippedWeapon();
+                var equippedWeapon = abilityOwner?.GetEquippedWeapon();
 
                 if (equippedWeapon == null)
                 {

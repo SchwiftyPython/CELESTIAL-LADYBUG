@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Saving;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
-    public class CombatMessenger : MonoBehaviour, ISubscriber
+    public class CombatMessenger : MonoBehaviour, ISubscriber, ISaveable
     {
         private const int MaxMessagesOnScreen = 45;
 
@@ -37,6 +38,11 @@ namespace Assets.Scripts.UI
 
         private void ClearAllOnScreenMessages()
         {
+            if (_messagesOnScreen == null || _messagesOnScreen.Count < 1)
+            {
+                return;
+            }
+
             foreach (var messageObject in _messagesOnScreen)
             {
                 Destroy(messageObject);
@@ -69,6 +75,16 @@ namespace Assets.Scripts.UI
             StartCoroutine(PushToBottom());
         }
 
+        private void RestoreOnScreenMessages(Queue<string> messages)
+        {
+            ClearAllOnScreenMessages();
+
+            foreach (var message in messages)
+            {
+                CreateOnScreenMessage(message);
+            }
+        }
+
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
         {
@@ -83,6 +99,36 @@ namespace Assets.Scripts.UI
                 }
 
                 CreateOnScreenMessage(message);
+            }
+        }
+
+        public object CaptureState()
+        {
+            if (_messagesOnScreen == null || _messagesOnScreen.Count < 1)
+            {
+                return new Queue<string>();
+            }
+
+            var messages = new Queue<string>();
+
+            foreach (var message in _messagesOnScreen)
+            {
+                messages.Enqueue(message.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
+            }
+
+            return messages;
+        }
+
+        public void RestoreState(object state)
+        {
+            if (state == null)
+            {
+                return;
+            }
+
+            if (state is Queue<string> savedMessages)
+            {
+                RestoreOnScreenMessages(savedMessages);
             }
         }
     }

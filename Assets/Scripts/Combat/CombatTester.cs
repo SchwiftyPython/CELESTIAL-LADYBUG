@@ -44,7 +44,7 @@ namespace Assets.Scripts.Combat
 
             for (var i = 0; i < 1; i++)
             {
-                Entity bandit = new Djinn();
+                Entity bandit = new Ghost();
 
                 bandits.Add(bandit);
 
@@ -69,7 +69,7 @@ namespace Assets.Scripts.Combat
 
             combatManager.Enemies = bandits;
 
-            combatManager.Load();
+            combatManager.LoadCombatScene();
         }
 
         private void SetAllEnemiesToOneHealth()

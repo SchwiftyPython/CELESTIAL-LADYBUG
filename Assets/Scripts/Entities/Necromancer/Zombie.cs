@@ -25,7 +25,7 @@ namespace Assets.Scripts.Entities.Necromancer
 
             var eEndurance = abilityStore.GetAbilityByName("endangered endurance", this);
 
-            Abilities.Add(eEndurance.GetType(), eEndurance);
+            Abilities.Add(eEndurance.Name, eEndurance);
 
             GenerateStartingEquipment(EntityClass.ManAtArms, _startingEquipmentTable);
 

@@ -16,11 +16,11 @@ namespace Assets.Scripts.Entities.Tower
 
             var clawAttack = abilityStore.GetAbilityByName("claw attack", this);
 
-            Abilities.Add(clawAttack.GetType(), clawAttack);
+           AddAbility(clawAttack);
 
             var demonicIntervention = abilityStore.GetAbilityByName("demonic intervention", this);
 
-            Abilities.Add(demonicIntervention.GetType(), demonicIntervention);
+            AddAbility(demonicIntervention);
 
             var audioStore = Object.FindObjectOfType<AudioStore>();
 

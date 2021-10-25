@@ -24,7 +24,7 @@ namespace Assets.Scripts.Entities.Stronghold
 
             var tank = abilityStore.GetAbilityByName("tank", this);
 
-            Abilities.Add(tank.GetType(), tank);
+            Abilities.Add(tank.Name, tank);
 
             var audioStore = Object.FindObjectOfType<AudioStore>();
 

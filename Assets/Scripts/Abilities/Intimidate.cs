@@ -13,7 +13,7 @@ namespace Assets.Scripts.Abilities
 
         //todo maybe list of effect exemptions in ability class?
 
-        public Intimidate(Entity abilityOwner) : base("Intimidate", "Anyone adjacent gains Fear effect.", -1, 1, abilityOwner, TargetType.Hostile, false, true)
+        public Intimidate(Entity abilityOwner) : base("Intimidate", "Anyone adjacent gains Fear effect.", -1, 1, abilityOwner, TargetType.Hostile, true, false)
         {
             _fearTiles = new List<Tile>();
             _fearEffect = new Fear(abilityOwner, true, Fear.INFINITE);

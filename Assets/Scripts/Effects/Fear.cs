@@ -13,6 +13,10 @@ namespace Assets.Scripts.Effects
         private const int FearDuration = 4;
         private const int PanicChance = 20;
 
+        public Fear()
+        {
+        }
+
         public Fear(Entity owner, bool locationDependent, int duration = FearDuration) : base("Fear",
             $"{PanicChance}% chance that target loses turn and attacks at random if able.", duration, locationDependent,
             false, TargetType.Hostile, owner)

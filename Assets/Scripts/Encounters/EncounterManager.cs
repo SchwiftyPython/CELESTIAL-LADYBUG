@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using Assets.Scripts.Decks;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Saving;
 using Assets.Scripts.Travel;
 using UnityEngine;
 
 namespace Assets.Scripts.Encounters
 {
-    public class EncounterManager : MonoBehaviour, ISubscriber
+    public class EncounterManager : MonoBehaviour, ISubscriber, ISaveable
     {
         private const string EncounterFinished = GlobalHelper.EncounterFinished;
         private const string MentalBreak = GlobalHelper.MentalBreak;
@@ -52,6 +53,11 @@ namespace Assets.Scripts.Encounters
                     PauseTimer();
 
                     var parallax = FindObjectOfType<Parallax>();
+
+                    if (parallax == null)
+                    {
+                        return;
+                    }
 
                     parallax.Stop();
 
@@ -106,6 +112,30 @@ namespace Assets.Scripts.Encounters
             }
 
             ResetTimer();
+        }
+
+        private void BuildDecksOnLoadGame(EncounterManagerDto emDto)
+        {
+            var encounterStore = FindObjectOfType<EncounterStore>();
+
+            var normalEncounterSize =  emDto.NormalDeck.Size;
+
+            if (normalEncounterSize > 0)
+            {
+                _normalEncounterDeck = new EncounterDeck(encounterStore.GetNormalEncounters(), normalEncounterSize);
+                _normalEncounterDeck.Shuffle();
+            }
+
+            _campingDeck = new EncounterDeck(encounterStore.GetCampingEncounters(), emDto.CampingDeck.Size);
+
+            if (GameManager.Instance.InCombat())
+            {
+                PauseTimer();
+            }
+            else
+            {
+                ResetTimer();
+            }
         }
 
         private void BuildTestDeck()
@@ -266,6 +296,40 @@ namespace Assets.Scripts.Encounters
             }
 
             //todo events for reset timer, draw trigger encounter
+        }
+
+        private struct EncounterManagerDto
+        {
+            public EncounterDeck.EncounterDeckDto NormalDeck;
+            public EncounterDeck.EncounterDeckDto CampingDeck;
+        }
+
+        public object CaptureState()
+        {
+            if (_normalEncounterDeck == null || _campingDeck == null)
+            {
+                return new EncounterManagerDto();
+            }
+
+            var dto = new EncounterManagerDto
+            {
+                NormalDeck = (EncounterDeck.EncounterDeckDto)_normalEncounterDeck.CaptureState(),
+                CampingDeck = (EncounterDeck.EncounterDeckDto)_campingDeck.CaptureState()
+            };
+
+            return dto;
+        }
+
+        public void RestoreState(object state)
+        {
+            if (state == null)
+            {
+                return;
+            }
+
+            var emDto = (EncounterManagerDto)state;
+
+            BuildDecksOnLoadGame(emDto);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Assets.Scripts.Entities.Special
 
             var fart = abilityStore.GetAbilityByName("fart", this);
 
-            Abilities.Add(fart.GetType(), fart);
+            AddAbility(fart);
 
             //todo make a little tougher than normal ghosts
         }
