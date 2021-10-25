@@ -32,8 +32,6 @@ namespace Assets.Scripts
         public const string CombatSceneName = "Combat";
         public const int CombatSceneIndex = 2;
 
-        private List<string> _subscribedEventNames;
-
         private List<GameObject> _activeWindows;
 
         private GameState _currentState;
@@ -60,11 +58,7 @@ namespace Assets.Scripts
 
             _currentState = GameState.Title;
 
-            //CurrentScene = SceneManager.GetActiveScene();
-
             _activeWindows = new List<GameObject>();
-
-            SubscribeToEvents();
         }
 
         private void Start()
@@ -150,6 +144,10 @@ namespace Assets.Scripts
         {
             _musicController.EndTitleMusic();
 
+            SaveFileName = saveFileName;
+
+            SceneManager.sceneLoaded += InitialSave;
+
             LoadTravelScene();
 
             var travelManager = FindObjectOfType<TravelManager>();
@@ -159,10 +157,6 @@ namespace Assets.Scripts
             travelManager.NewInventory();
 
             travelManager.StartNewDay();
-
-            var savingSystem = FindObjectOfType<SavingSystem>();  //might have to wait for travel scene to load
-
-            savingSystem.Save(saveFileName);
         }
 
         public void LoadTravelScene()
@@ -175,14 +169,18 @@ namespace Assets.Scripts
             StartCoroutine(WaitForSceneLoad(CombatSceneIndex));
         }
 
-        public void OnNotify(string eventName, object broadcaster, object parameter = null)
-        {
-
-        }
-
         public void WaitForSeconds(int numSeconds)
         {
             StartCoroutine(WaitForSecondsCoroutine(numSeconds));
+        }
+
+        private void InitialSave(Scene arg0, LoadSceneMode loadSceneMode)
+        {
+            var savingSystem = FindObjectOfType<SavingSystem>();
+
+            savingSystem.Save(SaveFileName);
+
+            SceneManager.sceneLoaded -= InitialSave;
         }
 
         private IEnumerator WaitForSceneLoad(int sceneNumber)
@@ -193,21 +191,6 @@ namespace Assets.Scripts
         private IEnumerator WaitForSecondsCoroutine(int numSeconds)
         {
             yield return new WaitForSeconds(numSeconds);
-        }
-
-        private void SubscribeToEvents()
-        {
-            // foreach (var eventName in _subscribedEventNames)
-            // {
-            //     //todo
-            //     //eventMediator.SubscribeToEvent(eventName, this);
-            // }
-        }
-
-        private void UnsubscribeFromEvents()
-        {
-            //todo
-            //eventMediator.UnsubscribeFromAllEvents(this);
         }
 
         public struct GameManagerDto

@@ -11,20 +11,18 @@ namespace Assets.Scripts.Utilities.Save_Load
 {
     public class SavingSystem : MonoBehaviour
     {
-        public void Save()
+        private string _autoSaveFile;
+
+        public void AutoSave()
         {
-            var gameManager = FindObjectOfType<GameManager>();
-
-            var saveFile = gameManager.SaveFileName;
-
-            Save(saveFile);
+            Save(_autoSaveFile);
         }
 
         public void Save(string saveFile)
         {
-            var gameManager = FindObjectOfType<GameManager>();
+            _autoSaveFile = saveFile;
 
-            gameManager.SaveFileName = saveFile;
+            var gameManager = FindObjectOfType<GameManager>();
 
             ES3.Save("game manager", gameManager.CaptureState(), saveFile);
 
@@ -49,6 +47,8 @@ namespace Assets.Scripts.Utilities.Save_Load
 
         public void Load(string saveFile)
         {
+            _autoSaveFile = saveFile;
+
             var gameManager = FindObjectOfType<GameManager>();
 
             var gmDto = (GameManager.GameManagerDto)ES3.Load("game manager", saveFile);
@@ -95,7 +95,7 @@ namespace Assets.Scripts.Utilities.Save_Load
 
         public void Delete(string saveFile)
         {
-            //todo
+            ES3.DeleteFile(saveFile);
         }
 
         private void LoadCombatManager(Scene arg0, LoadSceneMode loadSceneMode)
@@ -113,14 +113,7 @@ namespace Assets.Scripts.Utilities.Save_Load
 
         private void OnApplicationQuit()
         {
-            //todo auto save
-
-            if (string.Equals(GameManager.CurrentScene.name, "TitleScreen"))
-            {
-                return;
-            }
-
-            throw new NotImplementedException();
+            AutoSave();
         }
     }
 }

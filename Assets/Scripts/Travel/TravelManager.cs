@@ -5,10 +5,11 @@ using Assets.Scripts.Audio;
 using Assets.Scripts.Encounters;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Items;
-using Assets.Scripts.Saving;
 using Assets.Scripts.UI;
+using Assets.Scripts.Utilities.Save_Load;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using ISaveable = Assets.Scripts.Saving.ISaveable;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Travel
@@ -772,6 +773,10 @@ namespace Assets.Scripts.Travel
                 else
                 {
                     StartNewDay();
+
+                    var saveSystem = FindObjectOfType<SavingSystem>();
+
+                    saveSystem.AutoSave();
                 }
             }
             else if (eventName.Equals(GlobalHelper.EntityDead))

@@ -12658,7 +12658,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toggleKey: 27
   uiContainer: {fileID: 1067809255}
-  boardHolder: {fileID: 0}
+  QuitButton: {fileID: 0}
   entityHolder: {fileID: 0}
 --- !u!114 &938456700
 MonoBehaviour:

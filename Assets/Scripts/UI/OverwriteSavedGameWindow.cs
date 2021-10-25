@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.UI
 {
-    public class NewGameWindow : MonoBehaviour
+    public class OverwriteSavedGameWindow : MonoBehaviour
     {
         [SerializeField] private GameObject uiContainer = null;
 
@@ -21,8 +21,10 @@ namespace Assets.Scripts.UI
             _savingSystem = FindObjectOfType<SavingSystem>();
         }
 
-        public void Show()
+        public void Show(string fileName)
         {
+            _saveFileName = fileName;
+
             uiContainer.SetActive(true);
             GameManager.Instance.AddActiveWindow(uiContainer);
         }
@@ -33,23 +35,15 @@ namespace Assets.Scripts.UI
             GameManager.Instance.RemoveActiveWindow(uiContainer);
         }
 
-        public void StartGame()
+        public void Confirm()
         {
-            if (_savingSystem.SaveExists(_saveFileName))
-            {
-                var overwriteConfirm = FindObjectOfType<OverwriteSavedGameWindow>();
+            Hide();
 
-                overwriteConfirm.Show(_saveFileName);
-            }
-            else
-            {
-                GameManager.Instance.StartNewGame(_saveFileName);
-            }
-        }
+            _savingSystem.Delete(_saveFileName);
 
-        public void SetNewSaveFileName(string fileName)
-        {
-            _saveFileName = fileName;
+            var newGameWindow = FindObjectOfType<NewGameWindow>();
+
+            newGameWindow.StartGame();
         }
     }
 }

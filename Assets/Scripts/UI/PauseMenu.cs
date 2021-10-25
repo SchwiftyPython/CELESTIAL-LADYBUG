@@ -3,6 +3,7 @@ using Assets.Scripts.Combat;
 using Assets.Scripts.Utilities.Save_Load;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
@@ -10,11 +11,15 @@ namespace Assets.Scripts.UI
     {
         private const string ShowPopupEvent = GlobalHelper.ShowPauseMenu;
         private const string HidePopupEvent = GlobalHelper.HidePauseMenu;
+        private const string PlayerTurnEvent = GlobalHelper.PlayerTurn;
+        private const string AiTurnEvent = GlobalHelper.AiTurn;
 
         [SerializeField] private KeyCode toggleKey = KeyCode.Escape;
         [SerializeField] private GameObject uiContainer = null;
-        [SerializeField] private GameObject boardHolder = null;
+        [SerializeField] private Button QuitButton = null;
+        [SerializeField] private Button RetreatButton = null;
         [SerializeField] private GameObject entityHolder = null;
+        [SerializeField] private GameObject boardHolder = null;
 
         private void Start()
         {
@@ -54,6 +59,11 @@ namespace Assets.Scripts.UI
                 uiContainer.SetActive(true);
                 GameManager.Instance.AddActiveWindow(uiContainer);
 
+                var combatManager = FindObjectOfType<CombatManager>();
+
+                QuitButton.interactable = combatManager.IsPlayerTurn();
+                RetreatButton.interactable = combatManager.IsPlayerTurn();
+
                 return;
             }
 
@@ -70,11 +80,6 @@ namespace Assets.Scripts.UI
             uiContainer.SetActive(false);
             GameManager.Instance.RemoveActiveWindow(uiContainer);
 
-            // if (GameManager.Instance.CurrentScene.name.Equals(GlobalHelper.CombatScene))
-            // {
-            //     return;
-            // }
-
             if (GameManager.Instance.AnyActiveWindows())
             {
                 return;
@@ -87,30 +92,13 @@ namespace Assets.Scripts.UI
             eventMediator.Broadcast(GlobalHelper.ResumeTimer, this);
         }
 
-        public void SaveAndQuit() //todo disable on enemy turn or when in the middle of encounter
+        public void SaveAndQuit()
         {
             var saveSystem = FindObjectOfType<SavingSystem>();
 
-            saveSystem.Save();
+            saveSystem.AutoSave();
 
             LoadMainMenuScene();
-        }
-
-        public void Load()
-        {
-            if (GameManager.CurrentScene.name.Equals(GlobalHelper.CombatScene))
-            {
-                var combatManager = FindObjectOfType<CombatManager>();
-
-                combatManager.LoadFromSave();
-
-                GlobalHelper.DestroyAllChildren(entityHolder);
-                GlobalHelper.DestroyAllChildren(boardHolder);
-            }
-
-            var saveSystem = FindObjectOfType<SavingSystem>();
-
-            saveSystem.Load(String.Empty); //todo file select
         }
 
         public void LoadMainMenuScene()

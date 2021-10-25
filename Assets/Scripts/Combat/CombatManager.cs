@@ -300,6 +300,11 @@ namespace Assets.Scripts.Combat
             _currentCombatState = CombatState.LoadFromSave;
         }
 
+        public bool IsPlayerTurn()
+        {
+            return _currentCombatState == CombatState.PlayerTurn;
+        }
+
         private void AiTakeTurn()
         {
             if (ActiveEntity.CombatSpriteInstance == null)
