@@ -14,6 +14,8 @@ using Assets.Scripts.Entities.Names;
 using Assets.Scripts.Items;
 using Assets.Scripts.Saving;
 using Assets.Scripts.UI;
+using DG.Tweening;
+using DG.Tweening.Plugins.Core.PathCore;
 using GoRogue;
 using GoRogue.DiceNotation;
 using UnityEngine;
@@ -210,7 +212,7 @@ namespace Assets.Scripts.Entities
         }
 
         //todo refactor this so the sprite moves through each square and doesn't just teleport
-        public void MoveTo(Tile tile, int apMovementCost)
+        public void MoveTo(Tile tile, int apMovementCost, List<Tile> path = null)
         {
             if (tile == null)
             {
@@ -249,13 +251,56 @@ namespace Assets.Scripts.Entities
 
                 currentTile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(null);
 
-                if (IsPlayer())
+                const float durationMod = 0.25f;
+
+                if (path != null)
                 {
-                    CombatSpriteInstance.transform.position = new Vector3(Position.X, Position.Y);
+                    var waypoints = new Queue<Vector3>();
+
+                    foreach (var step in path)
+                    {
+                        if (IsPlayer())
+                        {
+                            waypoints.Enqueue(new Vector2(step.Position.X, step.Position.Y));
+                        }
+                        else
+                        {
+                            waypoints.Enqueue(new Vector2(step.Position.X + 1, step.Position.Y));
+                        }
+                        
+                    }
+
+                    var duration = waypoints.Count * durationMod;
+
+                    var tween = CombatSpriteInstance.transform.DOPath(waypoints.ToArray(), duration, PathType.Linear,
+                        PathMode.TopDown2D);
+
+                    var animationHelper = CombatSpriteInstance.transform.GetComponent<CombatAnimationHelper>();
+
+                    animationHelper.StartSmoothMove(tween);
                 }
                 else
                 {
-                    CombatSpriteInstance.transform.position = new Vector3(Position.X + 1, Position.Y);
+                    var waypoint = new Vector3[1];
+
+                    if (IsPlayer())
+                    {
+                        waypoint[0] = new Vector2(tile.Position.X, tile.Position.Y);
+                    }
+                    else
+                    {
+                        waypoint[0] = new Vector2(tile.Position.X + 1, tile.Position.Y);
+                    }
+
+                    CombatSpriteInstance.transform.DOPath(waypoint, durationMod, PathType.Linear,
+                        PathMode.TopDown2D);
+
+                    var tween = CombatSpriteInstance.transform.DOPath(waypoint, durationMod, PathType.Linear,
+                        PathMode.TopDown2D);
+
+                    var animationHelper = CombatSpriteInstance.transform.GetComponent<CombatAnimationHelper>();
+
+                    animationHelper.StartSmoothMove(tween);
                 }
 
                 tile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(this);
