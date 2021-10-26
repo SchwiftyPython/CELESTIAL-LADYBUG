@@ -53,8 +53,8 @@ namespace Assets.Scripts.AI
         {
             _fleeing = false;
         }
-
-        public IEnumerator TakeTurn()
+        
+        public IEnumerator TakeTurn() //todo might have to re-structure this so it's not working like a loop
         {
             _actionAvailable = true;
 
@@ -113,6 +113,11 @@ namespace Assets.Scripts.AI
                 }
 
                 currentTry++;
+
+                while (animating)
+                {
+                    yield return null;
+                }
             }
 
             while (animating)
@@ -347,6 +352,11 @@ namespace Assets.Scripts.AI
             }
 
             return targets[Random.Range(0, targets.Count)];
+        }
+
+        private IEnumerator Delay()
+        {
+            yield return new WaitForSeconds(1.00f);
         }
     }
 }
