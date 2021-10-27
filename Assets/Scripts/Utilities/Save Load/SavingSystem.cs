@@ -113,6 +113,18 @@ namespace Assets.Scripts.Utilities.Save_Load
 
         private void OnApplicationQuit()
         {
+            if (string.Equals(GameManager.CurrentScene.name, "TitleScreen", StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            var combatTester = FindObjectOfType<CombatTester>();
+
+            if (combatTester != null && combatTester.testingEnabled)
+            {
+                return;
+            }
+
             AutoSave();
         }
     }

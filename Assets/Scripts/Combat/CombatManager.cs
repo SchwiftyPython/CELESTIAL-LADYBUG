@@ -610,6 +610,12 @@ namespace Assets.Scripts.Combat
             {
                 var companion = _travelManager.Party.GetCompanionById(id.Key);
 
+                if (companion == null)
+                {
+                    Debug.LogError($"Can't find companion with id {id.Key}");
+                    continue;
+                }
+
                 Companions.Add(companion, id.Value);
             }
 
