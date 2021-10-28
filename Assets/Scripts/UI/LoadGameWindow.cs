@@ -40,6 +40,8 @@ namespace Assets.Scripts.UI
         public void LoadSelectedGame()
         {
             _savingSystem.Load(_saveFileName);
+
+            Hide();
         }
 
         public void SetNewSaveFileName(string fileName)

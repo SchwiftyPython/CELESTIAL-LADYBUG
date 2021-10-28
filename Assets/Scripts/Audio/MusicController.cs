@@ -10,6 +10,8 @@ namespace Assets.Scripts.Audio
 
         [SerializeField] private bool muteMusic;
 
+        private float _volume;
+
         private FMOD.Studio.EventInstance _musicInstance;
 
         private void Awake()
@@ -63,6 +65,13 @@ namespace Assets.Scripts.Audio
         public void MuteMusic()
         {
             _musicInstance.setParameterByName("Mute", 1f);
+        }
+
+        public void AdjustVolume(float volume)
+        {
+            _volume = volume;
+
+            _musicInstance.setVolume(_volume);
         }
 
         private void PlayMusic(string path)

@@ -1811,7 +1811,7 @@ MonoBehaviour:
   battleMusic: event:/Music/Battle Music
   travelMusic: event:/Music/Generic Travel Music
   titleMusic: event:/Music/Title Music
-  muteMusic: 1
+  muteMusic: 0
 --- !u!114 &6424118163489059769
 MonoBehaviour:
   m_ObjectHideFlags: 0

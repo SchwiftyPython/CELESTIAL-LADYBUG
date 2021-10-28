@@ -138,7 +138,7 @@ MonoBehaviour:
   Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Neutral.bank
   Name: Neutral
   StudioPath: bank:/Neutral
-  lastModified: 637665164536315101
+  lastModified: 637710138230071415
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -222,6 +222,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &-8714181780083035729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Battle Music/Victory
+  m_EditorClassIdentifier: 
+  Name: Victory
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-8681733012055259582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,7 +257,7 @@ MonoBehaviour:
   Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Interface.bank
   Name: Interface
   StudioPath: bank:/Interface
-  lastModified: 637665164535610967
+  lastModified: 637710138229183574
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -944,6 +964,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &-7304668493479939005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Generic Travel Music/Mute
+  m_EditorClassIdentifier: 
+  Name: Mute
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-7291011185292290703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1362,7 +1402,7 @@ MonoBehaviour:
   Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637665164535660287
+  lastModified: 637710138229228212
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -1406,6 +1446,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &-6493158996853950287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Battle Music/End Battle Music
+  m_EditorClassIdentifier: 
+  Name: End Battle Music
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-6486070973632986409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1629,11 +1689,11 @@ MonoBehaviour:
   Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637665164535675167
+  lastModified: 637710138229248049
   LoadResult: 0
   FileSizes:
   - Name: Desktop
-    Value: 2224
+    Value: 2302
   Exists: 1
 --- !u!114 &-6095489977031382385
 MonoBehaviour:
@@ -1655,6 +1715,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &-6046840749761875984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Title Music/End Title Music
+  m_EditorClassIdentifier: 
+  Name: End Title Music
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-6025213835916973493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2182,7 +2262,7 @@ MonoBehaviour:
   Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Companions.bank
   Name: Companions
   StudioPath: bank:/Companions
-  lastModified: 637665164534994993
+  lastModified: 637710138228568539
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -3110,7 +3190,7 @@ MonoBehaviour:
   Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Enemies.bank
   Name: Enemies
   StudioPath: bank:/Enemies
-  lastModified: 637665164535306536
+  lastModified: 637710138228876060
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -3739,6 +3819,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 1
+--- !u!114 &-1382527138965071436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Title Music/Mute
+  m_EditorClassIdentifier: 
+  Name: Mute
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-1346986958559866359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4249,7 +4349,7 @@ MonoBehaviour:
   - {fileID: -6658935821727719001}
   StringsBanks:
   - {fileID: -6100143119512428333}
-  stringsBankWriteTime: 637665164535675167
+  stringsBankWriteTime: 637710138229248049
   cacheVersion: 6
 --- !u!114 &34974994391803826
 MonoBehaviour:
@@ -4617,6 +4717,26 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 181
+--- !u!114 &663328160028254662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Generic Travel Music/End Travel Music
+  m_EditorClassIdentifier: 
+  Name: End Travel Music
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &706655723896962817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4997,10 +5117,10 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: -419557735358095566}
-  - {fileID: -553900096959993298}
-  - {fileID: -69908270420169876}
-  - {fileID: -5035883098740143655}
+  - {fileID: -6493158996853950287}
+  - {fileID: 6353493797574990170}
+  - {fileID: 4719410818543767744}
+  - {fileID: -8714181780083035729}
   MinDistance: 0
   MaxDistance: 0
   Length: 451056
@@ -6036,7 +6156,7 @@ MonoBehaviour:
   Path: ../../../Documents/FMOD Studio/Dunnigan's Trail/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 637665164536088547
+  lastModified: 637710138229858130
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -6303,6 +6423,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &4719410818543767744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Battle Music/Game Over
+  m_EditorClassIdentifier: 
+  Name: Game Over
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &4761967428081949875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6649,8 +6789,8 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: -305147663048557421}
-  - {fileID: 6929577548346427240}
+  - {fileID: -7304668493479939005}
+  - {fileID: 663328160028254662}
   MinDistance: 0
   MaxDistance: 0
   Length: 520000
@@ -7120,6 +7260,26 @@ MonoBehaviour:
     data1: 0
     data2: 0
   Exists: 0
+--- !u!114 &6353493797574990170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/Battle Music/Mute
+  m_EditorClassIdentifier: 
+  Name: Mute
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &6371430799188475490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7902,15 +8062,15 @@ MonoBehaviour:
   guid: e52e6edea93fde43a8fb5e07706ca865
   Banks:
   - {fileID: 3920283206164665579}
-  IsStream: 0
+  IsStream: 1
   Is3D: 0
-  IsOneShot: 1
+  IsOneShot: 0
   Parameters:
-  - {fileID: -7752262788492759075}
-  - {fileID: -2929299206235919294}
+  - {fileID: -6046840749761875984}
+  - {fileID: -1382527138965071436}
   MinDistance: 0
   MaxDistance: 0
-  Length: 140500
+  Length: 142000
 --- !u!114 &8183234649869095716
 MonoBehaviour:
   m_ObjectHideFlags: 0
