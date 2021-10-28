@@ -31,6 +31,9 @@ namespace Assets.Scripts.Combat
 
         public void Build(CombatMap map)
         {
+            GlobalHelper.DestroyAllChildren(gameObject);
+            GlobalHelper.DestroyAllChildren(EntityHolder.gameObject);
+
             for (var currentColumn = 0; currentColumn < map.Width; currentColumn++)
             {
                 for (var currentRow = 0; currentRow < map.Height; currentRow++)

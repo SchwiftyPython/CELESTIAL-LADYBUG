@@ -29,6 +29,11 @@ namespace Assets.Scripts.UI
 
         private void ClearExcessOnScreenMessages()
         {
+            if (_messagesOnScreen == null || _messagesOnScreen.Count < 1)
+            {
+                return;
+            }
+
             while (_messagesOnScreen.Count >= MaxMessagesOnScreen)
             {
                 var messageToClear = _messagesOnScreen.Dequeue();

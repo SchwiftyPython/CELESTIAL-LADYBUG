@@ -11,6 +11,8 @@ namespace Assets.Scripts.Utilities.Save_Load
 {
     public class SavingSystem : MonoBehaviour
     {
+        private const string SettingsFile = "settings.txt";
+
         private string _autoSaveFile;
 
         public void AutoSave()
@@ -67,10 +69,39 @@ namespace Assets.Scripts.Utilities.Save_Load
 
             if (string.Equals(gmDto.CurrentSceneName, GameManager.CombatSceneName, StringComparison.OrdinalIgnoreCase))
             {
-                SceneManager.sceneLoaded += LoadCombatManager;
+                if (string.Equals(SceneManager.GetActiveScene().name, GameManager.CombatSceneName,
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    LoadCombatManager();
+                }
+                else
+                {
+                    SceneManager.sceneLoaded += LoadCombatManager;
+                }
             }
 
             gameManager.RestoreState(gmDto);
+        }
+
+        public void SaveSettings()
+        {
+            var settings = FindObjectOfType<SettingsWindow>();
+
+            ES3.Save("settings", settings.CaptureState(), SettingsFile);
+        }
+
+        public void LoadSettings()
+        {
+            var settings = FindObjectOfType<SettingsWindow>();
+
+            if (!ES3.FileExists(SettingsFile))
+            {
+                return;
+            }
+
+            var settingsDto = ES3.Load("settings", SettingsFile);
+
+            settings.RestoreState(settingsDto);
         }
 
         public SaveSlot.SaveGameInfo? GetSaveGameInfo(string fileName)
@@ -100,9 +131,14 @@ namespace Assets.Scripts.Utilities.Save_Load
 
         private void LoadCombatManager(Scene arg0, LoadSceneMode loadSceneMode)
         {
+            LoadCombatManager();
+        }
+
+        private void LoadCombatManager()
+        {
             var combatManager = FindObjectOfType<CombatManager>();
 
-            var cmDto = ES3.Load("combat manager");
+            var cmDto = ES3.Load("combat manager", _autoSaveFile);
 
             combatManager.RestoreState(cmDto);
 
