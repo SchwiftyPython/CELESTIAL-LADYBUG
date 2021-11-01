@@ -2065,6 +2065,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 00cbfbf02f7bcb246aabfc82e51a9e95, type: 3}
   - {fileID: 21300000, guid: e51347b0ac26dea469746c5459de4f87, type: 3}
   - {fileID: 21300000, guid: 661e640015735904e9b8f4f79002ff15, type: 3}
+  DerpusPortrait: {fileID: 21300000, guid: 0e4c78306d61c1f43a0746808711518b, type: 3}
   WeaponSprites:
   - {fileID: 21300000, guid: 39eb2ce4472b51a47ad422c7f11a631e, type: 3}
   - {fileID: 21300000, guid: 41de99a6a95ac4a4386d6ac316050460, type: 3}
