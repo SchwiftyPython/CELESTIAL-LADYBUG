@@ -2,11 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.AI;
-using Assets.Scripts.Audio;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Effects;
 using Assets.Scripts.Effects.Args;
@@ -15,7 +13,6 @@ using Assets.Scripts.Items;
 using Assets.Scripts.Saving;
 using Assets.Scripts.UI;
 using DG.Tweening;
-using DG.Tweening.Plugins.Core.PathCore;
 using GoRogue;
 using GoRogue.DiceNotation;
 using UnityEngine;
@@ -134,7 +131,14 @@ namespace Assets.Scripts.Entities
 
             Effects = new List<Effect>();
 
-            GeneratePortrait();
+            if (IsDerpus())
+            {
+                GetDerpusPortrait();
+            }
+            else
+            {
+                GeneratePortrait();
+            }
 
             _level = 1;
             _xp = 0;
@@ -1419,6 +1423,13 @@ namespace Assets.Scripts.Entities
             }
 
             return NameStore.Instance.GenerateFullName(possibleNameFiles, sex);
+        }
+
+        private void GetDerpusPortrait()
+        {
+            var spriteStore = Object.FindObjectOfType<SpriteStore>();
+
+            Portrait = spriteStore.GetDerpusPortrait();
         }
 
         private void GeneratePortrait()

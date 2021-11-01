@@ -68,6 +68,8 @@ namespace Assets.Scripts
         public Sprite[] PortraitHairSprites;
         public Sprite[] PortraitHelmetSprites;
 
+        public Sprite DerpusPortrait;
+
         #endregion PortraitSprites
 
         #region ItemSprites
@@ -173,6 +175,13 @@ namespace Assets.Scripts
             return preset;
         }
 
+        public Dictionary<Portrait.Slot, string> GetDerpusPortrait()
+        {
+            var portrait = new Dictionary<Portrait.Slot, string> { { Portrait.Slot.Skin, "derpus" } };
+
+            return portrait;
+        }
+
         public Sprite GetRandomSpriteForSlot(Portrait.Slot slot)
         {
             switch (slot)
@@ -220,6 +229,12 @@ namespace Assets.Scripts
             switch (slot)
             {
                 case Portrait.Slot.Skin:
+
+                    if (string.Equals(key, "derpus"))
+                    {
+                        return DerpusPortrait;
+                    }
+
                     return _pSkinDictionary[key];
                 // case Portrait.Slot.Ears:
                 //     return _pEarDictionary[key];
