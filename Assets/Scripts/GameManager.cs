@@ -5,6 +5,7 @@ using System.Linq;
 using Assets.Scripts.Audio;
 using Assets.Scripts.Items;
 using Assets.Scripts.Travel;
+using Assets.Scripts.UI;
 using Assets.Scripts.Utilities.Save_Load;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -119,6 +120,17 @@ namespace Assets.Scripts
 
         public bool AnyActiveWindows()
         {
+            if (_activeWindows.Any())
+            {
+                foreach (var window in _activeWindows.ToArray())
+                {
+                    if (window == null)
+                    {
+                        RemoveActiveWindow(window);
+                    }
+                }
+            }
+
             return _activeWindows.Any();
         }
 
@@ -148,6 +160,8 @@ namespace Assets.Scripts
 
             SceneManager.sceneLoaded += InitialSave;
 
+            SceneManager.sceneLoaded += ShowNewGamePopup;
+
             LoadTravelScene();
 
             var travelManager = FindObjectOfType<TravelManager>();
@@ -157,6 +171,11 @@ namespace Assets.Scripts
             travelManager.NewInventory();
 
             travelManager.StartNewDay();
+        }
+
+        private void ShowNewGamePopup(Scene arg0, LoadSceneMode arg1)
+        {
+            StartCoroutine(ShowNewGamePopup());
         }
 
         public void LoadTravelScene()
@@ -183,6 +202,15 @@ namespace Assets.Scripts
             SceneManager.sceneLoaded -= InitialSave;
         }
 
+        private IEnumerator ShowNewGamePopup()
+        {
+            yield return WaitForSecondsCoroutine(1);
+
+            var newGamePopup = FindObjectOfType<NewGamePopup>();
+
+            newGamePopup.Show();
+        }
+
         private IEnumerator WaitForSceneLoad(int sceneNumber)
         {
             yield return SceneManager.LoadSceneAsync(sceneNumber);
@@ -190,7 +218,7 @@ namespace Assets.Scripts
 
         private IEnumerator WaitForSecondsCoroutine(int numSeconds)
         {
-            yield return new WaitForSeconds(numSeconds);
+            yield return new WaitForSecondsRealtime(numSeconds);
         }
 
         public struct GameManagerDto

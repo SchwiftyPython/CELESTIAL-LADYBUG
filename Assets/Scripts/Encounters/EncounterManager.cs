@@ -42,7 +42,7 @@ namespace Assets.Scripts.Encounters
 
         private void Update()
         {
-            if (!_timerPaused)
+            if (!_timerPaused && !GameManager.Instance.AnyActiveWindows())
             {
                 if (TimeTilNextEncounter > 0)
                 {
@@ -112,6 +112,7 @@ namespace Assets.Scripts.Encounters
             }
 
             ResetTimer();
+            ResumeTimer();
         }
 
         private void BuildDecksOnLoadGame(EncounterManagerDto emDto)
@@ -135,6 +136,7 @@ namespace Assets.Scripts.Encounters
             else
             {
                 ResetTimer();
+                ResumeTimer();
             }
         }
 
@@ -247,8 +249,7 @@ namespace Assets.Scripts.Encounters
 
         private void ResetTimer()
         {
-            TimeTilNextEncounter = Random.Range(7, 9);
-            ResumeTimer();
+            TimeTilNextEncounter = Random.Range(6, 8);
         }
 
         private IEnumerator Delay()

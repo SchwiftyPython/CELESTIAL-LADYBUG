@@ -8,8 +8,8 @@ namespace Assets.Scripts
         Melee,
         [Description("Ranged")]
         Ranged,
-        [Description("Lockpicking")]
-        Lockpicking,
+        [Description("Sneak")]
+        Sneak,
         [Description("Endurance")]
         Endurance,
         [Description("Healing")]
