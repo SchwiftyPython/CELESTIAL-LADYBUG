@@ -16,6 +16,8 @@ namespace Assets.Scripts.UI
         private FMOD.Studio.Bus _musicBus;
         private FMOD.Studio.Bus _soundBus;
 
+        private bool _tutorialsEnabled;
+
         private void Start()
         {
             if (uiContainer.activeSelf)
@@ -26,6 +28,7 @@ namespace Assets.Scripts.UI
             _masterBus = FMODUnity.RuntimeManager.GetBus("Bus:/");
             _musicBus = FMODUnity.RuntimeManager.GetBus("bus:/Music");
             _soundBus = FMODUnity.RuntimeManager.GetBus("bus:/SoundEffects");
+            _tutorialsEnabled = true;
 
             var savingSystem = FindObjectOfType<SavingSystem>();
 
@@ -71,12 +74,23 @@ namespace Assets.Scripts.UI
             savingSystem.SaveSettings();
         }
 
+        public void EnableTutorials()
+        {
+            _tutorialsEnabled = true;
+        }
+
+        public void DisableTutorials()
+        {
+            _tutorialsEnabled = false;
+        }
+
         private struct SettingsDto
         {
             public float MasterVolume;
             public float MusicVolume;
             public float SoundEffectsVolume;
             public bool FullScreen;
+            public bool TutorialsEnabled;
         }
 
         public object CaptureState()
@@ -87,6 +101,7 @@ namespace Assets.Scripts.UI
             _musicBus.getVolume(out dto.MusicVolume);
             _soundBus.getVolume(out dto.SoundEffectsVolume);
             dto.FullScreen = Screen.fullScreen;
+            dto.TutorialsEnabled = _tutorialsEnabled;
 
             return dto;
         }
@@ -111,6 +126,8 @@ namespace Assets.Scripts.UI
 
             ToggleFullscreen(dto.FullScreen);
             fullScreenToggle.isOn = dto.FullScreen;
+
+            _tutorialsEnabled = dto.TutorialsEnabled;
         }
     }
 }

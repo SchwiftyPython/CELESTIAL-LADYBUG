@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("<Melee>k__BackingField", "<Ranged>k__BackingField", "<Lockpicking>k__BackingField", "<Endurance>k__BackingField", "<Healing>k__BackingField", "<Survival>k__BackingField", "_persuasion")]
+	[ES3PropertiesAttribute("<Melee>k__BackingField", "<Ranged>k__BackingField", "<Sneak>k__BackingField", "<Endurance>k__BackingField", "<Healing>k__BackingField", "<Survival>k__BackingField", "_persuasion")]
 	public class ES3UserType_Skills : ES3ObjectType
 	{
 		public static ES3Type Instance = null;
@@ -18,7 +18,7 @@ namespace ES3Types
 			
 			writer.WritePrivateField("<Melee>k__BackingField", instance);
 			writer.WritePrivateField("<Ranged>k__BackingField", instance);
-			writer.WritePrivateField("<Lockpicking>k__BackingField", instance);
+			writer.WritePrivateField("<Sneak>k__BackingField", instance);
 			writer.WritePrivateField("<Endurance>k__BackingField", instance);
 			writer.WritePrivateField("<Healing>k__BackingField", instance);
 			writer.WritePrivateField("<Survival>k__BackingField", instance);
@@ -39,8 +39,8 @@ namespace ES3Types
 					case "<Ranged>k__BackingField":
 					reader.SetPrivateField("<Ranged>k__BackingField", reader.Read<System.Int32>(), instance);
 					break;
-					case "<Lockpicking>k__BackingField":
-					reader.SetPrivateField("<Lockpicking>k__BackingField", reader.Read<System.Int32>(), instance);
+					case "<Sneak>k__BackingField":
+					reader.SetPrivateField("<Sneak>k__BackingField", reader.Read<System.Int32>(), instance);
 					break;
 					case "<Endurance>k__BackingField":
 					reader.SetPrivateField("<Endurance>k__BackingField", reader.Read<System.Int32>(), instance);

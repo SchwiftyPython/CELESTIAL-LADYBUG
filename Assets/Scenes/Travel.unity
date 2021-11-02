@@ -4920,6 +4920,7 @@ GameObject:
   - component: {fileID: 338063068}
   - component: {fileID: 338063067}
   - component: {fileID: 338063066}
+  - component: {fileID: 338063069}
   m_Layer: 5
   m_Name: Ranged
   m_TagString: Untagged
@@ -5005,6 +5006,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 338063064}
   m_CullTransparentMesh: 0
+--- !u!114 &338063069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338063064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b36b69f4f70a4e4a92926c94c62b504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
+    type: 3}
+  tooltipText: How well a character can hit something with a Ranged attack.
 --- !u!1 &339152108
 GameObject:
   m_ObjectHideFlags: 0
@@ -11890,7 +11906,7 @@ MonoBehaviour:
   _morale: {fileID: 1904433491}
   _melee: {fileID: 615341114}
   _ranged: {fileID: 1625792648}
-  _lockpick: {fileID: 921101024}
+  _sneak: {fileID: 0}
   _toughness: {fileID: 1397448028}
   _healing: {fileID: 402367575}
   _agility: {fileID: 1302083814}
@@ -13791,6 +13807,7 @@ GameObject:
   - component: {fileID: 864686452}
   - component: {fileID: 864686451}
   - component: {fileID: 864686450}
+  - component: {fileID: 864686453}
   m_Layer: 5
   m_Name: Charisma
   m_TagString: Untagged
@@ -13876,6 +13893,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 864686448}
   m_CullTransparentMesh: 0
+--- !u!114 &864686453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 864686448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b36b69f4f70a4e4a92926c94c62b504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
+    type: 3}
+  tooltipText: Emotional intelligence and physical attractiveness.
 --- !u!1 &868577233
 GameObject:
   m_ObjectHideFlags: 0
@@ -14024,6 +14056,7 @@ GameObject:
   - component: {fileID: 877739948}
   - component: {fileID: 877739947}
   - component: {fileID: 877739946}
+  - component: {fileID: 877739949}
   m_Layer: 5
   m_Name: Agility
   m_TagString: Untagged
@@ -14109,6 +14142,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 877739944}
   m_CullTransparentMesh: 0
+--- !u!114 &877739949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877739944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b36b69f4f70a4e4a92926c94c62b504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
+    type: 3}
+  tooltipText: Agility measures dexterity, reflexes, and balance.
 --- !u!1 &881781837
 GameObject:
   m_ObjectHideFlags: 0
@@ -14525,6 +14573,7 @@ GameObject:
   - component: {fileID: 898323411}
   - component: {fileID: 898323410}
   - component: {fileID: 898323409}
+  - component: {fileID: 898323412}
   m_Layer: 5
   m_Name: Intellect
   m_TagString: Untagged
@@ -14610,6 +14659,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 898323407}
   m_CullTransparentMesh: 0
+--- !u!114 &898323412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 898323407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b36b69f4f70a4e4a92926c94c62b504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
+    type: 3}
+  tooltipText: Character's ability to learn and remember.
 --- !u!1 &910586808
 GameObject:
   m_ObjectHideFlags: 0
@@ -15380,8 +15444,9 @@ GameObject:
   - component: {fileID: 935016417}
   - component: {fileID: 935016416}
   - component: {fileID: 935016415}
+  - component: {fileID: 935016418}
   m_Layer: 5
-  m_Name: Lockpicking
+  m_Name: Sneak
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15465,6 +15530,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 935016413}
   m_CullTransparentMesh: 0
+--- !u!114 &935016418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 935016413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b36b69f4f70a4e4a92926c94c62b504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
+    type: 3}
+  tooltipText: Avoid being seen or heard.
 --- !u!1 &938456697
 GameObject:
   m_ObjectHideFlags: 0
@@ -18284,6 +18364,7 @@ GameObject:
   - component: {fileID: 1194998313}
   - component: {fileID: 1194998312}
   - component: {fileID: 1194998311}
+  - component: {fileID: 1194998314}
   m_Layer: 5
   m_Name: Morale
   m_TagString: Untagged
@@ -18369,6 +18450,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1194998309}
   m_CullTransparentMesh: 0
+--- !u!114 &1194998314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194998309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b36b69f4f70a4e4a92926c94c62b504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
+    type: 3}
+  tooltipText: Characters have unpredictable behavior when Morale reaches zero.
 --- !u!1 &1200542003
 GameObject:
   m_ObjectHideFlags: 0
@@ -20477,6 +20573,7 @@ GameObject:
   - component: {fileID: 1347467811}
   - component: {fileID: 1347467810}
   - component: {fileID: 1347467809}
+  - component: {fileID: 1347467812}
   m_Layer: 5
   m_Name: Energy
   m_TagString: Untagged
@@ -20562,6 +20659,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1347467807}
   m_CullTransparentMesh: 0
+--- !u!114 &1347467812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347467807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b36b69f4f70a4e4a92926c94c62b504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
+    type: 3}
+  tooltipText: Energy determines how many Action Points a character has in combat.
 --- !u!1 &1351340128
 GameObject:
   m_ObjectHideFlags: 0
@@ -21454,6 +21566,7 @@ GameObject:
   - component: {fileID: 1395854716}
   - component: {fileID: 1395854715}
   - component: {fileID: 1395854714}
+  - component: {fileID: 1395854717}
   m_Layer: 5
   m_Name: Endurance
   m_TagString: Untagged
@@ -21539,6 +21652,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1395854712}
   m_CullTransparentMesh: 0
+--- !u!114 &1395854717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395854712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b36b69f4f70a4e4a92926c94c62b504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
+    type: 3}
+  tooltipText: How  well a character can handle harsh conditions and prolonged exertion.
 --- !u!1 &1397448026
 GameObject:
   m_ObjectHideFlags: 0
@@ -26076,6 +26204,7 @@ GameObject:
   - component: {fileID: 1644942732}
   - component: {fileID: 1644942731}
   - component: {fileID: 1644942730}
+  - component: {fileID: 1644942733}
   m_Layer: 5
   m_Name: Healing
   m_TagString: Untagged
@@ -26161,6 +26290,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1644942728}
   m_CullTransparentMesh: 0
+--- !u!114 &1644942733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644942728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b36b69f4f70a4e4a92926c94c62b504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
+    type: 3}
+  tooltipText: Dressing wounds, applying splints, and disinfecting injuries, plus
+    an understanding and application of medical procedures, such as diagnosing illnesses
+    and performing surgery.
 --- !u!1 &1648483054
 GameObject:
   m_ObjectHideFlags: 0
@@ -27819,6 +27965,7 @@ GameObject:
   - component: {fileID: 1715232394}
   - component: {fileID: 1715232393}
   - component: {fileID: 1715232392}
+  - component: {fileID: 1715232395}
   m_Layer: 5
   m_Name: Physique
   m_TagString: Untagged
@@ -27904,6 +28051,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1715232390}
   m_CullTransparentMesh: 0
+--- !u!114 &1715232395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715232390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b36b69f4f70a4e4a92926c94c62b504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
+    type: 3}
+  tooltipText: Physical power and damage resistance.
 --- !u!1 &1729240884
 GameObject:
   m_ObjectHideFlags: 0
@@ -28564,6 +28726,7 @@ GameObject:
   - component: {fileID: 1772605331}
   - component: {fileID: 1772605330}
   - component: {fileID: 1772605329}
+  - component: {fileID: 1772605332}
   m_Layer: 5
   m_Name: HP
   m_TagString: Untagged
@@ -28649,6 +28812,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1772605327}
   m_CullTransparentMesh: 0
+--- !u!114 &1772605332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772605327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b36b69f4f70a4e4a92926c94c62b504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
+    type: 3}
+  tooltipText: Character dies when Hit Points reach zero.
 --- !u!1001 &1781082151
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28945,6 +29123,7 @@ GameObject:
   - component: {fileID: 1801647284}
   - component: {fileID: 1801647283}
   - component: {fileID: 1801647282}
+  - component: {fileID: 1801647285}
   m_Layer: 5
   m_Name: Melee
   m_TagString: Untagged
@@ -29030,6 +29209,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1801647280}
   m_CullTransparentMesh: 0
+--- !u!114 &1801647285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1801647280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b36b69f4f70a4e4a92926c94c62b504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
+    type: 3}
+  tooltipText: How well a character can hit things with a Melee attack.
 --- !u!1 &1802043539
 GameObject:
   m_ObjectHideFlags: 0
@@ -29317,6 +29511,7 @@ GameObject:
   - component: {fileID: 1833392583}
   - component: {fileID: 1833392582}
   - component: {fileID: 1833392581}
+  - component: {fileID: 1833392584}
   m_Layer: 5
   m_Name: Persuasion
   m_TagString: Untagged
@@ -29402,6 +29597,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1833392579}
   m_CullTransparentMesh: 0
+--- !u!114 &1833392584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1833392579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b36b69f4f70a4e4a92926c94c62b504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
+    type: 3}
+  tooltipText: 'Influencing others or getting information out of them through bribery,
+    honest discussion, debate, diplomacy, or speeches. '
 --- !u!1 &1833409620
 GameObject:
   m_ObjectHideFlags: 0
@@ -29681,6 +29892,7 @@ GameObject:
   - component: {fileID: 1839133756}
   - component: {fileID: 1839133755}
   - component: {fileID: 1839133754}
+  - component: {fileID: 1839133757}
   m_Layer: 5
   m_Name: Survival
   m_TagString: Untagged
@@ -29766,6 +29978,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1839133752}
   m_CullTransparentMesh: 0
+--- !u!114 &1839133757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839133752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b36b69f4f70a4e4a92926c94c62b504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
+    type: 3}
+  tooltipText: Surviving in wilderness environments, including the ability to identify
+    plants, animals, and their nutritional and medicinal uses.
 --- !u!1 &1846533011
 GameObject:
   m_ObjectHideFlags: 0
@@ -33044,6 +33272,7 @@ GameObject:
   - component: {fileID: 1989397002}
   - component: {fileID: 1989397001}
   - component: {fileID: 1989397000}
+  - component: {fileID: 1989397003}
   m_Layer: 5
   m_Name: Coordination
   m_TagString: Untagged
@@ -33129,6 +33358,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1989396998}
   m_CullTransparentMesh: 0
+--- !u!114 &1989397003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1989396998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b36b69f4f70a4e4a92926c94c62b504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
+    type: 3}
+  tooltipText: A measure of fine motor abilities.
 --- !u!1 &1991117384
 GameObject:
   m_ObjectHideFlags: 0
@@ -33215,6 +33459,7 @@ GameObject:
   - component: {fileID: 1995143214}
   - component: {fileID: 1995143213}
   - component: {fileID: 1995143212}
+  - component: {fileID: 1995143215}
   m_Layer: 5
   m_Name: Acumen
   m_TagString: Untagged
@@ -33300,6 +33545,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1995143210}
   m_CullTransparentMesh: 0
+--- !u!114 &1995143215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1995143210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b36b69f4f70a4e4a92926c94c62b504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
+    type: 3}
+  tooltipText: Mental quickness and creativity.
 --- !u!1 &1998998674
 GameObject:
   m_ObjectHideFlags: 0
@@ -35782,7 +36042,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Lockpick
+  m_text: Sneak
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f4bccea45e50e984e9b93fbe219eaa8d, type: 2}
   m_sharedMaterial: {fileID: -8101100261937072485, guid: f4bccea45e50e984e9b93fbe219eaa8d,

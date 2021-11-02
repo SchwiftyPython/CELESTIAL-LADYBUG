@@ -19,7 +19,7 @@ namespace Assets.Scripts.UI
         [SerializeField] private TextMeshProUGUI _morale;
         [SerializeField] private TextMeshProUGUI _melee;
         [SerializeField] private TextMeshProUGUI _ranged;
-        [SerializeField] private TextMeshProUGUI _lockpick;
+        [SerializeField] private TextMeshProUGUI _sneak;
         [SerializeField] private TextMeshProUGUI _toughness;
         [SerializeField] private TextMeshProUGUI _healing;
         [SerializeField] private TextMeshProUGUI _agility;
@@ -63,7 +63,7 @@ namespace Assets.Scripts.UI
 
             _melee.text = skills.Melee.ToString();
             _ranged.text = skills.Ranged.ToString();
-            _lockpick.text = skills.Lockpicking.ToString();
+            _sneak.text = skills.Sneak.ToString();
             _toughness.text = skills.Endurance.ToString();
             _healing.text = skills.Healing.ToString();
             _survival.text = skills.Survival.ToString();

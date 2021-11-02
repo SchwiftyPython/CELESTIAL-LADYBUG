@@ -356,8 +356,8 @@ namespace Assets.Scripts.Travel
                                 case EntitySkillTypes.Ranged:
                                     companion.Skills.Ranged += skillGain.Value;
                                     break;
-                                case EntitySkillTypes.Lockpicking:
-                                    companion.Skills.Lockpicking += skillGain.Value;
+                                case EntitySkillTypes.Sneak:
+                                    companion.Skills.Sneak += skillGain.Value;
                                     break;
                                 case EntitySkillTypes.Endurance:
                                     companion.Skills.Endurance += skillGain.Value;
@@ -663,8 +663,8 @@ namespace Assets.Scripts.Travel
                                 case EntitySkillTypes.Ranged:
                                     companion.Skills.Ranged -= skillLoss.Value;
                                     break;
-                                case EntitySkillTypes.Lockpicking:
-                                    companion.Skills.Lockpicking -= skillLoss.Value;
+                                case EntitySkillTypes.Sneak:
+                                    companion.Skills.Sneak -= skillLoss.Value;
                                     break;
                                 case EntitySkillTypes.Endurance:
                                     companion.Skills.Endurance -= skillLoss.Value;

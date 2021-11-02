@@ -18,7 +18,7 @@ namespace Assets.Scripts.Entities
         //todo probably should define setters and getters here
         public int Melee { get; set; }
         public int Ranged { get; set; }
-        public int Lockpicking { get; set; }
+        public int Sneak { get; set; }
         public int Endurance { get; set; }
         public int Healing { get; set; }
         public int Survival { get; set; }
@@ -81,7 +81,7 @@ namespace Assets.Scripts.Entities
             {
                 { EntitySkillTypes.Melee, SkillMin },
                 { EntitySkillTypes.Ranged, SkillMin },
-                { EntitySkillTypes.Lockpicking, SkillMin },
+                { EntitySkillTypes.Sneak, SkillMin },
                 { EntitySkillTypes.Endurance, SkillMin },
                 { EntitySkillTypes.Healing, SkillMin },
                 { EntitySkillTypes.Survival, SkillMin },
@@ -115,8 +115,8 @@ namespace Assets.Scripts.Entities
                     case EntitySkillTypes.Ranged:
                         Ranged = startingValue.Value;
                         break;
-                    case EntitySkillTypes.Lockpicking:
-                        Lockpicking = startingValue.Value;
+                    case EntitySkillTypes.Sneak:
+                        Sneak = startingValue.Value;
                         break;
                     case EntitySkillTypes.Endurance:
                         Endurance = startingValue.Value;
