@@ -32,7 +32,14 @@ namespace Assets.Scripts.Combat
         Retreat
     }
 
-    public struct CompanionCombatStats
+    public enum CombatStat
+    {
+        Kills,
+        DamageDealt,
+        DamageReceived
+    }
+
+    public class CompanionCombatStats
     {
         public int Kills;
         public int DamageDealt;
@@ -162,9 +169,8 @@ namespace Assets.Scripts.Combat
                         _currentCombatState = CombatState.AiTurn;
                     }
 
-                    _eventMediator.SubscribeToEvent(EndTurnEvent, this);
-                    _eventMediator.SubscribeToEvent(GlobalHelper.EntityDead, this);
-                    _eventMediator.SubscribeToEvent(GlobalHelper.ActiveEntityMoved, this);
+                    SubscribeToEvents();
+
                     _eventMediator.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
                     _eventMediator.Broadcast(RefreshUi, this, ActiveEntity);
 
@@ -275,9 +281,8 @@ namespace Assets.Scripts.Combat
                 case CombatState.LoadFromSave:
                     _eventMediator.UnsubscribeFromAllEvents(this);
 
-                    _eventMediator.SubscribeToEvent(EndTurnEvent, this);
-                    _eventMediator.SubscribeToEvent(GlobalHelper.EntityDead, this);
-                    _eventMediator.SubscribeToEvent(GlobalHelper.ActiveEntityMoved, this);
+                    SubscribeToEvents();
+
                     _eventMediator.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
                     _eventMediator.Broadcast(RefreshUi, this, ActiveEntity);
 
@@ -287,6 +292,29 @@ namespace Assets.Scripts.Combat
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public void UpdateCombatStats(Entity companion, CombatStat stat, int value)
+        {
+            if (!Companions.ContainsKey(companion))
+            {
+                return;
+            }
+
+            switch (stat)
+            {
+                case CombatStat.Kills:
+                    Companions[companion].Kills += value;
+                    break;
+                case CombatStat.DamageDealt:
+                    Companions[companion].DamageDealt += value;
+                    break;
+                case CombatStat.DamageReceived:
+                    Companions[companion].DamageReceived += value;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(stat), stat, null);
             }
         }
 
@@ -414,7 +442,11 @@ namespace Assets.Scripts.Combat
         {
             TurnOrder = new Queue<Entity>(TurnOrder.Where(entity => entity != target));
 
-            Map.RemoveEntity(target);
+            var currentTile = Map.GetTileAt(target.Position);
+
+            var removed = Map.RemoveEntity(target);
+
+            currentTile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(null);
 
             Destroy(target.CombatSpriteInstance);
 
@@ -523,6 +555,16 @@ namespace Assets.Scripts.Combat
             BoardHolder.Instance.Build(Map);
         }
 
+        private void SubscribeToEvents()
+        {
+            _eventMediator.SubscribeToEvent(EndTurnEvent, this);
+            _eventMediator.SubscribeToEvent(GlobalHelper.EntityDead, this);
+            _eventMediator.SubscribeToEvent(GlobalHelper.ActiveEntityMoved, this);
+            _eventMediator.SubscribeToEvent(GlobalHelper.DamageDealt, this);
+            _eventMediator.SubscribeToEvent(GlobalHelper.DamageReceived, this);
+            _eventMediator.SubscribeToEvent(GlobalHelper.KilledTarget, this);
+        }
+
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
         {
             if (eventName.Equals(EndTurnEvent))
@@ -544,6 +586,58 @@ namespace Assets.Scripts.Combat
             else if (eventName.Equals(GlobalHelper.ActiveEntityMoved))
             {
                 HighlightActiveEntitySprite();
+            }
+            else if (eventName.Equals(GlobalHelper.DamageDealt))
+            {
+                if (!(broadcaster is Entity entity))
+                {
+                    return;
+                }
+
+                if (!entity.IsPlayer())
+                {
+                    return;
+                }
+
+                if (!(parameter is int damage) || damage < 1)
+                {
+                    return;
+                }
+
+                UpdateCombatStats(entity, CombatStat.DamageDealt, damage);
+            }
+            else if (eventName.Equals(GlobalHelper.DamageReceived))
+            {
+                if (!(broadcaster is Entity entity))
+                {
+                    return;
+                }
+
+                if (!entity.IsPlayer())
+                {
+                    return;
+                }
+
+                if (!(parameter is int damage) || damage < 1)
+                {
+                    return;
+                }
+
+                UpdateCombatStats(entity, CombatStat.DamageReceived, damage);
+            }
+            else if(eventName.Equals(GlobalHelper.KilledTarget))
+            {
+                if (!(broadcaster is Entity entity))
+                {
+                    return;
+                }
+
+                if (!entity.IsPlayer())
+                {
+                    return;
+                }
+
+                UpdateCombatStats(entity, CombatStat.Kills, 1);
             }
         }
 
