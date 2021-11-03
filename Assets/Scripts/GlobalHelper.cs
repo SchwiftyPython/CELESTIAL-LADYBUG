@@ -65,6 +65,8 @@ namespace Assets.Scripts
         public const string MeleeHit = "MeleeHit";
         public const string MeleeMiss = "MeleeMiss";
         public const string DamageDealt = "DamageDealt";
+        public const string DamageReceived = "DamageReceived";
+        public const string KilledTarget = "KilledTarget";
         public const string ActiveEntityMoved = "ActiveEntityMoved";
         public const string PauseTimer = "PauseTimer";
         public const string ResumeTimer = "ResumeTimer";

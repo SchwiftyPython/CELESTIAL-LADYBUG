@@ -214,8 +214,7 @@ namespace Assets.Scripts.Entities
 
             Abilities.Add(ability.Name, ability);
         }
-
-        //todo refactor this so the sprite moves through each square and doesn't just teleport
+        
         public void MoveTo(Tile tile, int apMovementCost, List<Tile> path = null)
         {
             if (tile == null)
@@ -483,13 +482,12 @@ namespace Assets.Scripts.Entities
 
                 if (target.IsDead())
                 {
-                    //todo sound for dying peep
-
                     var message = $"{Name} killed {target.Name}!";
 
                     var eventMediator = Object.FindObjectOfType<EventMediator>();
 
                     eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                    eventMediator.Broadcast(GlobalHelper.KilledTarget, this);
                 }
                 else
                 {
@@ -532,13 +530,12 @@ namespace Assets.Scripts.Entities
 
                 if (target.IsDead())
                 {
-                    //todo sound for dying peep
-
                     var message = $"{Name} killed {target.Name}!";
 
                     var eventMediator = Object.FindObjectOfType<EventMediator>();
 
                     eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                    eventMediator.Broadcast(GlobalHelper.KilledTarget, this);
                 }
                 else
                 {
@@ -581,13 +578,12 @@ namespace Assets.Scripts.Entities
 
                 if (target.IsDead())
                 {
-                    //todo sound for dying peep
-
                     var message = $"{Name} killed {target.Name}!";
 
                     var eventMediator = Object.FindObjectOfType<EventMediator>();
 
                     eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                    eventMediator.Broadcast(GlobalHelper.KilledTarget, this);
                 }
                 else
                 {
@@ -653,13 +649,12 @@ namespace Assets.Scripts.Entities
 
                 if (target.IsDead())
                 {
-                    //todo sound for dying peep
-
                     var message = $"{Name} killed {target.Name}!";
 
                     var eventMediator = Object.FindObjectOfType<EventMediator>();
 
                     eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                    eventMediator.Broadcast(GlobalHelper.KilledTarget, this);
                 }
                 else
                 {
@@ -833,10 +828,6 @@ namespace Assets.Scripts.Entities
 
             if (criticalHit)
             {
-                // const float critBoost = .05f;
-                //
-                // damage += (int)Mathf.Ceil(damage * critBoost);
-
                 var wildRoll = GlobalHelper.RollWildDie();
 
                 damage += wildRoll;
@@ -862,6 +853,7 @@ namespace Assets.Scripts.Entities
 
             eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
             eventMediator.Broadcast(GlobalHelper.DamageDealt, this, damage);
+            eventMediator.Broadcast(GlobalHelper.DamageReceived, target, damage);
 
             if (!target.HasAbility("Demonic Intervention"))
             {
@@ -878,6 +870,8 @@ namespace Assets.Scripts.Entities
             message = $"Demonic Intervention! {target.Name} dealt {damage} damage to {Name}!";
 
             eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+            eventMediator.Broadcast(GlobalHelper.DamageDealt, target, damage);
+            eventMediator.Broadcast(GlobalHelper.DamageReceived, this, damage);
         }
 
         public bool HasMissileWeaponEquipped()
@@ -1238,20 +1232,6 @@ namespace Assets.Scripts.Entities
         public void SubtractHealth(int amount)
         {
             Stats.CurrentHealth -= amount;
-
-            if (IsDead())
-            {
-                return;
-            }
-
-            if (CombatSpriteInstance == null)
-            {
-                return;
-            }
-
-            // var animator = CombatSpriteInstance.GetComponent<Animator>();
-            //
-            // animator.SetTrigger("Hit");
         }
 
         public int AddEnergy(int amount)
