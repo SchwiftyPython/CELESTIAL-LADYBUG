@@ -87,6 +87,7 @@ namespace Assets.Scripts.Combat
         [ES3NonSerializable] public Dictionary<Entity, CompanionCombatStats> Companions;
 
         public GameObject PrototypePawnHighlighterPrefab;
+        public GameObject DamagePopupPrefab;
 
         private CombatResult _result;
 

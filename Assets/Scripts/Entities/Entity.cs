@@ -745,6 +745,10 @@ namespace Assets.Scripts.Entities
                 swapper.ChangeTexture(HitSkinSwap);
             }
 
+            var animationHelper = CombatSpriteInstance.GetComponent<CombatAnimationHelper>();
+
+            animationHelper.ShowDamagePopup();
+
             var ai = CombatSpriteInstance.GetComponent<AiController>();
 
             if (ai == null)
@@ -772,6 +776,10 @@ namespace Assets.Scripts.Entities
             {
                 swapper.ChangeTexture(DeadSkinSwap);
             }
+
+            var animationHelper = CombatSpriteInstance.GetComponent<CombatAnimationHelper>();
+
+            animationHelper.ShowDamagePopup();
 
             var ai = CombatSpriteInstance.GetComponent<AiController>();
 
@@ -845,6 +853,7 @@ namespace Assets.Scripts.Entities
             damage -= damageReduction;
 
             string message;
+            CombatAnimationHelper animationHelper;
             if (damage <= 0)
             {
                 message = $"{target.Name} resisted all damage!"; //todo see if we can communicate to player if there is no chance for attack to do damage
@@ -854,6 +863,11 @@ namespace Assets.Scripts.Entities
                 target.SubtractHealth(damage);
 
                 message = $"{Name} dealt {damage} damage to {target.Name}!";
+
+                animationHelper = target.CombatSpriteInstance.GetComponent<CombatAnimationHelper>();
+
+                animationHelper.damage = damage;
+                animationHelper.criticalHit = criticalHit;
             }
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
@@ -875,6 +889,11 @@ namespace Assets.Scripts.Entities
             SubtractHealth(damage);
 
             message = $"Demonic Intervention! {target.Name} dealt {damage} damage to {Name}!";
+
+            animationHelper = target.CombatSpriteInstance.GetComponent<CombatAnimationHelper>();
+
+            animationHelper.damage = damage;
+            animationHelper.criticalHit = criticalHit;
 
             eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
             eventMediator.Broadcast(GlobalHelper.DamageDealt, target, damage);
@@ -1167,7 +1186,7 @@ namespace Assets.Scripts.Entities
                     }
                 }
 
-                if (wildRoll > 6)  //todo need to apply crit to damage somehow
+                if (wildRoll > 6)  
                 {
                     criticalHit = true;
                     message = "CRITICAL HIT!";
