@@ -13,6 +13,8 @@ namespace Assets.Scripts.UI
         public Entity Parent;
         public Entity Target;
         public bool attackHit;
+        public int damage;
+        public bool criticalHit;
 
         public void StopAttackAnimation()
         {
@@ -51,14 +53,14 @@ namespace Assets.Scripts.UI
         public void FlashSprite()
         {
             SpriteRenderer uiImage = GetComponent<SpriteRenderer>();
-
+            
             if (uiImage == null)
             {
                 uiImage = GetComponentInChildren<SpriteRenderer>();
             }
-
+            
             uiImage.material = new Material(uiImage.material);
-
+            
             StartCoroutine(FlashSpriteCr(uiImage.material));
         }
 
@@ -76,6 +78,11 @@ namespace Assets.Scripts.UI
             yield return mat.DOFloat(0.08f, "_HitEffectBlend", 0.1f).WaitForCompletion();
 
             yield return mat.DOFloat(0.0f, "_HitEffectBlend", 0.1f).WaitForCompletion();
+        }
+
+        public void ShowDamagePopup()
+        {
+            DamagePopup.Create(transform.position, damage, criticalHit);
         }
 
         public void PlayHitSound()

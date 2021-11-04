@@ -2292,6 +2292,8 @@ MonoBehaviour:
   _currentCombatState: 0
   PrototypePawnHighlighterPrefab: {fileID: 4067867605620032898, guid: c582aee715a5a1b4893bb0db9a4d3374,
     type: 3}
+  DamagePopupPrefab: {fileID: 2122241930188209765, guid: f0b472e450a4bf44bbe00fe5f7034652,
+    type: 3}
 --- !u!1 &110280287966630567
 GameObject:
   m_ObjectHideFlags: 0
