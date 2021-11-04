@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Entities.Companions;
 using Assets.Scripts.Entities.Necromancer;
 using Assets.Scripts.Entities.Rampart;
 using Assets.Scripts.Entities.Stronghold;
@@ -44,23 +45,23 @@ namespace Assets.Scripts.Combat
 
             for (var i = 0; i < 1; i++)
             {
-                Entity bandit = new Ghost();
+                Entity bandit = new Spider();
 
                 bandits.Add(bandit);
 
-                bandit = new Golem();
+                bandit = new Titan();
 
                 bandits.Add(bandit);
 
-                bandit = new Lion();
+                bandit = new Treant();
 
                 bandits.Add(bandit);
 
-                bandit = new Mage();
+                bandit = new Vampire();
 
                 bandits.Add(bandit);
 
-                bandit = new Minotaur();
+                bandit = new Zombie();
 
                 bandits.Add(bandit);
             }

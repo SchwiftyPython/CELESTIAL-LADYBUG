@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Combat;
 using Assets.Scripts.Entities;
+using Assets.Scripts.UI;
 using GoRogue;
 using UnityEngine;
 
@@ -60,7 +61,7 @@ namespace Assets.Scripts.Abilities
 
                 var destination = targetTile.GetAdjacentTileByDirection(direction);
 
-                target.MoveTo(destination, 0); //todo some kind of woosh effect would be cool here
+                target.MoveTo(destination, 0); //todo can we trigger the hit animation first?
             }
         }
     }

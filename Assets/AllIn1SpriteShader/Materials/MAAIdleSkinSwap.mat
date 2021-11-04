@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: MAAIdleSkinSwap
   m_Shader: {fileID: 4800000, guid: a36b7719ff0465b42ab1407d67672c5f, type: 3}
-  m_ShaderKeywords: ATLAS_ON COLORSWAP_ON ETC1_EXTERNAL_ALPHA
+  m_ShaderKeywords: ATLAS_ON COLORSWAP_ON ETC1_EXTERNAL_ALPHA HITEFFECT_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -113,7 +113,7 @@ Material:
     - _GreyscaleOutline: 0
     - _HandDrawnAmount: 10
     - _HandDrawnSpeed: 5
-    - _HitEffectBlend: 1
+    - _HitEffectBlend: 0
     - _HitEffectGlow: 5
     - _HologramMaxAlpha: 0.75
     - _HologramMinAlpha: 0.1

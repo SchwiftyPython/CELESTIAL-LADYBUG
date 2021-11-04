@@ -27,7 +27,7 @@ namespace Assets.Scripts
             {typeof(ManAtArms), (rType, isPlayer)  => new ManAtArms(rType, isPlayer)},
             {typeof(Paladin), (rType, isPlayer)  => new Paladin(rType, isPlayer)},
             {typeof(Spearman), (rType, isPlayer)  => new Spearman(rType, isPlayer)},
-            {typeof(Wizard), (rType, isPlayer)  => new Wizard(rType, isPlayer)},
+            //{typeof(Wizard), (rType, isPlayer)  => new Wizard(rType, isPlayer)},
         };
 
         //todo organize collections by group - necromancer, castle, etc

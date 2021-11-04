@@ -692,6 +692,13 @@ namespace Assets.Scripts.Entities
                 swapper.ChangeTexture(AttackSkinSwap);
             }
 
+            // if (attackHit) //testing if we can trigger hit animation before moving target for abilities like shield bash - no effect
+            // {
+            //     var eventMediator = Object.FindObjectOfType<EventMediator>();
+            //
+            //     eventMediator.Broadcast(GlobalHelper.TargetHit, this, target);
+            // }
+
             var ai = CombatSpriteInstance.GetComponent<AiController>();
 
             if (ai == null)
