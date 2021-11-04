@@ -1,10 +1,10 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using Assets.Scripts.AI;
 using Assets.Scripts.Audio;
 using Assets.Scripts.Entities;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
@@ -41,6 +41,41 @@ namespace Assets.Scripts.UI
             var eAudio = GetComponent<EntityAudio>();
 
             eAudio.Attack();
+        }
+
+        public void ShakeSprite()
+        {
+            transform.DOShakePosition(0.4f, new Vector3(.02f, .02f));
+        }
+
+        public void FlashSprite()
+        {
+            SpriteRenderer uiImage = GetComponent<SpriteRenderer>();
+
+            if (uiImage == null)
+            {
+                uiImage = GetComponentInChildren<SpriteRenderer>();
+            }
+
+            uiImage.material = new Material(uiImage.material);
+
+            StartCoroutine(FlashSpriteCr(uiImage.material));
+        }
+
+        private IEnumerator FlashSpriteCr(Material mat)
+        {
+            if (mat == null)
+            {
+                yield return null;
+            }
+
+            yield return mat.DOFloat(0.08f, "_HitEffectBlend", 0.1f).WaitForCompletion();
+
+            yield return mat.DOFloat(0.0f, "_HitEffectBlend", 0.1f).WaitForCompletion();
+
+            yield return mat.DOFloat(0.08f, "_HitEffectBlend", 0.1f).WaitForCompletion();
+
+            yield return mat.DOFloat(0.0f, "_HitEffectBlend", 0.1f).WaitForCompletion();
         }
 
         public void PlayHitSound()
@@ -92,7 +127,7 @@ namespace Assets.Scripts.UI
 
         private IEnumerator Delay()
         {
-            yield return new WaitForSeconds(1.00f);
+            yield return new WaitForSecondsRealtime(1.00f);
         }
     }
 }
