@@ -31,6 +31,9 @@ namespace Assets.Scripts.Encounters
 
         public List<BiomeType> BiomeTypes;
 
+        public string ImageName;
+        public string ImageResultName;
+
         public Party Party
         {
             get

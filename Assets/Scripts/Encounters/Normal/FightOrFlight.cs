@@ -12,6 +12,7 @@ namespace Assets.Scripts.Encounters.Normal
             Rarity = Rarity.Common;
             EncounterType = EncounterType.Normal;
             Title = "Fight or Flight";
+            ImageName = "wall";
         }
 
         //todo refactor

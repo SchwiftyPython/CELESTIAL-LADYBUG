@@ -6,6 +6,7 @@ using Assets.Scripts.Utilities.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
@@ -26,6 +27,8 @@ namespace Assets.Scripts.UI
 
         public GameObject OkayButton;
         public GameObject StartCombatButton;
+        public GameObject ImageContainer;
+        public Image Image;
 
         [FMODUnity.EventRef] public string popupSound;
 
@@ -46,6 +49,27 @@ namespace Assets.Scripts.UI
         public void ShowCombatPreview(Encounter encounter, string result, List<Entity> enemies)
         {
             HideButtons();
+
+            if (string.IsNullOrEmpty(encounter.ImageName))
+            {
+                ImageContainer.SetActive(false);
+            }
+            else
+            {
+                var spriteStore = FindObjectOfType<SpriteStore>();
+
+                var image = spriteStore.GetEncounterSprite(encounter.ImageName); //todo get a combat preview image
+
+                if (image == null)
+                {
+                    ImageContainer.SetActive(false);
+                }
+                else
+                {
+                    Image.sprite = image;
+                    ImageContainer.SetActive(true);
+                }
+            }
 
             _encounterType = EncounterType.Combat;
 
@@ -68,6 +92,29 @@ namespace Assets.Scripts.UI
             HideButtons();
 
             _encounterType = encounter.EncounterType;
+
+            //todo we'll need to store result images in options for different outcomes
+
+            if (string.IsNullOrEmpty(encounter.ImageResultName))
+            {
+                ImageContainer.SetActive(false);
+            }
+            else
+            {
+                var spriteStore = FindObjectOfType<SpriteStore>();
+
+                var image = spriteStore.GetEncounterSprite(encounter.ImageResultName);
+
+                if (image == null)
+                {
+                    ImageContainer.SetActive(false);
+                }
+                else
+                {
+                    Image.sprite = image;
+                    ImageContainer.SetActive(true);
+                }
+            }
 
             if (_encounterType == EncounterType.Camping)
             {

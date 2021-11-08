@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using Assets.Scripts.Encounters;
 using Assets.Scripts.Utilities.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
@@ -24,6 +26,8 @@ namespace Assets.Scripts.UI
 
         public TextMeshProUGUI EncounterTitle;
         public TextMeshProUGUI EncounterDescription;
+        public GameObject ImageContainer;
+        public Image Image;
 
         [FMODUnity.EventRef] public string popupSound;
 
@@ -73,6 +77,27 @@ namespace Assets.Scripts.UI
             //todo might want to hide messages at this point too? 
 
             _encounter = encounter;
+
+            if (string.IsNullOrEmpty(encounter.ImageName))
+            {
+                ImageContainer.SetActive(false);
+            }
+            else
+            {
+                var spriteStore = FindObjectOfType<SpriteStore>();
+
+                var image = spriteStore.GetEncounterSprite(encounter.ImageName);
+
+                if (image == null)
+                {
+                    ImageContainer.SetActive(false);
+                }
+                else
+                {
+                    Image.sprite = image;
+                    ImageContainer.SetActive(true);
+                }
+            }
 
             EncounterTitle.text = _encounter.Title;
 

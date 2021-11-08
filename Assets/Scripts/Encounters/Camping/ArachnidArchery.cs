@@ -15,6 +15,7 @@ namespace Assets.Scripts.Encounters.Camping
             EncounterType = EncounterType.Camping;
             Title = "Arachnid Archery";
             CountsAsDayTraveled = true;
+            ImageName = "archery";
         }
 
         public override void Run()

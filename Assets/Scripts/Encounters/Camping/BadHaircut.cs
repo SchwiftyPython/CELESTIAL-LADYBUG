@@ -12,6 +12,7 @@ namespace Assets.Scripts.Encounters.Camping
             EncounterType = EncounterType.Camping;
             Title = "Bad Haircut";
             CountsAsDayTraveled = true;
+            ImageResultName = "grimace";
         }
 
         public override void Run()

@@ -12,6 +12,7 @@ namespace Assets.Scripts.Encounters.Normal
             Rarity = Rarity.Common;
             EncounterType = EncounterType.Normal;
             Title = "Lending a Hand";
+            ImageName = "narrow trail";
         }
 
         public override void Run()

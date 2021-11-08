@@ -11,6 +11,7 @@ namespace Assets.Scripts.Encounters.Normal
             Rarity = Rarity.Common;
             EncounterType = EncounterType.Normal;
             Title = "Klutz";
+            ImageResultName = "river";
         }
 
         public override void Run()

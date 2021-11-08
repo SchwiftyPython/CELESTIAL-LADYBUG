@@ -3,6 +3,7 @@ using Assets.Scripts.Encounters;
 using Assets.Scripts.Utilities.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
@@ -19,6 +20,8 @@ namespace Assets.Scripts.UI
 
         public TextMeshProUGUI EncounterTitle;
         public TextMeshProUGUI EncounterDescription;
+        public GameObject ImageContainer;
+        public Image Image;
 
         private void Awake()
         {
@@ -54,6 +57,27 @@ namespace Assets.Scripts.UI
         private void Show(Encounter encounter)
         {
             EncounterTitle.text = encounter.Title;
+
+            if (string.IsNullOrEmpty(encounter.ImageName))
+            {
+                ImageContainer.SetActive(false);
+            }
+            else
+            {
+                var spriteStore = FindObjectOfType<SpriteStore>();
+
+                var image = spriteStore.GetEncounterSprite(encounter.ImageName);
+
+                if (image == null)
+                {
+                    ImageContainer.SetActive(false);
+                }
+                else
+                {
+                    Image.sprite = image;
+                    ImageContainer.SetActive(true);
+                }
+            }
 
             _textWriter.AddWriter(EncounterDescription, encounter.Description, GlobalHelper.DefaultTextSpeed, true);
 

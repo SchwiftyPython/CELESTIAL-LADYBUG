@@ -144,6 +144,10 @@ namespace Assets.Scripts
 
         #endregion SkinSwaps
 
+        private Dictionary<string, Sprite> _encounterSpritesDictionary;
+
+        public Sprite[] EncounterSprites;
+
         public void Setup()
         {
             PopulateSpriteDictionaries();
@@ -300,6 +304,17 @@ namespace Assets.Scripts
             return _effectSpriteDictionary[effect.Name.ToLower()];
         }
 
+        public Sprite GetEncounterSprite(string sName)
+        {
+            if (_encounterSpritesDictionary == null || !_encounterSpritesDictionary.ContainsKey(sName.ToLower()))
+            {
+                Debug.LogError($"Encounter sprite {sName} does not exist!");
+                return null;
+            }
+
+            return _encounterSpritesDictionary[sName.ToLower()];
+        }
+
         public Sprite[] GetFloorSprites(BiomeType bType, TileType tType)
         {
             var biomeFloorSprites = _combatTerrainSprites[bType];
@@ -426,6 +441,7 @@ namespace Assets.Scripts
             PopulateItemSprites();
             PopulateAbilitySprites();
             PopulateEffectSprites();
+            PopulateEncounterSprites();
         }
 
         private void PopulatePortraitSprites()
@@ -497,6 +513,11 @@ namespace Assets.Scripts
         private void PopulateEffectSprites()
         {
             _effectSpriteDictionary = PopulateDictionaryFromArray(EffectSprites);
+        }
+
+        private void PopulateEncounterSprites()
+        {
+            _encounterSpritesDictionary = PopulateDictionaryFromArray(EncounterSprites);
         }
 
         private static Dictionary<string, Sprite> PopulateDictionaryFromArray(IEnumerable<Sprite> sprites)

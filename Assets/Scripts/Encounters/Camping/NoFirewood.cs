@@ -12,6 +12,7 @@ namespace Assets.Scripts.Encounters.Camping
             Title = "No Firewood";
             Description = $"It is going to be a chilly night and you've run out of firewood. Someone can chop some, but it's tiring work.";
             CountsAsDayTraveled = true;
+            ImageName = "firewood";
         }
 
         public override void Run()
