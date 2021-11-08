@@ -14,6 +14,7 @@ namespace Assets.Scripts.Encounters.Camping
             Description =
                 "Everyone settles in for the night under the stars. It is quite peaceful until one by one, everyone starts vomiting up the Orc Tuna Special that Derpus threw together for dinner.";
             CountsAsDayTraveled = true;
+            ImageResultName = "throw up";
         }
 
         public override void Run()

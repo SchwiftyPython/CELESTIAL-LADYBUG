@@ -2246,6 +2246,22 @@ MonoBehaviour:
     type: 3}
   CrossbowmanHitSwap: {fileID: 2800000, guid: ee2d41aab5785c34cae05b94577de686, type: 3}
   CrossbowmanDeadSwap: {fileID: 2800000, guid: 2835f29e3a5d91742b525a87eb9caec5, type: 3}
+  EncounterSprites:
+  - {fileID: 21300000, guid: 327dd35601ceb1945be5c79b5e245aca, type: 3}
+  - {fileID: 21300000, guid: 69b115efb259a1a469173ab105864882, type: 3}
+  - {fileID: 21300000, guid: d7b3ef3efe1d38945a8c95245326e365, type: 3}
+  - {fileID: 21300000, guid: a19f7874b504c5a419cbd6af89e195d4, type: 3}
+  - {fileID: 21300000, guid: 17ed06d27a4fcd44c94af690b75c4a86, type: 3}
+  - {fileID: 21300000, guid: f29b6daa7a5486d48bc121847096163f, type: 3}
+  - {fileID: 21300000, guid: a9dad38c9b5650e45a47e994b2d23fd9, type: 3}
+  - {fileID: 21300000, guid: aade1ac04cf910c4bbc92e2b29fa9bef, type: 3}
+  - {fileID: 21300000, guid: 9ce457ba9fbe7104295254f7e0e731bc, type: 3}
+  - {fileID: 21300000, guid: c6d302aa32381474ba4170e5ba820900, type: 3}
+  - {fileID: 21300000, guid: 764080107c1c9714db623947f1cb2be2, type: 3}
+  - {fileID: 21300000, guid: 4ac26782daaf13943ad94dc96565f64b, type: 3}
+  - {fileID: 21300000, guid: 07ef88ce106c31e46949f5368efb288c, type: 3}
+  - {fileID: 21300000, guid: aa89c48c44d94e14aa6263141e4c8793, type: 3}
+  - {fileID: 21300000, guid: 43710646ffcc27d4baef01cfdc960b96, type: 3}
 --- !u!1 &1959258010
 GameObject:
   m_ObjectHideFlags: 0

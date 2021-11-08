@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Entities;
-using Assets.Scripts.Entities.Companions;
 using Assets.Scripts.Entities.Necromancer;
 using Assets.Scripts.Travel;
 using GoRogue.DiceNotation;
@@ -18,6 +17,7 @@ namespace Assets.Scripts.Encounters.Combat
             Rarity = Rarity.Uncommon;
             EncounterType = EncounterType.Combat;
             Title = "Trail of the Dead";
+            ImageName = "zombie";
             //todo BiomeTypes = new List<BiomeType> { BiomeType.Spooky };
         }
 

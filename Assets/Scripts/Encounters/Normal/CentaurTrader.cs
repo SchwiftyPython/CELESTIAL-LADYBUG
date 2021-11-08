@@ -12,6 +12,8 @@ namespace Assets.Scripts.Encounters.Normal
             EncounterType = EncounterType.Normal;
             Title = "Odd Trader";
             Description = "Just another day on the trail when the party arrives at a small trading stall. The young man watching the stall gives you a wave. As you approach, you realize that he is a horse from the waist down! He chuckles at your astonishment.\n\n\"Never cheap out on magic! You know how those teleport spells mess up sometimes? Well...\"\n\nHe spreads his arms wide as if to say 'surprise!'\n\n\"Anyways, what can I get ya?\"";
+            ImageName = "shack";
+            ImageResultName = "shake hands";
         }
 
         public override void Run()
