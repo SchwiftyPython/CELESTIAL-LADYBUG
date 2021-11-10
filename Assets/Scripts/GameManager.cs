@@ -41,6 +41,8 @@ namespace Assets.Scripts
 
         public string SaveFileName;
 
+        public Texture2D NormalCursor;
+
         public static Scene CurrentScene => SceneManager.GetActiveScene();
 
         public static GameManager Instance;
@@ -60,6 +62,8 @@ namespace Assets.Scripts
             _currentState = GameState.Title;
 
             _activeWindows = new List<GameObject>();
+
+            SetCursorToNormal();
         }
 
         private void Start()
@@ -98,6 +102,11 @@ namespace Assets.Scripts
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        public void SetCursorToNormal()
+        {
+            Cursor.SetCursor(NormalCursor, Vector2.zero, CursorMode.ForceSoftware);
         }
 
         public void AddActiveWindow(GameObject window)
@@ -176,6 +185,8 @@ namespace Assets.Scripts
         private void ShowNewGamePopup(Scene arg0, LoadSceneMode arg1)
         {
             StartCoroutine(ShowNewGamePopup());
+
+            SceneManager.sceneLoaded -= ShowNewGamePopup;
         }
 
         public void LoadTravelScene()

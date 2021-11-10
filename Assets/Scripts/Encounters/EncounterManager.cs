@@ -295,6 +295,17 @@ namespace Assets.Scripts.Encounters
 
                 ResumeTimer();
             }
+            else if (eventName.Equals(EncounterFinished)) //todo I'm not sure if this did anything
+            {
+                var eventMediator = FindObjectOfType<EventMediator>();
+
+                eventMediator.UnsubscribeFromEvent(GlobalHelper.EncounterFinished, this);
+
+                _encounterInProgress = false;
+
+                ResetTimer();
+                ResumeTimer();
+            }
 
             //todo events for reset timer, draw trigger encounter
         }

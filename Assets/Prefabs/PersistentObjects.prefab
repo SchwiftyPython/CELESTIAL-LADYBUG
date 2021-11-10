@@ -1835,6 +1835,7 @@ MonoBehaviour:
   spiderAttack: event:/Entities/Spider Attack
   genericAttack: event:/Entities/Generic Attack
   bowAttack: event:/Entities/Bow Attack
+  impact: event:/Entities/Impact
   genericPopup: event:/Interface/Generic Popup
   buttonClick: event:/Interface/Button Click
   buttonHover: event:/Interface/Button Hover

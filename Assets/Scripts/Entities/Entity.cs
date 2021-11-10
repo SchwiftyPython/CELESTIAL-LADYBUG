@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.AI;
+using Assets.Scripts.Audio;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Effects;
 using Assets.Scripts.Effects.Args;
@@ -18,6 +19,7 @@ using GoRogue.DiceNotation;
 using UnityEngine;
 using GameObject = GoRogue.GameFramework.GameObject;
 using Object = UnityEngine.Object;
+using PathType = DG.Tweening.PathType;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Entities
@@ -215,7 +217,7 @@ namespace Assets.Scripts.Entities
             Abilities.Add(ability.Name, ability);
         }
         
-        public void MoveTo(Tile tile, int apMovementCost, List<Tile> path = null)
+        public void MoveTo(Tile tile, int apMovementCost, List<Tile> path = null) //todo maybe a bool to keep not change facing
         {
             if (tile == null)
             {
@@ -232,6 +234,12 @@ namespace Assets.Scripts.Entities
             var map = combatManager.Map;
 
             var currentTile = map.GetTileAt(Position);
+
+            var vDelta = tile.Position - Position;
+
+            var direction = Direction.GetDirection(vDelta);
+
+            SetSpriteDirection(direction, GetSpriteRenderer());
 
             //this will not update the position if blocked
             Position = tile.Position;
@@ -262,7 +270,10 @@ namespace Assets.Scripts.Entities
 
                     foreach (var step in path)
                     {
-                        if (IsPlayer())
+
+                        //waypoints.Enqueue(new Vector2(step.Position.X, step.Position.Y));
+
+                        if (SpriteFacingEast(GetSpriteRenderer()))
                         {
                             waypoints.Enqueue(new Vector2(step.Position.X, step.Position.Y));
                         }
@@ -286,7 +297,7 @@ namespace Assets.Scripts.Entities
                 {
                     var waypoint = new Vector3[1];
 
-                    if (IsPlayer())
+                    if (SpriteFacingEast(GetSpriteRenderer()))
                     {
                         waypoint[0] = new Vector2(tile.Position.X, tile.Position.Y);
                     }
@@ -356,6 +367,103 @@ namespace Assets.Scripts.Entities
                 Debug.Log($"Movement Blocked for {Name}");
             }
 
+        }
+
+        private void SetSpriteDirection(Direction direction, SpriteRenderer sprite)
+        {
+            switch (direction.Type)
+            {
+                case Direction.Types.UP:
+                    break;
+                case Direction.Types.UP_RIGHT:
+                case Direction.Types.RIGHT:
+                case Direction.Types.DOWN_RIGHT:
+                    if (SpriteFacingWest(sprite))
+                    {
+                        SpriteFaceEast(sprite);
+                    }
+                    break;
+                case Direction.Types.DOWN:
+                    break;
+                case Direction.Types.DOWN_LEFT:
+                case Direction.Types.LEFT:
+                case Direction.Types.UP_LEFT:
+                    if (SpriteFacingEast(sprite))
+                    {
+                        SpriteFaceWest(sprite);
+                    }
+                    break;
+                case Direction.Types.NONE:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public SpriteRenderer GetSpriteRenderer()
+        {
+            var spriteRenderer = CombatSpriteInstance.GetComponent<SpriteRenderer>();
+
+            if (spriteRenderer == null)
+            {
+                spriteRenderer = CombatSpriteInstance.GetComponentInChildren<SpriteRenderer>();
+            }
+
+            return spriteRenderer;
+        }
+
+        public bool SpriteFacingEast(SpriteRenderer sprite)
+        {
+            return sprite.flipX == false;
+        }
+
+        public bool SpriteFacingWest(SpriteRenderer sprite)
+        {
+            return sprite.flipX;
+        }
+
+        public void SpriteFaceEast(SpriteRenderer sprite)
+        {
+            sprite.flipX = false;
+
+            var goParent = sprite.transform.parent;
+
+            if (goParent.name.Equals("EntityHolder", StringComparison.OrdinalIgnoreCase))
+            {
+                var pos = sprite.transform.position;
+
+                sprite.transform.position = new Vector3(pos.x - 1,
+                    pos.y, pos.z);
+            }
+            else
+            {
+                var pos = goParent.transform.position;
+
+                goParent.transform.position = new Vector3(pos.x - 1,
+                    pos.y, pos.z);
+            }
+        }
+
+        public void SpriteFaceWest(SpriteRenderer sprite)
+        {
+            sprite.flipX = true;
+
+            var goParent = sprite.transform.parent;
+
+            if (goParent.name.Equals("EntityHolder", StringComparison.OrdinalIgnoreCase))
+            {
+                var pos = sprite.transform.position;
+
+                sprite.transform.position = new Vector3(pos.x + 1,
+                    pos.y, pos.z);
+            }
+            else
+            {
+                var pos = goParent.transform.position;
+
+                goParent.transform.position = new Vector3(pos.x + 1,
+                    pos.y, pos.z);
+            }
         }
 
         public void GenerateStartingEquipment(EntityClass eClass, Dictionary<EquipLocation, List<string>> startingTable)
@@ -673,8 +781,19 @@ namespace Assets.Scripts.Entities
             }
         }
 
+        private void FaceTarget(Entity target)
+        {
+            var vDelta = target.Position - Position;
+
+            var direction = Direction.GetDirection(vDelta);
+
+            SetSpriteDirection(direction, GetSpriteRenderer());
+        }
+
         private void PlayAttackAnimation(Entity target, bool attackHit)
         {
+            FaceTarget(target);
+
             var animationHelper = CombatSpriteInstance.GetComponent<CombatAnimationHelper>();
 
             animationHelper.Target = target;
@@ -793,6 +912,13 @@ namespace Assets.Scripts.Entities
             var combatManager = Object.FindObjectOfType<CombatManager>();
 
             combatManager.RemoveEntity(this);
+        }
+
+        public void PlayImpactNoise()
+        {
+            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
+
+            eAudio.PlayImpactSound();
         }
 
         private IEnumerator Delay()
