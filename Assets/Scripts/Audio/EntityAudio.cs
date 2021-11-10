@@ -79,6 +79,11 @@ namespace Assets.Scripts.Audio
             PlaySound(DeathSound);
         }
 
+        public void PlayImpactSound()
+        {
+            PlaySound("event:/Entities/Impact");
+        }
+
         private void PlaySound(string soundPath)
         {
             var sound = FMODUnity.RuntimeManager.CreateInstance(soundPath);

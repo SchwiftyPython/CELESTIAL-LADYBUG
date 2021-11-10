@@ -29,10 +29,10 @@ namespace Assets.Scripts.UI
 
         public void Leave()
         {
+            var eventMediator = FindObjectOfType<EventMediator>();
+
             if (_result == CombatResult.Defeat)
             {
-                var eventMediator = FindObjectOfType<EventMediator>();
-
                 eventMediator.Broadcast(GlobalHelper.GameOver, this);
             }
             else
@@ -53,6 +53,8 @@ namespace Assets.Scripts.UI
                     var musicController = FindObjectOfType<MusicController>();
 
                     musicController.PlayTravelMusic();
+
+                    eventMediator.Broadcast(GlobalHelper.EncounterFinished, this);
                 }
             }
         }

@@ -44,6 +44,8 @@ namespace Assets.Scripts.Combat
         public Color HighlightedColor;
         public Color MovementRangeColor;
 
+        public Texture2D AbilityCursor;
+
         public GameObject Canvas;
 
         private void Start()
@@ -106,6 +108,8 @@ namespace Assets.Scripts.Combat
                                 _isAbilitySelected = false;
 
                                 ClearHighlights();
+
+                                GameManager.Instance.SetCursorToNormal();
 
                                 _eventMediator.Broadcast(GlobalHelper.RefreshCombatUi, this, _combatManager.ActiveEntity);
                             }
@@ -170,6 +174,8 @@ namespace Assets.Scripts.Combat
                     _isAbilitySelected = false;
 
                     _eventMediator.Broadcast(GlobalHelper.TileDeselected, this);
+
+                    GameManager.Instance.SetCursorToNormal();
                 }
                 else if (Input.GetKeyDown(KeyCode.Escape))
                 {
@@ -180,6 +186,8 @@ namespace Assets.Scripts.Combat
                     _isAbilitySelected = false;
 
                     _eventMediator.Broadcast(GlobalHelper.TileDeselected, this);
+
+                    GameManager.Instance.SetCursorToNormal();
                 }
             }
         }
@@ -193,6 +201,8 @@ namespace Assets.Scripts.Combat
         {
             _selectedAbility = selectedAbility;
             _isAbilitySelected = true;
+
+            Cursor.SetCursor(AbilityCursor, Vector2.zero, CursorMode.ForceSoftware);
         }
 
         public bool AbilitySelected()

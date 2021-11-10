@@ -21,7 +21,7 @@ namespace Assets.Scripts.Encounters.Normal
 
             var trappedFella = entityStore.GetRandomCompanion();
 
-            var eClass = trappedFella.EntityClass.ToString().ToLower();
+            var eClass = GlobalHelper.GetEnumDescription(trappedFella.EntityClass).ToLower();
 
             var travelManager = Object.FindObjectOfType<TravelManager>();
 

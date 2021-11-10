@@ -28,6 +28,8 @@ namespace Assets.Scripts.UI
                 return;
             }
 
+            Target.PlayImpactNoise();
+
             if (!Target.IsDead())
             {
                 Target.PlayHitAnimation();

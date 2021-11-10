@@ -30,6 +30,7 @@ namespace Assets.Scripts.Audio
         [Header("Neutral Sounds")]
         [FMODUnity.EventRef] public string genericAttack;
         [FMODUnity.EventRef] public string bowAttack;
+        [FMODUnity.EventRef] public string impact;
 
         [Header("Interface Sounds")]
         [FMODUnity.EventRef] public string genericPopup;
