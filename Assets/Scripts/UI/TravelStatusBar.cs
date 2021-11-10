@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Travel;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -22,6 +23,8 @@ namespace Assets.Scripts.UI
         public TextMeshProUGUI HealthPotionsValue;
         public TextMeshProUGUI DerpusEnergy;
         public TextMeshProUGUI DerpusMorale;
+        public RectTransform DerpusEnergyBar;
+        public RectTransform DerpusMoraleBar;
 
         public List<GameObject> CompanionStatuses;
         public Transform CompanionStatusParent;
@@ -40,7 +43,7 @@ namespace Assets.Scripts.UI
 
         public void Populate()
         {
-            var travelManager = Object.FindObjectOfType<TravelManager>();
+            var travelManager = FindObjectOfType<TravelManager>();
             var party = travelManager.Party;
 
             GoldValue.text = party.Gold.ToString();
@@ -48,6 +51,9 @@ namespace Assets.Scripts.UI
             HealthPotionsValue.text = party.HealthPotions.ToString();
             DerpusEnergy.text = $"{party.Derpus.Stats.CurrentEnergy}/{party.Derpus.Stats.MaxEnergy}";
             DerpusMorale.text = $"{party.Derpus.Stats.CurrentMorale}/{party.Derpus.Stats.MaxMorale}";
+
+            DerpusEnergyBar.DOScaleY((float)party.Derpus.Stats.CurrentEnergy / party.Derpus.Stats.MaxEnergy, 0.5f);
+            DerpusMoraleBar.DOScaleY((float)party.Derpus.Stats.CurrentMorale / party.Derpus.Stats.MaxMorale, 0.5f);
 
             PopulateCompanionStatuses(party);
 
@@ -121,6 +127,9 @@ namespace Assets.Scripts.UI
             HealthPotionsValue.text = party.HealthPotions.ToString();
             DerpusEnergy.text = $"{party.Derpus.Stats.CurrentEnergy}/{party.Derpus.Stats.MaxEnergy}";
             DerpusMorale.text = $"{party.Derpus.Stats.CurrentMorale}/{party.Derpus.Stats.MaxMorale}";
+
+            DerpusEnergyBar.DOScaleY(party.Derpus.Stats.CurrentEnergy / party.Derpus.Stats.MaxEnergy, 0.25f);
+            DerpusMoraleBar.DOScaleY(party.Derpus.Stats.CurrentMorale / party.Derpus.Stats.MaxMorale, 0.25f);
         }
 
         public void ScrollPartyListLeft()

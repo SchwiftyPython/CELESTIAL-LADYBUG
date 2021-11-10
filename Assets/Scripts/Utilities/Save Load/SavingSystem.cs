@@ -129,6 +129,11 @@ namespace Assets.Scripts.Utilities.Save_Load
             ES3.DeleteFile(saveFile);
         }
 
+        public void DeleteCurrentSave()
+        {
+            ES3.DeleteFile(_autoSaveFile);
+        }
+
         private void LoadCombatManager(Scene arg0, LoadSceneMode loadSceneMode)
         {
             LoadCombatManager();

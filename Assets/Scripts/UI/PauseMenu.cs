@@ -77,6 +77,16 @@ namespace Assets.Scripts.UI
 
         public void Hide()
         {
+            var loadWindow = GameObject.Find("LoadGameMask");
+            var settingsWindow = GameObject.Find("SettingsWindowMask");
+
+            EventMediator eventMediator = FindObjectOfType<EventMediator>();
+
+            if (GameManager.Instance.WindowActive(settingsWindow) || GameManager.Instance.WindowActive(loadWindow))
+            {
+                return;
+            }           
+
             uiContainer.SetActive(false);
             GameManager.Instance.RemoveActiveWindow(uiContainer);
 
@@ -84,10 +94,6 @@ namespace Assets.Scripts.UI
             {
                 return;
             }
-
-            EventMediator eventMediator = FindObjectOfType<EventMediator>();
-
-            //todo need to keep paused when inventory is open
 
             eventMediator.Broadcast(GlobalHelper.ResumeTimer, this);
         }

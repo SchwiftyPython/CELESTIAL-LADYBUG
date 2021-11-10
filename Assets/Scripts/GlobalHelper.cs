@@ -29,6 +29,7 @@ namespace Assets.Scripts
         public const string NoOptionEncounter = "NoOptionEncounter";
         public const string CombatEncounter = "CombatEncounter";
         public const string RetreatEncounterFailed = "RetreatEncounterFailed";
+        public const string RetreatEncounterSuccess = "RetreatEncounterSuccess";
         public const string EncounterResult = "EncounterResult";
         public const string EncounterFinished = "EncounterFinished";
         public const string WritingFinished = "WritingFinished";

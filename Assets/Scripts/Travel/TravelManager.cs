@@ -16,7 +16,7 @@ namespace Assets.Scripts.Travel
 {
     public class TravelManager : MonoBehaviour, ISubscriber, ISaveable
     {
-        private const int DemoDaysToDestination = 5;
+        private const int DemoDaysToDestination = 1;
         private const int FullGameDaysToDestination = 15;
 
         private const int BiomeChangeFrequency = 3;
@@ -66,11 +66,23 @@ namespace Assets.Scripts.Travel
 
             _daysTilNextBiome = BiomeChangeFrequency;
 
-            TravelDaysToDestination = DemoDaysToDestination;
+            ResetTravelDays();
 
             _musicController = FindObjectOfType<MusicController>();
 
             _travelMessenger = FindObjectOfType<TravelMessenger>();
+        }
+
+        public void ResetTravelDays()
+        {
+            if (GameManager.Instance.DemoMode)
+            {
+                TravelDaysToDestination = DemoDaysToDestination;
+            }
+            else
+            {
+                TravelDaysToDestination = FullGameDaysToDestination;
+            }
         }
 
         public void NewParty()
