@@ -21,6 +21,8 @@ namespace Assets.Scripts.UI
             }
 
             _textWriter = GetComponent<TextWriter>();
+
+            uiContainer.GetComponent<Button_UI>().ClickFunc = _textWriter.DisplayMessageInstantly;
         }
 
         public void Show()
@@ -45,6 +47,8 @@ namespace Assets.Scripts.UI
 
         public void Hide()
         {
+            _textWriter.DisplayMessageInstantly();
+
             uiContainer.SetActive(false);
             GameManager.Instance.RemoveActiveWindow(uiContainer);
 

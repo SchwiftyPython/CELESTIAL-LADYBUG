@@ -9,7 +9,6 @@ using Assets.Scripts.UI;
 using Assets.Scripts.Utilities.Save_Load;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Object = UnityEngine.Object;
 
 namespace Assets.Scripts
 {
@@ -42,6 +41,8 @@ namespace Assets.Scripts
         public string SaveFileName;
 
         public Texture2D NormalCursor;
+
+        public bool DemoMode;
 
         public static Scene CurrentScene => SceneManager.GetActiveScene();
 
@@ -143,6 +144,11 @@ namespace Assets.Scripts
             return _activeWindows.Any();
         }
 
+        public int NumActiveWindows()
+        {
+            return _activeWindows.Count;
+        }
+
         public bool WindowActive(GameObject window)
         {
             foreach (var activeWindow in _activeWindows)
@@ -174,6 +180,8 @@ namespace Assets.Scripts
             LoadTravelScene();
 
             var travelManager = FindObjectOfType<TravelManager>();
+
+            travelManager.ResetTravelDays();
 
             travelManager.NewParty();
 

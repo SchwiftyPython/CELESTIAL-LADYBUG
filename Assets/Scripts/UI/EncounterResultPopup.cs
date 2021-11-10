@@ -16,11 +16,13 @@ namespace Assets.Scripts.UI
         private const string CombatPreviewPopupEvent = GlobalHelper.ShowCombatPreview;
         private const string EncounterFinished = GlobalHelper.EncounterFinished;
         private const string CampingEncounterFinished = GlobalHelper.CampingEncounterFinished;
+        private const string RetreatSuccess = GlobalHelper.RetreatEncounterSuccess;
 
         private TextWriter _textWriter;
         private EncounterType _encounterType;
         private bool _countsAsDayTraveled;
         private List<Entity> _enemies;
+        private bool _showCombatButton;
 
         public TextMeshProUGUI EncounterTitle;
         public TextMeshProUGUI ResultDescription;
@@ -141,7 +143,7 @@ namespace Assets.Scripts.UI
 
         private void ShowButtons()
         {
-            if (_encounterType == EncounterType.Combat)
+            if (_encounterType == EncounterType.Combat && _showCombatButton)
             {
                 StartCombatButton.SetActive(true);
             }
@@ -217,6 +219,8 @@ namespace Assets.Scripts.UI
                     return;
                 }
 
+                _showCombatButton = false;
+
                 Show(encounter, result);
             }
             else if (eventName.Equals(CombatPreviewPopupEvent))
@@ -234,6 +238,8 @@ namespace Assets.Scripts.UI
                 {
                     return;
                 }
+
+                _showCombatButton = true;
 
                 ShowCombatPreview(encounter, option.ResultText, option.Enemies);
             }
