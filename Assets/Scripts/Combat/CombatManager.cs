@@ -113,6 +113,8 @@ namespace Assets.Scripts.Combat
 
                     _musicController.EndTravelMusic();
 
+                    _musicController.PlayBattleMusic();
+
                     //todo travel manager checks for testing in combat scene
                     if (_travelManager != null && _travelManager.Party != null && Enemies != null && Enemies.Count > 0)
                     {
@@ -174,8 +176,6 @@ namespace Assets.Scripts.Combat
 
                     _eventMediator.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
                     _eventMediator.Broadcast(RefreshUi, this, ActiveEntity);
-
-                    _musicController.PlayBattleMusic();
 
                     break;
                 case CombatState.PlayerTurn:
@@ -284,10 +284,10 @@ namespace Assets.Scripts.Combat
 
                     SubscribeToEvents();
 
+                    _musicController.PlayBattleMusic();
+
                     _eventMediator.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
                     _eventMediator.Broadcast(RefreshUi, this, ActiveEntity);
-
-                    _musicController.PlayBattleMusic();
 
                     _currentCombatState = CombatState.PlayerTurn;
                     break;
@@ -446,6 +446,11 @@ namespace Assets.Scripts.Combat
             var currentTile = Map.GetTileAt(target.Position);
 
             var removed = Map.RemoveEntity(target);
+
+            if (currentTile.SpriteInstance == null)
+            {
+                return;
+            }
 
             currentTile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(null);
 

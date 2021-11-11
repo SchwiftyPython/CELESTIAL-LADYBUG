@@ -75,7 +75,7 @@ namespace Assets.Scripts.AI
                 var combatManager = FindObjectOfType<CombatManager>();
                 var map = combatManager.Map;
 
-                if (TargetEntity == null || TargetEntity.IsDead() || map.OutOfBounds(TargetEntity.Position))
+                if (TargetEntity == null || TargetEntity.IsDead() || map.OutOfBounds(TargetEntity.Position) || !combatManager.TurnOrder.Contains(TargetEntity))
                 {
                     TargetEntity = FindTarget();
                 }

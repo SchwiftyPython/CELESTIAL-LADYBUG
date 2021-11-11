@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.Scripts.Audio;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Utilities.Save_Load;
 using UnityEngine;
@@ -109,6 +110,17 @@ namespace Assets.Scripts.UI
 
         public void LoadMainMenuScene()
         {
+            var music = FindObjectOfType<MusicController>();
+
+            if (GameManager.CurrentScene.name.Equals("Combat", StringComparison.OrdinalIgnoreCase))
+            {
+                music.EndBattleMusic();
+            }
+            else
+            {
+                music.EndTravelMusic();
+            }
+
             SceneManager.LoadScene(GlobalHelper.TitleScreenScene);
         }
 

@@ -75,6 +75,11 @@ namespace Assets.Scripts.UI
 
             messageInstance.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = myMessage;
 
+            if (_messagesOnScreen == null)
+            {
+                _messagesOnScreen = new Queue<GameObject>();
+            }
+
             _messagesOnScreen.Enqueue(messageInstance);
 
             StartCoroutine(PushToBottom());

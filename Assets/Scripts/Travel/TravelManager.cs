@@ -16,7 +16,7 @@ namespace Assets.Scripts.Travel
 {
     public class TravelManager : MonoBehaviour, ISubscriber, ISaveable
     {
-        private const int DemoDaysToDestination = 1;
+        private const int DemoDaysToDestination = 5;
         private const int FullGameDaysToDestination = 15;
 
         private const int BiomeChangeFrequency = 3;
@@ -101,6 +101,11 @@ namespace Assets.Scripts.Travel
             var encounterManager = FindObjectOfType<EncounterManager>();
             encounterManager.BuildDecksForNewDay();
 
+            PlayTravelMusic();
+        }
+
+        public void PlayTravelMusic()
+        {
             _musicController.PlayTravelMusic();
         }
 

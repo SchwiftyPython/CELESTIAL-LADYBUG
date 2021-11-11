@@ -20,8 +20,11 @@ namespace Assets.Scripts.UI
             Hide();
         }
 
-        private void Show()
+        public void Show()
         {
+            var travelManager = Object.FindObjectOfType<TravelManager>();
+            _companions = travelManager.Party.GetCompanions();
+
             var eventMediator = Object.FindObjectOfType<EventMediator>();
             eventMediator.Broadcast(GlobalHelper.PopulateCharacterSheet, this, _companions.First());
             eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this, _companions.First());
@@ -34,7 +37,7 @@ namespace Assets.Scripts.UI
             GameManager.Instance.AddActiveWindow(gameObject);
         }
 
-        private void Hide()
+        public void Hide()
         {
             var eventMediator = Object.FindObjectOfType<EventMediator>();
             eventMediator.SubscribeToEvent(ShowPopupEvent, this);
@@ -74,6 +77,10 @@ namespace Assets.Scripts.UI
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
             eventMediator.Broadcast(GlobalHelper.PopulateCharacterSheet, this, _companions[_currentIndex]);
+
+            var characterSheet = FindObjectOfType<CompanionCharacterSheet>();
+
+            characterSheet.Populate(_companions[_currentIndex]);
         }
 
         public void PreviousCompanion()
@@ -92,6 +99,10 @@ namespace Assets.Scripts.UI
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
             eventMediator.Broadcast(GlobalHelper.PopulateCharacterSheet, this, _companions[_currentIndex]);
+
+            var characterSheet = FindObjectOfType<CompanionCharacterSheet>();
+
+            characterSheet.Populate(_companions[_currentIndex]);
         }
 
         public Entity GetCurrentCompanion()
@@ -103,8 +114,6 @@ namespace Assets.Scripts.UI
         {
             if (eventName.Equals(ShowPopupEvent))
             {
-                var travelManager = Object.FindObjectOfType<TravelManager>();
-                _companions = travelManager.Party.GetCompanions();
                 Show();
             }
             else if (eventName.Equals(HidePopupEvent))
