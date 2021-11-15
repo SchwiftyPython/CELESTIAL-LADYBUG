@@ -87,20 +87,20 @@ namespace Assets.Scripts.Combat
 
                             entityInstance.transform.position = position;
 
-                            var renderer = entityInstance.GetComponent<Renderer>();
+                            var sRenderer = entityInstance.GetComponent<Renderer>();
 
-                            if (renderer == null)
+                            if (sRenderer == null)
                             {
-                                renderer = entityInstance.GetComponentInChildren<Renderer>();
+                                sRenderer = entityInstance.GetComponentInChildren<Renderer>();
                             }
 
                             var palette = FindObjectOfType<Palette>();
 
-                            var mat = renderer.material;
+                            var mat = sRenderer.material;
 
-                            mat.EnableKeyword("OUTBASE_ON");
                             mat.SetColor("_OutlineColor", palette.BrightRed);
                             mat.SetFloat("_OutlineWidth", 0.0009f);
+                            mat.SetFloat("_OutlineAlpha", 1.0f);
                         }
 
                         entityInstance.AddComponent<EntityAudio>();

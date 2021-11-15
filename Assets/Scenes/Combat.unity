@@ -4477,7 +4477,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testingBiome: 0
-  testingEnabled: 0
+  testingEnabled: 1
 --- !u!4 &604771531
 Transform:
   m_ObjectHideFlags: 0
