@@ -110,6 +110,11 @@ namespace Assets.Scripts
             Cursor.SetCursor(NormalCursor, Vector2.zero, CursorMode.ForceSoftware);
         }
 
+        public void EndTitleMusic()
+        {
+            _musicController.EndTitleMusic();
+        }
+
         public void AddActiveWindow(GameObject window)
         {
             if (_activeWindows.Contains(window))
@@ -199,11 +204,15 @@ namespace Assets.Scripts
 
         public void LoadTravelScene()
         {
+            _musicController.EndTitleMusic();
+
             StartCoroutine(WaitForSceneLoad(TravelSceneIndex));
         }
 
         public void LoadCombatScene()
         {
+            _musicController.EndTitleMusic();
+
             StartCoroutine(WaitForSceneLoad(CombatSceneIndex));
         }
 

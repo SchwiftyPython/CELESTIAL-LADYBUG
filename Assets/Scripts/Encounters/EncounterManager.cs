@@ -21,6 +21,7 @@ namespace Assets.Scripts.Encounters
         private EncounterDeck _normalEncounterDeck;
         private EncounterDeck _campingDeck;
         private EncounterDeck _testDeck;
+        private List<Encounter> _usedEncounters;
 
         private Queue<Encounter> _encounterQueue;
 
@@ -92,7 +93,12 @@ namespace Assets.Scripts.Encounters
                     normalEncounterSize++;
                 }
 
-                _normalEncounterDeck = new EncounterDeck(encounterStore.GetNormalEncounters(), normalEncounterSize);
+                if (_usedEncounters == null)
+                {
+                    _usedEncounters = new List<Encounter>();
+                }
+
+                _normalEncounterDeck = new EncounterDeck(encounterStore.GetNormalEncounters(), normalEncounterSize, _usedEncounters);
 
                 var combatEncounters = encounterStore.GetCombatEncounters();
 
@@ -103,7 +109,7 @@ namespace Assets.Scripts.Encounters
 
             if (_campingDeck == null || _campingDeck.Size < 1)
             {
-                _campingDeck = new EncounterDeck(encounterStore.GetCampingEncounters(), 5);
+                _campingDeck = new EncounterDeck(encounterStore.GetCampingEncounters(), 5, _usedEncounters);
             }
 
             if (_encounterInProgress)
@@ -119,15 +125,17 @@ namespace Assets.Scripts.Encounters
         {
             var encounterStore = FindObjectOfType<EncounterStore>();
 
+            _usedEncounters = new List<Encounter>();
+
             var normalEncounterSize =  emDto.NormalDeck.Size;
 
             if (normalEncounterSize > 0)
             {
-                _normalEncounterDeck = new EncounterDeck(encounterStore.GetNormalEncounters(), normalEncounterSize);
+                _normalEncounterDeck = new EncounterDeck(encounterStore.GetNormalEncounters(), normalEncounterSize, _usedEncounters);
                 _normalEncounterDeck.Shuffle();
             }
 
-            _campingDeck = new EncounterDeck(encounterStore.GetCampingEncounters(), emDto.CampingDeck.Size);
+            _campingDeck = new EncounterDeck(encounterStore.GetCampingEncounters(), emDto.CampingDeck.Size, _usedEncounters);
 
             if (GameManager.Instance.InCombat())
             {
@@ -137,6 +145,9 @@ namespace Assets.Scripts.Encounters
             {
                 ResetTimer();
                 ResumeTimer();
+
+                var travelManager = FindObjectOfType<TravelManager>();
+                travelManager.PlayTravelMusic();
             }
         }
 
@@ -146,7 +157,9 @@ namespace Assets.Scripts.Encounters
 
             var testEncounters = encounterStore.GetTestEncounters();
 
-            _testDeck = new EncounterDeck(testEncounters, testEncounters.Count);
+            _usedEncounters = new List<Encounter>();
+
+            _testDeck = new EncounterDeck(testEncounters, testEncounters.Count, _usedEncounters);
 
             _testDeck.Shuffle();
         }

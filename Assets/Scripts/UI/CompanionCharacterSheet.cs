@@ -41,6 +41,13 @@ namespace Assets.Scripts.UI
             eventMediator.SubscribeToEvent(EquipmentUpdated, this);
         }
 
+        public void Populate(Entity companion)
+        {
+            _companion = companion;
+
+            Populate();
+        }
+
         private void Populate()
         {
             if (_companion == null)

@@ -22,6 +22,8 @@ namespace Assets.Scripts.Decks
 
         public virtual void Build(List<T> cardPool, int deckSize, RarityCapper capper) {}
 
+        public virtual void Build(List<T> cardPool, int deckSize, RarityCapper capper, List<T> usedCards) {}
+
         public void Shuffle()
         {
             var cardList = Cards.ToList();

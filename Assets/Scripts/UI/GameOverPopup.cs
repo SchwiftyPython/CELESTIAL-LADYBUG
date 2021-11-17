@@ -20,7 +20,7 @@ namespace Assets.Scripts.UI
             SceneManager.LoadScene(GlobalHelper.TitleScreenScene);
         }
 
-        private void Show()
+        public void Show()
         {
             var parallax = FindObjectOfType<Parallax>();
             parallax.Stop();
