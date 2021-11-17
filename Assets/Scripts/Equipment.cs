@@ -173,7 +173,6 @@ namespace Assets.Scripts
             }
 
             _equippedItems[slot] = null;
-            //eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this);
         }
 
         public void RemoveAllItems()
