@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Effects.Args;
 using Assets.Scripts.Entities;
+using Assets.Scripts.UI;
 using GoRogue;
 using UnityEngine;
 
@@ -37,6 +38,21 @@ namespace Assets.Scripts.Effects
             eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
             basicEffectArgs.Target.SubtractHealth(Damage);
+
+            var animHelper = basicEffectArgs.Target.CombatSpriteInstance.GetComponent<CombatAnimationHelper>();
+
+            animHelper.damage = Damage;
+            animHelper.criticalHit = false;
+
+            if (basicEffectArgs.Target.IsDead())
+            {
+                eventMediator.StartCoroutine(basicEffectArgs.Target.PlayDeathAnimation());
+                eventMediator.Broadcast(GlobalHelper.EndTurn, this);
+            }
+            else
+            {
+                basicEffectArgs.Target.PlayHitAnimation();
+            }
         }
     }
 }

@@ -28,6 +28,7 @@ namespace Assets.Scripts.Encounters.Camping
                 if (companion == chosen)
                 {
                     Reward.AddEntityGain(companion, EntityStatTypes.CurrentEnergy, 5);
+                    continue;
                 }
 
                 Reward.AddEntityGain(companion, EntityStatTypes.CurrentEnergy, 10);

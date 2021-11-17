@@ -16,9 +16,10 @@ namespace Assets.Scripts.Travel
 {
     public class TravelManager : MonoBehaviour, ISubscriber, ISaveable
     {
-        private const int DemoDaysToDestination = 1;
+        private const int DemoDaysToDestination = 5;
         private const int FullGameDaysToDestination = 15;
 
+        private const int DemoBiomeChangeFrequency = 2;
         private const int BiomeChangeFrequency = 3;
 
         private const BiomeType StartingBiome = BiomeType.Forest;
@@ -64,9 +65,9 @@ namespace Assets.Scripts.Travel
 
             CurrentDayOfTravel = 1;
 
-            _daysTilNextBiome = BiomeChangeFrequency;
-
             ResetTravelDays();
+
+            ResetDaysTilNextBiome();
 
             _musicController = FindObjectOfType<MusicController>();
 
@@ -82,6 +83,18 @@ namespace Assets.Scripts.Travel
             else
             {
                 TravelDaysToDestination = FullGameDaysToDestination;
+            }
+        }
+
+        private void ResetDaysTilNextBiome()
+        {
+            if (GameManager.Instance.DemoMode)
+            {
+                _daysTilNextBiome = DemoBiomeChangeFrequency;
+            }
+            else
+            {
+                _daysTilNextBiome = BiomeChangeFrequency;
             }
         }
 
@@ -101,6 +114,11 @@ namespace Assets.Scripts.Travel
             var encounterManager = FindObjectOfType<EncounterManager>();
             encounterManager.BuildDecksForNewDay();
 
+            PlayTravelMusic();
+        }
+
+        public void PlayTravelMusic()
+        {
             _musicController.PlayTravelMusic();
         }
 
@@ -738,7 +756,7 @@ namespace Assets.Scripts.Travel
                 return;
             }
 
-            _daysTilNextBiome = BiomeChangeFrequency;
+            ResetDaysTilNextBiome();
 
             CurrentBiome = _biomeQueue.Dequeue();
 

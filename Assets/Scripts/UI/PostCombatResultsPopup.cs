@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts.Audio;
 using Assets.Scripts.Combat;
+using Assets.Scripts.Utilities.Save_Load;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -34,6 +35,14 @@ namespace Assets.Scripts.UI
             if (_result == CombatResult.Defeat)
             {
                 eventMediator.Broadcast(GlobalHelper.GameOver, this);
+
+                var gameOverPopup = FindObjectOfType<GameOverPopup>();
+
+                gameOverPopup.Show();
+
+                var saveSystem = FindObjectOfType<SavingSystem>();
+
+                saveSystem.DeleteCurrentSave();
             }
             else
             {

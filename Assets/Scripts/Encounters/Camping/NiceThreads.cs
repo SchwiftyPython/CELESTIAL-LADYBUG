@@ -29,6 +29,11 @@ namespace Assets.Scripts.Encounters.Camping
 
             Description = $"The party decides to camp outside of a town known for its shopping district. {trendy.FirstName()} disappears for awhile to check things out. They return proudly wearing the poofiest, silkiest pantaloons you've ever seen!";
 
+            if (gold <= 0)
+            {
+                Description += $"\n\nThey found the clothes hanging out to dry in someone's yard and took them!";
+            }
+            else
             if (gold <= clothesCost)
             {
                 Description += $"\n\nThey spent the rest of the gold!";

@@ -523,7 +523,7 @@ namespace Assets.Scripts.Combat
 
             _highlightedTiles.Add(tile);
 
-            tile.SpriteInstance.GetComponent<SpriteRenderer>().color = HighlightedColor;
+            tile.Highlight(HighlightedColor);
         }
 
         private void HighlightTileUnderAbilityTarget(Entity abilityTarget)
@@ -544,7 +544,7 @@ namespace Assets.Scripts.Combat
                 return;
             }
 
-            _highlightedAbilityTile.SpriteInstance.GetComponent<SpriteRenderer>().color = Color.white;
+            _highlightedAbilityTile.ClearHighlight();
 
             _highlightedAbilityTile = null;
         }
@@ -558,18 +558,13 @@ namespace Assets.Scripts.Combat
 
             foreach (var tile in _highlightedTiles)
             {
-                if (tile.SpriteInstance == null)
-                {
-                    continue;
-                }
-
                 if (tile.Selectable)
                 {
                     tile.SpriteInstance.GetComponent<SpriteRenderer>().color = MovementRangeColor;
                 }
                 else
                 {
-                    tile.SpriteInstance.GetComponent<SpriteRenderer>().color = Color.white;
+                    tile.ClearHighlight();
                 }
             }
 

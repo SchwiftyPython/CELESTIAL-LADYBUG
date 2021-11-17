@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Assets.Scripts.Audio;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Encounters;
 using Assets.Scripts.Travel;
@@ -141,6 +142,10 @@ namespace Assets.Scripts.Utilities.Save_Load
 
         private void LoadCombatManager()
         {
+            var music = FindObjectOfType<MusicController>();
+
+            music.EndTravelMusic();
+
             var combatManager = FindObjectOfType<CombatManager>();
 
             var cmDto = ES3.Load("combat manager", _autoSaveFile);

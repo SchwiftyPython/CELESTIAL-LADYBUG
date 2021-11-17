@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Items;
@@ -172,12 +173,11 @@ namespace Assets.Scripts
             }
 
             _equippedItems[slot] = null;
-            //eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this);
         }
 
         public void RemoveAllItems()
         {
-            foreach (var slot in _equippedItems.Keys)
+            foreach (var slot in _equippedItems.Keys.ToArray())
             {
                 RemoveItem(slot);
             }

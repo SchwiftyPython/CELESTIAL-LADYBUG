@@ -39,6 +39,13 @@ namespace Assets.Scripts.UI
 
         public void LoadSelectedGame()
         {
+            if (!_savingSystem.SaveExists(_saveFileName))
+            {
+                return;
+            }
+
+            GameManager.Instance.EndTitleMusic();
+
             _savingSystem.Load(_saveFileName);
 
             Hide();

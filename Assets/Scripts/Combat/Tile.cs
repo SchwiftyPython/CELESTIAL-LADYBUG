@@ -31,6 +31,7 @@ namespace Assets.Scripts.Combat
         public Sprite Texture { get; set; }
 
         public UnityEngine.GameObject SpriteInstance { get; private set; }
+        public SpriteRenderer SRenderer { get; private set; }
 
         public TileType TileType { get; protected set; }
         public BiomeType BiomeType { get; protected set; }
@@ -95,6 +96,17 @@ namespace Assets.Scripts.Combat
         public void SetSpriteInstance(UnityEngine.GameObject instance)
         {
             SpriteInstance = instance;
+            SRenderer = SpriteInstance.GetComponent<SpriteRenderer>();
+        }
+
+        public void Highlight(Color color)
+        {
+            SRenderer.color = color;
+        }
+
+        public void ClearHighlight()
+        {
+            SRenderer.color = Color.white;
         }
 
         public Tile GetAdjacentTileByDirection(Direction direction)

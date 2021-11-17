@@ -35,6 +35,11 @@ namespace Assets.Scripts.UI
 
         public void Setup(int damageAmount, bool isCriticalHit)
         {
+            if (damageAmount < 0)
+            {
+                damageAmount = 0;
+            }
+
             textMesh.SetText(damageAmount.ToString());
             if (!isCriticalHit)
             {

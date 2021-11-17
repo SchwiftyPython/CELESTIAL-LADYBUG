@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Utilities.Save_Load;
+﻿using System;
+using Assets.Scripts.Utilities.Save_Load;
 using UnityEngine;
 
 namespace Assets.Scripts.UI
@@ -35,6 +36,12 @@ namespace Assets.Scripts.UI
 
         public void StartGame()
         {
+            if (string.IsNullOrEmpty(_saveFileName) ||
+                _saveFileName.Equals("SaveFile.es3", StringComparison.OrdinalIgnoreCase))
+            {
+                _saveFileName = "SlotOne";
+            }
+
             if (_savingSystem.SaveExists(_saveFileName))
             {
                 var overwriteConfirm = FindObjectOfType<OverwriteSavedGameWindow>();

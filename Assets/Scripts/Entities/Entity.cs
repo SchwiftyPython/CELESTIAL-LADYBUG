@@ -989,12 +989,12 @@ namespace Assets.Scripts.Entities
                 target.SubtractHealth(damage);
 
                 message = $"{Name} dealt {damage} damage to {target.Name}!";
-
-                animationHelper = target.CombatSpriteInstance.GetComponent<CombatAnimationHelper>();
-
-                animationHelper.damage = damage;
-                animationHelper.criticalHit = criticalHit;
             }
+
+            animationHelper = target.CombatSpriteInstance.GetComponent<CombatAnimationHelper>();
+
+            animationHelper.damage = damage;
+            animationHelper.criticalHit = criticalHit;
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 

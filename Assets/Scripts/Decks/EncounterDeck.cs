@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Decks
 {
-    public class EncounterDeck : Deck<Encounter>, ISaveable
+    public sealed class EncounterDeck : Deck<Encounter>, ISaveable
     {
         private const int CommonCap = 5;
         private const int UncommonCap = 2;
@@ -14,14 +14,14 @@ namespace Assets.Scripts.Decks
 
         public override Queue<Encounter> Cards { get; set; }
 
-        public EncounterDeck(List<Encounter> cardPool, int deckSize)
+        public EncounterDeck(List<Encounter> cardPool, int deckSize, List<Encounter> usedEncounters)
         {
             CardIndex = 0;
-            Build(cardPool, deckSize, new RarityCapper(CommonCap, UncommonCap, RareCap));
+            Build(cardPool, deckSize, new RarityCapper(CommonCap, UncommonCap, RareCap), usedEncounters);
             Shuffle();
         }
 
-        public sealed override void Build(List<Encounter> cardPool, int deckSize, RarityCapper capper)
+        public override void Build(List<Encounter> cardPool, int deckSize, RarityCapper capper, List<Encounter> usedEncounters)
         {
             var travelManager = Object.FindObjectOfType<TravelManager>();
 
@@ -55,18 +55,30 @@ namespace Assets.Scripts.Decks
 
                     card = cardPool[index];
 
-                    if (!capper.IsCapped(card.Rarity) && card.ValidBiome(currentBiome))
+                    if (usedEncounters.Contains(card))
+                    {
+                        continue;
+                    }
+
+                    if (card.ValidBiome(currentBiome))
                     {
                         validCard = true;
                     }
+
+                    // if (!capper.IsCapped(card.Rarity) && card.ValidBiome(currentBiome))
+                    // {
+                    //     validCard = true;
+                    // }
                 }
 
-                // if (card == null)
-                // {
-                //     card = cardPool[Random.Range(0, cardPool.Count)];
-                // }
+                if (!validCard)
+                {
+                    usedEncounters.Clear();
+                }
 
                 AddCard(card);
+
+                usedEncounters.Add(card);
             }
         }
 
