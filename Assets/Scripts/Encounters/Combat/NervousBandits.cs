@@ -33,9 +33,20 @@ namespace Assets.Scripts.Encounters.Combat
 
             if (Party.Food > foodThreshold && Party.Gold > 4 && Party.HealthPotions > 4)
             {
-                Description += $"{Party.Gold / 4} gold, ";
+                var numGold = Party.Gold / 4;
 
-                Description += $"{Party.HealthPotions / 4} potions, ";
+                Description += $"{numGold} gold, ";
+                
+                var numPotions = Party.HealthPotions / 4;
+
+                Description += $"{numPotions} potion";
+
+                if (numPotions > 1)
+                {
+                    Description += $"s";
+                }
+
+                Description += ", ";
 
                 Description += "and the rest of your food!";
 

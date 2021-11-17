@@ -31,7 +31,11 @@ namespace Assets.Scripts.Encounters.Camping
 
             Description = $"The party decides to camp outside of a small village. {fatty.FirstName()} disappears for awhile to check things out. When they return, they're carrying an armful of pastries. ";
 
-            if (gold <= pastryCost)
+            if (gold <= 0)
+            {
+                Description += $"\n\nThey found them in a basket with no one around to claim them!";
+            }
+            else if (gold <= pastryCost)
             {
                 Description += $"\n\nThey spent the rest of the gold!";
 

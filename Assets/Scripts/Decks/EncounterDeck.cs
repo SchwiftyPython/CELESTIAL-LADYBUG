@@ -60,10 +60,15 @@ namespace Assets.Scripts.Decks
                         continue;
                     }
 
-                    if (!capper.IsCapped(card.Rarity) && card.ValidBiome(currentBiome))
+                    if (card.ValidBiome(currentBiome))
                     {
                         validCard = true;
                     }
+
+                    // if (!capper.IsCapped(card.Rarity) && card.ValidBiome(currentBiome))
+                    // {
+                    //     validCard = true;
+                    // }
                 }
 
                 if (!validCard)

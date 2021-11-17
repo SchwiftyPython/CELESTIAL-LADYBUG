@@ -456,6 +456,8 @@ namespace Assets.Scripts.Combat
 
             Destroy(target.CombatSpriteInstance);
 
+            _eventMediator.Broadcast(GlobalHelper.RefreshCombatUi, this, ActiveEntity);
+
             //todo remove effects that originate from player
         }
 
