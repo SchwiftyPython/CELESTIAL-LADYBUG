@@ -24,6 +24,36 @@ namespace Assets.Scripts
 
         #region PortraitSprites
 
+        private readonly List<Dictionary<Portrait.Slot, List<string>>> _portraitPresets = new List<Dictionary<Portrait.Slot, List<string>>>
+        {
+            {
+                new Dictionary<Portrait.Slot, List<string>>
+                {
+                    {Portrait.Slot.Skin, new List<string>{"base", "base_3"}},
+                    {Portrait.Slot.Chest, new List<string>{ "chest_padded", "chest_padded_2", "chest_padded_3", "chest_robe", "chest_robe_2", "chest_robe_3", "chest_plate"}},
+                    {Portrait.Slot.Hair, new List<string>{ "hair_short", "hair_short_2", "hair_short_3", "hair_balding"}}
+                }
+            },
+            {
+                new Dictionary<Portrait.Slot, List<string>>
+                {
+                    {Portrait.Slot.Skin, new List<string>{"base", "base_3"}},
+                    {Portrait.Slot.FacialHair, new List<string>{"facial_handlebar", "facial_chinstrap"}},
+                    {Portrait.Slot.Chest, new List<string>{ "chest_padded", "chest_padded_2", "chest_padded_3", "chest_robe", "chest_robe_2", "chest_robe_3", "chest_plate"}},
+                    {Portrait.Slot.Hair, new List<string>{ "hair_short", "hair_short_2", "hair_short_3", "hair_balding"}}
+                }
+            },
+            {
+                new Dictionary<Portrait.Slot, List<string>>
+                {
+                    {Portrait.Slot.Skin, new List<string>{"base", "base_2", "base_3", "base_4"}},
+                    {Portrait.Slot.FacialHair, new List<string>{"facial_handlebar", "facial_chinstrap", "facial_goatee"}},
+                    {Portrait.Slot.Chest, new List<string>{ "chest_padded_2", "chest_padded_3", "chest_robe", "chest_robe_2", "chest_robe_3", "chest_plate"}},
+                    {Portrait.Slot.Hair, new List<string>{ "hair_short", "hair_short_2", "hair_short_3", "hair_balding", "hair_long", "hair_long_2"}}
+                }
+            },
+        };
+
         private Dictionary<string, Sprite> _pSkinDictionary;
         private Dictionary<string, Sprite> _pEarDictionary;
         private Dictionary<string, Sprite> _pChestDictionary;
@@ -37,6 +67,8 @@ namespace Assets.Scripts
         public Sprite[] PortraitFacialFairSprites;
         public Sprite[] PortraitHairSprites;
         public Sprite[] PortraitHelmetSprites;
+
+        public Sprite DerpusPortrait;
 
         #endregion PortraitSprites
 
@@ -75,7 +107,17 @@ namespace Assets.Scripts
         public Sprite[] GrassyMudSprites;
         public Sprite[] TemperateTreeSprites;
 
-        private Dictionary<TileType, Sprite[]> _combatTerrainSprites;
+        public Sprite[] SandSprites;
+        public Sprite[] SandDecoratorSprites;
+        public Sprite[] SandRockSprites;
+        public Sprite[] SandTreeSprites;
+
+        public Sprite[] SpookyGroundSprites;
+        public Sprite[] SpookyDecoratorSprites;
+        public Sprite[] SpookyGravestoneSprites;
+        public Sprite[] SpookyTreeSprites;
+
+        private Dictionary<BiomeType, Dictionary<TileType, Sprite[]>> _combatTerrainSprites; //todo might be better off as a class if unwieldy
 
         #endregion TerrainSprites
 
@@ -84,6 +126,27 @@ namespace Assets.Scripts
 
         public Sprite[] AbilitySprites;
         public Sprite[] EffectSprites;
+
+        #region SkinSwaps
+
+        public Texture SpearmanIdleSwap;
+        public Texture SpearmanAttackSwap;
+        public Texture SpearmanHitSwap;
+        public Texture SpearmanDeadSwap;
+        public Texture ManAtArmsIdleSwap;
+        public Texture ManAtArmsAttackSwap;
+        public Texture ManAtArmsHitSwap;
+        public Texture ManAtArmsDeadSwap;
+        public Texture CrossbowmanIdleSwap;
+        public Texture CrossbowmanAttackSwap;
+        public Texture CrossbowmanHitSwap;
+        public Texture CrossbowmanDeadSwap;
+
+        #endregion SkinSwaps
+
+        private Dictionary<string, Sprite> _encounterSpritesDictionary;
+
+        public Sprite[] EncounterSprites;
 
         public void Setup()
         {
@@ -100,6 +163,27 @@ namespace Assets.Scripts
             var eventMediator = FindObjectOfType<EventMediator>();
 
             eventMediator.Broadcast(GlobalHelper.SpritesLoaded, this);
+        }
+
+        public Dictionary<Portrait.Slot, string> GetRandomPortraitPreset()
+        {
+            var presetOptions = _portraitPresets.ElementAt(Random.Range(0, _portraitPresets.Count));
+
+            var preset = new Dictionary<Portrait.Slot, string>();
+
+            foreach (var slot in presetOptions)
+            {
+                preset.Add(slot.Key, slot.Value[Random.Range(0, slot.Value.Count)]);
+            }
+
+            return preset;
+        }
+
+        public Dictionary<Portrait.Slot, string> GetDerpusPortrait()
+        {
+            var portrait = new Dictionary<Portrait.Slot, string> { { Portrait.Slot.Skin, "derpus" } };
+
+            return portrait;
         }
 
         public Sprite GetRandomSpriteForSlot(Portrait.Slot slot)
@@ -149,6 +233,12 @@ namespace Assets.Scripts
             switch (slot)
             {
                 case Portrait.Slot.Skin:
+
+                    if (string.Equals(key, "derpus"))
+                    {
+                        return DerpusPortrait;
+                    }
+
                     return _pSkinDictionary[key];
                 // case Portrait.Slot.Ears:
                 //     return _pEarDictionary[key];
@@ -214,14 +304,29 @@ namespace Assets.Scripts
             return _effectSpriteDictionary[effect.Name.ToLower()];
         }
 
-        public Sprite[] GetFloorSprites(TileType tType)
+        public Sprite GetEncounterSprite(string sName)
         {
-            return _combatTerrainSprites[tType];
+            if (_encounterSpritesDictionary == null || !_encounterSpritesDictionary.ContainsKey(sName.ToLower()))
+            {
+                Debug.LogError($"Encounter sprite {sName} does not exist!");
+                return null;
+            }
+
+            return _encounterSpritesDictionary[sName.ToLower()];
         }
 
-        public Sprite[] GetWallSprites(TileType tType)
+        public Sprite[] GetFloorSprites(BiomeType bType, TileType tType)
         {
-            return _combatTerrainSprites[tType];
+            var biomeFloorSprites = _combatTerrainSprites[bType];
+
+            return biomeFloorSprites[tType];
+        }
+
+        public Sprite[] GetWallSprites(BiomeType bType, TileType tType)
+        {
+            var biomeWallSprites = _combatTerrainSprites[bType];
+
+            return biomeWallSprites[tType];
         }
 
         public void SetColorSwaps(IEnumerable<ColorSwapper> colorSwapper, Entity entity)
@@ -336,6 +441,7 @@ namespace Assets.Scripts
             PopulateItemSprites();
             PopulateAbilitySprites();
             PopulateEffectSprites();
+            PopulateEncounterSprites();
         }
 
         private void PopulatePortraitSprites()
@@ -409,6 +515,11 @@ namespace Assets.Scripts
             _effectSpriteDictionary = PopulateDictionaryFromArray(EffectSprites);
         }
 
+        private void PopulateEncounterSprites()
+        {
+            _encounterSpritesDictionary = PopulateDictionaryFromArray(EncounterSprites);
+        }
+
         private static Dictionary<string, Sprite> PopulateDictionaryFromArray(IEnumerable<Sprite> sprites)
         {
             var spriteDictionary = new Dictionary<string, Sprite>();
@@ -423,12 +534,35 @@ namespace Assets.Scripts
 
         private void PopulateCombatTerrain()
         {
-            _combatTerrainSprites = new Dictionary<TileType, Sprite[]>
+            _combatTerrainSprites = new Dictionary<BiomeType, Dictionary<TileType, Sprite[]>>
             {
-                {TileType.Grass, GrassSprites},
-                {TileType.GrassDecorators, GrassDecoratorSprites},
-                {TileType.Mud, GrassyMudSprites},
-                {TileType.Tree, TemperateTreeSprites}
+                {
+                    BiomeType.Forest, new Dictionary<TileType, Sprite[]>
+                    {
+                        { TileType.Grass, GrassSprites },
+                        { TileType.GrassDecorators, GrassDecoratorSprites },
+                        { TileType.Mud, GrassyMudSprites },
+                        { TileType.Tree, TemperateTreeSprites }
+                    }
+                },
+                {
+                    BiomeType.Desert, new Dictionary<TileType, Sprite[]>
+                    {
+                        { TileType.Sand, SandSprites },
+                        { TileType.SandDecorators, SandDecoratorSprites },
+                        { TileType.Rock, SandRockSprites },
+                        { TileType.Tree, SandTreeSprites }
+                    }
+                },
+                {
+                    BiomeType.Spooky, new Dictionary<TileType, Sprite[]>
+                    {
+                        { TileType.Grass, SpookyGroundSprites },
+                        { TileType.GrassDecorators, SpookyDecoratorSprites },
+                        { TileType.Gravestone, SpookyGravestoneSprites },
+                        { TileType.Tree, SpookyTreeSprites }
+                    }
+                },
             };
         }
 

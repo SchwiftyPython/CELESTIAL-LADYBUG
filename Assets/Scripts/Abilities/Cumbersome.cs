@@ -7,7 +7,7 @@ namespace Assets.Scripts.Abilities
     {
         private const int ApMod = -1; 
 
-        public Cumbersome(Entity abilityOwner) : base("Cumbersome", $"{ApMod} Max AP", -1, -1, abilityOwner, false, true)
+        public Cumbersome(Entity abilityOwner) : base("Cumbersome", $"{ApMod} Max AP", -1, -1, abilityOwner, TargetType.Friendly, true)
         {
         }
 

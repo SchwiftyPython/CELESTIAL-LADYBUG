@@ -8,7 +8,7 @@ namespace Assets.Scripts.Abilities
     {
         private const int DodgeMod = 2;
 
-        public UncannyDodge(Entity abilityOwner) : base("Uncanny Dodge", $"+{DodgeMod} to dodge.", -1, -1, abilityOwner, false, true)
+        public UncannyDodge(Entity abilityOwner) : base("Uncanny Dodge", $"+{DodgeMod} to dodge.", -1, -1, abilityOwner, TargetType.Friendly, true)
         {
             var spriteStore = Object.FindObjectOfType<SpriteStore>();
             Icon = spriteStore.GetAbilitySprite(this);

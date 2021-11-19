@@ -11,10 +11,10 @@ namespace Assets.Scripts.Abilities
         private List<Tile> _blindedTiles;
         private readonly Blinded _blindedEffect;
 
-        public Distracting(Entity abilityOwner) : base("Distracting", "Anyone adjacent is Blinded.", -1, 1, abilityOwner, false, true)
+        public Distracting(Entity abilityOwner) : base("Distracting", "Anyone adjacent is Blinded.", -1, 1, abilityOwner, TargetType.Friendly, true)
         {
             _blindedTiles = new List<Tile>();
-            _blindedEffect = new Blinded(true, Blinded.INFINITE);
+            _blindedEffect = new Blinded(abilityOwner, true, Blinded.INFINITE);
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 

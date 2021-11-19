@@ -8,7 +8,7 @@ namespace Assets.Scripts.Abilities
     {
         private const int ToHitBonus = 3;
     
-        public GuidedStrikes(Entity abilityOwner) : base("Guided Strikes", $"+{ToHitBonus} to hit on melee attacks.", -1, -1, abilityOwner, false, true)
+        public GuidedStrikes(Entity abilityOwner) : base("Guided Strikes", $"+{ToHitBonus} to hit on melee attacks.", -1, -1, abilityOwner, TargetType.Friendly, true)
         {
         }
 

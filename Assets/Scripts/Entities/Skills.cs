@@ -13,43 +13,12 @@ namespace Assets.Scripts.Entities
         private const int StartingSkillDice = 7;
         private const int StartingSkillMax = 5;
 
-        private Entity _parent;
-
-        /*private int _dodge;
-        public int Dodge 
-        {
-            get
-            {
-                var moddedDodge = _dodge + GetAllModifiersForStat(EntitySkillTypes.Dodge);
-
-                if (moddedDodge > SkillMax)
-                {
-                    return SkillMax;
-                }
-
-                return moddedDodge;
-            }
-            private set
-            {
-                if (value < SkillMin)
-                {
-                    _dodge = SkillMin;
-                }
-                else if (value > SkillMax)
-                {
-                    _dodge = SkillMax;
-                }
-                else
-                {
-                    _dodge = value;
-                }
-            }
-        }*/
+        [ES3NonSerializable] private Entity _parent;
 
         //todo probably should define setters and getters here
         public int Melee { get; set; }
         public int Ranged { get; set; }
-        public int Lockpicking { get; set; }
+        public int Sneak { get; set; }
         public int Endurance { get; set; }
         public int Healing { get; set; }
         public int Survival { get; set; }
@@ -68,7 +37,7 @@ namespace Assets.Scripts.Entities
 
                 return _persuasion;
             }
-            private set
+            set
             {
                 if (value < SkillMin)
                 {
@@ -85,11 +54,20 @@ namespace Assets.Scripts.Entities
             }
         }
 
+        public Skills()
+        {
+        }
+
         public Skills(Entity parent)
         {
-            _parent = parent;
+            SetParent(parent);
 
             GenerateSkillValues();
+        }
+
+        public void SetParent(Entity parent)
+        {
+            _parent = parent;
         }
 
         //todo this assumes level 1 entity
@@ -103,7 +81,7 @@ namespace Assets.Scripts.Entities
             {
                 { EntitySkillTypes.Melee, SkillMin },
                 { EntitySkillTypes.Ranged, SkillMin },
-                { EntitySkillTypes.Lockpicking, SkillMin },
+                { EntitySkillTypes.Sneak, SkillMin },
                 { EntitySkillTypes.Endurance, SkillMin },
                 { EntitySkillTypes.Healing, SkillMin },
                 { EntitySkillTypes.Survival, SkillMin },
@@ -137,8 +115,8 @@ namespace Assets.Scripts.Entities
                     case EntitySkillTypes.Ranged:
                         Ranged = startingValue.Value;
                         break;
-                    case EntitySkillTypes.Lockpicking:
-                        Lockpicking = startingValue.Value;
+                    case EntitySkillTypes.Sneak:
+                        Sneak = startingValue.Value;
                         break;
                     case EntitySkillTypes.Endurance:
                         Endurance = startingValue.Value;

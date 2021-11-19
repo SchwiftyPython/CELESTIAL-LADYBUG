@@ -6,7 +6,7 @@ namespace Assets.Scripts.Abilities
     {
         private bool _savedFromDeath;
 
-        public EndangeredEndurance(Entity abilityOwner) : base("Endangered Endurance", "Once per combat, if health falls to zero or below, set health to one.", -1, -1, abilityOwner, false, true)
+        public EndangeredEndurance(Entity abilityOwner) : base("Endangered Endurance", "Once per combat, if health falls to zero or below, set health to one.", -1, -1, abilityOwner, TargetType.Friendly, true)
         {
             _savedFromDeath = false;
         }

@@ -13,8 +13,8 @@ namespace Assets.Scripts.Combat
 {
     public class MapGenerator : MonoBehaviour
     {
-        private const int MapWidth = 32;
-        private const int MapHeight = 24;
+        public static int MapWidth = 32;
+        public static int MapHeight = 24;
 
         public static MapGenerator Instance;
 
@@ -80,11 +80,11 @@ namespace Assets.Scripts.Combat
                 Tile tile;
                 if (IsWallTile(selection))
                 {
-                    tile = tStore.GetWallTile(selection, position);
+                    tile = tStore.GetWallTile(biome, selection, position, MapWidth, MapHeight);
                 }
                 else
                 {
-                    tile = TerrainStore.GetFloorTile(selection, position);
+                    tile = TerrainStore.GetFloorTile(biome, selection, position, MapWidth, MapHeight);
                 }
 
                 map.SetTerrain(tile);
@@ -101,8 +101,12 @@ namespace Assets.Scripts.Combat
                 case TileType.Grass:
                 case TileType.GrassDecorators:
                 case TileType.Mud:
+                case TileType.Sand:
+                case TileType.SandDecorators:
                     return false;
                 case TileType.Tree:
+                case TileType.Rock:
+                case TileType.Gravestone:
                     return true;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(tType), tType, null);
@@ -171,6 +175,5 @@ namespace Assets.Scripts.Combat
             }
 
         }
-
     }
 }

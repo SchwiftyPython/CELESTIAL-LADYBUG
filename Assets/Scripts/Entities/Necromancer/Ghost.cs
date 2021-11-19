@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Abilities;
+using Assets.Scripts.Audio;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities.Necromancer
@@ -11,17 +12,26 @@ namespace Assets.Scripts.Entities.Necromancer
 
             CombatSpritePrefab = entityPrefabStore.GetCombatSpritePrefab("Ghost");
 
-            //todo some creepy boi abilities
+            //todo maybe some creepy boi abilities
             //pass through obstacles
             //buff other undead
             //possession
-            //generic ghost attack
 
             var abilityStore = Object.FindObjectOfType<AbilityStore>();
 
             var intimidate = abilityStore.GetAbilityByName("intimidate", this);
 
-            Abilities.Add(intimidate.GetType(), intimidate);
+            AddAbility(intimidate);
+
+            var spookyTouch = abilityStore.GetAbilityByName("spooky touch", this);
+
+            AddAbility(spookyTouch);
+
+            var audioStore = Object.FindObjectOfType<AudioStore>();
+
+            HurtSound = audioStore.monsterHurt;
+            DieSound = audioStore.monsterDie;
+            AttackSound = audioStore.genericAttack;
         }
     }
 }

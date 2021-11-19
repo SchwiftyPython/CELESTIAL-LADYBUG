@@ -2,53 +2,94 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.AI;
+using Assets.Scripts.Audio;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Saving;
 using Assets.Scripts.Travel;
+using Assets.Scripts.UI;
 using GoRogue;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Combat
 {
     public enum CombatState
     {
-        Loading,
+        LoadingScene,
         Start,
         PlayerTurn,
         AiTurn,
         EndTurn,
         EndCombat,
-        NotActive
+        NotActive,
+        LoadFromSave
     }
 
-    public class CombatManager : MonoBehaviour, ISubscriber
+    public enum CombatResult
     {
+        Victory,
+        Defeat,
+        Retreat
+    }
+
+    public enum CombatStat
+    {
+        Kills,
+        DamageDealt,
+        DamageReceived
+    }
+
+    public class CompanionCombatStats
+    {
+        public int Kills;
+        public int DamageDealt;
+        public int DamageReceived;
+    }
+
+    public class CombatManager : MonoBehaviour, ISubscriber, ISaveable
+    {
+        private struct CombatManagerDto
+        {
+            public CombatState CurrentState;
+            public object CombatMap;
+            public string ActiveEntityId;
+            public Queue<string> TurnOrder;
+            public int TurnNumber;
+            public List<object> Enemies;
+            public Dictionary<string, CompanionCombatStats> CompanionIds;
+            public Queue<string> CombatMessenger;
+        }
+
         private const string EndTurnEvent = GlobalHelper.EndTurn;
         private const string CombatFinished = GlobalHelper.CombatFinished;
         private const string EntityDead = GlobalHelper.EntityDead;
         private const string RefreshUi = GlobalHelper.RefreshCombatUi;
 
-        private CombatState _currentCombatState;
+        [SerializeField] private CombatState _currentCombatState;
         private GameObject _pawnHighlighterInstance;
 
         private EventMediator _eventMediator;
         private TravelManager _travelManager;
         private CombatInputController _combatInput;
+        private MusicController _musicController;
 
         private List<EffectTrigger<EffectArgs>> _effectTriggers;
 
-        public CombatMap Map { get; private set; }
+        [ES3NonSerializable] public CombatMap Map { get; private set; } //todo need to save manually somehow
 
-        public Entity ActiveEntity { get; private set; }
+        [ES3NonSerializable] public Entity ActiveEntity { get; private set; }
 
         public Queue<Entity> TurnOrder { get; private set; }
 
         public int CurrentTurnNumber { get; private set; }
 
-        public List<Entity> Enemies; //todo refactor
+        [ES3NonSerializable] public List<Entity> Enemies; //todo refactor
+        [ES3NonSerializable] public Dictionary<Entity, CompanionCombatStats> Companions;
 
         public GameObject PrototypePawnHighlighterPrefab;
+        public GameObject DamagePopupPrefab;
+
+        private CombatResult _result;
 
         private void Awake()
         {
@@ -59,13 +100,20 @@ namespace Assets.Scripts.Combat
             _travelManager = FindObjectOfType<TravelManager>();
 
             _combatInput = FindObjectOfType<CombatInputController>();
+
+            _musicController = FindObjectOfType<MusicController>();
         }
 
         private void Update()
         {
+            
             switch (_currentCombatState)
             {
-                case CombatState.Loading: //we want to wait until we have enemy combatants populated
+                case CombatState.LoadingScene: //we want to wait until we have enemy combatants populated
+
+                    _musicController.EndTravelMusic();
+
+                    _musicController.PlayBattleMusic();
 
                     //todo travel manager checks for testing in combat scene
                     if (_travelManager != null && _travelManager.Party != null && Enemies != null && Enemies.Count > 0)
@@ -80,6 +128,7 @@ namespace Assets.Scripts.Combat
                     var party = _travelManager.Party.GetCompanions();
 
                     var combatants = new List<Entity>();
+                    Companions = new Dictionary<Entity, CompanionCombatStats>();
 
                     foreach (var companion in party)
                     {
@@ -89,6 +138,7 @@ namespace Assets.Scripts.Combat
                         }
 
                         combatants.Add(companion);
+                        Companions.Add(companion, new CompanionCombatStats());
                     }
 
                     combatants.AddRange(Enemies);
@@ -122,19 +172,33 @@ namespace Assets.Scripts.Combat
                         _currentCombatState = CombatState.AiTurn;
                     }
 
-                    _eventMediator.SubscribeToEvent(EndTurnEvent, this);
-                    _eventMediator.SubscribeToEvent(GlobalHelper.EntityDead, this);
-                    _eventMediator.SubscribeToEvent(GlobalHelper.ActiveEntityMoved, this);
+                    SubscribeToEvents();
+
                     _eventMediator.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
                     _eventMediator.Broadcast(RefreshUi, this, ActiveEntity);
-
-                    //_combatInput.HighlightMovementRange();
 
                     break;
                 case CombatState.PlayerTurn:
 
                     _eventMediator.Broadcast(GlobalHelper.PlayerTurn, this);
-                   
+
+                    var activePlayerSprite = ActiveEntity.CombatSpriteInstance;
+
+                    if (activePlayerSprite == null)
+                    {
+                        RemoveEntity(ActiveEntity);
+                        _currentCombatState = CombatState.EndTurn;
+                        return;
+                    }
+
+                    var aiController = activePlayerSprite.GetComponent<AiController>();
+
+                    if (ReferenceEquals(aiController, null))
+                    {
+                        return;
+                    }
+
+                    StartCoroutine(aiController.TakeTurn());
                     break;
                 case CombatState.AiTurn:
                     _eventMediator.Broadcast(GlobalHelper.AiTurn, this);
@@ -146,7 +210,7 @@ namespace Assets.Scripts.Combat
                         return;
                     }
 
-                    ActiveEntity.CombatSpriteInstance.GetComponent<AiController>().TakeTurn();
+                    AiTakeTurn();
                     break;
                 case CombatState.EndTurn:
                     if (IsCombatFinished())
@@ -162,8 +226,6 @@ namespace Assets.Scripts.Combat
                         ActiveEntity.UpdateMovedFlags();
 
                         HighlightActiveEntitySprite();
-
-                        //_combatInput.HighlightMovementRange();
 
                         if (ActiveEntityPlayerControlled())
                         {
@@ -184,39 +246,117 @@ namespace Assets.Scripts.Combat
                 case CombatState.EndCombat:
                     _eventMediator.UnsubscribeFromAllEvents(this);
 
-                    DisplayPostCombatPopup();
-
-                    //todo maybe move this portion to the post combat popup
-                    if (PlayerDead())
+                    if (_result != CombatResult.Retreat)
                     {
-                        _eventMediator.Broadcast(GlobalHelper.GameOver, this);
-                    }
-                    else
-                    {
-                        foreach (var combatant in TurnOrder)
+                        if (PlayerRetreated())
                         {
-                            combatant.ResetOneUseCombatAbilities();
-                        }
+                            _result = CombatResult.Retreat;
 
-                        if (!SceneManager.GetSceneByName(GlobalHelper.TravelScene).isLoaded)
+                            //_musicController.PlayBattleVictoryMusic();
+
+                            _musicController.EndBattleMusic();
+                        }
+                        else if (PlayerDead())
                         {
-                            SceneManager.LoadScene(GlobalHelper.TravelScene);
+                            _result = CombatResult.Defeat;
+
+                            _musicController.PlayBattleGameOverMusic();
+                        }
+                        else
+                        {
+                            _result = CombatResult.Victory;
+
+                            //_musicController.PlayBattleVictoryMusic();
+
+                            _musicController.EndBattleMusic();
                         }
                     }
+
+                    DisplayPostCombatPopup(_result);
 
                     _currentCombatState = CombatState.NotActive;
 
                     break;
                 case CombatState.NotActive:
                     break;
+                case CombatState.LoadFromSave:
+                    _eventMediator.UnsubscribeFromAllEvents(this);
+
+                    SubscribeToEvents();
+
+                    _musicController.PlayBattleMusic();
+
+                    _eventMediator.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
+                    _eventMediator.Broadcast(RefreshUi, this, ActiveEntity);
+
+                    _currentCombatState = CombatState.PlayerTurn;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        public void Load()
+        public void UpdateCombatStats(Entity companion, CombatStat stat, int value)
         {
-            _currentCombatState = CombatState.Loading;
+            if (!Companions.ContainsKey(companion))
+            {
+                return;
+            }
+
+            switch (stat)
+            {
+                case CombatStat.Kills:
+                    Companions[companion].Kills += value;
+                    break;
+                case CombatStat.DamageDealt:
+                    Companions[companion].DamageDealt += value;
+                    break;
+                case CombatStat.DamageReceived:
+                    Companions[companion].DamageReceived += value;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(stat), stat, null);
+            }
+        }
+
+        public void LoadCombatScene()
+        {
+            _currentCombatState = CombatState.LoadingScene;
+        }
+
+        public void LoadFromSave()
+        {
+            _currentCombatState = CombatState.LoadFromSave;
+        }
+
+        public bool IsPlayerTurn()
+        {
+            return _currentCombatState == CombatState.PlayerTurn;
+        }
+
+        private void AiTakeTurn()
+        {
+            if (ActiveEntity.CombatSpriteInstance == null)
+            {
+                return;
+            }
+
+            var aiController = ActiveEntity.CombatSpriteInstance.GetComponent<AiController>();
+
+            if (aiController == null)
+            {
+                return;
+            }
+
+            try
+            {
+                StartCoroutine(aiController.TakeTurn());
+            }
+            catch (Exception e)
+            {
+                Debug.Log("AI controller error");
+                _eventMediator.Broadcast(EndTurnEvent, this);
+            }
         }
 
         private GameObject GetPawnHighlighterInstance()
@@ -231,17 +371,27 @@ namespace Assets.Scripts.Combat
 
         private bool PlayerDead()
         {
-            foreach (var entity in TurnOrder.ToArray())
+            foreach (var entity in Companions.Keys.ToArray())
             {
-                if (entity.IsDead())
-                {
-                    continue;
-                }
-
-                if (entity.IsPlayer())
+                if (!entity.IsDead())
                 {
                     return false;
                 }
+            }
+
+            return true;
+        }
+
+        private bool PlayerRetreated()
+        {
+            if (PlayerDead())
+            {
+                return false;
+            }
+
+            if (TurnOrder.Any(e => e.IsPlayer()))
+            {
+                return false;
             }
 
             return true;
@@ -289,13 +439,24 @@ namespace Assets.Scripts.Combat
             return TurnOrder.Peek();
         }
 
-        private void RemoveDeadEntity(Entity deadEntity)
+        public void RemoveEntity(Entity target)
         {
-            TurnOrder = new Queue<Entity>(TurnOrder.Where(entity => entity != deadEntity));
+            TurnOrder = new Queue<Entity>(TurnOrder.Where(entity => entity != target));
 
-            Map.RemoveEntity(deadEntity);
+            var currentTile = Map.GetTileAt(target.Position);
 
-            Destroy(deadEntity.CombatSpriteInstance);
+            var removed = Map.RemoveEntity(target);
+
+            if (currentTile.SpriteInstance == null)
+            {
+                return;
+            }
+
+            currentTile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(null);
+
+            Destroy(target.CombatSpriteInstance);
+
+            _eventMediator.Broadcast(GlobalHelper.RefreshCombatUi, this, ActiveEntity);
 
             //todo remove effects that originate from player
         }
@@ -305,7 +466,7 @@ namespace Assets.Scripts.Combat
             return ActiveEntity.IsPlayer();
         }
 
-        private void HighlightActiveEntitySprite() 
+        private void HighlightActiveEntitySprite()
         {
             if (ActiveEntity == null)
             {
@@ -319,25 +480,19 @@ namespace Assets.Scripts.Combat
                 return;
             }
 
-            activeTile.SpriteInstance.GetComponent<TerrainSlotUi>().HighlightTileForActiveEntity();
-        }
-
-        private void UpdateActiveEntityInfoPanel()
-        {
-            //todo might have panel subscribe to end turn event
-        }
-
-        private void RemoveDeadEntitiesFromTurnOrderDisplay()
-        {
-            foreach (var entity in TurnOrder.ToArray())
+            if (activeTile.SpriteInstance == null)
             {
-                if (entity.IsDead())
-                {
-                    //broadcast to remove its portrait and sprite from play.
-                    //we'll probably do this when they are killed anyways so this is just a cleanup
-                    _eventMediator.Broadcast(EntityDead, this, entity);
-                }
+                return;
             }
+
+            var terrainSlotUi = activeTile.SpriteInstance.GetComponent<TerrainSlotUi>();
+
+            if (terrainSlotUi == null)
+            {
+                return;
+            }
+
+            terrainSlotUi.HighlightTileForActiveEntity();
         }
 
         private bool IsCombatFinished()
@@ -370,8 +525,31 @@ namespace Assets.Scripts.Combat
             return true;
         }
 
-        private void DisplayPostCombatPopup()
+        public void Retreat()
         {
+            foreach (var entity in Companions.Keys)
+            {
+                if (entity.IsDead())
+                {
+                    continue;
+                }
+
+                var entityInstance = entity.CombatSpriteInstance;
+
+                entityInstance.AddComponent<AiController>();
+                entityInstance.GetComponent<AiController>().SetSelf(entity);
+                entityInstance.GetComponent<AiController>().Flee();
+            }
+
+            StartCoroutine(ActiveEntity.CombatSpriteInstance.GetComponent<AiController>().TakeTurn());
+        }
+
+        private void DisplayPostCombatPopup(CombatResult result)
+        {
+            var popup = FindObjectOfType<PostCombatResultsPopup>();
+
+            popup.Show(result);
+
             _eventMediator.Broadcast(CombatFinished, this);
         }
 
@@ -383,6 +561,16 @@ namespace Assets.Scripts.Combat
         private void DrawMap()
         {
             BoardHolder.Instance.Build(Map);
+        }
+
+        private void SubscribeToEvents()
+        {
+            _eventMediator.SubscribeToEvent(EndTurnEvent, this);
+            _eventMediator.SubscribeToEvent(GlobalHelper.EntityDead, this);
+            _eventMediator.SubscribeToEvent(GlobalHelper.ActiveEntityMoved, this);
+            _eventMediator.SubscribeToEvent(GlobalHelper.DamageDealt, this);
+            _eventMediator.SubscribeToEvent(GlobalHelper.DamageReceived, this);
+            _eventMediator.SubscribeToEvent(GlobalHelper.KilledTarget, this);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
@@ -398,8 +586,6 @@ namespace Assets.Scripts.Combat
                     return;
                 }
 
-                RemoveDeadEntity(deadEntity);
-
                 if (IsCombatFinished())
                 {
                     _currentCombatState = CombatState.EndCombat;
@@ -408,8 +594,184 @@ namespace Assets.Scripts.Combat
             else if (eventName.Equals(GlobalHelper.ActiveEntityMoved))
             {
                 HighlightActiveEntitySprite();
-                //_combatInput.HighlightMovementRange();
             }
+            else if (eventName.Equals(GlobalHelper.DamageDealt))
+            {
+                if (!(broadcaster is Entity entity))
+                {
+                    return;
+                }
+
+                if (!entity.IsPlayer())
+                {
+                    return;
+                }
+
+                if (!(parameter is int damage) || damage < 1)
+                {
+                    return;
+                }
+
+                UpdateCombatStats(entity, CombatStat.DamageDealt, damage);
+            }
+            else if (eventName.Equals(GlobalHelper.DamageReceived))
+            {
+                if (!(broadcaster is Entity entity))
+                {
+                    return;
+                }
+
+                if (!entity.IsPlayer())
+                {
+                    return;
+                }
+
+                if (!(parameter is int damage) || damage < 1)
+                {
+                    return;
+                }
+
+                UpdateCombatStats(entity, CombatStat.DamageReceived, damage);
+            }
+            else if(eventName.Equals(GlobalHelper.KilledTarget))
+            {
+                if (!(broadcaster is Entity entity))
+                {
+                    return;
+                }
+
+                if (!entity.IsPlayer())
+                {
+                    return;
+                }
+
+                UpdateCombatStats(entity, CombatStat.Kills, 1);
+            }
+        }
+
+        public object CaptureState()
+        {
+            var dto = new CombatManagerDto
+            {
+                ActiveEntityId = ActiveEntity.Id,
+                CombatMap = Map.CaptureState(),
+                TurnNumber = CurrentTurnNumber,
+                TurnOrder = new Queue<string>(),
+                CurrentState = _currentCombatState,
+                Enemies = new List<object>(),
+                CompanionIds = new Dictionary<string, CompanionCombatStats>()
+            };
+
+            foreach (var companion in Companions)
+            {
+                dto.CompanionIds.Add(companion.Key.Id, companion.Value);
+            }
+
+            foreach (var enemy in Enemies)
+            {
+                dto.Enemies.Add(enemy.CaptureState());
+            }
+
+            foreach (var entity in TurnOrder)
+            {
+                dto.TurnOrder.Enqueue(entity.Id);
+            }
+
+            var messenger = FindObjectOfType<CombatMessenger>();
+
+            dto.CombatMessenger = (Queue<string>)messenger.CaptureState();
+
+            return dto;
+        }
+
+        public void RestoreState(object state)
+        {
+            if (state == null)
+            {
+                return;
+            }
+
+            CombatManagerDto dto = (CombatManagerDto)state;
+
+            Enemies = new List<Entity>();
+
+            foreach (var enemy in dto.Enemies)
+            {
+                var restoredEnemy = new Entity();
+
+                restoredEnemy.RestoreState(enemy);
+
+                Enemies.Add(restoredEnemy);
+            }
+
+            ActiveEntity = _travelManager.Party.GetCompanionById(dto.ActiveEntityId);
+
+            Companions = new Dictionary<Entity, CompanionCombatStats>();
+
+            foreach (var id in dto.CompanionIds)
+            {
+                var companion = _travelManager.Party.GetCompanionById(id.Key);
+
+                if (companion == null)
+                {
+                    Debug.LogError($"Can't find companion with id {id.Key}");
+                    continue;
+                }
+
+                Companions.Add(companion, id.Value);
+            }
+
+            TurnOrder = new Queue<Entity>();
+
+            foreach (var id in dto.TurnOrder)
+            {
+                Entity entity = null;
+
+                foreach (var companion in Companions.Keys)
+                {
+                    if (string.Equals(id, companion.Id, StringComparison.OrdinalIgnoreCase))
+                    {
+                        entity = companion;
+                        break;
+                    }
+                }
+
+                if (entity == null)
+                {
+                    foreach (var enemy in Enemies)
+                    {
+                        if (string.Equals(id, enemy.Id, StringComparison.OrdinalIgnoreCase))
+                        {
+                            entity = enemy;
+                            break;
+                        }
+                    }
+                }
+
+                TurnOrder.Enqueue(entity);
+            }
+
+            Map = new CombatMap(MapGenerator.MapWidth, MapGenerator.MapHeight);
+
+            Map.RestoreState(dto.CombatMap);
+
+            _combatInput = FindObjectOfType<CombatInputController>();
+
+            _combatInput.SetMap(Map);
+
+            _combatInput.ClearHighlights();
+
+            DrawMap();
+
+            var messenger = FindObjectOfType<CombatMessenger>();
+
+            messenger.RestoreState(dto.CombatMessenger);
+
+            HighlightActiveEntitySprite();
+
+            _eventMediator = FindObjectOfType<EventMediator>();
+
+            _eventMediator.Broadcast(GlobalHelper.RefreshCombatUi, this, ActiveEntity);
         }
     }
 }

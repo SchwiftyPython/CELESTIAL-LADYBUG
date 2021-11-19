@@ -29,6 +29,21 @@ namespace Assets.Scripts.Encounters
 
         public bool CountsAsDayTraveled;
 
+        public List<BiomeType> BiomeTypes;
+
+        public string ImageName;
+        public string ImageResultName;
+
+        public Party Party
+        {
+            get
+            {
+                var travelManager = Object.FindObjectOfType<TravelManager>();
+
+                return travelManager.Party;
+            }
+        }
+
         public abstract void Run();
 
         public void OptionSelected(Option selectedOption)
@@ -42,29 +57,17 @@ namespace Assets.Scripts.Encounters
 
             var travelManager = Object.FindObjectOfType<TravelManager>();
 
-            List<string> rewardsText = null; 
             if (selectedOption.HasReward())
             {
-                rewardsText = travelManager.ApplyEncounterReward(selectedOption.Reward);
+                travelManager.ApplyEncounterReward(selectedOption.Reward);
             }
 
-            List<string> penaltiesText = null; 
             if (selectedOption.HasPenalty())
             {
-                penaltiesText = travelManager.ApplyEncounterPenalty(selectedOption.Penalty);
+                travelManager.ApplyEncounterPenalty(selectedOption.Penalty);
             }
 
             var fullResultDescription = new List<string> {selectedOption.ResultText + "\n"};
-
-            if (rewardsText != null)
-            {
-                fullResultDescription.AddRange(rewardsText);
-            }
-
-            if (penaltiesText != null)
-            {
-                fullResultDescription.AddRange(penaltiesText);
-            }
 
             EncounterType = selectedOption.TargetEncounterType;
 
@@ -84,17 +87,23 @@ namespace Assets.Scripts.Encounters
                         eventMediator.Broadcast(GlobalHelper.RetreatEncounterFailed, this, fullResultDescription);
                     }
                 }
-                else //if to arms option selected
+                else if(selectedOption is FightCombatOption fightCombatOption)
                 {
-                    SceneManager.LoadScene(GlobalHelper.CombatScene);
+                    if (!string.IsNullOrEmpty(fightCombatOption.ResultText))
+                    {
+                        eventMediator.Broadcast(GlobalHelper.ShowCombatPreview, this, fightCombatOption);
+                    }
+                    else
+                    {
+                        SceneManager.LoadScene(GlobalHelper.CombatScene);
 
-                    var combatManager = Object.FindObjectOfType<CombatManager>();
+                        var combatManager = Object.FindObjectOfType<CombatManager>();
 
-                    combatManager.Enemies = ((FightCombatOption) selectedOption).Enemies;
+                        combatManager.Enemies = ((FightCombatOption)selectedOption).Enemies;
 
-                    combatManager.Load();
+                        combatManager.LoadCombatScene();
+                    }
                 }
-               
             }
             else if (fullResultDescription.Count > 1 || !fullResultDescription.First().Equals("\n"))
             {
@@ -109,6 +118,16 @@ namespace Assets.Scripts.Encounters
         public bool HasOptions()
         {
             return Options != null && Options.Count > 0;
+        }
+
+        public bool ValidBiome(BiomeType bType)
+        {
+            if (BiomeTypes == null || BiomeTypes.Count < 1)
+            {
+                return true;
+            }
+
+            return BiomeTypes.Contains(bType);
         }
 
         protected void SubscribeToOptionSelectedEvent()

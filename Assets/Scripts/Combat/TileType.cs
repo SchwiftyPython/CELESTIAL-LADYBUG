@@ -5,6 +5,10 @@
         Grass,
         GrassDecorators,
         Mud,
-        Tree
+        Tree,
+        Rock,
+        Sand,
+        SandDecorators,
+        Gravestone
     }
 }

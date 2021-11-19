@@ -12,6 +12,7 @@ namespace Assets.Scripts.Encounters.Normal
             EncounterType = EncounterType.Normal;
             Title = "Nasty Storm";
             Description = "The group gets caught in a sudden downpour! Thunder crashes around them as they look for a place to take shelter, but there is none! With no other options, they are forced to keep moving through the elemental onslaught.";
+            ImageResultName = "storm";
         }
 
         public override void Run()
@@ -28,9 +29,7 @@ namespace Assets.Scripts.Encounters.Normal
 
             var fullResultDescription = new List<string> {Description + "\n"};
 
-            var penaltiesText = travelManager.ApplyEncounterPenalty(Penalty);
-
-            fullResultDescription.AddRange(penaltiesText);
+            travelManager.ApplyEncounterPenalty(Penalty);
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
             eventMediator.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);

@@ -17,6 +17,7 @@ namespace Assets.Scripts.Encounters.Camping
             Title = "Comfy Inn";
             Description = $"A little inn pops up on the road as the sun is setting. A little old lady runs the place and says it'll cost {CostPerPerson} gold each to stay the night.";
             CountsAsDayTraveled = true;
+            ImageName = "inn";
         }
 
         public override void Run()

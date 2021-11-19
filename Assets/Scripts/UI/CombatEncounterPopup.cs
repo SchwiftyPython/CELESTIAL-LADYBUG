@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Encounters;
+using Assets.Scripts.Utilities.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
@@ -10,6 +12,7 @@ namespace Assets.Scripts.UI
         private const string EncounterPopupEvent = GlobalHelper.CombatEncounter;
         private const string RetreatFailedPopupEvent = GlobalHelper.RetreatEncounterFailed;
 
+        private TextWriter _textWriter;
         private List<GameObject> _optionButtons;
 
         public GameObject OptionButtonOne;
@@ -17,6 +20,8 @@ namespace Assets.Scripts.UI
 
         public TextMeshProUGUI EncounterTitle;
         public TextMeshProUGUI EncounterDescription;
+        public GameObject ImageContainer;
+        public Image Image;
 
         private void Awake()
         {
@@ -29,6 +34,11 @@ namespace Assets.Scripts.UI
             var eventMediator = Object.FindObjectOfType<EventMediator>();
             eventMediator.SubscribeToEvent(EncounterPopupEvent, this);
             eventMediator.SubscribeToEvent(RetreatFailedPopupEvent, this);
+
+            _textWriter = GetComponent<TextWriter>();
+
+            GetComponent<Button_UI>().ClickFunc = _textWriter.DisplayMessageInstantly;
+
             Hide();
         }
 
@@ -47,7 +57,29 @@ namespace Assets.Scripts.UI
         private void Show(Encounter encounter)
         {
             EncounterTitle.text = encounter.Title;
-            EncounterDescription.text = encounter.Description;
+
+            if (string.IsNullOrEmpty(encounter.ImageName))
+            {
+                ImageContainer.SetActive(false);
+            }
+            else
+            {
+                var spriteStore = FindObjectOfType<SpriteStore>();
+
+                var image = spriteStore.GetEncounterSprite(encounter.ImageName);
+
+                if (image == null)
+                {
+                    ImageContainer.SetActive(false);
+                }
+                else
+                {
+                    Image.sprite = image;
+                    ImageContainer.SetActive(true);
+                }
+            }
+
+            _textWriter.AddWriter(EncounterDescription, encounter.Description, GlobalHelper.DefaultTextSpeed, true);
 
             DisableAllButtons();
 
@@ -84,17 +116,29 @@ namespace Assets.Scripts.UI
             var optionButtonIndex = 0;
             foreach (var optionText in encounter.Options.Keys)
             {
+                if (optionButtonIndex >= _optionButtons.Count)
+                {
+                    break;
+                }
+
                 var button = _optionButtons[optionButtonIndex].GetComponent<EncounterOptionButton>();
 
-                button.SetOptionText(optionText);
+                if (encounter.Options[optionText] is FightCombatOption)
+                {
+                    button.SetOptionText(optionText);
 
-                button.Show();
-
-                //todo we want to make retreat not interactive for now -- refactor if clunky looking
-                if (encounter.Options[optionText] is RetreatCombatOption)
+                    button.Show();
+                }
+                else
                 {
                     button.gameObject.SetActive(false);
                 }
+
+                //todo we want to make retreat not interactive for now -- refactor if clunky looking
+                // if (encounter.Options[optionText] is RetreatCombatOption)
+                // {
+                //     button.gameObject.SetActive(false);
+                // }
 
                 optionButtonIndex++;
             }

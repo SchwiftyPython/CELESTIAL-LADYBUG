@@ -12,9 +12,9 @@ namespace Assets.Scripts.Abilities
 
         private readonly Bleeding _bleedingEffect;
 
-        public Cleave(Entity abilityOwner) : base("Cleave", $"Deals {DamageMod}% extra damage and bleeding effect.", 6, 1, abilityOwner, true, false)
+        public Cleave(Entity abilityOwner) : base("Cleave", $"Deals {DamageMod}% extra damage and bleeding effect.", 6, 1, abilityOwner, TargetType.Hostile, false)
         {
-            _bleedingEffect = new Bleeding();
+            _bleedingEffect = new Bleeding(abilityOwner);
         }
 
         public override void Use(Entity target)

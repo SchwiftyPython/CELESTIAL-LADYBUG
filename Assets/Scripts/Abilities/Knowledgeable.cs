@@ -7,7 +7,7 @@ namespace Assets.Scripts.Abilities
     {
         private const int IntellectMod = 1; 
 
-        public Knowledgeable(Entity abilityOwner) : base("Knowledgeable", $"+{IntellectMod} Intellect", -1, -1, abilityOwner, false, true)
+        public Knowledgeable(Entity abilityOwner) : base("Knowledgeable", $"+{IntellectMod} Intellect", -1, -1, abilityOwner, TargetType.Friendly, true)
         {
         }
 

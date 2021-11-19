@@ -51,7 +51,7 @@ namespace Assets.Scripts.Encounters.Normal
             Options.Add(optionTitle, optionTwo);
 
             optionTitle = "A Pair of Rat Legs";
-            optionResultText = $"The cauldron's bubbling grows violent and a discolored cloud envelopes {curiousCompanion.FirstName()}. The cloud clears and they feel... different. \n\n Faster? \n\n Faster.";
+            optionResultText = $"The cauldron's bubbling grows violent and a discolored cloud envelopes {curiousCompanion.FirstName()}. The cloud clears and they feel... different. \n\nFaster? \n\nFaster.";
 
             optionReward = new Reward();
             optionReward.AddEntityGain(curiousCompanion, EntityAttributeTypes.Agility, 1);

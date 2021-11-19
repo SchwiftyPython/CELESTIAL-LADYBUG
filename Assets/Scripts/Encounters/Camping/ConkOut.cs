@@ -30,9 +30,7 @@ namespace Assets.Scripts.Encounters.Camping
 
             var fullResultDescription = new List<string> { Description + "\n" };
 
-            var rewardsText = travelManager.ApplyEncounterReward(Reward);
-
-            fullResultDescription.AddRange(rewardsText);
+            travelManager.ApplyEncounterReward(Reward);
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
             eventMediator.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);

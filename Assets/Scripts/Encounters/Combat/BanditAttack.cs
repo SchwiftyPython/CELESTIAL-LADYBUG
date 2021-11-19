@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Entities;
-using Assets.Scripts.Entities.Necromancer;
+using Assets.Scripts.Entities.Companions;
+using GoRogue.DiceNotation;
 using UnityEngine;
 
 namespace Assets.Scripts.Encounters.Combat
@@ -21,13 +22,24 @@ namespace Assets.Scripts.Encounters.Combat
         {
             var numBandits = Random.Range(MinBandits, MaxBandits + 1);
 
-            Description = $"{numBandits} bandits are attacking the wagon!";
+            Description = $"{numBandits} bandits have blocked the trail with their weapons drawn!";
 
             var bandits = new List<Entity>();
 
             for (var i = 0; i < numBandits; i++)
             {
-                var bandit = new Skeleton(); //todo change
+                var banditIndex = Dice.Roll("1d2");
+
+                Entity bandit;
+
+                if (banditIndex == 1)
+                {
+                    bandit = new ManAtArms(Race.RaceType.Human, false);
+                }
+                else
+                {
+                    bandit = new Crossbowman(Race.RaceType.Human, false);
+                }
 
                 bandits.Add(bandit);
             }
@@ -40,8 +52,7 @@ namespace Assets.Scripts.Encounters.Combat
 
             const int retreatSuccessValue = 47;
 
-            //todo diceroller
-            var retreatCheck = Random.Range(1, 101);
+            var retreatCheck = Dice.Roll("1d100");
 
             var retreatSuccess = retreatCheck <= retreatSuccessValue;
 
@@ -50,11 +61,11 @@ namespace Assets.Scripts.Encounters.Combat
 
             if (retreatSuccess)
             {
-                optionResultText = "You manage to evade the attackers and escape safely.";
+                optionResultText = "They manage to evade the attackers and escape safely.";
             }
             else
             {
-                optionResultText = "You try to get away, but the attackers are too fast! Prepare for battle!";
+                optionResultText = "They try to get away, but the attackers are too fast! Prepare for battle!";
             }
 
             var retreatOption = new RetreatCombatOption(optionTitle, optionResultText, bandits, retreatSuccess);
@@ -63,7 +74,7 @@ namespace Assets.Scripts.Encounters.Combat
 
             optionTitle = "To arms!";
 
-            optionResultText = "You prepare for battle...";
+            optionResultText = "Prepare for battle...";
 
             var fightOption = new FightCombatOption(optionTitle, optionResultText, bandits);
 

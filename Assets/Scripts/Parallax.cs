@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Travel;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -18,6 +19,7 @@ namespace Assets.Scripts
         private float _zPosition;
         private Vector2 _startPos;
 
+        private WagonMover _wagonMover;
 
         //Properties
         private float TwoAspect => cam.aspect * 2;
@@ -39,15 +41,31 @@ namespace Assets.Scripts
         //Loop requirement
         public SpriteRenderer loopSpriteRenderer;
 
+        public BiomeType biome;
+        public Color BackgroundColor;
+
         // Start is called before the first frame update
         private void Awake()
         {
-            _paused = false;
+            var travelManager = FindObjectOfType<TravelManager>();
+
+            if (biome == travelManager.CurrentBiome)
+            {
+                gameObject.SetActive(true);
+                cam.backgroundColor = BackgroundColor;
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
 
             var eventMediator = FindObjectOfType<EventMediator>();
 
-            eventMediator.SubscribeToEvent(PauseEvent, this);
-            eventMediator.SubscribeToEvent(ResumeEvent, this);
+            eventMediator.SubscribeToEvent(GlobalHelper.BiomeChanged, this);
+
+            _paused = false;
+
+            _wagonMover = FindObjectOfType<WagonMover>();
 
             cam = Camera.main;
             _startPos = transform.position;
@@ -85,6 +103,18 @@ namespace Assets.Scripts
             }
         }
 
+        public void Animate()
+        {
+            _paused = false;
+            _wagonMover.Animate();
+        }
+
+        public void Stop()
+        {
+            _paused = true;
+            _wagonMover.Stop();
+        }
+
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
         {
             if (eventName.Equals(PauseEvent))
@@ -94,6 +124,21 @@ namespace Assets.Scripts
             else if (eventName.Equals(ResumeEvent))
             {
                 _paused = false;
+            }
+            else if (eventName.Equals(GlobalHelper.BiomeChanged))
+            {
+                var travelManager = FindObjectOfType<TravelManager>();
+
+                if (biome == travelManager.CurrentBiome)
+                {
+                    gameObject.SetActive(true);
+
+                    cam.backgroundColor = BackgroundColor;
+                }
+                else
+                {
+                    gameObject.SetActive(false);
+                }
             }
         }
     }

@@ -2,9 +2,7 @@
 using System.Linq;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.Entities;
-using FloodSpill;
 using GoRogue;
-using GoRogue.GameFramework;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -45,6 +43,8 @@ namespace Assets.Scripts.Combat
 
         public Color HighlightedColor;
         public Color MovementRangeColor;
+
+        public Texture2D AbilityCursor;
 
         public GameObject Canvas;
 
@@ -109,6 +109,8 @@ namespace Assets.Scripts.Combat
 
                                 ClearHighlights();
 
+                                GameManager.Instance.SetCursorToNormal();
+
                                 _eventMediator.Broadcast(GlobalHelper.RefreshCombatUi, this, _combatManager.ActiveEntity);
                             }
                         }
@@ -156,7 +158,7 @@ namespace Assets.Scripts.Combat
                                 return;
                             }
 
-                            activeEntity.MoveTo(targetTile, _apMovementCost);
+                            activeEntity.MoveTo(targetTile, _apMovementCost, _highlightedTiles);
 
                             _eventMediator.Broadcast(GlobalHelper.RefreshCombatUi, this, activeEntity);
                         }
@@ -172,6 +174,8 @@ namespace Assets.Scripts.Combat
                     _isAbilitySelected = false;
 
                     _eventMediator.Broadcast(GlobalHelper.TileDeselected, this);
+
+                    GameManager.Instance.SetCursorToNormal();
                 }
                 else if (Input.GetKeyDown(KeyCode.Escape))
                 {
@@ -182,14 +186,23 @@ namespace Assets.Scripts.Combat
                     _isAbilitySelected = false;
 
                     _eventMediator.Broadcast(GlobalHelper.TileDeselected, this);
+
+                    GameManager.Instance.SetCursorToNormal();
                 }
             }
+        }
+
+        public void SetMap(CombatMap map)
+        {
+            _map = map;
         }
 
         public void AbilityButtonClicked(Ability selectedAbility)
         {
             _selectedAbility = selectedAbility;
             _isAbilitySelected = true;
+
+            Cursor.SetCursor(AbilityCursor, Vector2.zero, CursorMode.ForceSoftware);
         }
 
         public bool AbilitySelected()
@@ -273,7 +286,7 @@ namespace Assets.Scripts.Combat
                 Canvas = GameObject.Find("UI");
             }
             _canvasGraphicRaycaster = Canvas.GetComponent<GraphicRaycaster>();
-            _canvasEventSystem = Canvas.GetComponent<EventSystem>();
+            _canvasEventSystem = FindObjectOfType<EventSystem>();
 
             var pointerEventData = new PointerEventData(_canvasEventSystem) { position = Input.mousePosition };
 
@@ -503,8 +516,14 @@ namespace Assets.Scripts.Combat
                 _highlightedTiles = new List<Tile>();
             }
 
+            if (tile.SpriteInstance == null)
+            {
+                return;
+            }
+
             _highlightedTiles.Add(tile);
-            tile.SpriteInstance.GetComponent<SpriteRenderer>().color = HighlightedColor;
+
+            tile.Highlight(HighlightedColor);
         }
 
         private void HighlightTileUnderAbilityTarget(Entity abilityTarget)
@@ -525,7 +544,7 @@ namespace Assets.Scripts.Combat
                 return;
             }
 
-            _highlightedAbilityTile.SpriteInstance.GetComponent<SpriteRenderer>().color = Color.white;
+            _highlightedAbilityTile.ClearHighlight();
 
             _highlightedAbilityTile = null;
         }
@@ -539,18 +558,13 @@ namespace Assets.Scripts.Combat
 
             foreach (var tile in _highlightedTiles)
             {
-                if (tile.SpriteInstance == null)
-                {
-                    continue;
-                }
-
                 if (tile.Selectable)
                 {
                     tile.SpriteInstance.GetComponent<SpriteRenderer>().color = MovementRangeColor;
                 }
                 else
                 {
-                    tile.SpriteInstance.GetComponent<SpriteRenderer>().color = Color.white;
+                    tile.ClearHighlight();
                 }
             }
 
@@ -561,7 +575,7 @@ namespace Assets.Scripts.Combat
         {
             if (eventName.Equals(CombatSceneLoaded))
             {
-                _map = parameter as CombatMap;
+               SetMap(parameter as CombatMap);
             }
             else if (eventName.Equals(PlayerTurn))
             {

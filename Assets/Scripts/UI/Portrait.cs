@@ -31,19 +31,47 @@ namespace Assets.Scripts.UI
             switch (slot)
             {
                 case Slot.Skin:
-                    _skin.GetComponent<Image>().sprite = sprite;
+                    if (sprite == null)
+                    {
+                        _skin.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        _skin.GetComponent<Image>().sprite = sprite;
+                    }
                     break;
                 // case Slot.Ears:
                 //     _ears.GetComponent<Image>().sprite = sprite;
                 //     break;
                 case Slot.Chest:
-                    _chest.GetComponent<Image>().sprite = sprite;
+                    if (sprite == null)
+                    {
+                        _chest.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        _chest.GetComponent<Image>().sprite = sprite;
+                    }
                     break;
                 case Slot.FacialHair:
-                    _facialHair.GetComponent<Image>().sprite = sprite;
+                    if (sprite == null)
+                    {
+                        _facialHair.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        _facialHair.GetComponent<Image>().sprite = sprite;
+                    }
                     break;
                 case Slot.Hair:
-                    _hair.GetComponent<Image>().sprite = sprite;
+                    if (sprite == null)
+                    {
+                        _hair.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        _hair.GetComponent<Image>().sprite = sprite;
+                    }
                     break;
                 // case Slot.Helmet:
                 //     _helmet.GetComponent<Image>().sprite = sprite;
@@ -57,6 +85,12 @@ namespace Assets.Scripts.UI
         {
             foreach (Slot slot in Enum.GetValues(typeof(Slot)))
             {
+                if (!sprites.ContainsKey(slot))
+                {
+                    SetSprite(slot, null);
+                    continue;
+                }
+
                 var sprite = sprites[slot];
 
                 SetSprite(slot, sprite);

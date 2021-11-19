@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Abilities;
+using Assets.Scripts.Audio;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities.Necromancer
@@ -18,7 +19,13 @@ namespace Assets.Scripts.Entities.Necromancer
 
             var bite = abilityStore.GetAbilityByName("bite", this);
 
-            Abilities.Add(bite.GetType(), bite);
+            AddAbility(bite);
+
+            var audioStore = Object.FindObjectOfType<AudioStore>();
+
+            HurtSound = audioStore.spiderHurt;
+            DieSound = audioStore.spiderDie;
+            AttackSound = audioStore.spiderAttack;
         }
     }
 }

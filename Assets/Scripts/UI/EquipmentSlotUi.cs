@@ -105,6 +105,11 @@ namespace Assets.Scripts.UI
 
         private void RedrawUi()
         {
+            if (_companionEquipment == null)
+            {
+                return;
+            }
+
             if (_companionEquipment.HasSlot(_equipLocation))
             {
                 gameObject.SetActive(true);

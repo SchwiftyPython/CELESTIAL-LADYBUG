@@ -9,7 +9,7 @@ namespace Assets.Scripts.Abilities
 {
     public class HelmetCharge : Ability
     {
-        public HelmetCharge(Entity abilityOwner) : base("Helmet Charge", "Charge headfirst into an enemy.", 4, 3, abilityOwner, true, false)
+        public HelmetCharge(Entity abilityOwner) : base("Helmet Charge", "Charge headfirst into an enemy.", 4, 3, abilityOwner, TargetType.Hostile, false)
         {
         }
 

@@ -1,18 +1,32 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Entities.Companions;
+using Assets.Scripts.Saving;
+using Assets.Scripts.UI;
 using UnityEngine;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts
 {
-    public class Party
+    public class Party : ISaveable
     {
-        private const int MaxSize = 8;
-        private const int StartSize = 6;
+        private const int MaxSize = 6;
+        private const int StartSize = 4;
         private const int MoraleFoodModifier = 10;
 
         public const int FoodConsumedPerCompanion = 1;
+
+        private struct PartyDto
+        {
+            public List<object> Companions;
+            public object Derpus;
+            public int Food;
+            public int HealthPotions;
+            public int Gold;
+        }
 
         private Dictionary<string, Entity> _companions;
 
@@ -22,6 +36,8 @@ namespace Assets.Scripts
         public int HealthPotions { get; set; }
         public int Gold { get; set; }
 
+        public int Size => _companions.Count;
+        
         public Party()
         {
             GenerateStartingParty();
@@ -67,16 +83,14 @@ namespace Assets.Scripts
             }
 
             _companions.Remove(companion.Name);
-
-            if (_companions.Count <= 0)
-            {
-                EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
-
-                eventMediator.Broadcast(GlobalHelper.GameOver, this);
-            }
         }
 
-        public Entity GetCompanion(string companionName)
+        public bool PartyDead()
+        {
+            return _companions.Count <= 0;
+        }
+
+        public Entity GetCompanionByName(string companionName)
         {
             if (!_companions.ContainsKey(companionName))
             {
@@ -84,6 +98,19 @@ namespace Assets.Scripts
             }
 
             return _companions[companionName];
+        }
+
+        public Entity GetCompanionById(string id)
+        {
+            foreach (var companion in _companions.Values)
+            {
+                if (string.Equals(id, companion.Id, StringComparison.OrdinalIgnoreCase))
+                {
+                    return companion;
+                }
+            }
+
+            return null;
         }
 
         public List<Entity> GetCompanions()
@@ -96,25 +123,32 @@ namespace Assets.Scripts
             var eatResult = Eat();
             var healResult = Heal();
 
-            var totalResult = new List<string>();
+            var travelMessenger = Object.FindObjectOfType<TravelMessenger>();
 
-            totalResult.AddRange(eatResult);
-            totalResult.AddRange(healResult);
+            travelMessenger.QueuePartyMessages(eatResult);
 
-            EventMediator eventMediator = Object.FindObjectOfType<EventMediator>();
-
-            eventMediator.Broadcast(GlobalHelper.PartyEatAndHeal, this, totalResult);
+            foreach (var message in healResult)
+            {
+                travelMessenger.QueueEntityMessage(message);
+            }
         }
 
-        //todo refactor may not need a list here
-        public List<string> Eat()
+        public List<TravelMessenger.PartyMessageDto> Eat()
         {
+            var travelMessenger = Object.FindObjectOfType<TravelMessenger>();
+
             if (_companions == null || _companions.Count < 1)
             {
-                return new List<string>{"No mouths to feed!"};
+                var partyDto = new TravelMessenger.PartyMessageDto
+                {
+                    Message = "No mouths to feed!",
+                    TextColor = new Color32(1, 1, 1, 1)
+                };
+
+                return new List<TravelMessenger.PartyMessageDto> {partyDto};
             }
 
-            var eatResult = new List<string>();
+            var eatResult = new List<TravelMessenger.PartyMessageDto>();
 
             //todo choose random order to feed companions. This allows for some to eat and not others when food is low. Then subtract morale for the hungry.
 
@@ -127,7 +161,13 @@ namespace Assets.Scripts
                     companion.SubtractMorale(MoraleFoodModifier);
                 }
 
-                eatResult.Add("Not enough food! Party morale drops!");
+                var partyDto = new TravelMessenger.PartyMessageDto
+                {
+                    Message = "Not enough food! Party morale drops!",
+                    TextColor = travelMessenger.penaltyColor
+                };
+
+                eatResult.Add(partyDto);
 
                 Debug.Log("Not enough food! Party morale drops!"); 
             }
@@ -135,7 +175,13 @@ namespace Assets.Scripts
             {
                 Food -= _companions.Count * FoodConsumedPerCompanion;
 
-                eatResult.Add($"Party ate {_companions.Count * FoodConsumedPerCompanion} food!");
+                var partyDto = new TravelMessenger.PartyMessageDto
+                {
+                    Message = $"Party ate {_companions.Count * FoodConsumedPerCompanion} food!",
+                    TextColor = travelMessenger.rewardColor
+                };
+
+                eatResult.Add(partyDto);
 
                 Debug.Log($"Party ate {_companions.Count * FoodConsumedPerCompanion} food!"); 
             }
@@ -158,21 +204,25 @@ namespace Assets.Scripts
             }
         }
 
-        public List<string> Heal()
+        public List<TravelMessenger.EntityMessageDto> Heal()
         {
-            if (_companions == null || _companions.Count < 1)
-            {
-                return new List<string>{"No one to heal!"};
-            }
+            var travelMessenger = Object.FindObjectOfType<TravelMessenger>();
 
             if (HealthPotions <= 0)
             {
                 Debug.Log("No health potions! Can't heal!");
 
-                return new List<string> { "No health potions! Can't heal!" };
+                var partyDto = new TravelMessenger.EntityMessageDto
+                {
+                    Message = "No health potions! Can't heal!",
+                    TextColor = travelMessenger.penaltyColor,
+                    Portrait = null
+                };
+
+                return new List<TravelMessenger.EntityMessageDto> { partyDto };
             }
 
-            var healResult = new List<string>();
+            var healResult = new List<TravelMessenger.EntityMessageDto>();
 
             //todo choose random order to heal companions.
 
@@ -187,7 +237,14 @@ namespace Assets.Scripts
                 {
                     companion.UseHealthPotion();
 
-                    healResult.Add($"{companion.FirstName()} used a health potion!");
+                    var partyDto = new TravelMessenger.EntityMessageDto
+                    {
+                        Message = $"{companion.FirstName()} used a health potion!",
+                        TextColor = travelMessenger.rewardColor,
+                        Portrait = companion.Portrait
+                    };
+
+                    healResult.Add(partyDto);
 
                     HealthPotions--;
                 }
@@ -221,6 +278,31 @@ namespace Assets.Scripts
             var index = Random.Range(0, _companions.Count);
 
             return _companions.ElementAt(index).Value;
+        }
+
+        public List<Entity> GetRandomCompanions(int numCompanions)
+        {
+            if (_companions == null || _companions.Count < 1)
+            {
+                return new List<Entity> { Derpus };
+            }
+
+            var remaining = new List<Entity>(_companions.Values);
+
+            var picked = new List<Entity>();
+
+            while (remaining.Count > 0 && picked.Count < numCompanions)
+            {
+                var index = Random.Range(0, remaining.Count);
+
+                var companion = remaining[index];
+
+                picked.Add(companion);
+
+                remaining.Remove(companion);
+            }
+
+            return picked;
         }
 
         //todo wrapper method for these that takes in a stat type
@@ -262,6 +344,115 @@ namespace Assets.Scripts
             return bestShot;
         }
 
+        public Entity GetCompanionWithHighestSurvivalSkill()
+        {
+            if (_companions == null || _companions.Count < 1)
+            {
+                return Derpus;
+            }
+
+            Entity bestSurvival = null;
+            foreach (var companion in _companions.Values)
+            {
+                if (bestSurvival == null || companion.Skills.Survival > bestSurvival.Skills.Survival)
+                {
+                    bestSurvival = companion;
+                }
+            }
+
+            return bestSurvival;
+        }
+
+        public Entity GetCompanionWithHighestCoordination()
+        {
+            if (_companions == null || _companions.Count < 1)
+            {
+                return Derpus;
+            }
+
+            Entity bestCoord = null;
+            foreach (var companion in _companions.Values)
+            {
+                if (bestCoord == null || companion.Attributes.Coordination > bestCoord.Attributes.Coordination)
+                {
+                    bestCoord = companion;
+                }
+            }
+
+            return bestCoord;
+        }
+
+        public Entity GetCompanionWithHighestHealing()
+        {
+            if (_companions == null || _companions.Count < 1)
+            {
+                return Derpus;
+            }
+
+            Entity bestHealing = null;
+            foreach (var companion in _companions.Values)
+            {
+                if (bestHealing == null || companion.Skills.Healing > bestHealing.Skills.Healing)
+                {
+                    bestHealing = companion;
+                }
+            }
+
+            return bestHealing;
+        }
+
+        public Entity GetCompanionWithLowestEndurance()
+        {
+            if (_companions == null || _companions.Count < 1)
+            {
+                return Derpus;
+            }
+
+            Entity worstEndurance = null;
+            foreach (var companion in _companions.Values)
+            {
+                if (worstEndurance == null || companion.Skills.Endurance < worstEndurance.Skills.Endurance)
+                {
+                    worstEndurance = companion;
+                }
+            }
+
+            return worstEndurance;
+        }
+
+        public int GetTotalPartyEndurance()
+        {
+            return _companions.Sum(companion => companion.Value.Skills.Endurance);
+        }
+
+        public int GetTotalPartyPhysique()
+        {
+            return _companions.Sum(companion => companion.Value.Attributes.Physique);
+        }
+
+        public bool IsFull()
+        {
+            return _companions.Count >= MaxSize;
+        }
+
+        private void SetAllMoraleToOne()
+        {
+            Derpus.Stats.CurrentMorale = 1;
+
+            foreach (var companion in _companions.Values)
+            {
+                companion.Stats.CurrentMorale = 1;
+            }
+        }
+
+        private void SetAllHealthToOne()
+        {
+            foreach (var companion in _companions.Values)
+            {
+                companion.Stats.CurrentHealth = 1;
+            }
+        }
+
         private void GenerateStartingParty()
         {
             Derpus = new Entity(Race.RaceType.Derpus, EntityClass.Derpus, true);
@@ -276,6 +467,53 @@ namespace Assets.Scripts
 
                 AddCompanion(companion);
             }
+        }
+
+        public object CaptureState()
+        {
+            var dto = new PartyDto();
+
+            dto.Companions = new List<object>();
+            
+            foreach (var companion in _companions.Values)
+            {
+                dto.Companions.Add(companion.CaptureState());
+            }
+
+            dto.Derpus = Derpus.CaptureState();
+            dto.Food = Food;
+            dto.Gold = Gold;
+            dto.HealthPotions = HealthPotions;
+
+            return dto;
+        }
+
+        public void RestoreState(object state)
+        {
+            if (state == null)
+            {
+                return;
+            }
+
+            PartyDto dto = (PartyDto)state;
+
+            _companions = new Dictionary<string, Entity>();
+
+            foreach (var companionDto in dto.Companions)
+            {
+                var companion = new Entity();
+            
+                companion.RestoreState(companionDto);
+            
+                _companions.Add(companion.Name, companion);
+            }
+
+            Derpus = new Entity();
+            Derpus.RestoreState(dto.Derpus);
+
+            Food = dto.Food;
+            Gold = dto.Gold;
+            HealthPotions = dto.HealthPotions;
         }
     }
 }

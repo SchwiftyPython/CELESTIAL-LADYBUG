@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Assets.Scripts.Decks;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Saving;
+using Assets.Scripts.Travel;
 using UnityEngine;
 
 namespace Assets.Scripts.Encounters
 {
-    public class EncounterManager : MonoBehaviour, ISubscriber
+    public class EncounterManager : MonoBehaviour, ISubscriber, ISaveable
     {
         private const string EncounterFinished = GlobalHelper.EncounterFinished;
         private const string MentalBreak = GlobalHelper.MentalBreak;
@@ -17,14 +20,18 @@ namespace Assets.Scripts.Encounters
 
         private EncounterDeck _normalEncounterDeck;
         private EncounterDeck _campingDeck;
+        private EncounterDeck _testDeck;
+        private List<Encounter> _usedEncounters;
 
         private Queue<Encounter> _encounterQueue;
 
         public float TimeTilNextEncounter;
 
+        public bool UseTestDeck;
+
         private void Start()
         {
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
 
             eventMediator.SubscribeToEvent(MentalBreak, this);
             eventMediator.SubscribeToEvent(GlobalHelper.DerpusNoEnergy, this);
@@ -36,7 +43,7 @@ namespace Assets.Scripts.Encounters
 
         private void Update()
         {
-            if (!_timerPaused)
+            if (!_timerPaused && !GameManager.Instance.AnyActiveWindows())
             {
                 if (TimeTilNextEncounter > 0)
                 {
@@ -46,7 +53,16 @@ namespace Assets.Scripts.Encounters
                 {
                     PauseTimer();
 
-                    var eventMediator = Object.FindObjectOfType<EventMediator>();
+                    var parallax = FindObjectOfType<Parallax>();
+
+                    if (parallax == null)
+                    {
+                        return;
+                    }
+
+                    parallax.Stop();
+
+                    var eventMediator = FindObjectOfType<EventMediator>();
 
                     eventMediator.Broadcast(PauseTimerEvent, this);
 
@@ -57,50 +73,120 @@ namespace Assets.Scripts.Encounters
 
         public void BuildDecksForNewDay()
         {
-            var normalEncounterSize = 3;
+            var encounterStore = FindObjectOfType<EncounterStore>();
 
-            const int extraEncounterChance = 5;
-
-            //todo diceroller
-            var roll = Random.Range(1, 101);
-
-            if (roll <= extraEncounterChance)
+            if (UseTestDeck)
             {
-                normalEncounterSize++;
+                BuildTestDeck();
             }
+            else
+            {
+                var normalEncounterSize = 3;
 
-            var encounterStore = Object.FindObjectOfType<EncounterStore>();
+                const int extraEncounterChance = 5;
 
-            _normalEncounterDeck = new EncounterDeck(encounterStore.GetNormalEncounters(), normalEncounterSize);
+                //todo diceroller
+                var roll = Random.Range(1, 101);
 
-            var combatEncounters = encounterStore.GetCombatEncounters();
+                if (roll <= extraEncounterChance)
+                {
+                    normalEncounterSize++;
+                }
 
-            _normalEncounterDeck.AddCard(combatEncounters[Random.Range(0, combatEncounters.Count)]);
+                if (_usedEncounters == null)
+                {
+                    _usedEncounters = new List<Encounter>();
+                }
 
-            _normalEncounterDeck.Shuffle();
+                _normalEncounterDeck = new EncounterDeck(encounterStore.GetNormalEncounters(), normalEncounterSize, _usedEncounters);
+
+                var combatEncounters = encounterStore.GetCombatEncounters();
+
+                _normalEncounterDeck.AddCard(combatEncounters[Random.Range(0, combatEncounters.Count)]);
+
+                _normalEncounterDeck.Shuffle();
+            }
 
             if (_campingDeck == null || _campingDeck.Size < 1)
             {
-                _campingDeck = new EncounterDeck(encounterStore.GetCampingEncounters(), 5);
+                _campingDeck = new EncounterDeck(encounterStore.GetCampingEncounters(), 5, _usedEncounters);
+            }
+
+            if (_encounterInProgress)
+            {
+                return;
             }
 
             ResetTimer();
+            ResumeTimer();
+        }
+
+        private void BuildDecksOnLoadGame(EncounterManagerDto emDto)
+        {
+            var encounterStore = FindObjectOfType<EncounterStore>();
+
+            _usedEncounters = new List<Encounter>();
+
+            var normalEncounterSize =  emDto.NormalDeck.Size;
+
+            if (normalEncounterSize > 0)
+            {
+                _normalEncounterDeck = new EncounterDeck(encounterStore.GetNormalEncounters(), normalEncounterSize, _usedEncounters);
+                _normalEncounterDeck.Shuffle();
+            }
+
+            _campingDeck = new EncounterDeck(encounterStore.GetCampingEncounters(), emDto.CampingDeck.Size, _usedEncounters);
+
+            if (GameManager.Instance.InCombat())
+            {
+                PauseTimer();
+            }
+            else
+            {
+                ResetTimer();
+                ResumeTimer();
+
+                var travelManager = FindObjectOfType<TravelManager>();
+                travelManager.PlayTravelMusic();
+            }
+        }
+
+        private void BuildTestDeck()
+        {
+            var encounterStore = FindObjectOfType<EncounterStore>();
+
+            var testEncounters = encounterStore.GetTestEncounters();
+
+            _usedEncounters = new List<Encounter>();
+
+            _testDeck = new EncounterDeck(testEncounters, testEncounters.Count, _usedEncounters);
+
+            _testDeck.Shuffle();
         }
 
         private void DrawNextEncounter()
         {
-            var encounter = _normalEncounterDeck.Draw();
-            
+            Encounter encounter;
+
+            if (UseTestDeck)
+            {
+                encounter = _testDeck.Draw();
+            }
+            else
+            {
+                encounter = _normalEncounterDeck.Draw();
+            }
+
             if (encounter == null)
             {
                 encounter = _campingDeck.Draw();
             }
 
-            encounter.Run();
-
             _encounterInProgress = true;
 
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            encounter.Run();
+
+            var eventMediator = FindObjectOfType<EventMediator>();
 
             eventMediator.SubscribeToEvent(EncounterFinished, this);
         }
@@ -115,7 +201,7 @@ namespace Assets.Scripts.Encounters
             _encounterQueue.Enqueue(encounter);
         }
 
-        private void RunQueuedEncounters()
+        public void RunQueuedEncounters()
         {
             if (_encounterQueue != null && _encounterQueue.Count > 0)
             {
@@ -126,6 +212,42 @@ namespace Assets.Scripts.Encounters
             }
 
             _encounterQueue?.Clear();
+        }
+
+        public IEnumerator RunNextQueuedEncounter()
+        {
+            var travelManager = FindObjectOfType<TravelManager>();
+
+            if (travelManager.Party.PartyDead())
+            {
+                var eventMediator = FindObjectOfType<EventMediator>();
+
+                eventMediator.Broadcast(GlobalHelper.GameOver, this);
+            }
+            else if (_encounterQueue == null || _encounterQueue.Count < 1)
+            {
+                ResetTimer();
+
+                var eventMediator = FindObjectOfType<EventMediator>();
+
+                _encounterInProgress = false;
+
+                eventMediator.Broadcast(ResumeTimerEvent, this);
+            }
+            else
+            {
+                yield return StartCoroutine(Delay());
+
+                var parallax = FindObjectOfType<Parallax>();
+
+                parallax.Stop();
+
+                var encounter = _encounterQueue.Dequeue();
+
+                _encounterInProgress = true;
+
+                encounter.Run();
+            }
         }
 
         private void PauseTimer()
@@ -140,29 +262,19 @@ namespace Assets.Scripts.Encounters
 
         private void ResetTimer()
         {
-            TimeTilNextEncounter = Random.Range(7, 11);
-            ResumeTimer();
+            TimeTilNextEncounter = Random.Range(6, 8);
+        }
+
+        private IEnumerator Delay()
+        {
+            yield return new WaitForSeconds(1.5f);
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)
         {
-            var encounterStore = Object.FindObjectOfType<EncounterStore>();
+            var encounterStore = FindObjectOfType<EncounterStore>();
 
-            if (eventName.Equals(EncounterFinished))
-            {
-                ResetTimer();
-
-                var eventMediator = Object.FindObjectOfType<EventMediator>();
-
-                eventMediator.UnsubscribeFromEvent(EncounterFinished, this);
-
-                RunQueuedEncounters();
-
-                _encounterInProgress = false;
-
-                eventMediator.Broadcast(ResumeTimerEvent, this);
-            }
-            else if (eventName.Equals(MentalBreak))
+            if (eventName.Equals(MentalBreak))
             {
                 if(!(broadcaster is Entity companion))
                 {
@@ -196,8 +308,53 @@ namespace Assets.Scripts.Encounters
 
                 ResumeTimer();
             }
+            else if (eventName.Equals(EncounterFinished)) //todo I'm not sure if this did anything
+            {
+                var eventMediator = FindObjectOfType<EventMediator>();
+
+                eventMediator.UnsubscribeFromEvent(GlobalHelper.EncounterFinished, this);
+
+                _encounterInProgress = false;
+
+                ResetTimer();
+                ResumeTimer();
+            }
 
             //todo events for reset timer, draw trigger encounter
+        }
+
+        private struct EncounterManagerDto
+        {
+            public EncounterDeck.EncounterDeckDto NormalDeck;
+            public EncounterDeck.EncounterDeckDto CampingDeck;
+        }
+
+        public object CaptureState()
+        {
+            if (_normalEncounterDeck == null || _campingDeck == null)
+            {
+                return new EncounterManagerDto();
+            }
+
+            var dto = new EncounterManagerDto
+            {
+                NormalDeck = (EncounterDeck.EncounterDeckDto)_normalEncounterDeck.CaptureState(),
+                CampingDeck = (EncounterDeck.EncounterDeckDto)_campingDeck.CaptureState()
+            };
+
+            return dto;
+        }
+
+        public void RestoreState(object state)
+        {
+            if (state == null)
+            {
+                return;
+            }
+
+            var emDto = (EncounterManagerDto)state;
+
+            BuildDecksOnLoadGame(emDto);
         }
     }
 }

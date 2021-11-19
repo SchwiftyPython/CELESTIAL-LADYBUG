@@ -7,7 +7,7 @@ namespace Assets.Scripts.Abilities
     {
         private const int InterventionChance = 25;
 
-        public DemonicIntervention(Entity abilityOwner) : base("Demonic Intervention", $"{InterventionChance}% chance that damage dealt to you is also dealt to the attacker", -1, -1, abilityOwner, true, true)
+        public DemonicIntervention(Entity abilityOwner) : base("Demonic Intervention", $"{InterventionChance}% chance that damage dealt to you is also dealt to the attacker", -1, -1, abilityOwner, TargetType.Hostile, true)
         {
         }
 

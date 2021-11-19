@@ -13,6 +13,7 @@ namespace Assets.Scripts.Encounters.DerpusStopWagon
             Description =
                 "The wagon slowly rolls to a stop. Derpus is too tired and has decided to nap the rest of the day.";
             CountsAsDayTraveled = false;
+            ImageResultName = "lone wagon";
         }
 
         public override void Run()
@@ -29,9 +30,7 @@ namespace Assets.Scripts.Encounters.DerpusStopWagon
 
             var fullResultDescription = new List<string> { Description + "\n" };
 
-            var rewardsText = travelManager.ApplyEncounterReward(Reward);
-
-            fullResultDescription.AddRange(rewardsText);
+            travelManager.ApplyEncounterReward(Reward);
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 

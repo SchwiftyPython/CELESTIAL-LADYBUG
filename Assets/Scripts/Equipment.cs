@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.Entities;
 using Assets.Scripts.Items;
@@ -13,6 +14,7 @@ namespace Assets.Scripts
     /// Provides a store for the items equipped to an entity. Items are stored by
     /// their equip locations.  
     /// </summary>
+    [Serializable]
     public class Equipment : ISaveable
     {
         private readonly Dictionary<EntityClass, List<ItemGroup>> _allowedItemGroupsByClass =
@@ -28,9 +30,15 @@ namespace Assets.Scripts
                 {EntityClass.Paladin, new List<ItemGroup> {ItemGroup.TwoHandedSword, ItemGroup.Armor, ItemGroup.Feet, ItemGroup.Glove, ItemGroup.Helmet, ItemGroup.Ring}}
             };
 
+        [ES3Serializable]
         private Dictionary<EquipLocation, EquipableItem> _equippedItems;
 
+        [ES3Serializable]
         private EntityClass _entityClass;
+
+        public Equipment()
+        {
+        }
 
         public Equipment(EntityClass entityClass)
         {
@@ -165,7 +173,14 @@ namespace Assets.Scripts
             }
 
             _equippedItems[slot] = null;
-            //eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this);
+        }
+
+        public void RemoveAllItems()
+        {
+            foreach (var slot in _equippedItems.Keys.ToArray())
+            {
+                RemoveItem(slot);
+            }
         }
 
         public bool AbilityEquipped(Ability ability)

@@ -15,7 +15,7 @@ namespace Assets.Scripts.Encounters.MentalBreak
             Rarity = Rarity.Uncommon;
             EncounterType = EncounterType.MentalBreak;
             Title = "Dazed Mugging";
-            Description = $"{dazedCompanion.Name} wanders away from the group in a daze and is mugged by a roving band of ne'er-do-wells.";
+            Description = $"{dazedCompanion.Name} wanders away from the group in a daze and is mugged by a couple of gnomes!";
         }
 
         public override void Run()
@@ -28,9 +28,8 @@ namespace Assets.Scripts.Encounters.MentalBreak
             var fullResultDescription = new List<string> { Description + "\n" };
 
             var travelManager = Object.FindObjectOfType<TravelManager>();
-            var penaltiesText = travelManager.ApplyEncounterPenalty(Penalty);
 
-            fullResultDescription.AddRange(penaltiesText);
+            travelManager.ApplyEncounterPenalty(Penalty);
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 

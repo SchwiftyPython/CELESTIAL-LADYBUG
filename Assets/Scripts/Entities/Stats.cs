@@ -1,5 +1,6 @@
 ﻿using System;
 using Assets.Scripts.Abilities;
+using Assets.Scripts.Audio;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
@@ -15,7 +16,7 @@ namespace Assets.Scripts.Entities
 
         private const int CurrentStatsMin = 0;
 
-        private readonly Entity _parent;
+        [ES3NonSerializable] private Entity _parent;
 
         private int _maxHealth;
 
@@ -59,11 +60,11 @@ namespace Assets.Scripts.Entities
                 if (value <= CurrentStatsMin)
                 {
                     //todo need to encapsulate this if we add another will not die ability
-                    if (GameManager.Instance.InCombat() && _parent.HasAbility(typeof(EndangeredEndurance)) &&
-                        !((EndangeredEndurance) _parent.Abilities[typeof(EndangeredEndurance)])
+                    if (GameManager.Instance.InCombat() && _parent.HasAbility("Endangered Endurance") &&
+                        !((EndangeredEndurance) _parent.Abilities["Endangered Endurance"])
                             .SavedFromDeathThisBattle())
                     {
-                        _parent.Abilities[typeof(EndangeredEndurance)].Use();
+                        _parent.Abilities["Endangered Endurance"].Use();
                     }
                     else
                     {
@@ -224,11 +225,20 @@ namespace Assets.Scripts.Entities
        
         public int Armor { get; set; } //todo maybe only for some types or can we "equip" natural armor in those cases?
         public int Critical { get; set; } //todo have this ignore damage reduction when implemented
-        
+
+        public Stats()
+        {
+        }
+
         public Stats(Entity parent, Attributes attributes, Skills skills)
         {
-            _parent = parent;
+            SetParent(parent);
             GenerateStats(attributes, skills);
+        }
+
+        public void SetParent(Entity parent)
+        {
+            _parent = parent;
         }
 
         private void GenerateStats(Attributes attributes, Skills skills)

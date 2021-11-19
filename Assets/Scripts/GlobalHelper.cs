@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -10,7 +11,6 @@ using Assets.Scripts.Entities;
 using GoRogue;
 using GoRogue.DiceNotation;
 using UnityEngine;
-using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts
@@ -19,6 +19,7 @@ namespace Assets.Scripts
     {
         public const string DoubleSpace = "\n\n";
         public const string SingleSpace = "\n";
+        public const float DefaultTextSpeed = 0.015f;
 
         #region EventNames  //todo would it be better to make these enums?
 
@@ -28,8 +29,11 @@ namespace Assets.Scripts
         public const string NoOptionEncounter = "NoOptionEncounter";
         public const string CombatEncounter = "CombatEncounter";
         public const string RetreatEncounterFailed = "RetreatEncounterFailed";
+        public const string RetreatEncounterSuccess = "RetreatEncounterSuccess";
         public const string EncounterResult = "EncounterResult";
         public const string EncounterFinished = "EncounterFinished";
+        public const string WritingFinished = "WritingFinished";
+        public const string TravelMessagesFinished = "TravelMessagesFinished";
         public const string CampingEncounterFinished = "CampingEncounterFinished";
         public const string PartyEatAndHeal = "PartyEatAndHeal";
         public const string PlayerTurn = "PlayerTurn";
@@ -63,12 +67,18 @@ namespace Assets.Scripts
         public const string MeleeHit = "MeleeHit";
         public const string MeleeMiss = "MeleeMiss";
         public const string DamageDealt = "DamageDealt";
+        public const string DamageReceived = "DamageReceived";
+        public const string KilledTarget = "KilledTarget";
         public const string ActiveEntityMoved = "ActiveEntityMoved";
         public const string PauseTimer = "PauseTimer";
         public const string ResumeTimer = "ResumeTimer";
         public const string ShowPauseMenu = "ShowPauseMenu";
         public const string HidePauseMenu = "HidePauseMenu";
         public const string SpritesLoaded = "SpritesLoaded";
+        public const string ShowCombatPreview = "ShowCombatPreview";
+        public const string BiomeChanged = "BiomeChanged";
+        public const string SaveLoaded = "SaveLoaded";
+        public const string MoveAnimationComplete = "MoveAnimationComplete";
 
         #endregion EventNames
 
@@ -79,6 +89,16 @@ namespace Assets.Scripts
         public const string TitleScreenScene = "TitleScreen";
 
         #endregion SceneNames
+
+        #region SoundPaths //todo move these to an Audio Controller/Store -- See MusicController.cs
+
+        public const string MonsterHitOne = "event:/Monster Hit 1";
+        public const string MonsterDieOne = "event:/Monster Die 1";
+
+        public const string CompanionHitOne = "event:/Companion Hit 1";
+        public const string CompanionDieOne = "event:/Companion Die 1";
+
+        #endregion SoundPaths
 
         private static readonly System.Random SysRandom = new System.Random();
 
@@ -117,6 +137,11 @@ namespace Assets.Scripts
             return System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(s.ToLower());
         }
 
+        public static string CapitalizeAllLetters(string s)
+        {
+            return s.ToUpper();
+        }
+
         public static string SplitStringByCapitalLetters(string s)
         {
             var splitString = "";
@@ -134,6 +159,35 @@ namespace Assets.Scripts
             }
 
             return splitString;
+        }
+
+        public static Color GetColorFromString(string color)
+        {
+            float red = Hex_to_Dec01(color.Substring(0, 2));
+            float green = Hex_to_Dec01(color.Substring(2, 2));
+            float blue = Hex_to_Dec01(color.Substring(4, 2));
+            float alpha = 1f;
+            if (color.Length >= 8)
+            {
+                // Color string contains alpha
+                alpha = Hex_to_Dec01(color.Substring(6, 2));
+            }
+            return new Color(red, green, blue, alpha);
+        }
+
+        public static float Hex_to_Dec01(string hex)
+        {
+            return Hex_to_Dec(hex) / 255f;
+        }
+
+        public static int Hex_to_Dec(string hex)
+        {
+            return Convert.ToInt32(hex, 16);
+        }
+
+        public static IEnumerator Delay(int time)
+        {
+            yield return new WaitForSecondsRealtime(time);
         }
 
         //<Summary>

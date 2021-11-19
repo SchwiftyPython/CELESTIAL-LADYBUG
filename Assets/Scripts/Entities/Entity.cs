@@ -1,27 +1,59 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Assets.Scripts.Abilities;
 using Assets.Scripts.AI;
+using Assets.Scripts.Audio;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Effects;
 using Assets.Scripts.Effects.Args;
 using Assets.Scripts.Entities.Names;
 using Assets.Scripts.Items;
+using Assets.Scripts.Saving;
 using Assets.Scripts.UI;
+using DG.Tweening;
 using GoRogue;
 using GoRogue.DiceNotation;
 using UnityEngine;
 using GameObject = GoRogue.GameFramework.GameObject;
 using Object = UnityEngine.Object;
+using PathType = DG.Tweening.PathType;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Entities
 {
-    public class Entity : GameObject
+    public class Entity : GameObject, ISaveable
     {
         private const float BaseCombatDifficulty = 10;
+
+        private struct EntityDto
+        {
+            public bool IsPlayer;
+            public Equipment Equipment;
+            public bool Moved;
+            public bool MovedLastTurn;
+            public string Id;
+            public string Name;
+            public Race Race;
+            public EntityClass EntityClass;
+            public Attributes Attributes;
+            public Stats Stats;
+            public Skills Skills;
+            public Dictionary<Portrait.Slot, string> Portrait;
+            public Dictionary<string, Ability> Abilities;
+            public List<Effect> Effects;
+            public UnityEngine.GameObject CombatSpritePrefab;
+            public Texture IdleSkinSwap;
+            public Texture AttackSkinSwap;
+            public Texture HitSkinSwap;
+            public Texture DeadSkinSwap;
+            public string HurtSound;
+            public string DieSound;
+            public string AttackSound;
+            public Vector2Int Position;
+        }
 
         private int _level;
         private int _xp;
@@ -35,28 +67,49 @@ namespace Assets.Scripts.Entities
         private bool _moved;
         private bool _movedLastTurn;
 
+        public string Id { get; private set; }
         public string Name { get; set; }
         public Sex Sex { get; }
-        public Race Race { get; } //todo this and class are likely modifier providers so we should make classes for these
+        public Race Race
+        {
+            get;
+            set;
+        } //todo this and class are likely modifier providers so we should make classes for these
                                   // will be easier to define starting equipment and whatnot I think
-        public EntityClass EntityClass { get; }
-        public Attributes Attributes { get; }
-        public Stats Stats { get; }
-        public Skills Skills { get; }
+        public EntityClass EntityClass { get; set; }
+        public Attributes Attributes { get; set; }
+        public Stats Stats { get; set; }
+        public Skills Skills { get; set; }
         public Dictionary<Portrait.Slot, string> Portrait { get; private set; }
         
-        public Dictionary<Type, Ability> Abilities { get; private set; }
+        public Dictionary<string, Ability> Abilities { get; private set; } 
 
         public List<Effect> Effects { get; set; }
 
         public UnityEngine.GameObject CombatSpritePrefab { get; protected set; }
         public UnityEngine.GameObject CombatSpriteInstance { get; private set; }
 
+        public Texture IdleSkinSwap;
+        public Texture AttackSkinSwap;
+        public Texture HitSkinSwap;
+        public Texture DeadSkinSwap;
+
+        public string HurtSound;
+        public string DieSound;
+        public string AttackSound;
+
+        public Entity() : base((-1, -1), 1, null, false, false, true)
+        {
+
+        }
+
         public Entity(Race.RaceType rType, EntityClass eClass, bool isPlayer) : base((-1, -1), 1, null, false, false, true)
         {
+            Id = Guid.NewGuid().ToString();
+
             Sex = PickSex();
 
-            if (rType != Race.RaceType.Derpus)
+            if (rType != Race.RaceType.Derpus && string.IsNullOrEmpty(Name))
             {
                 Name = GenerateName(null, Sex);
             }
@@ -74,13 +127,20 @@ namespace Assets.Scripts.Entities
             Attributes = new Attributes(this);
             Skills = new Skills(this);
 
-            Abilities = new Dictionary<Type, Ability>();
+            Abilities = new Dictionary<string, Ability>();
 
             Stats = new Stats(this, Attributes, Skills);
 
             Effects = new List<Effect>();
 
-            GeneratePortrait();
+            if (IsDerpus())
+            {
+                GetDerpusPortrait();
+            }
+            else
+            {
+                GeneratePortrait();
+            }
 
             _level = 1;
             _xp = 0;
@@ -142,40 +202,122 @@ namespace Assets.Scripts.Entities
             Stats.CurrentActionPoints = Stats.MaxActionPoints;
         }
 
-        //todo refactor this so the sprite moves through each square and doesn't just teleport
-        public void MoveTo(Tile tile, int apMovementCost)
+        public void AddAbility(Ability ability)
         {
+            if (Abilities == null)
+            {
+                Abilities = new Dictionary<string, Ability>();
+            }
+
+            if (Abilities.ContainsKey(ability.Name))
+            {
+                return;
+            }
+
+            Abilities.Add(ability.Name, ability);
+        }
+        
+        public void MoveTo(Tile tile, int apMovementCost, List<Tile> path = null) //todo maybe a bool to keep not change facing
+        {
+            if (tile == null)
+            {
+                return;
+            }
+
             if (apMovementCost > Stats.CurrentActionPoints)
             {
                 Debug.Log("AP movement cost greater than current AP!");
                 return;
             }
 
-            var currentTile = ((CombatMap)CurrentMap).GetTileAt(Position);
+            var combatManager = Object.FindObjectOfType<CombatManager>();
+            var map = combatManager.Map;
+
+            var currentTile = map.GetTileAt(Position);
+
+            var vDelta = tile.Position - Position;
+
+            var direction = Direction.GetDirection(vDelta);
+
+            SetSpriteDirection(direction, GetSpriteRenderer());
 
             //this will not update the position if blocked
             Position = tile.Position;
 
+            var eventMediator = Object.FindObjectOfType<EventMediator>();
+
             if (Position == tile.Position)
             {
+                if (tile.RetreatTile)
+                {
+                    combatManager.RemoveEntity(this);
+                    
+                    eventMediator.Broadcast(GlobalHelper.EndTurn, this);
+                    return;
+                }
+
                 _moved = true;
 
                 Stats.CurrentActionPoints -= apMovementCost;
 
                 currentTile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(null);
 
-                if (IsPlayer())
+                const float durationMod = 0.25f;
+
+                if (path != null)
                 {
-                    CombatSpriteInstance.transform.position = new Vector3(Position.X, Position.Y);
+                    var waypoints = new Queue<Vector3>();
+
+                    foreach (var step in path)
+                    {
+
+                        //waypoints.Enqueue(new Vector2(step.Position.X, step.Position.Y));
+
+                        if (SpriteFacingEast(GetSpriteRenderer()))
+                        {
+                            waypoints.Enqueue(new Vector2(step.Position.X, step.Position.Y));
+                        }
+                        else
+                        {
+                            waypoints.Enqueue(new Vector2(step.Position.X + 1, step.Position.Y));
+                        }
+                        
+                    }
+
+                    var duration = waypoints.Count * durationMod;
+
+                    var tween = CombatSpriteInstance.transform.DOPath(waypoints.ToArray(), duration, PathType.Linear,
+                        PathMode.TopDown2D);
+
+                    var animationHelper = CombatSpriteInstance.transform.GetComponent<CombatAnimationHelper>();
+
+                    animationHelper.StartSmoothMove(tween);
                 }
                 else
                 {
-                    CombatSpriteInstance.transform.position = new Vector3(Position.X + 1, Position.Y);
+                    var waypoint = new Vector3[1];
+
+                    if (SpriteFacingEast(GetSpriteRenderer()))
+                    {
+                        waypoint[0] = new Vector2(tile.Position.X, tile.Position.Y);
+                    }
+                    else
+                    {
+                        waypoint[0] = new Vector2(tile.Position.X + 1, tile.Position.Y);
+                    }
+
+                    CombatSpriteInstance.transform.DOPath(waypoint, durationMod, PathType.Linear,
+                        PathMode.TopDown2D);
+
+                    var tween = CombatSpriteInstance.transform.DOPath(waypoint, durationMod, PathType.Linear,
+                        PathMode.TopDown2D);
+
+                    var animationHelper = CombatSpriteInstance.transform.GetComponent<CombatAnimationHelper>();
+
+                    animationHelper.StartSmoothMove(tween);
                 }
 
                 tile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(this);
-
-                var eventMediator = Object.FindObjectOfType<EventMediator>();
 
                 eventMediator.Broadcast(GlobalHelper.ActiveEntityMoved, this);
 
@@ -213,7 +355,10 @@ namespace Assets.Scripts.Entities
                 {
                     foreach (var effect in tileEffects)
                     {
-                        ApplyEffect(effect);
+                        if (CanApplyEffect(effect))
+                        {
+                            ApplyEffect(effect);
+                        }
                     }
                 }
             }
@@ -222,6 +367,103 @@ namespace Assets.Scripts.Entities
                 Debug.Log($"Movement Blocked for {Name}");
             }
 
+        }
+
+        private void SetSpriteDirection(Direction direction, SpriteRenderer sprite)
+        {
+            switch (direction.Type)
+            {
+                case Direction.Types.UP:
+                    break;
+                case Direction.Types.UP_RIGHT:
+                case Direction.Types.RIGHT:
+                case Direction.Types.DOWN_RIGHT:
+                    if (SpriteFacingWest(sprite))
+                    {
+                        SpriteFaceEast(sprite);
+                    }
+                    break;
+                case Direction.Types.DOWN:
+                    break;
+                case Direction.Types.DOWN_LEFT:
+                case Direction.Types.LEFT:
+                case Direction.Types.UP_LEFT:
+                    if (SpriteFacingEast(sprite))
+                    {
+                        SpriteFaceWest(sprite);
+                    }
+                    break;
+                case Direction.Types.NONE:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public SpriteRenderer GetSpriteRenderer()
+        {
+            var spriteRenderer = CombatSpriteInstance.GetComponent<SpriteRenderer>();
+
+            if (spriteRenderer == null)
+            {
+                spriteRenderer = CombatSpriteInstance.GetComponentInChildren<SpriteRenderer>();
+            }
+
+            return spriteRenderer;
+        }
+
+        public bool SpriteFacingEast(SpriteRenderer sprite)
+        {
+            return sprite.flipX == false;
+        }
+
+        public bool SpriteFacingWest(SpriteRenderer sprite)
+        {
+            return sprite.flipX;
+        }
+
+        public void SpriteFaceEast(SpriteRenderer sprite)
+        {
+            sprite.flipX = false;
+
+            var goParent = sprite.transform.parent;
+
+            if (goParent.name.Equals("EntityHolder", StringComparison.OrdinalIgnoreCase))
+            {
+                var pos = sprite.transform.position;
+
+                sprite.transform.position = new Vector3(pos.x - 1,
+                    pos.y, pos.z);
+            }
+            else
+            {
+                var pos = goParent.transform.position;
+
+                goParent.transform.position = new Vector3(pos.x - 1,
+                    pos.y, pos.z);
+            }
+        }
+
+        public void SpriteFaceWest(SpriteRenderer sprite)
+        {
+            sprite.flipX = true;
+
+            var goParent = sprite.transform.parent;
+
+            if (goParent.name.Equals("EntityHolder", StringComparison.OrdinalIgnoreCase))
+            {
+                var pos = sprite.transform.position;
+
+                sprite.transform.position = new Vector3(pos.x + 1,
+                    pos.y, pos.z);
+            }
+            else
+            {
+                var pos = goParent.transform.position;
+
+                goParent.transform.position = new Vector3(pos.x + 1,
+                    pos.y, pos.z);
+            }
         }
 
         public void GenerateStartingEquipment(EntityClass eClass, Dictionary<EquipLocation, List<string>> startingTable)
@@ -256,14 +498,14 @@ namespace Assets.Scripts.Entities
 
             if (Abilities == null)
             {
-                Abilities = new Dictionary<Type, Ability>();
+                Abilities = new Dictionary<string, Ability>();
             }
 
             foreach (var ability in item.GetAbilities(this))
             {
-                if (!Abilities.ContainsKey(ability.GetType()))
+                if (!Abilities.ContainsKey(ability.Name))
                 {
-                    Abilities.Add(ability.GetType(), ability);
+                    Abilities.Add(ability.Name, ability);
                 }
             }
 
@@ -282,7 +524,7 @@ namespace Assets.Scripts.Entities
             {
                 if (!Equipment.AbilityEquipped(ability))
                 {
-                    Abilities.Remove(ability.GetType());
+                    Abilities.Remove(ability.Name);
                 }
             }
 
@@ -296,11 +538,16 @@ namespace Assets.Scripts.Entities
             eventMediator.Broadcast(GlobalHelper.EquipmentUpdated, this);
         }
 
-        public bool HasAbility(Type abilityType)
+        public void UnEquipAll()
+        {
+            Equipment.RemoveAllItems();
+        }
+
+        public bool HasAbility(string abilityName)
         {
             foreach (var ability in Abilities)
             {
-                if (abilityType == ability.Key)
+                if (abilityName == ability.Key)
                 {
                     return true;
                 }
@@ -311,11 +558,11 @@ namespace Assets.Scripts.Entities
 
         public void ResetOneUseCombatAbilities()
         {
-            if (HasAbility(typeof(EndangeredEndurance)) &&
-                !((EndangeredEndurance)Abilities[typeof(EndangeredEndurance)])
+            if (HasAbility("Endangered Endurance") &&
+                !((EndangeredEndurance)Abilities["Endangered Endurance"])
                     .SavedFromDeathThisBattle())
             {
-                ((EndangeredEndurance)Abilities[typeof(EndangeredEndurance)]).Reset();
+                ((EndangeredEndurance)Abilities["Endangered Endurance"]).Reset();
             }
         }
 
@@ -331,6 +578,8 @@ namespace Assets.Scripts.Entities
 
             if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Melee, toHitMod, out bool criticalHit)) 
             {
+                PlayAttackAnimation(target, true);
+
                 int damageMod = 0;
                 if (modifierProvider != null)
                 {
@@ -341,24 +590,27 @@ namespace Assets.Scripts.Entities
 
                 if (target.IsDead())
                 {
-                    //todo sound for dying peep
-
                     var message = $"{Name} killed {target.Name}!";
 
                     var eventMediator = Object.FindObjectOfType<EventMediator>();
 
                     eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                    eventMediator.Broadcast(GlobalHelper.KilledTarget, this);
                 }
                 else
                 {
                     //todo check for abilities that respond to attack hit
 
-                    if (target.HasAbility(typeof(Riposte))) //todo hail mary not sure if this will work
+                    if (target.HasAbility("Riposte")) //todo hail mary not sure if this will work
                     {
-                        target.Abilities[typeof(Riposte)].Use(this);
+                        target.Abilities["Riposte"].Use(this);
                     }
 
                 }
+            }
+            else
+            {
+                PlayAttackAnimation(target, false);
             }
         }
 
@@ -374,6 +626,8 @@ namespace Assets.Scripts.Entities
 
             if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Melee, toHitMod, out bool criticalHit))
             {
+                PlayAttackAnimation(target, true);
+
                 int damageMod = 0;
                 if (modifierProvider != null)
                 {
@@ -384,24 +638,27 @@ namespace Assets.Scripts.Entities
 
                 if (target.IsDead())
                 {
-                    //todo sound for dying peep
-
                     var message = $"{Name} killed {target.Name}!";
 
                     var eventMediator = Object.FindObjectOfType<EventMediator>();
 
                     eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                    eventMediator.Broadcast(GlobalHelper.KilledTarget, this);
                 }
                 else
                 {
                     //todo check for abilities that respond to attack hit
 
-                    if (target.HasAbility(typeof(Riposte))) //todo hail mary not sure if this will work
+                    if (target.HasAbility("Riposte")) //todo hail mary not sure if this will work
                     {
-                        target.Abilities[typeof(Riposte)].Use(this);
+                        target.Abilities["Riposte"].Use(this);
                     }
 
                 }
+            }
+            else
+            {
+                PlayAttackAnimation(target, false);
             }
         }
 
@@ -417,6 +674,8 @@ namespace Assets.Scripts.Entities
 
             if (AttackHit((int) hitDifficulty, target, EntitySkillTypes.Ranged, toHitMod, out bool criticalHit))
             {
+                PlayAttackAnimation(target, true);
+
                 int damageMod = 0;
                 if (modifierProvider != null)
                 {
@@ -427,24 +686,27 @@ namespace Assets.Scripts.Entities
 
                 if (target.IsDead())
                 {
-                    //todo sound for dying peep
-
                     var message = $"{Name} killed {target.Name}!";
 
                     var eventMediator = Object.FindObjectOfType<EventMediator>();
 
                     eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                    eventMediator.Broadcast(GlobalHelper.KilledTarget, this);
                 }
                 else
                 {
                     //todo check for abilities that respond to attack hit
 
-                    if (target.HasAbility(typeof(Riposte))) //todo hail mary not sure if this will work
+                    if (target.HasAbility("Riposte")) //todo hail mary not sure if this will work
                     {
-                        target.Abilities[typeof(Riposte)].Use(this);
+                        target.Abilities["Riposte"].Use(this);
                     }
 
                 }
+            }
+            else
+            {
+                PlayAttackAnimation(target, false);
             }
         }
 
@@ -483,6 +745,8 @@ namespace Assets.Scripts.Entities
 
             if (attackHit)
             {
+                PlayAttackAnimation(target, true);
+
                 int damageMod = 0;
                 if (modifierProvider != null)
                 {
@@ -493,25 +757,173 @@ namespace Assets.Scripts.Entities
 
                 if (target.IsDead())
                 {
-                    //todo sound for dying peep
-
                     var message = $"{Name} killed {target.Name}!";
 
                     var eventMediator = Object.FindObjectOfType<EventMediator>();
 
                     eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+                    eventMediator.Broadcast(GlobalHelper.KilledTarget, this);
                 }
                 else
                 {
                     //todo check for abilities that respond to attack hit
 
-                    if (target.HasAbility(typeof(Riposte))) //todo hail mary not sure if this will work
+                    if (target.HasAbility("Riposte")) //todo hail mary not sure if this will work
                     {
-                        target.Abilities[typeof(Riposte)].Use(this);
+                        target.Abilities["Riposte"].Use(this);
                     }
 
                 }
             }
+            else
+            {
+                PlayAttackAnimation(target, false);
+            }
+        }
+
+        private void FaceTarget(Entity target)
+        {
+            var vDelta = target.Position - Position;
+
+            var direction = Direction.GetDirection(vDelta);
+
+            SetSpriteDirection(direction, GetSpriteRenderer());
+        }
+
+        private void PlayAttackAnimation(Entity target, bool attackHit)
+        {
+            FaceTarget(target);
+
+            var animationHelper = CombatSpriteInstance.GetComponent<CombatAnimationHelper>();
+
+            animationHelper.Target = target;
+
+            animationHelper.attackHit = attackHit;
+
+            var animator = CombatSpriteInstance.GetComponent<Animator>();
+
+            animator.SetBool("IsAttacking", true);
+
+            var swapper = CombatSpriteInstance.GetComponentInChildren<ColorSwapper>();
+
+            if (swapper != null)
+            {
+                swapper.ChangeTexture(AttackSkinSwap);
+            }
+
+            // if (attackHit) //testing if we can trigger hit animation before moving target for abilities like shield bash - no effect
+            // {
+            //     var eventMediator = Object.FindObjectOfType<EventMediator>();
+            //
+            //     eventMediator.Broadcast(GlobalHelper.TargetHit, this, target);
+            // }
+
+            var ai = CombatSpriteInstance.GetComponent<AiController>();
+
+            if (ai == null)
+            {
+                return;
+            }
+
+            ai.animating = true;
+        }
+
+        public void PlayIdleAnimation()
+        {
+            var animator = CombatSpriteInstance.GetComponent<Animator>();
+
+            animator.SetBool("IsAttacking", false);
+
+            var swapper = CombatSpriteInstance.GetComponentInChildren<ColorSwapper>();
+
+            if (swapper != null)
+            {
+                swapper.ChangeTexture(IdleSkinSwap);
+            }
+
+            var ai = CombatSpriteInstance.GetComponent<AiController>();
+
+            if (ai == null)
+            {
+                return;
+            }
+
+            ai.animating = false;
+        }
+
+        public void PlayHitAnimation()
+        {
+            var animator = CombatSpriteInstance.GetComponent<Animator>();
+
+            animator.SetTrigger("Hit");
+
+            var swapper = CombatSpriteInstance.GetComponentInChildren<ColorSwapper>();
+
+            if (swapper != null)
+            {
+                swapper.ChangeTexture(HitSkinSwap);
+            }
+
+            var animationHelper = CombatSpriteInstance.GetComponent<CombatAnimationHelper>();
+
+            animationHelper.ShowDamagePopup();
+
+            var ai = CombatSpriteInstance.GetComponent<AiController>();
+
+            if (ai == null)
+            {
+                return;
+            }
+
+            ai.animating = false;
+        }
+
+        public IEnumerator PlayDeathAnimation()
+        {
+            if (CombatSpriteInstance == null)
+            {
+                yield return null;
+            }
+
+            var animator = CombatSpriteInstance.GetComponent<Animator>();
+
+            animator.SetTrigger("Dead");
+
+            var swapper = CombatSpriteInstance.GetComponentInChildren<ColorSwapper>();
+
+            if (swapper != null)
+            {
+                swapper.ChangeTexture(DeadSkinSwap);
+            }
+
+            var animationHelper = CombatSpriteInstance.GetComponent<CombatAnimationHelper>();
+
+            animationHelper.ShowDamagePopup();
+
+            var ai = CombatSpriteInstance.GetComponent<AiController>();
+
+            if (ai != null)
+            {
+                ai.animating = false;
+            }
+
+            yield return Delay();
+
+            var combatManager = Object.FindObjectOfType<CombatManager>();
+
+            combatManager.RemoveEntity(this);
+        }
+
+        public void PlayImpactNoise()
+        {
+            var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
+
+            eAudio.PlayImpactSound();
+        }
+
+        private IEnumerator Delay()
+        {
+            yield return new WaitForSeconds(1.0f);
         }
 
         public void ApplyDamageWithAbility(Entity target, Ability ability, int damageMod, bool criticalHit)
@@ -557,10 +969,6 @@ namespace Assets.Scripts.Entities
 
             if (criticalHit)
             {
-                // const float critBoost = .05f;
-                //
-                // damage += (int)Mathf.Ceil(damage * critBoost);
-
                 var wildRoll = GlobalHelper.RollWildDie();
 
                 damage += wildRoll;
@@ -571,6 +979,7 @@ namespace Assets.Scripts.Entities
             damage -= damageReduction;
 
             string message;
+            CombatAnimationHelper animationHelper;
             if (damage <= 0)
             {
                 message = $"{target.Name} resisted all damage!"; //todo see if we can communicate to player if there is no chance for attack to do damage
@@ -582,12 +991,18 @@ namespace Assets.Scripts.Entities
                 message = $"{Name} dealt {damage} damage to {target.Name}!";
             }
 
+            animationHelper = target.CombatSpriteInstance.GetComponent<CombatAnimationHelper>();
+
+            animationHelper.damage = damage;
+            animationHelper.criticalHit = criticalHit;
+
             var eventMediator = Object.FindObjectOfType<EventMediator>();
 
             eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
             eventMediator.Broadcast(GlobalHelper.DamageDealt, this, damage);
+            eventMediator.Broadcast(GlobalHelper.DamageReceived, target, damage);
 
-            if (!target.HasAbility(typeof(DemonicIntervention)))
+            if (!target.HasAbility("Demonic Intervention"))
             {
                 return;
             }
@@ -601,11 +1016,23 @@ namespace Assets.Scripts.Entities
 
             message = $"Demonic Intervention! {target.Name} dealt {damage} damage to {Name}!";
 
+            animationHelper = target.CombatSpriteInstance.GetComponent<CombatAnimationHelper>();
+
+            animationHelper.damage = damage;
+            animationHelper.criticalHit = criticalHit;
+
             eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
+            eventMediator.Broadcast(GlobalHelper.DamageDealt, target, damage);
+            eventMediator.Broadcast(GlobalHelper.DamageReceived, this, damage);
         }
 
         public bool HasMissileWeaponEquipped()
         {
+            if (Equipment == null)
+            {
+                return false;
+            }
+
             var equippedWeapon = Equipment.GetItemInSlot(EquipLocation.Weapon);
 
             if (equippedWeapon == null)
@@ -616,6 +1043,11 @@ namespace Assets.Scripts.Entities
             var (min, max) = equippedWeapon.GetRangedDamageRange();
 
             return min > 0 && max > 0;
+        }
+
+        public bool IsStunned()
+        {
+            return HasEffect(new Stun(this));
         }
 
         private int GetTotalArmorToughness()
@@ -630,12 +1062,27 @@ namespace Assets.Scripts.Entities
 
         private int GetDodgeTotal()
         {
-            if (Equipment == null)
+            var dodgeTotal = 0;
+
+            if (Effects != null && Effects.Count > 0)
             {
-                return 0;
+                foreach (var effect in Effects)
+                {
+                    if (effect is IModifierProvider provider)
+                    {
+                        dodgeTotal += (int)provider.GetAdditiveModifiers(EntitySkillTypes.Dodge);
+                    }
+                }
             }
 
-            return Equipment.GetDodgeTotal();
+            if (Equipment == null)
+            {
+                return dodgeTotal;
+            }
+
+            dodgeTotal += Equipment.GetDodgeTotal();
+
+            return dodgeTotal;
         }
 
         public EquipableItem GetEquippedWeapon()
@@ -846,10 +1293,13 @@ namespace Assets.Scripts.Entities
 
             var totalRoll = coreRoll + wildRoll + toHitMod;
 
+            Debug.Log($"Total Roll: {totalRoll}");
+            Debug.Log($"Difficulty: {hitDifficulty}");
+
             string message;
             if (totalRoll >= hitDifficulty)
             {
-                if (target.HasAbility(typeof(DivineIntervention)))
+                if (target.HasAbility("Divine Intervention"))
                 {
                     if (DivineIntervention.Intervened())
                     {
@@ -862,7 +1312,7 @@ namespace Assets.Scripts.Entities
                     }
                 }
 
-                if (wildRoll > 6)  //todo need to apply crit to damage somehow
+                if (wildRoll > 6)  
                 {
                     criticalHit = true;
                     message = "CRITICAL HIT!";
@@ -892,7 +1342,10 @@ namespace Assets.Scripts.Entities
 
         public bool IsSurrounded()
         {
-            var currentTile = ((CombatMap) (CurrentMap)).GetTileAt(Position);
+            var combatManager = Object.FindObjectOfType<CombatManager>();
+            var map = combatManager.Map;
+
+            var currentTile = map.GetTileAt(Position);
 
             var numEnemies = 0;
 
@@ -998,15 +1451,9 @@ namespace Assets.Scripts.Entities
                 Effects = new List<Effect>();
             }
 
-            if (!effect.CanStack())
+            if (!effect.CanStack() && HasEffect(effect))
             {
-                foreach (var existingEffect in Effects)
-                {
-                    if (existingEffect.GetType() == effect.GetType())
-                    {
-                        return;
-                    }
-                }
+                return;
             }
 
             Effects.Add(effect);
@@ -1038,6 +1485,42 @@ namespace Assets.Scripts.Entities
 
                 effect.Trigger(new BasicEffectArgs(this));
             }
+        }
+
+        public bool HasEffect(Effect effect)
+        {
+            foreach (var existingEffect in Effects)
+            {
+                if (existingEffect.GetType() == effect.GetType())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool CanApplyEffect(Effect effect)
+        {
+            foreach (var ability in Abilities)
+            {
+                if (ability.Value.ExemptFromEffect(effect))
+                {
+                    return false;
+                }
+            }
+
+            if (effect.GetTargetType() == TargetType.Hostile)
+            {
+                return effect.GetOwner().IsPlayer() != IsPlayer();
+            }
+
+            if (effect.GetTargetType() == TargetType.Friendly)
+            {
+                return effect.GetOwner().IsPlayer() == IsPlayer();
+            }
+
+            return true;
         }
 
         public int RollForInitiative()
@@ -1074,16 +1557,18 @@ namespace Assets.Scripts.Entities
             return NameStore.Instance.GenerateFullName(possibleNameFiles, sex);
         }
 
-        private void GeneratePortrait()
+        private void GetDerpusPortrait()
         {
-            Portrait = new Dictionary<Portrait.Slot, string>();
-
             var spriteStore = Object.FindObjectOfType<SpriteStore>();
 
-            foreach (Portrait.Slot slot in Enum.GetValues(typeof(Portrait.Slot)))
-            {
-                Portrait.Add(slot, spriteStore.GetRandomSpriteKeyForSlot(slot));
-            }
+            Portrait = spriteStore.GetDerpusPortrait();
+        }
+
+        private void GeneratePortrait()
+        {
+            var spriteStore = Object.FindObjectOfType<SpriteStore>();
+
+            Portrait = spriteStore.GetRandomPortraitPreset();
         }
 
         private Sex PickSex()
@@ -1099,6 +1584,98 @@ namespace Assets.Scripts.Entities
         private EntityClass PickEntityClass()
         {
             return GlobalHelper.GetRandomEnumValue<EntityClass>();
+        }
+
+        public object CaptureState()
+        {
+            var dto = new EntityDto
+            {
+                Position = new Vector2Int(Position.X, Position.Y),
+                Name = Name,
+                Id = Id,
+                Abilities = Abilities,
+                Attributes = Attributes,
+                AttackSkinSwap = AttackSkinSwap,
+                AttackSound = AttackSound,
+                CombatSpritePrefab = CombatSpritePrefab,
+                DeadSkinSwap = DeadSkinSwap,
+                DieSound = DieSound,
+                Effects = Effects,
+                EntityClass = EntityClass,
+                Equipment = Equipment,
+                HitSkinSwap = HitSkinSwap,
+                HurtSound = HurtSound,
+                IdleSkinSwap = IdleSkinSwap,
+                IsPlayer = _isPlayer,
+                Moved = _moved,
+                MovedLastTurn = _movedLastTurn,
+                Portrait = Portrait,
+                Race = Race,
+                Skills = Skills,
+                Stats = Stats
+            };
+
+            return dto;
+        }
+
+        public void RestoreState(object state)
+        {
+            if (state == null)
+            {
+                return;
+            }
+
+            var entityDto = (EntityDto)state;
+
+            Position = new Coord(entityDto.Position.x, entityDto.Position.y);
+            Name = entityDto.Name;
+            Id = entityDto.Id;
+            
+            Abilities = entityDto.Abilities;
+
+            if (Abilities != null && Abilities.Count > 0)
+            {
+                foreach (var ability in Abilities.Values)
+                {
+                    ability.AbilityOwner = this;
+                }
+            }
+
+            Attributes = entityDto.Attributes;
+            Attributes.SetParent(this);
+
+            AttackSkinSwap = entityDto.AttackSkinSwap;
+            AttackSound = entityDto.AttackSound;
+            CombatSpritePrefab = entityDto.CombatSpritePrefab;
+            DeadSkinSwap = entityDto.DeadSkinSwap;
+            DieSound = entityDto.DieSound;
+            
+            Effects = entityDto.Effects;
+
+            if (Effects != null && Effects.Count > 0)
+            {
+                foreach (var effect in Effects)
+                {
+                    effect.SetOwner(this);
+                }
+            }
+
+            EntityClass = entityDto.EntityClass;
+            Equipment = entityDto.Equipment;
+            HitSkinSwap = entityDto.HitSkinSwap;
+            HurtSound = entityDto.HurtSound;
+            IdleSkinSwap = entityDto.IdleSkinSwap;
+            _isPlayer = entityDto.IsPlayer;
+            _moved = entityDto.Moved;
+            _movedLastTurn = entityDto.MovedLastTurn;
+            Portrait = entityDto.Portrait;
+            Race = entityDto.Race;
+
+            Skills = entityDto.Skills;
+            Skills.SetParent(this);
+
+            Stats = entityDto.Stats;
+            Stats.SetParent(this);
         }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Encounters;
+using Assets.Scripts.Saving;
+using Assets.Scripts.Travel;
 using UnityEngine;
 
 namespace Assets.Scripts.Decks
 {
-    public class EncounterDeck : Deck<Encounter>
+    public sealed class EncounterDeck : Deck<Encounter>, ISaveable
     {
         private const int CommonCap = 5;
         private const int UncommonCap = 2;
@@ -12,15 +14,19 @@ namespace Assets.Scripts.Decks
 
         public override Queue<Encounter> Cards { get; set; }
 
-        public EncounterDeck(List<Encounter> cardPool, int deckSize)
+        public EncounterDeck(List<Encounter> cardPool, int deckSize, List<Encounter> usedEncounters)
         {
             CardIndex = 0;
-            Build(cardPool, deckSize, new RarityCapper(CommonCap, UncommonCap, RareCap));
+            Build(cardPool, deckSize, new RarityCapper(CommonCap, UncommonCap, RareCap), usedEncounters);
             Shuffle();
         }
 
-        public sealed override void Build(List<Encounter> cardPool, int deckSize, RarityCapper capper)
+        public override void Build(List<Encounter> cardPool, int deckSize, RarityCapper capper, List<Encounter> usedEncounters)
         {
+            var travelManager = Object.FindObjectOfType<TravelManager>();
+
+            var currentBiome = travelManager.CurrentBiome;
+
             Cards = new Queue<Encounter>();
             Size = deckSize;
 
@@ -32,37 +38,47 @@ namespace Assets.Scripts.Decks
                 var validCard = false;
                 var numTries = 0;
 
-                var index = Random.Range(0, cardPool.Count);
-
-                usedIndexes.Add(index);
-
                 Encounter card = null;
 
                 while (!validCard && numTries < maxTries)
                 {
                     numTries++;
 
+                    var index = Random.Range(0, cardPool.Count);
+
                     if (usedIndexes.Contains(index))
                     {
                         continue;
                     }
 
+                    usedIndexes.Add(index);
+
                     card = cardPool[index];
 
-                    if (!capper.IsCapped(card.Rarity))
+                    if (usedEncounters.Contains(card))
+                    {
+                        continue;
+                    }
+
+                    if (card.ValidBiome(currentBiome))
                     {
                         validCard = true;
                     }
 
-                    index = Random.Range(0, cardPool.Count);
+                    // if (!capper.IsCapped(card.Rarity) && card.ValidBiome(currentBiome))
+                    // {
+                    //     validCard = true;
+                    // }
                 }
 
-                if (card == null)
+                if (!validCard)
                 {
-                    card = cardPool[Random.Range(0, cardPool.Count)];
+                    usedEncounters.Clear();
                 }
 
                 AddCard(card);
+
+                usedEncounters.Add(card);
             }
         }
 
@@ -76,6 +92,26 @@ namespace Assets.Scripts.Decks
             Size--;
 
             return Cards.Dequeue();
+        }
+
+        public struct EncounterDeckDto
+        {
+            public int Size;
+        }
+
+        public object CaptureState()
+        {
+            var dto = new EncounterDeckDto
+            {
+                Size = Cards.Count
+            };
+
+            return dto;
+        }
+
+        public void RestoreState(object state)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

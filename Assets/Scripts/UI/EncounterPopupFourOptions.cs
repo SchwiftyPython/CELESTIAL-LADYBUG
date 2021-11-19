@@ -1,7 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Mime;
 using Assets.Scripts.Encounters;
+using Assets.Scripts.Utilities.UI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
@@ -9,6 +14,9 @@ namespace Assets.Scripts.UI
     {
         private const string PopupEvent = GlobalHelper.FourOptionEncounter;
 
+        private Encounter _encounter;
+        private TextWriter _textWriter;
+        private TravelMessenger _travelMessenger;
         private List<GameObject> _optionButtons;
 
         public GameObject OptionButtonOne;
@@ -18,6 +26,10 @@ namespace Assets.Scripts.UI
 
         public TextMeshProUGUI EncounterTitle;
         public TextMeshProUGUI EncounterDescription;
+        public GameObject ImageContainer;
+        public Image Image;
+
+        [FMODUnity.EventRef] public string popupSound;
 
         private void Awake()
         {
@@ -29,9 +41,17 @@ namespace Assets.Scripts.UI
                 OptionButtonFour
             };
 
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
             eventMediator.SubscribeToEvent(PopupEvent, this);
-            Hide();
+            eventMediator.SubscribeToEvent(GlobalHelper.WritingFinished, this);
+
+            _textWriter = GetComponent<TextWriter>();
+            _travelMessenger = FindObjectOfType<TravelMessenger>();
+
+            GetComponent<Button_UI>().ClickFunc = _textWriter.DisplayMessageInstantly;
+
+            gameObject.SetActive(false);
+            GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 
         private void EnableAllButtons()
@@ -52,13 +72,55 @@ namespace Assets.Scripts.UI
 
         private void Show(Encounter encounter)
         {
-            EncounterTitle.text = encounter.Title;
-            EncounterDescription.text = encounter.Description;
+            _travelMessenger.ClearMessageQueues();
+
+            //todo might want to hide messages at this point too? 
+
+            _encounter = encounter;
+
+            if (string.IsNullOrEmpty(encounter.ImageName))
+            {
+                ImageContainer.SetActive(false);
+            }
+            else
+            {
+                var spriteStore = FindObjectOfType<SpriteStore>();
+
+                var image = spriteStore.GetEncounterSprite(encounter.ImageName);
+
+                if (image == null)
+                {
+                    ImageContainer.SetActive(false);
+                }
+                else
+                {
+                    Image.sprite = image;
+                    ImageContainer.SetActive(true);
+                }
+            }
+
+            EncounterTitle.text = _encounter.Title;
 
             DisableAllButtons();
 
+            _textWriter.AddWriter(EncounterDescription, _encounter.Description, GlobalHelper.DefaultTextSpeed, true);
+
+            gameObject.SetActive(true);
+            GameManager.Instance.AddActiveWindow(gameObject);
+
+            var sound = FMODUnity.RuntimeManager.CreateInstance(popupSound);
+            sound.start();
+        }
+
+        private void ShowButtons()
+        {
+            if (_encounter == null)
+            {
+                return;
+            }
+
             var optionButtonIndex = 0;
-            foreach (var optionText in encounter.Options.Keys)
+            foreach (var optionText in _encounter.Options.Keys.ToArray())
             {
                 var button = _optionButtons[optionButtonIndex].GetComponent<EncounterOptionButton>();
 
@@ -68,27 +130,35 @@ namespace Assets.Scripts.UI
 
                 optionButtonIndex++;
             }
-
-            gameObject.SetActive(true);
-            GameManager.Instance.AddActiveWindow(gameObject);
         }
 
         public void Hide()
         {
+            StartCoroutine(HideDelayed());
+        }
+
+        private IEnumerator HideDelayed()
+        {
+            yield return StartCoroutine(Delay());
             gameObject.SetActive(false);
             GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 
+        private IEnumerator Delay()
+        {
+            yield return new WaitForSecondsRealtime(.25f);
+        }
+
         private void OnDestroy()
         {
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
 
             if (eventMediator == null)
             {
                 return;
             }
 
-            eventMediator.UnsubscribeFromEvent(PopupEvent, this);
+            eventMediator.UnsubscribeFromAllEvents(this);
             GameManager.Instance.RemoveActiveWindow(gameObject);
         }
 
@@ -104,6 +174,10 @@ namespace Assets.Scripts.UI
                 }
 
                 Show(encounter);
+            }
+            else if (eventName.Equals(GlobalHelper.WritingFinished))
+            {
+                ShowButtons();
             }
         }
     }

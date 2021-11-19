@@ -8,7 +8,7 @@ namespace Assets.Scripts.Abilities
     {
         private const int ToHitBonus = 10;
 
-        public AimedShot(Entity abilityOwner) : base("Aimed Shot", $"+{ToHitBonus}% to hit.", 7, 7, abilityOwner, true,
+        public AimedShot(Entity abilityOwner) : base("Aimed Shot", $"+{ToHitBonus}% to hit.", 7, 7, abilityOwner, TargetType.Hostile,
             false)
         {
         }

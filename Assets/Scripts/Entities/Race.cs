@@ -5,7 +5,7 @@ namespace Assets.Scripts.Entities
 {
     public class Race : IModifierProvider
     {
-        private readonly RaceType _rType;
+        [ES3Serializable] private readonly RaceType _rType;
 
         //todo does it matter if the types are not represented graphically?
         public enum RaceType
@@ -17,7 +17,12 @@ namespace Assets.Scripts.Entities
             [Description("Halfling")] Halfling,
             [Description("Undead")] Undead,
             [Description("Beast")] Beast,
-            [Description("Derpus")] Derpus
+            [Description("Derpus")] Derpus,
+            [Description("Elemental")] Elemental
+        }
+
+        public Race()
+        {
         }
 
         public Race(RaceType rType)

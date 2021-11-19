@@ -12,6 +12,7 @@ namespace Assets.Scripts.Encounters.Normal
             EncounterType = EncounterType.Normal;
             Title = "Sweetroll Robbery";
             Description = "The group finds an overturned wagon on the side of the trail. It's unclear what happened here, but the group manages to find some baked goods!";
+            ImageResultName = "crashed wagon";
 
             Reward = new Reward();
 
@@ -35,9 +36,8 @@ namespace Assets.Scripts.Encounters.Normal
             fullResultDescription.Add(Description + "\n");
 
             var travelManager = Object.FindObjectOfType<TravelManager>();
-            var rewardsText = travelManager.ApplyEncounterReward(Reward);
-
-            fullResultDescription.AddRange(rewardsText);
+            
+            travelManager.ApplyEncounterReward(Reward);
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
             eventMediator.Broadcast(GlobalHelper.EncounterResult, this, fullResultDescription);

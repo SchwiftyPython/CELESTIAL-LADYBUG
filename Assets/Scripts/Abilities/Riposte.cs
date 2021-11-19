@@ -6,7 +6,7 @@ namespace Assets.Scripts.Abilities
     {
         //todo no idea if this works yet -- UNTESTED
 
-        public Riposte(Entity abilityOwner) : base("Riposte", "Automatically counter-attack with equipped weapon.", -1, 1, abilityOwner, true, true)
+        public Riposte(Entity abilityOwner) : base("Riposte", "Automatically counter-attack with equipped weapon.", -1, 1, abilityOwner, TargetType.Hostile, true)
         {
         }
 

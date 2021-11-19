@@ -15,10 +15,10 @@ namespace Assets.Scripts
         {
             _paused = false;
 
-            var eventMediator = FindObjectOfType<EventMediator>();
-
-            eventMediator.SubscribeToEvent(PauseEvent, this);
-            eventMediator.SubscribeToEvent(ResumeEvent, this);
+            // var eventMediator = FindObjectOfType<EventMediator>();
+            //
+            // eventMediator.SubscribeToEvent(PauseEvent, this);
+            // eventMediator.SubscribeToEvent(ResumeEvent, this);
         }
 
         private void Update()
@@ -29,6 +29,16 @@ namespace Assets.Scripts
             }
 
             transform.Translate(Vector2.left * (walkSpeed * Time.deltaTime));
+        }
+
+        public void Animate()
+        {
+            _paused = false;
+        }
+
+        public void Stop()
+        {
+            _paused = true;
         }
 
         public void OnNotify(string eventName, object broadcaster, object parameter = null)

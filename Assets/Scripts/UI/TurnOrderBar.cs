@@ -78,23 +78,16 @@ namespace Assets.Scripts.UI
 
                 if (spriteRenderer == null)
                 {
-                    var childRenderers = entityInstance.GetComponentsInChildren<SpriteRenderer>();
+                    spriteRenderer = entityInstance.GetComponentInChildren<SpriteRenderer>();
+                }
 
-                    foreach (var cRenderer in childRenderers)
-                    {
-                        cRenderer.sortingLayerName = "FakeUi";
-                    }
-                }
-                else
-                {
-                    spriteRenderer.sortingLayerName = "FakeUi";
-                }
+                spriteRenderer.sortingLayerName = "FakeUi";
 
                 entityInstance.transform.SetParent(slotList[count]);
 
                 if (!entity.IsPlayer())
                 {
-                    entityInstance.GetComponent<SpriteRenderer>().flipX = true;
+                    spriteRenderer.flipX = true;
                     entityInstance.transform.localPosition = new Vector3(0.08f, -0.3f, -0.01f);
                 }
                 else

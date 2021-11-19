@@ -6,7 +6,7 @@ namespace Assets.Scripts.Encounters.Normal
 {
     public class DisabledWagon : Encounter
     {
-        public DisabledWagon()
+        public DisabledWagon() //todo continuity -- leave him there and he could pop up later for revenge!
         {
             Rarity = Rarity.Common;
             EncounterType = EncounterType.Normal;
@@ -133,7 +133,7 @@ namespace Assets.Scripts.Encounters.Normal
 
             optionTitle = "Pass'm by";
 
-            var optionThree = new Option(optionTitle, string.Empty, EncounterType.Normal);
+            var optionThree = new Option(optionTitle, "The man sits helpless by the wagon as the group vanishes over the horizon.", EncounterType.Normal);
 
             Options.Add(optionTitle, optionThree);
 

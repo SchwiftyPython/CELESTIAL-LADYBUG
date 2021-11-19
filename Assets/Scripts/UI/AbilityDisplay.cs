@@ -23,6 +23,11 @@ namespace Assets.Scripts.UI
 
         private void RedrawUi()
         {
+            if (_currentCompanion == null)
+            {
+                return;
+            }
+
             GlobalHelper.DestroyAllChildren(gameObject);
 
             foreach (var ability in _currentCompanion.Abilities)

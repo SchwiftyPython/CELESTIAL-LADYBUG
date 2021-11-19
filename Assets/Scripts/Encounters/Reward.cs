@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Effects;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Items;
 
 namespace Assets.Scripts.Encounters
 {
@@ -8,7 +9,10 @@ namespace Assets.Scripts.Encounters
     {
         public Dictionary<Entity, List<KeyValuePair<EntityStatTypes, int>>> EntityStatGains;
         public Dictionary<Entity, List<KeyValuePair<EntityAttributeTypes, int>>> EntityAttributeGains;
+        public Dictionary<Entity, List<KeyValuePair<EntitySkillTypes, int>>> EntitySkillGains;
         public Dictionary<PartySupplyTypes, int> PartyGains;
+        public List<Entity> PartyAdditions;
+        public List<EquipableItem> InventoryGains;
         public List<Effect> Effects;
 
         public void AddEntityGain(Entity targetEntity, EntityStatTypes statType, int amountGained)
@@ -49,6 +53,25 @@ namespace Assets.Scripts.Encounters
             }
         }
 
+        public void AddEntityGain(Entity targetEntity, EntitySkillTypes skillType, int amountGained)
+        {
+            if (EntitySkillGains == null)
+            {
+                EntitySkillGains = new Dictionary<Entity, List<KeyValuePair<EntitySkillTypes, int>>>();
+            }
+
+            var gain = new KeyValuePair<EntitySkillTypes, int>(skillType, amountGained);
+
+            if (!EntitySkillGains.ContainsKey(targetEntity))
+            {
+                EntitySkillGains.Add(targetEntity, new List<KeyValuePair<EntitySkillTypes, int>> { gain });
+            }
+            else
+            {
+                EntitySkillGains[targetEntity].Add(gain);
+            }
+        }
+
         public void AddPartyGain(PartySupplyTypes supplyType, int amountGained)
         {
             if (PartyGains == null)
@@ -63,6 +86,56 @@ namespace Assets.Scripts.Encounters
             else
             {
                 PartyGains[supplyType] += amountGained;
+            }
+        }
+
+        public void AddToParty(Entity companion)
+        {
+            if (PartyAdditions == null)
+            {
+                PartyAdditions = new List<Entity>();
+            }
+
+            PartyAdditions.Add(companion);
+        }
+
+        public void AddToInventory(EquipableItem item)
+        {
+            if (InventoryGains == null)
+            {
+                InventoryGains = new List<EquipableItem>();
+            }
+
+            InventoryGains.Add(item);
+        }
+
+        public void EveryoneGain(Party party, EntityStatTypes statType, int amountGained)
+        {
+            AddEntityGain(party.Derpus, statType, amountGained);
+
+            foreach (var companion in party.GetCompanions())
+            {
+                AddEntityGain(companion, statType, amountGained);
+            }
+        }
+
+        public void EveryoneGain(Party party, EntityAttributeTypes attributeType, int amountGained)
+        {
+            AddEntityGain(party.Derpus, attributeType, amountGained);
+
+            foreach (var companion in party.GetCompanions())
+            {
+                AddEntityGain(companion, attributeType, amountGained);
+            }
+        }
+
+        public void EveryoneGain(Party party, EntitySkillTypes skillType, int amountGained)
+        {
+            AddEntityGain(party.Derpus, skillType, amountGained);
+
+            foreach (var companion in party.GetCompanions())
+            {
+                AddEntityGain(companion, skillType, amountGained);
             }
         }
     }

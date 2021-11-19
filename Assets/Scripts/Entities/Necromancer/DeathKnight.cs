@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Audio;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities.Necromancer
@@ -23,6 +24,12 @@ namespace Assets.Scripts.Entities.Necromancer
             GenerateStartingEquipment(EntityClass.BattleMage, _startingEquipmentTable);
 
             //todo need some mount specific abilities
+
+            var audioStore = Object.FindObjectOfType<AudioStore>();
+
+            HurtSound = audioStore.monsterHurt;
+            DieSound = audioStore.monsterDie;
+            AttackSound = audioStore.genericAttack;
         }
     }
 }
