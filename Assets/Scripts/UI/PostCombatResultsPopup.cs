@@ -34,15 +34,25 @@ namespace Assets.Scripts.UI
 
             if (_result == CombatResult.Defeat)
             {
-                eventMediator.Broadcast(GlobalHelper.GameOver, this);
-
-                var gameOverPopup = FindObjectOfType<GameOverPopup>();
-
-                gameOverPopup.Show();
+                titleText.text = "Game Over";
 
                 var saveSystem = FindObjectOfType<SavingSystem>();
 
                 saveSystem.DeleteCurrentSave();
+
+                Hide();
+
+                var music = FindObjectOfType<MusicController>();
+
+                music.EndBattleMusic();
+
+                SceneManager.LoadScene(GlobalHelper.TitleScreenScene);
+
+                // eventMediator.Broadcast(GlobalHelper.GameOver, this);
+                //
+                // var gameOverPopup = FindObjectOfType<GameOverPopup>();
+                //
+                // gameOverPopup.Show();
             }
             else
             {

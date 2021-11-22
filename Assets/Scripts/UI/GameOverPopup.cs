@@ -23,7 +23,11 @@ namespace Assets.Scripts.UI
         public void Show()
         {
             var parallax = FindObjectOfType<Parallax>();
-            parallax.Stop();
+
+            if (parallax != null)
+            {
+                parallax.Stop();
+            }
 
             var eventMediator = FindObjectOfType<EventMediator>();
             eventMediator.SubscribeToEvent(HidePopupEvent, this);
