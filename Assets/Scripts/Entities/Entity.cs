@@ -916,6 +916,11 @@ namespace Assets.Scripts.Entities
 
         public void PlayImpactNoise()
         {
+            if (CombatSpriteInstance == null)
+            {
+                return;
+            }
+
             var eAudio = CombatSpriteInstance.GetComponent<EntityAudio>();
 
             eAudio.PlayImpactSound();
