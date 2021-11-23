@@ -74,6 +74,19 @@ namespace Assets.Scripts.Travel
             _travelMessenger = FindObjectOfType<TravelMessenger>();
         }
 
+        public void NewGame()
+        {
+            BuildBiomeQueue();
+
+            ResetTravelDays();
+
+            NewParty();
+
+            NewInventory();
+
+            StartNewDay();
+        }
+
         public void ResetTravelDays()
         {
             if (GameManager.Instance.DemoMode)
