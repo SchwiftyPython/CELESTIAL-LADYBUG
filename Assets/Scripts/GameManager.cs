@@ -184,15 +184,9 @@ namespace Assets.Scripts
 
             LoadTravelScene();
 
-            var travelManager = FindObjectOfType<TravelManager>();
+            var travelManager = FindObjectOfType<TravelManager>(); 
 
-            travelManager.ResetTravelDays();
-
-            travelManager.NewParty();
-
-            travelManager.NewInventory();
-
-            travelManager.StartNewDay();
+            travelManager.NewGame();
         }
 
         private void ShowNewGamePopup(Scene arg0, LoadSceneMode arg1)
