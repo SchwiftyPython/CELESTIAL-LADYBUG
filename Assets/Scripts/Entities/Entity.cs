@@ -361,6 +361,13 @@ namespace Assets.Scripts.Entities
                         }
                     }
                 }
+
+                var ai = CombatSpriteInstance.GetComponent<AiController>();
+
+                if (ai != null)
+                {
+                    ai.StartCoroutine(ai.TakeActionAfterAnimation(1.5f));
+                }
             }
             else
             {
@@ -811,13 +818,6 @@ namespace Assets.Scripts.Entities
                 swapper.ChangeTexture(AttackSkinSwap);
             }
 
-            // if (attackHit) //testing if we can trigger hit animation before moving target for abilities like shield bash - no effect
-            // {
-            //     var eventMediator = Object.FindObjectOfType<EventMediator>();
-            //
-            //     eventMediator.Broadcast(GlobalHelper.TargetHit, this, target);
-            // }
-
             var ai = CombatSpriteInstance.GetComponent<AiController>();
 
             if (ai == null)
@@ -825,7 +825,7 @@ namespace Assets.Scripts.Entities
                 return;
             }
 
-            ai.animating = true;
+            ai.StartCoroutine(ai.TakeActionAfterAnimation(2.0f));
         }
 
         public void PlayIdleAnimation()

@@ -8,11 +8,11 @@ using Assets.Scripts.Entities;
 using GoRogue;
 using GoRogue.Pathing;
 using UnityEngine;
+using UnityEngine.Video;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.AI
 {
-    //todo this is just prototype dumb dumb ai - but if it works then don't fix it :)
     public class AiController : MonoBehaviour
     {
         private const int MaxTries = 2;
@@ -53,8 +53,70 @@ namespace Assets.Scripts.AI
         {
             _fleeing = false;
         }
+
+        public void TakeAction()
+        {
+            if (_fleeing)
+            {
+                if (_retreatMethod == null)
+                {
+                    _retreatMethod = _retreatMethods[Random.Range(0, _retreatMethods.Count)];
+                }
+
+                _retreatMethod.Invoke();
+
+                return;
+            }
+
+            var combatManager = FindObjectOfType<CombatManager>();
+            var map = combatManager.Map;
+
+            if (TargetEntity == null || TargetEntity.IsDead() || map.OutOfBounds(TargetEntity.Position) || !combatManager.TurnOrder.Contains(TargetEntity))
+            {
+                TargetEntity = FindTarget();
+            }
+
+            if (TargetEntity == null)
+            {
+                EndTurn();
+                return;
+            }
+
+            var distance = Distance.CHEBYSHEV.Calculate(Self.Position, TargetEntity.Position);
+
+            var usableAbilities = new List<Ability>();
+
+            foreach (var ability in Self.Abilities.Values)
+            {
+                if (ability.IsPassive || ability.Range < distance)
+                {
+                    continue;
+                }
+
+                if ((ability.Range == 1 || Self.HasMissileWeaponEquipped() || !ability.UsesEquipment) && Self.Stats.CurrentActionPoints >= ability.ApCost)
+                {
+                    usableAbilities.Add(ability);
+                }
+            }
+
+            if (usableAbilities.Count < 1)
+            {
+                MoveToTargetEntity();
+            }
+            else
+            {
+                Attack(usableAbilities);
+            }
+        }
+
+        public IEnumerator TakeActionAfterAnimation(float time)
+        {
+            yield return new WaitForSeconds(time);
+
+            TakeAction();
+        }
         
-        public IEnumerator TakeTurn() //todo might have to re-structure this so it's not working like a loop
+        public IEnumerator TakeTurn() 
         {
             _actionAvailable = true;
 
@@ -145,7 +207,7 @@ namespace Assets.Scripts.AI
 
             if (path == null || path.Length < 1)
             {
-                _actionAvailable = false;
+                EndTurn();
                 return;
             }
 
@@ -153,11 +215,30 @@ namespace Assets.Scripts.AI
 
             if (Self.Stats.CurrentActionPoints < tileStep.ApCost || !tileStep.IsWalkable || !map.WalkabilityView[tileStep.Position])
             {
-                _actionAvailable = false;
+                EndTurn();
                 return;
             }
 
-            Self.MoveTo(tileStep, tileStep.ApCost);
+            var tiles = new List<Tile> { tileStep };
+
+            var apTotal = tileStep.ApCost;
+
+            for (int i = 1; i < path.Length; i++)
+            {
+                tileStep = map.GetTerrain<Floor>(path.GetStep(i));
+
+                if (Self.Stats.CurrentActionPoints < apTotal + tileStep.ApCost || !tileStep.IsWalkable || !map.WalkabilityView[tileStep.Position])
+                {
+                    break;
+                }
+
+                tiles.Add(tileStep);
+
+                apTotal += tileStep.ApCost;
+            }
+
+            //Self.MoveTo(tileStep, tileStep.ApCost);
+            Self.MoveTo(tiles.Last(), apTotal, tiles);
         }
 
         private void Retreat()
@@ -210,6 +291,7 @@ namespace Assets.Scripts.AI
             {
                 _retreatMethod = RandomRetreat;
                 _actionAvailable = false;
+                EndTurn();
                 return;
             }
 
@@ -218,10 +300,30 @@ namespace Assets.Scripts.AI
             if (Self.Stats.CurrentActionPoints < tileStep.ApCost || !tileStep.IsWalkable || !map.WalkabilityView[tileStep.Position])
             {
                 _actionAvailable = false;
+                EndTurn();
                 return;
             }
 
-            Self.MoveTo(tileStep, tileStep.ApCost);
+            var tiles = new List<Tile> { tileStep };
+
+            var apTotal = tileStep.ApCost;
+
+            for (int i = 1; i < path.Length; i++)
+            {
+                tileStep = map.GetTerrain<Floor>(path.GetStep(i));
+
+                if (Self.Stats.CurrentActionPoints < apTotal + tileStep.ApCost || !tileStep.IsWalkable || !map.WalkabilityView[tileStep.Position])
+                {
+                    break;
+                }
+
+                tiles.Add(tileStep);
+
+                apTotal += tileStep.ApCost;
+            }
+
+            //Self.MoveTo(tileStep, tileStep.ApCost);
+            Self.MoveTo(tiles.Last(), apTotal, tiles);
         }
 
         //testing algorithm where path length to tile isn't considered. Only distance from enemy
@@ -280,10 +382,30 @@ namespace Assets.Scripts.AI
             if (Self.Stats.CurrentActionPoints < tileStep.ApCost || !tileStep.IsWalkable || !map.WalkabilityView[tileStep.Position])
             {
                 _actionAvailable = false;
+                EndTurn();
                 return;
             }
 
-            Self.MoveTo(tileStep, tileStep.ApCost);
+            var tiles = new List<Tile> { tileStep };
+
+            var apTotal = tileStep.ApCost;
+
+            for (int i = 1; i < path.Length; i++)
+            {
+                tileStep = map.GetTerrain<Floor>(path.GetStep(i));
+
+                if (Self.Stats.CurrentActionPoints < apTotal + tileStep.ApCost || !tileStep.IsWalkable || !map.WalkabilityView[tileStep.Position])
+                {
+                    break;
+                }
+
+                tiles.Add(tileStep);
+
+                apTotal += tileStep.ApCost;
+            }
+
+            //Self.MoveTo(tileStep, tileStep.ApCost);
+            Self.MoveTo(tiles.Last(), apTotal, tiles);
         }
 
         private void RandomRetreat()
@@ -318,10 +440,30 @@ namespace Assets.Scripts.AI
             if (Self.Stats.CurrentActionPoints < tileStep.ApCost || !tileStep.IsWalkable || !map.WalkabilityView[tileStep.Position])
             {
                 _actionAvailable = false;
+                EndTurn();
                 return;
             }
 
-            Self.MoveTo(tileStep, tileStep.ApCost);
+            var tiles = new List<Tile> { tileStep };
+
+            var apTotal = tileStep.ApCost;
+
+            for (int i = 1; i < _pathToTarget.Count; i++)
+            {
+                tileStep = map.GetTerrain<Floor>(_pathToTarget.ElementAt(i));
+
+                if (Self.Stats.CurrentActionPoints < apTotal + tileStep.ApCost || !tileStep.IsWalkable || !map.WalkabilityView[tileStep.Position])
+                {
+                    break;
+                }
+
+                tiles.Add(tileStep);
+
+                apTotal += tileStep.ApCost;
+            }
+
+            //Self.MoveTo(tileStep, tileStep.ApCost);
+            Self.MoveTo(tiles.Last(), apTotal, tiles);
         }
 
         private void Attack(List<Ability> usableAbilities)

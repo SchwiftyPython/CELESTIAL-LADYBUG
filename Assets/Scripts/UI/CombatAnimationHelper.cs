@@ -4,7 +4,6 @@ using Assets.Scripts.Audio;
 using Assets.Scripts.Entities;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
@@ -120,23 +119,12 @@ namespace Assets.Scripts.UI
         {
             var ai = GetComponent<AiController>();
 
-            if (ai != null)
-            {
-                ai.animating = true;
-            }
-
             yield return pathTween.WaitForCompletion();
-
-            if (ai != null)
-            {
-                yield return Delay();
-                ai.animating = false;
-            }
         }
 
-        private IEnumerator Delay()
+        public IEnumerator Delay(float time)
         {
-            yield return new WaitForSecondsRealtime(1.00f);
+            yield return new WaitForSeconds(time);
         }
     }
 }

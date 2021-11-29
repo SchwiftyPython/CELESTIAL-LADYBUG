@@ -18,6 +18,7 @@ namespace Assets.Scripts.Combat
         LoadingScene,
         Start,
         PlayerTurn,
+        StartAiTurn,
         AiTurn,
         EndTurn,
         EndCombat,
@@ -169,7 +170,7 @@ namespace Assets.Scripts.Combat
                     }
                     else
                     {
-                        _currentCombatState = CombatState.AiTurn;
+                        _currentCombatState = CombatState.StartAiTurn;
                     }
 
                     SubscribeToEvents();
@@ -189,18 +190,23 @@ namespace Assets.Scripts.Combat
                         RemoveEntity(ActiveEntity);
                         _currentCombatState = CombatState.EndTurn;
                         return;
-                    }
+                    } 
+                    
+                    var playerController = activePlayerSprite.GetComponent<AiController>();
 
-                    var aiController = activePlayerSprite.GetComponent<AiController>();
-
-                    if (ReferenceEquals(aiController, null))
+                    if (ReferenceEquals(playerController, null))
                     {
                         return;
                     }
 
-                    StartCoroutine(aiController.TakeTurn());
+                    //StartCoroutine(aiController.TakeTurn());
+
+                    _currentCombatState = CombatState.AiTurn;
+                    playerController.TakeAction();
                     break;
-                case CombatState.AiTurn:
+                case CombatState.StartAiTurn:
+                    _currentCombatState = CombatState.AiTurn;
+
                     _eventMediator.Broadcast(GlobalHelper.AiTurn, this);
 
                     var activeSprite = ActiveEntity.CombatSpriteInstance;
@@ -210,7 +216,18 @@ namespace Assets.Scripts.Combat
                         return;
                     }
 
-                    AiTakeTurn();
+                    var aiController = activeSprite.GetComponent<AiController>();
+
+                    if (ReferenceEquals(aiController, null))
+                    {
+                        return;
+                    }
+
+                    aiController.TakeAction();
+
+                    //AiTakeTurn();
+                    break;
+                case CombatState.AiTurn:
                     break;
                 case CombatState.EndTurn:
                     if (IsCombatFinished())
@@ -233,7 +250,7 @@ namespace Assets.Scripts.Combat
                         }
                         else
                         {
-                            _currentCombatState = CombatState.AiTurn;
+                            _currentCombatState = CombatState.StartAiTurn;
                         }
 
                         CurrentTurnNumber++;
@@ -527,6 +544,8 @@ namespace Assets.Scripts.Combat
 
         public void Retreat()
         {
+            _currentCombatState = CombatState.AiTurn;
+
             foreach (var entity in Companions.Keys)
             {
                 if (entity.IsDead())
@@ -541,7 +560,7 @@ namespace Assets.Scripts.Combat
                 entityInstance.GetComponent<AiController>().Flee();
             }
 
-            StartCoroutine(ActiveEntity.CombatSpriteInstance.GetComponent<AiController>().TakeTurn());
+            ActiveEntity.CombatSpriteInstance.GetComponent<AiController>().TakeAction();
         }
 
         private void DisplayPostCombatPopup(CombatResult result)

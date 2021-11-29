@@ -61,7 +61,7 @@ namespace Assets.Scripts.Abilities
 
                 var destination = targetTile.GetAdjacentTileByDirection(direction);
 
-                target.MoveTo(destination, 0); //todo can we trigger the hit animation first?
+                target.MoveTo(destination, 0); //todo this is broken by updates in MoveTo -- need a Pushed method
             }
         }
     }
