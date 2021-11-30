@@ -319,8 +319,6 @@ namespace Assets.Scripts.Entities
 
                 tile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(this);
 
-                eventMediator.Broadcast(GlobalHelper.ActiveEntityMoved, this);
-
                 var tileEffects = tile.GetEffects();
 
                 if (Effects.Count > 0)
@@ -362,11 +360,16 @@ namespace Assets.Scripts.Entities
                     }
                 }
 
-                var ai = CombatSpriteInstance.GetComponent<AiController>();
-
-                if (ai != null)
+                if (combatManager.IsEntityTurn(this))
                 {
-                    ai.StartCoroutine(ai.TakeActionAfterAnimation(1.5f));
+                    eventMediator.Broadcast(GlobalHelper.ActiveEntityMoved, this);
+
+                    var ai = CombatSpriteInstance.GetComponent<AiController>();
+
+                    if (ai != null)
+                    {
+                        ai.StartCoroutine(ai.TakeActionAfterDelay(1.5f));
+                    }
                 }
             }
             else
@@ -825,7 +828,7 @@ namespace Assets.Scripts.Entities
                 return;
             }
 
-            ai.StartCoroutine(ai.TakeActionAfterAnimation(2.0f));
+            ai.StartCoroutine(ai.TakeActionAfterDelay(2.0f));
         }
 
         public void PlayIdleAnimation()

@@ -109,7 +109,7 @@ namespace Assets.Scripts.AI
             }
         }
 
-        public IEnumerator TakeActionAfterAnimation(float time)
+        public IEnumerator TakeActionAfterDelay(float time)
         {
             yield return new WaitForSeconds(time);
 

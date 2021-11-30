@@ -199,8 +199,6 @@ namespace Assets.Scripts.Combat
                         return;
                     }
 
-                    //StartCoroutine(aiController.TakeTurn());
-
                     _currentCombatState = CombatState.AiTurn;
                     playerController.TakeAction();
                     break;
@@ -224,8 +222,6 @@ namespace Assets.Scripts.Combat
                     }
 
                     aiController.TakeAction();
-
-                    //AiTakeTurn();
                     break;
                 case CombatState.AiTurn:
                     break;
@@ -349,6 +345,11 @@ namespace Assets.Scripts.Combat
         public bool IsPlayerTurn()
         {
             return _currentCombatState == CombatState.PlayerTurn;
+        }
+
+        public bool IsEntityTurn(Entity entity)
+        {
+            return ReferenceEquals(ActiveEntity, entity);
         }
 
         private void AiTakeTurn()
