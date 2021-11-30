@@ -319,8 +319,6 @@ namespace Assets.Scripts.Entities
 
                 tile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(this);
 
-                eventMediator.Broadcast(GlobalHelper.ActiveEntityMoved, this);
-
                 var tileEffects = tile.GetEffects();
 
                 if (Effects.Count > 0)
@@ -359,6 +357,18 @@ namespace Assets.Scripts.Entities
                         {
                             ApplyEffect(effect);
                         }
+                    }
+                }
+
+                if (combatManager.IsEntityTurn(this))
+                {
+                    eventMediator.Broadcast(GlobalHelper.ActiveEntityMoved, this);
+
+                    var ai = CombatSpriteInstance.GetComponent<AiController>();
+
+                    if (ai != null)
+                    {
+                        ai.StartCoroutine(ai.TakeActionAfterDelay(1.5f));
                     }
                 }
             }
@@ -811,13 +821,6 @@ namespace Assets.Scripts.Entities
                 swapper.ChangeTexture(AttackSkinSwap);
             }
 
-            // if (attackHit) //testing if we can trigger hit animation before moving target for abilities like shield bash - no effect
-            // {
-            //     var eventMediator = Object.FindObjectOfType<EventMediator>();
-            //
-            //     eventMediator.Broadcast(GlobalHelper.TargetHit, this, target);
-            // }
-
             var ai = CombatSpriteInstance.GetComponent<AiController>();
 
             if (ai == null)
@@ -825,7 +828,7 @@ namespace Assets.Scripts.Entities
                 return;
             }
 
-            ai.animating = true;
+            ai.StartCoroutine(ai.TakeActionAfterDelay(2.0f));
         }
 
         public void PlayIdleAnimation()
