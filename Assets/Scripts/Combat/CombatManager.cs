@@ -285,7 +285,7 @@ namespace Assets.Scripts.Combat
                         }
                     }
 
-                    DisplayPostCombatPopup(_result);
+                    GlobalHelper.InvokeAfterDelay(() => DisplayPostCombatPopup(_result), 2.5f);
 
                     _currentCombatState = CombatState.NotActive;
 
@@ -555,6 +555,11 @@ namespace Assets.Scripts.Combat
                 }
 
                 var entityInstance = entity.CombatSpriteInstance;
+
+                if (entityInstance == null)
+                {
+                    continue;
+                }
 
                 entityInstance.AddComponent<AiController>();
                 entityInstance.GetComponent<AiController>().SetSelf(entity);

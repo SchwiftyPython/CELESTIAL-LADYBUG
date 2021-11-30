@@ -158,7 +158,7 @@ namespace Assets.Scripts.Combat
                                 return;
                             }
 
-                            activeEntity.MoveTo(targetTile, _apMovementCost, _highlightedTiles);
+                            activeEntity.MoveTo(targetTile, _apMovementCost, true, _highlightedTiles);
 
                             _eventMediator.Broadcast(GlobalHelper.RefreshCombatUi, this, activeEntity);
                         }
