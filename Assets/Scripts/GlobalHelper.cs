@@ -443,5 +443,16 @@ namespace Assets.Scripts
 
             return true;
         }
+
+        public static void InvokeAfterDelay(Action method, float delay)
+        {
+            GameManager.Instance.StartCoroutine(InvokeRoutine(method, delay));
+        }
+
+        private static IEnumerator InvokeRoutine(Action method, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            method();
+        }
     }
 }

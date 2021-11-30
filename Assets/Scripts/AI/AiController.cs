@@ -8,7 +8,6 @@ using Assets.Scripts.Entities;
 using GoRogue;
 using GoRogue.Pathing;
 using UnityEngine;
-using UnityEngine.Video;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.AI
@@ -237,8 +236,7 @@ namespace Assets.Scripts.AI
                 apTotal += tileStep.ApCost;
             }
 
-            //Self.MoveTo(tileStep, tileStep.ApCost);
-            Self.MoveTo(tiles.Last(), apTotal, tiles);
+            Self.MoveTo(tiles.Last(), apTotal, true, tiles);
         }
 
         private void Retreat()
@@ -322,8 +320,7 @@ namespace Assets.Scripts.AI
                 apTotal += tileStep.ApCost;
             }
 
-            //Self.MoveTo(tileStep, tileStep.ApCost);
-            Self.MoveTo(tiles.Last(), apTotal, tiles);
+            Self.MoveTo(tiles.Last(), apTotal, true, tiles);
         }
 
         //testing algorithm where path length to tile isn't considered. Only distance from enemy
@@ -404,8 +401,7 @@ namespace Assets.Scripts.AI
                 apTotal += tileStep.ApCost;
             }
 
-            //Self.MoveTo(tileStep, tileStep.ApCost);
-            Self.MoveTo(tiles.Last(), apTotal, tiles);
+            Self.MoveTo(tiles.Last(), apTotal, true, tiles);
         }
 
         private void RandomRetreat()
@@ -462,14 +458,11 @@ namespace Assets.Scripts.AI
                 apTotal += tileStep.ApCost;
             }
 
-            //Self.MoveTo(tileStep, tileStep.ApCost);
-            Self.MoveTo(tiles.Last(), apTotal, tiles);
+            Self.MoveTo(tiles.Last(), apTotal, true, tiles);
         }
 
         private void Attack(List<Ability> usableAbilities)
         {
-            //todo choose a hostile ability at random and do it
-
             usableAbilities[Random.Range(0, usableAbilities.Count)].Use(TargetEntity);
         }
 
