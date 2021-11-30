@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Entities;
-using Assets.Scripts.Entities.Companions;
 using Assets.Scripts.Entities.Necromancer;
 using Assets.Scripts.Entities.Rampart;
-using Assets.Scripts.Entities.Stronghold;
 using Assets.Scripts.Entities.Tower;
 using Assets.Scripts.Items;
 using Assets.Scripts.Travel;

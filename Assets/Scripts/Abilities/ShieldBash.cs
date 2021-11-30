@@ -61,7 +61,7 @@ namespace Assets.Scripts.Abilities
 
                 var destination = targetTile.GetAdjacentTileByDirection(direction);
 
-                target.MoveTo(destination, 0); //todo this is broken by updates in MoveTo -- need a Pushed method
+                GlobalHelper.InvokeAfterDelay(() => target.MoveTo(destination, 0, false), 1f);
             }
         }
     }
