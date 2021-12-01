@@ -8,8 +8,8 @@ namespace Assets.Scripts.UI
 {
     public class EntityTooltip : MonoBehaviour
     {
-        private const int TooltipWidthNormal = 155;
-        private const int TooltipWidthHitChance = 215;
+        private const int TooltipWidthNormal = 245;
+        private const int TooltipWidthHitChance = 305;
         private const int GreenChanceMin = 75;
         private const int YellowChanceMin = 45;
 
@@ -51,22 +51,10 @@ namespace Assets.Scripts.UI
             {
                 var activeEntity = combatManager.ActiveEntity;
 
-                if (!GlobalHelper.HasLineOfSight(activeEntity.Position, targetEntity.Position))
+                if (!inputController.TargetValid(targetEntity))
                 {
                     hitChanceValue.text = "0%";
-                    hitChanceValue.color = Color.red; //FindObjectOfType<Palette>().BrightRed; 
-                    hitChanceLabel.text = "Blocked Line of Sight";
-                    hitChanceParent.SetActive(true);
-                    positivesParent.SetActive(false);
-                    negativesParent.SetActive(false);
-
-                    GetComponent<RectTransform>()
-                        .SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, TooltipWidthHitChance);
-                }
-                else if (!inputController.TargetValid(targetEntity))
-                {
-                    hitChanceValue.text = "0%";
-                    hitChanceValue.color =  Color.red; //FindObjectOfType<Palette>().BrightRed; 
+                    hitChanceValue.color = Color.red;
                     hitChanceLabel.text = "Invalid Target";
                     hitChanceParent.SetActive(true);
                     positivesParent.SetActive(false);
@@ -75,10 +63,10 @@ namespace Assets.Scripts.UI
                     GetComponent<RectTransform>()
                         .SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, TooltipWidthNormal);
                 }
-                else if (!inputController.TargetInRange(targetEntity))
+                else  if (!inputController.TargetInRange(targetEntity))
                 {
                     hitChanceValue.text = "0%";
-                    hitChanceValue.color = Color.red; //FindObjectOfType<Palette>().BrightRed; 
+                    hitChanceValue.color = Color.red; 
                     hitChanceLabel.text = "Out of Range";
                     hitChanceParent.SetActive(true);
                     positivesParent.SetActive(false);
@@ -86,6 +74,18 @@ namespace Assets.Scripts.UI
 
                     GetComponent<RectTransform>()
                         .SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, TooltipWidthNormal);
+                }
+                else if (!GlobalHelper.HasLineOfSight(activeEntity.Position, targetEntity.Position))
+                {
+                    hitChanceValue.text = "0%";
+                    hitChanceValue.color = Color.red;
+                    hitChanceLabel.text = "Blocked Line of Sight";
+                    hitChanceParent.SetActive(true);
+                    positivesParent.SetActive(false);
+                    negativesParent.SetActive(false);
+
+                    GetComponent<RectTransform>()
+                        .SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, TooltipWidthHitChance);
                 }
                 else
                 {
