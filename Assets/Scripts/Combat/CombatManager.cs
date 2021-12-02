@@ -7,6 +7,7 @@ using Assets.Scripts.Entities;
 using Assets.Scripts.Saving;
 using Assets.Scripts.Travel;
 using Assets.Scripts.UI;
+using DG.Tweening;
 using GoRogue;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -234,6 +235,8 @@ namespace Assets.Scripts.Combat
                     {
                         ActiveEntity = GetNextInTurnOrder();
 
+                        MoveCameraToObject(ActiveEntity.CombatSpriteInstance.transform);
+
                         ActiveEntity.RefillActionPoints();
 
                         ActiveEntity.UpdateMovedFlags();
@@ -301,6 +304,8 @@ namespace Assets.Scripts.Combat
 
                     _eventMediator.Broadcast(GlobalHelper.CombatSceneLoaded, this, Map);
                     _eventMediator.Broadcast(RefreshUi, this, ActiveEntity);
+
+                    MoveCameraToObject(ActiveEntity.CombatSpriteInstance.transform);
 
                     _currentCombatState = CombatState.PlayerTurn;
                     break;
@@ -385,6 +390,14 @@ namespace Assets.Scripts.Combat
             }
 
             return _pawnHighlighterInstance;
+        }
+
+        private static void MoveCameraToObject(Transform target)
+        {
+            if (Camera.main != null)
+            {
+                Camera.main.transform.DOMove(new Vector3(target.position.x, target.position.y, -10), .5f);
+            }
         }
 
         private bool PlayerDead()
