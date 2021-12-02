@@ -217,7 +217,7 @@ namespace Assets.Scripts.Entities
             Abilities.Add(ability.Name, ability);
         }
         
-        public void MoveTo(Tile tile, int apMovementCost, List<Tile> path = null) //todo maybe a bool to keep not change facing
+        public void MoveTo(Tile tile, int apMovementCost, bool changeFacing = true, List<Tile> path = null) //todo maybe a bool to keep not change facing
         {
             if (tile == null)
             {
@@ -237,9 +237,12 @@ namespace Assets.Scripts.Entities
 
             var vDelta = tile.Position - Position;
 
-            var direction = Direction.GetDirection(vDelta);
+            if (changeFacing)
+            {
+                var direction = Direction.GetDirection(vDelta);
 
-            SetSpriteDirection(direction, GetSpriteRenderer());
+                SetSpriteDirection(direction, GetSpriteRenderer());
+            }
 
             //this will not update the position if blocked
             Position = tile.Position;
@@ -248,14 +251,6 @@ namespace Assets.Scripts.Entities
 
             if (Position == tile.Position)
             {
-                if (tile.RetreatTile)
-                {
-                    combatManager.RemoveEntity(this);
-                    
-                    eventMediator.Broadcast(GlobalHelper.EndTurn, this);
-                    return;
-                }
-
                 _moved = true;
 
                 Stats.CurrentActionPoints -= apMovementCost;
@@ -270,8 +265,6 @@ namespace Assets.Scripts.Entities
 
                     foreach (var step in path)
                     {
-
-                        //waypoints.Enqueue(new Vector2(step.Position.X, step.Position.Y));
 
                         if (SpriteFacingEast(GetSpriteRenderer()))
                         {
@@ -319,8 +312,6 @@ namespace Assets.Scripts.Entities
 
                 tile.SpriteInstance.GetComponent<TerrainSlotUi>().SetEntity(this);
 
-                eventMediator.Broadcast(GlobalHelper.ActiveEntityMoved, this);
-
                 var tileEffects = tile.GetEffects();
 
                 if (Effects.Count > 0)
@@ -361,12 +352,31 @@ namespace Assets.Scripts.Entities
                         }
                     }
                 }
+
+                if (tile.RetreatTile)
+                {
+                    GlobalHelper.InvokeAfterDelay(() => combatManager.RemoveEntity(this), 1f);
+
+                    GlobalHelper.InvokeAfterDelay(() => eventMediator.Broadcast(GlobalHelper.EndTurn, this), 1f);
+                    return;
+                }
+
+                if (combatManager.IsEntityTurn(this))
+                {
+                    eventMediator.Broadcast(GlobalHelper.ActiveEntityMoved, this);
+
+                    var ai = CombatSpriteInstance.GetComponent<AiController>();
+
+                    if (ai != null)
+                    {
+                        ai.StartCoroutine(ai.TakeActionAfterDelay(1.5f));
+                    }
+                }
             }
             else
             {
                 Debug.Log($"Movement Blocked for {Name}");
             }
-
         }
 
         private void SetSpriteDirection(Direction direction, SpriteRenderer sprite)
@@ -811,13 +821,6 @@ namespace Assets.Scripts.Entities
                 swapper.ChangeTexture(AttackSkinSwap);
             }
 
-            // if (attackHit) //testing if we can trigger hit animation before moving target for abilities like shield bash - no effect
-            // {
-            //     var eventMediator = Object.FindObjectOfType<EventMediator>();
-            //
-            //     eventMediator.Broadcast(GlobalHelper.TargetHit, this, target);
-            // }
-
             var ai = CombatSpriteInstance.GetComponent<AiController>();
 
             if (ai == null)
@@ -825,7 +828,7 @@ namespace Assets.Scripts.Entities
                 return;
             }
 
-            ai.animating = true;
+            ai.StartCoroutine(ai.TakeActionAfterDelay(2.0f));
         }
 
         public void PlayIdleAnimation()

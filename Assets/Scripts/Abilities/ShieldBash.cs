@@ -61,7 +61,7 @@ namespace Assets.Scripts.Abilities
 
                 var destination = targetTile.GetAdjacentTileByDirection(direction);
 
-                target.MoveTo(destination, 0); //todo can we trigger the hit animation first?
+                GlobalHelper.InvokeAfterDelay(() => target.MoveTo(destination, 0, false), 1f);
             }
         }
     }
