@@ -971,9 +971,9 @@ namespace Assets.Scripts.Entities
         {
             var (minDamage, maxDamage) = damageRange;
 
-            var damage = Random.Range(minDamage, maxDamage + 1) + damageMod;
+            float damage = Random.Range(minDamage, maxDamage + 1) + damageMod;
 
-            damage = GlobalHelper.ModifyNewValueForStat(this, CombatModifierTypes.Damage, damage);
+            damage = GlobalHelper.ModifyNewValueForStat(this, CombatModifierTypes.Damage, (int)damage);
 
             if (criticalHit)
             {
@@ -984,24 +984,28 @@ namespace Assets.Scripts.Entities
 
             var damageReduction = target.GetDamageReduction();
 
-            damage -= damageReduction;
+            var damageMult = damage > 0 ? damage / (damage + damageReduction) : 0;
+
+            Debug.Log($"Damage multiplier = {damageMult}");
+
+            damage *= damageMult;
 
             string message;
             CombatAnimationHelper animationHelper;
-            if (damage <= 0)
+            if ((int)damage <= 0)
             {
-                message = $"{target.Name} resisted all damage!"; //todo see if we can communicate to player if there is no chance for attack to do damage
+                message = $"{target.Name} resisted all damage!"; 
             }
             else
             {
-                target.SubtractHealth(damage);
+                target.SubtractHealth((int)damage);
 
-                message = $"{Name} dealt {damage} damage to {target.Name}!";
+                message = $"{Name} dealt {(int)damage} damage to {target.Name}!";
             }
 
             animationHelper = target.CombatSpriteInstance.GetComponent<CombatAnimationHelper>();
 
-            animationHelper.damage = damage;
+            animationHelper.damage = (int)damage;
             animationHelper.criticalHit = criticalHit;
 
             var eventMediator = Object.FindObjectOfType<EventMediator>();
@@ -1020,13 +1024,13 @@ namespace Assets.Scripts.Entities
                 return;
             }
 
-            SubtractHealth(damage);
+            SubtractHealth((int)damage);
 
-            message = $"Demonic Intervention! {target.Name} dealt {damage} damage to {Name}!";
+            message = $"Demonic Intervention! {target.Name} dealt {(int)damage} damage to {Name}!";
 
             animationHelper = target.CombatSpriteInstance.GetComponent<CombatAnimationHelper>();
 
-            animationHelper.damage = damage;
+            animationHelper.damage = (int)damage;
             animationHelper.criticalHit = criticalHit;
 
             eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
@@ -1548,9 +1552,7 @@ namespace Assets.Scripts.Entities
 
             var physiqueRoll = Dice.Roll($"{Attributes.Physique}d6");
 
-            var reduction = armor; //+ physiqueRoll; //might be too much with physique roll
-
-            Debug.Log($"Damage reduction = {reduction}");
+            var reduction = armor;
 
             return reduction;
         }
