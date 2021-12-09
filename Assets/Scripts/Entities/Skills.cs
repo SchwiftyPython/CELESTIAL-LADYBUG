@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Entities
@@ -12,6 +13,143 @@ namespace Assets.Scripts.Entities
 
         private const int StartingSkillDice = 7;
         private const int StartingSkillMax = 5;
+
+        private readonly Dictionary<EntityClass, Dictionary<EntitySkillTypes, int>> _classStartingVals =
+            new Dictionary<EntityClass, Dictionary<EntitySkillTypes, int>>
+            {
+                {
+                        EntityClass.Spearman, new Dictionary<EntitySkillTypes, int>
+                        {
+                            { EntitySkillTypes.Melee, 4 },
+                            { EntitySkillTypes.Ranged, 1 },
+                            { EntitySkillTypes.Sneak,  2},
+                            { EntitySkillTypes.Endurance, 3 },
+                            { EntitySkillTypes.Healing, 2 },
+                            { EntitySkillTypes.Survival, 2 },
+                            { EntitySkillTypes.Persuasion, 2 }
+                        }
+                    },
+                    {
+                        EntityClass.Crossbowman, new Dictionary<EntitySkillTypes, int>
+                        {
+                            { EntitySkillTypes.Melee, 1 },
+                            { EntitySkillTypes.Ranged, 4 },
+                            { EntitySkillTypes.Sneak,  2},
+                            { EntitySkillTypes.Endurance, 3 },
+                            { EntitySkillTypes.Healing, 2 },
+                            { EntitySkillTypes.Survival, 2 },
+                            { EntitySkillTypes.Persuasion, 2 }
+                        }
+                    },
+                    {
+                        EntityClass.ManAtArms, new Dictionary<EntitySkillTypes, int>
+                        {
+                            { EntitySkillTypes.Melee, 4 },
+                            { EntitySkillTypes.Ranged, 1 },
+                            { EntitySkillTypes.Sneak,  2},
+                            { EntitySkillTypes.Endurance, 3 },
+                            { EntitySkillTypes.Healing, 2 },
+                            { EntitySkillTypes.Survival, 2 },
+                            { EntitySkillTypes.Persuasion, 2 }
+                        }
+                    },
+                    {
+                        EntityClass.Gladiator, new Dictionary<EntitySkillTypes, int>
+                        {
+                            { EntitySkillTypes.Melee, 4 },
+                            { EntitySkillTypes.Ranged, 1 },
+                            { EntitySkillTypes.Sneak,  2},
+                            { EntitySkillTypes.Endurance, 3 },
+                            { EntitySkillTypes.Healing, 2 },
+                            { EntitySkillTypes.Survival, 2 },
+                            { EntitySkillTypes.Persuasion, 2 }
+                        }
+                    },
+                    {
+                        EntityClass.Wizard, new Dictionary<EntitySkillTypes, int>
+                        {
+                            { EntitySkillTypes.Melee, 1 },
+                            { EntitySkillTypes.Ranged, 4 },
+                            { EntitySkillTypes.Sneak,  2},
+                            { EntitySkillTypes.Endurance, 2 },
+                            { EntitySkillTypes.Healing, 3 },
+                            { EntitySkillTypes.Survival, 2 },
+                            { EntitySkillTypes.Persuasion, 3 }
+                        }
+                    },
+                    {
+                        EntityClass.BattleMage, new Dictionary<EntitySkillTypes, int>
+                        {
+                            { EntitySkillTypes.Melee, 3 },
+                            { EntitySkillTypes.Ranged, 3 },
+                            { EntitySkillTypes.Sneak, 2 },
+                            { EntitySkillTypes.Endurance, 3 },
+                            { EntitySkillTypes.Healing, 3 },
+                            { EntitySkillTypes.Survival, 2 },
+                            { EntitySkillTypes.Persuasion, 2 }
+                        }
+                    },
+                    {
+                        EntityClass.Knight, new Dictionary<EntitySkillTypes, int>
+                        {
+                            { EntitySkillTypes.Melee, 4 },
+                            { EntitySkillTypes.Ranged, 1 },
+                            { EntitySkillTypes.Sneak,  2},
+                            { EntitySkillTypes.Endurance, 4 },
+                            { EntitySkillTypes.Healing, 2 },
+                            { EntitySkillTypes.Survival, 2 },
+                            { EntitySkillTypes.Persuasion, 3 }
+                        }
+                    },
+                    {
+                        EntityClass.Paladin, new Dictionary<EntitySkillTypes, int>
+                        {
+                            { EntitySkillTypes.Melee, 4 },
+                            { EntitySkillTypes.Ranged, 1 },
+                            { EntitySkillTypes.Sneak,  2},
+                            { EntitySkillTypes.Endurance, 3 },
+                            { EntitySkillTypes.Healing, 2 },
+                            { EntitySkillTypes.Survival, 2 },
+                            { EntitySkillTypes.Persuasion, 4 }
+                        }
+                    },
+                    {
+                        EntityClass.Derpus, new Dictionary<EntitySkillTypes, int>
+                        {
+                            { EntitySkillTypes.Melee, 4 },
+                            { EntitySkillTypes.Ranged, 1 },
+                            { EntitySkillTypes.Sneak,  2},
+                            { EntitySkillTypes.Endurance, 3 },
+                            { EntitySkillTypes.Healing, 2 },
+                            { EntitySkillTypes.Survival, 2 },
+                            { EntitySkillTypes.Persuasion, 2 }
+                        }
+                    },
+                    {
+                        EntityClass.Beast, new Dictionary<EntitySkillTypes, int>
+                        {
+                            { EntitySkillTypes.Melee, 3 },
+                            { EntitySkillTypes.Ranged, 3 },
+                            { EntitySkillTypes.Sneak,  3},
+                            { EntitySkillTypes.Endurance, 3 },
+                            { EntitySkillTypes.Healing, 2 },
+                            { EntitySkillTypes.Survival, 3 },
+                            { EntitySkillTypes.Persuasion, 2 }
+                        }
+                    },
+                    {
+                        EntityClass.Ethereal, new Dictionary<EntitySkillTypes, int>
+                        {
+                            { EntitySkillTypes.Melee, 3 },
+                            { EntitySkillTypes.Ranged, 3 },
+                            { EntitySkillTypes.Sneak,  3},
+                            { EntitySkillTypes.Endurance, 3 },
+                            { EntitySkillTypes.Healing, 2 },
+                            { EntitySkillTypes.Survival, 3 },
+                            { EntitySkillTypes.Persuasion, 2 }
+                        }
+                    }
+            };
 
         [ES3NonSerializable] private Entity _parent;
 
@@ -62,7 +200,7 @@ namespace Assets.Scripts.Entities
         {
             SetParent(parent);
 
-            GenerateSkillValues();
+            GenerateSkillValues(parent.EntityClass);
         }
 
         public void SetParent(Entity parent)
@@ -70,9 +208,51 @@ namespace Assets.Scripts.Entities
             _parent = parent;
         }
 
-        //todo this assumes level 1 entity
-        //could take in a level (int) to create higher level fellers
-        //or even better would be to use whatever level up system we slam together
+        private void GenerateSkillValues(EntityClass eClass)
+        {
+            if (!_classStartingVals.ContainsKey(eClass))
+            {
+                Debug.LogError($"{eClass} not found in class starting values!");
+                return;
+            }
+
+            var startingVals = _classStartingVals[eClass];
+
+            var mods = new List<int> { -1, 0, 1 };
+
+            foreach (var startingValue in startingVals)
+            {
+                var mod = mods[Random.Range(0, mods.Count)];
+
+                switch (startingValue.Key)
+                {
+                    case EntitySkillTypes.Melee:
+                        Melee = startingValue.Value + mod;
+                        break;
+                    case EntitySkillTypes.Ranged:
+                        Ranged = startingValue.Value + mod;
+                        break;
+                    case EntitySkillTypes.Sneak:
+                        Sneak = startingValue.Value + mod;
+                        break;
+                    case EntitySkillTypes.Endurance:
+                        Endurance = startingValue.Value + mod;
+                        break;
+                    case EntitySkillTypes.Healing:
+                        Healing = startingValue.Value + mod;
+                        break;
+                    case EntitySkillTypes.Survival:
+                        Survival = startingValue.Value + mod;
+                        break;
+                    case EntitySkillTypes.Persuasion:
+                        Persuasion = startingValue.Value + mod;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
         public void GenerateSkillValues()
         {
             //todo also need to consider that some classes don't melee or use ranged 

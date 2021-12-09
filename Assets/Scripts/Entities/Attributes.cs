@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Entities
@@ -12,6 +13,132 @@ namespace Assets.Scripts.Entities
         private const int AttributeMax = 5;
 
         private const int StartingAttributeDice = 12;
+
+        private readonly Dictionary<EntityClass, Dictionary<EntityAttributeTypes, int>> _classStartingVals =
+            new Dictionary<EntityClass, Dictionary<EntityAttributeTypes, int>>
+            {
+                {
+                        EntityClass.Spearman, new Dictionary<EntityAttributeTypes, int>
+                        {
+                            { EntityAttributeTypes.Agility, 4 },
+                            { EntityAttributeTypes.Coordination, 3 },
+                            { EntityAttributeTypes.Physique, 4 },
+                            { EntityAttributeTypes.Intellect, 2 },
+                            { EntityAttributeTypes.Acumen, 3 },
+                            { EntityAttributeTypes.Charisma, 2 }
+                        }
+                    },
+                    {
+                        EntityClass.Crossbowman, new Dictionary<EntityAttributeTypes, int>
+                        {
+                            { EntityAttributeTypes.Agility, 3 },
+                            { EntityAttributeTypes.Coordination, 3 },
+                            { EntityAttributeTypes.Physique, 3 },
+                            { EntityAttributeTypes.Intellect, 2 },
+                            { EntityAttributeTypes.Acumen, 2 },
+                            { EntityAttributeTypes.Charisma, 3 }
+                        }
+                    },
+                    {
+                        EntityClass.ManAtArms, new Dictionary<EntityAttributeTypes, int>
+                        {
+                            { EntityAttributeTypes.Agility, 4 },
+                            { EntityAttributeTypes.Coordination, 3 },
+                            { EntityAttributeTypes.Physique, 4 },
+                            { EntityAttributeTypes.Intellect, 2 },
+                            { EntityAttributeTypes.Acumen, 3 },
+                            { EntityAttributeTypes.Charisma, 2 }
+                        }
+                    },
+                    {
+                        EntityClass.Gladiator, new Dictionary<EntityAttributeTypes, int>
+                        {
+                            { EntityAttributeTypes.Agility, 3 },
+                            { EntityAttributeTypes.Coordination, 3 },
+                            { EntityAttributeTypes.Physique, 3 },
+                            { EntityAttributeTypes.Intellect, 2 },
+                            { EntityAttributeTypes.Acumen, 3 },
+                            { EntityAttributeTypes.Charisma, 2 }
+                        }
+                    },
+                    {
+                        EntityClass.Wizard, new Dictionary<EntityAttributeTypes, int>
+                        {
+                            { EntityAttributeTypes.Agility, 2 },
+                            { EntityAttributeTypes.Coordination, 2 },
+                            { EntityAttributeTypes.Physique, 2 },
+                            { EntityAttributeTypes.Intellect, 3 },
+                            { EntityAttributeTypes.Acumen, 3 },
+                            { EntityAttributeTypes.Charisma, 2 }
+                        }
+                    },
+                    {
+                        EntityClass.BattleMage, new Dictionary<EntityAttributeTypes, int>
+                        {
+                            { EntityAttributeTypes.Agility, 2 },
+                            { EntityAttributeTypes.Coordination, 2 },
+                            { EntityAttributeTypes.Physique, 2 },
+                            { EntityAttributeTypes.Intellect, 3 },
+                            { EntityAttributeTypes.Acumen, 3 },
+                            { EntityAttributeTypes.Charisma, 3 }
+                        }
+                    },
+                    {
+                        EntityClass.Knight, new Dictionary<EntityAttributeTypes, int>
+                        {
+                            { EntityAttributeTypes.Agility, 4 },
+                            { EntityAttributeTypes.Coordination, 3 },
+                            { EntityAttributeTypes.Physique, 4 },
+                            { EntityAttributeTypes.Intellect, 2 },
+                            { EntityAttributeTypes.Acumen, 3 },
+                            { EntityAttributeTypes.Charisma, 2 }
+                        }
+                    },
+                    {
+                        EntityClass.Paladin, new Dictionary<EntityAttributeTypes, int>
+                        {
+                            { EntityAttributeTypes.Agility, 2 },
+                            { EntityAttributeTypes.Coordination, 2 },
+                            { EntityAttributeTypes.Physique, 2 },
+                            { EntityAttributeTypes.Intellect, 3 },
+                            { EntityAttributeTypes.Acumen, 3 },
+                            { EntityAttributeTypes.Charisma, 3 }
+                        }
+                    },
+                    {
+                        EntityClass.Derpus, new Dictionary<EntityAttributeTypes, int>
+                        {
+                            { EntityAttributeTypes.Agility, 2 },
+                            { EntityAttributeTypes.Coordination, 2 },
+                            { EntityAttributeTypes.Physique, 4 },
+                            { EntityAttributeTypes.Intellect, 2 },
+                            { EntityAttributeTypes.Acumen, 2 },
+                            { EntityAttributeTypes.Charisma, 2 }
+                        }
+                    },
+                    {
+                        EntityClass.Beast, new Dictionary<EntityAttributeTypes, int>
+                        {
+                            { EntityAttributeTypes.Agility, 3 },
+                            { EntityAttributeTypes.Coordination, 3 },
+                            { EntityAttributeTypes.Physique, 3 },
+                            { EntityAttributeTypes.Intellect, 2 },
+                            { EntityAttributeTypes.Acumen, 3 },
+                            { EntityAttributeTypes.Charisma, 2 }
+                        }
+                    },
+                    {
+                        EntityClass.Ethereal, new Dictionary<EntityAttributeTypes, int>
+                        {
+                            { EntityAttributeTypes.Agility, 3 },
+                            { EntityAttributeTypes.Coordination, 3 },
+                            { EntityAttributeTypes.Physique, 3 },
+                            { EntityAttributeTypes.Intellect, 2 },
+                            { EntityAttributeTypes.Acumen, 2 },
+                            { EntityAttributeTypes.Charisma, 3 }
+                        }
+                    }
+            };
 
         [ES3NonSerializable] private Entity _parent;
 
@@ -80,12 +207,54 @@ namespace Assets.Scripts.Entities
         public Attributes(Entity parent)
         {
             SetParent(parent);
-            GenerateAttributeValues();
+            GenerateAttributeValues(parent.EntityClass);
         }
 
         public void SetParent(Entity parent)
         {
             _parent = parent;
+        }
+
+        private void GenerateAttributeValues(EntityClass eClass)
+        {
+            if (!_classStartingVals.ContainsKey(eClass))
+            {
+                Debug.LogError($"{eClass} not found in class starting values!");
+                return;
+            }
+
+            var startingVals = _classStartingVals[eClass];
+
+            var mods = new List<int>{ -1, 0, 1 };
+
+            foreach (var startingValue in startingVals)
+            {
+                var mod = mods[Random.Range(0, mods.Count)];
+
+                switch (startingValue.Key)
+                {
+                    case EntityAttributeTypes.Agility:
+                        Agility = startingValue.Value + mod;
+                        break;
+                    case EntityAttributeTypes.Coordination:
+                        Coordination = startingValue.Value + mod;
+                        break;
+                    case EntityAttributeTypes.Physique:
+                        Physique = startingValue.Value + mod;
+                        break;
+                    case EntityAttributeTypes.Intellect:
+                        Intellect = startingValue.Value + mod;
+                        break;
+                    case EntityAttributeTypes.Acumen:
+                        Acumen = startingValue.Value + mod;
+                        break;
+                    case EntityAttributeTypes.Charisma:
+                        Charisma = startingValue.Value + mod;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
         }
 
         private void GenerateAttributeValues()
