@@ -5,6 +5,7 @@ using Assets.Scripts.Abilities;
 using Assets.Scripts.Combat;
 using Assets.Scripts.Effects;
 using Assets.Scripts.Entities;
+using Assets.Scripts.Entities.Companions;
 using Assets.Scripts.Travel;
 using Assets.Scripts.UI;
 using UnityEngine;
@@ -121,6 +122,12 @@ namespace Assets.Scripts
 
         #endregion TerrainSprites
 
+        public Sprite[] CrossbowmanTos;
+        public Sprite[] ManAtArmsTos;
+        public Sprite[] SpearmanTos;
+
+        private Dictionary<string, Sprite> _turnOrderSpritesDictionary;
+
         private Dictionary<string, Sprite> _abilitySpriteDictionary;
         private Dictionary<string, Sprite> _effectSpriteDictionary;
 
@@ -153,6 +160,7 @@ namespace Assets.Scripts
             PopulateSpriteDictionaries();
             PopulateColorSwaps();
             PopulateCombatTerrain();
+            PopulateTurnOrderSprites();
 
             CrossbowSpriteNames = new List<string>();
             DaggerSpriteNames = new List<string>();
@@ -435,6 +443,74 @@ namespace Assets.Scripts
             return _colorSwapLookup[key];
         }
 
+        public Sprite GetTurnOrderSprite(Entity entity)
+        {
+            var skinBase = entity.Portrait[Portrait.Slot.Skin];
+
+            switch (skinBase)
+            {
+                case "base":
+                    if (entity is Crossbowman)
+                    {
+                        return _turnOrderSpritesDictionary["crossbow_1"];
+                    }
+                    else if (entity is ManAtArms)
+                    {
+                        return _turnOrderSpritesDictionary["maa_1"];
+                    }
+                    else if (entity is Spearman)
+                    {
+                        return _turnOrderSpritesDictionary["spear_1"];
+                    }
+                    break;
+                case "base_2":
+                    if (entity is Crossbowman)
+                    {
+                        return _turnOrderSpritesDictionary["crossbow_2"];
+                    }
+                    else if (entity is ManAtArms)
+                    {
+                        return _turnOrderSpritesDictionary["maa_2"];
+                    }
+                    else if (entity is Spearman)
+                    {
+                        return _turnOrderSpritesDictionary["spear_2"];
+                    }
+                    break;
+                case "base_3":
+                    if (entity is Crossbowman)
+                    {
+                        return _turnOrderSpritesDictionary["crossbow_3"];
+                    }
+                    else if (entity is ManAtArms)
+                    {
+                        return _turnOrderSpritesDictionary["maa_3"];
+                    }
+                    else if (entity is Spearman)
+                    {
+                        return _turnOrderSpritesDictionary["spear_3"];
+                    }
+                    break;
+                case "base_4":
+                    if (entity is Crossbowman)
+                    {
+                        return _turnOrderSpritesDictionary["crossbow_4"];
+                    }
+                    else if (entity is ManAtArms)
+                    {
+                        return _turnOrderSpritesDictionary["maa_4"];
+                    }
+                    else if (entity is Spearman)
+                    {
+                        return _turnOrderSpritesDictionary["spear_4"];
+                    }
+                    break;
+            }
+
+            Debug.LogError($"No turn order sprite found for {entity.GetType()}!");
+            return null;
+        }
+
         private void PopulateSpriteDictionaries()
         {
             PopulatePortraitSprites();
@@ -563,6 +639,25 @@ namespace Assets.Scripts
                         { TileType.Tree, SpookyTreeSprites }
                     }
                 },
+            };
+        }
+
+        private void PopulateTurnOrderSprites()
+        {
+            _turnOrderSpritesDictionary = new Dictionary<string, Sprite>
+            {
+                {"crossbow_1", CrossbowmanTos[0]},
+                {"crossbow_2", CrossbowmanTos[1]},
+                {"crossbow_3", CrossbowmanTos[2]},
+                {"crossbow_4", CrossbowmanTos[3]},
+                {"maa_1", ManAtArmsTos[0]},
+                {"maa_2", ManAtArmsTos[1]},
+                {"maa_3", ManAtArmsTos[2]},
+                {"maa_4", ManAtArmsTos[3]},
+                {"spear_1", SpearmanTos[0]},
+                {"spear_2", SpearmanTos[1]},
+                {"spear_3", SpearmanTos[2]},
+                {"spear_4", SpearmanTos[3]}
             };
         }
 

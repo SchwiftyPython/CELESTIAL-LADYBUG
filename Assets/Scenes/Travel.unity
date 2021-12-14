@@ -20717,7 +20717,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
     type: 3}
-  tooltipText: Opens Party Management Window
+  tooltipText: Party Management Window
 --- !u!1 &1225684489
 GameObject:
   m_ObjectHideFlags: 0
@@ -22168,7 +22168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
     type: 3}
-  tooltipText: Opens Pause Menu
+  tooltipText: Pause Menu
 --- !u!1 &1325007113
 GameObject:
   m_ObjectHideFlags: 0

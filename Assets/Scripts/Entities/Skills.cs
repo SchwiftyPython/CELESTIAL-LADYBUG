@@ -21,7 +21,7 @@ namespace Assets.Scripts.Entities
                         EntityClass.Spearman, new Dictionary<EntitySkillTypes, int>
                         {
                             { EntitySkillTypes.Melee, 4 },
-                            { EntitySkillTypes.Ranged, 1 },
+                            { EntitySkillTypes.Ranged, 2 },
                             { EntitySkillTypes.Sneak,  2},
                             { EntitySkillTypes.Endurance, 3 },
                             { EntitySkillTypes.Healing, 2 },
@@ -32,7 +32,7 @@ namespace Assets.Scripts.Entities
                     {
                         EntityClass.Crossbowman, new Dictionary<EntitySkillTypes, int>
                         {
-                            { EntitySkillTypes.Melee, 1 },
+                            { EntitySkillTypes.Melee, 2 },
                             { EntitySkillTypes.Ranged, 4 },
                             { EntitySkillTypes.Sneak,  2},
                             { EntitySkillTypes.Endurance, 3 },
@@ -45,7 +45,7 @@ namespace Assets.Scripts.Entities
                         EntityClass.ManAtArms, new Dictionary<EntitySkillTypes, int>
                         {
                             { EntitySkillTypes.Melee, 4 },
-                            { EntitySkillTypes.Ranged, 1 },
+                            { EntitySkillTypes.Ranged, 2 },
                             { EntitySkillTypes.Sneak,  2},
                             { EntitySkillTypes.Endurance, 3 },
                             { EntitySkillTypes.Healing, 2 },
@@ -57,7 +57,7 @@ namespace Assets.Scripts.Entities
                         EntityClass.Gladiator, new Dictionary<EntitySkillTypes, int>
                         {
                             { EntitySkillTypes.Melee, 4 },
-                            { EntitySkillTypes.Ranged, 1 },
+                            { EntitySkillTypes.Ranged, 2 },
                             { EntitySkillTypes.Sneak,  2},
                             { EntitySkillTypes.Endurance, 3 },
                             { EntitySkillTypes.Healing, 2 },
@@ -68,7 +68,7 @@ namespace Assets.Scripts.Entities
                     {
                         EntityClass.Wizard, new Dictionary<EntitySkillTypes, int>
                         {
-                            { EntitySkillTypes.Melee, 1 },
+                            { EntitySkillTypes.Melee, 2 },
                             { EntitySkillTypes.Ranged, 4 },
                             { EntitySkillTypes.Sneak,  2},
                             { EntitySkillTypes.Endurance, 2 },
@@ -93,7 +93,7 @@ namespace Assets.Scripts.Entities
                         EntityClass.Knight, new Dictionary<EntitySkillTypes, int>
                         {
                             { EntitySkillTypes.Melee, 4 },
-                            { EntitySkillTypes.Ranged, 1 },
+                            { EntitySkillTypes.Ranged, 2 },
                             { EntitySkillTypes.Sneak,  2},
                             { EntitySkillTypes.Endurance, 4 },
                             { EntitySkillTypes.Healing, 2 },
@@ -105,7 +105,7 @@ namespace Assets.Scripts.Entities
                         EntityClass.Paladin, new Dictionary<EntitySkillTypes, int>
                         {
                             { EntitySkillTypes.Melee, 4 },
-                            { EntitySkillTypes.Ranged, 1 },
+                            { EntitySkillTypes.Ranged, 2 },
                             { EntitySkillTypes.Sneak,  2},
                             { EntitySkillTypes.Endurance, 3 },
                             { EntitySkillTypes.Healing, 2 },
@@ -117,7 +117,7 @@ namespace Assets.Scripts.Entities
                         EntityClass.Derpus, new Dictionary<EntitySkillTypes, int>
                         {
                             { EntitySkillTypes.Melee, 4 },
-                            { EntitySkillTypes.Ranged, 1 },
+                            { EntitySkillTypes.Ranged, 2 },
                             { EntitySkillTypes.Sneak,  2},
                             { EntitySkillTypes.Endurance, 3 },
                             { EntitySkillTypes.Healing, 2 },
