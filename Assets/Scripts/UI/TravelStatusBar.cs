@@ -77,6 +77,8 @@ namespace Assets.Scripts.UI
 
                 companionStatus.transform.SetParent(CompanionStatusParent);
 
+                companionStatus.transform.localScale = new Vector3(1, 1, 1);
+
                 var script = companionStatus.GetComponentInChildren<CompanionStatus>();
 
                 if (script != null)

@@ -36,6 +36,8 @@ namespace Assets.Scripts.UI
 
                 abilitySlot.transform.SetParent(transform);
 
+                abilitySlot.transform.localScale = new Vector3(1, 1, 1);
+
                 var script = abilitySlot.GetComponentInChildren<AbilitySlotUi>();
 
                 if (script != null)

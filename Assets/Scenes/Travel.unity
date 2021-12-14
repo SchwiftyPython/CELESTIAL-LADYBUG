@@ -16287,10 +16287,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -20717,7 +20717,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
     type: 3}
-  tooltipText: Opens Party Management Window
+  tooltipText: Party Management Window
 --- !u!1 &1225684489
 GameObject:
   m_ObjectHideFlags: 0
@@ -22168,7 +22168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tooltipPrefab: {fileID: 5831300868084713058, guid: 4eae8cd74e210ec49b75ac2c966e0be1,
     type: 3}
-  tooltipText: Opens Pause Menu
+  tooltipText: Pause Menu
 --- !u!1 &1325007113
 GameObject:
   m_ObjectHideFlags: 0

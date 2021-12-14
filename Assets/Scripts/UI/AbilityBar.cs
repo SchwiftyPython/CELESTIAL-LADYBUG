@@ -60,6 +60,8 @@ namespace Assets.Scripts.UI
 
                 testInstance.transform.SetParent(AbilityButtonParent);
 
+                testInstance.transform.localScale = new Vector3(1, 1, 1);
+
                 var buttonScript = testInstance.GetComponent<Button>().GetComponent<UseAbilityButton>();
 
                 if (AbilityIsUsable(ability))

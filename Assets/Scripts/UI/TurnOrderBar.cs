@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Combat;
+using Assets.Scripts.Entities.Companions;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
@@ -19,11 +21,10 @@ namespace Assets.Scripts.UI
 
         private void Start()
         {
-            var eventMediator = Object.FindObjectOfType<EventMediator>();
+            var eventMediator = FindObjectOfType<EventMediator>();
             eventMediator.SubscribeToEvent(RefreshEvent, this);
         }
 
-        //todo refactor
         private void Populate()
         {
             var slotList = new List<Transform>
@@ -37,13 +38,7 @@ namespace Assets.Scripts.UI
                 SlotSeven
             };
 
-            //todo for each slot
-            foreach (var slot in slotList)
-            {
-                GlobalHelper.DestroyAllChildren(slot.gameObject);
-            }
-
-            var combatManager = Object.FindObjectOfType<CombatManager>();
+            var combatManager = FindObjectOfType<CombatManager>();
             var turnOrder = combatManager.TurnOrder;
 
             if (turnOrder == null || turnOrder.Count < 1)
@@ -64,38 +59,36 @@ namespace Assets.Scripts.UI
                     continue;
                 }
 
-                var entityInstance = Instantiate(entity.CombatSpritePrefab, new Vector3(0, 0), Quaternion.identity);
-
                 var spriteStore = FindObjectOfType<SpriteStore>();
 
-                var colorSwapper = entityInstance.GetComponentsInChildren<ColorSwapper>();
+                Sprite tos;
 
-                spriteStore.SetColorSwaps(colorSwapper, entity);
-
-                entityInstance.gameObject.GetComponent<Animator>().enabled = false;
-
-                var spriteRenderer = entityInstance.GetComponent<SpriteRenderer>();
-
-                if (spriteRenderer == null)
+                if (entity is Crossbowman || entity is Spearman || entity is ManAtArms)
                 {
-                    spriteRenderer = entityInstance.GetComponentInChildren<SpriteRenderer>();
-                }
-
-                spriteRenderer.sortingLayerName = "FakeUi";
-
-                entityInstance.transform.SetParent(slotList[count]);
-
-                if (!entity.IsPlayer())
-                {
-                    spriteRenderer.flipX = true;
-                    entityInstance.transform.localPosition = new Vector3(0.08f, -0.3f, -0.01f);
+                    tos = spriteStore.GetTurnOrderSprite(entity);
                 }
                 else
                 {
-                    entityInstance.transform.localPosition = new Vector3(-0.075f, -0.3f, -0.01f);
+                    var spriteRenderer = entity.CombatSpriteInstance.GetComponent<SpriteRenderer>();
+
+                    if (spriteRenderer == null)
+                    {
+                        spriteRenderer = entity.CombatSpriteInstance.GetComponentInChildren<SpriteRenderer>();
+                    }
+
+                    tos = spriteRenderer.sprite;
                 }
 
-                entityInstance.transform.localScale = new Vector3(0.15f, 0.8f);
+                slotList[count].GetComponent<Image>().sprite = tos;
+
+                if (!entity.IsPlayer())
+                {
+                    slotList[count].GetComponent<RectTransform>().localScale = new Vector3(-1, 1, 1);
+                }
+                else
+                {
+                    slotList[count].GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+                }
 
                 count++;
             }

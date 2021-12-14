@@ -2197,6 +2197,21 @@ MonoBehaviour:
   - {fileID: 3370885990138429170, guid: 744b894af52bb5f4ab4950146fb6d2bd, type: 3}
   SpookyTreeSprites:
   - {fileID: 8237460798556589764, guid: 744b894af52bb5f4ab4950146fb6d2bd, type: 3}
+  CrossbowmanTos:
+  - {fileID: -4697591007364051401, guid: b29218ad9f6c9494580b8a0647731155, type: 3}
+  - {fileID: 8999046056439280288, guid: 0105ca8a2d6a9ff4fb4a89ec613b062e, type: 3}
+  - {fileID: -6359982800785595068, guid: 4192b0652a5527842957dc91461063e0, type: 3}
+  - {fileID: 8523989483705031962, guid: fc16a0a6198ac4e47b24aa126f79cd31, type: 3}
+  ManAtArmsTos:
+  - {fileID: 9036199767963618313, guid: fa0fa6344c6e26f42a3ed62c6fd62921, type: 3}
+  - {fileID: 7789635066945618157, guid: 7f48c2de93bfa2142b593f6e845ea1bc, type: 3}
+  - {fileID: -5200584948123636333, guid: 1cebab0aa87f8fd4893285d7906b3075, type: 3}
+  - {fileID: -2804076671689166314, guid: 95ca4bd268d1fe9408b23ada1f023bad, type: 3}
+  SpearmanTos:
+  - {fileID: 2258231227847105258, guid: a29297f0fb078cb46a89091ce8274ed4, type: 3}
+  - {fileID: -8503073029636378491, guid: e692b1a1f05486843b62898a32c6b672, type: 3}
+  - {fileID: 7619443556785023092, guid: befed058785ad104cae512d71c20c8d9, type: 3}
+  - {fileID: 1516181987733569039, guid: c8b8ba2bb71d130478560b1046b4ea8c, type: 3}
   AbilitySprites:
   - {fileID: 21300000, guid: a9812ed049e19704389dd690d8b41953, type: 3}
   - {fileID: 21300000, guid: 1a5b75fcb171fcc44b3deceb27bb49d2, type: 3}
