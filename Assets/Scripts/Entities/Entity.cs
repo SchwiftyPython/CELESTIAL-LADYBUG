@@ -1308,8 +1308,14 @@ namespace Assets.Scripts.Entities
             Debug.Log($"Total Roll: {totalRoll}");
             Debug.Log($"Difficulty: {hitDifficulty}");
 
+            var inputController = Object.FindObjectOfType<CombatInputController>();
+
+            var combatManager = Object.FindObjectOfType<CombatManager>();
+
+            var hitChance = combatManager.IsPlayerTurn() ? inputController.GetHitChance(target) : (-1, null, null);
+
             string message;
-            if (totalRoll >= hitDifficulty)
+            if (totalRoll >= hitDifficulty || hitChance.hitChance >= 90)
             {
                 if (target.HasAbility("Divine Intervention"))
                 {
