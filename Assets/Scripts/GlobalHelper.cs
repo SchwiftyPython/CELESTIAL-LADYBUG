@@ -415,7 +415,7 @@ namespace Assets.Scripts
                 total += roll;
             }
 
-            Debug.Log($"Wild Roll Total: {total}");
+            DisplayDebugLogMessage($"Wild Roll Total: {total}");
 
             return total;
         }
@@ -447,6 +447,15 @@ namespace Assets.Scripts
         public static void InvokeAfterDelay(Action method, float delay)
         {
             GameManager.Instance.StartCoroutine(InvokeRoutine(method, delay));
+        }
+
+        public static void DisplayDebugLogMessage(string message)
+        {
+#if UNITY_EDITOR
+
+            Debug.Log(message);
+
+#endif
         }
 
         private static IEnumerator InvokeRoutine(Action method, float delay)

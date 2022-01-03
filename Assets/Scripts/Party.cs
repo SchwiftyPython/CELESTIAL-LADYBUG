@@ -67,7 +67,7 @@ namespace Assets.Scripts
                 if (_companions.ContainsKey(companion.Name))
                 {
                     //todo just generate a different name at this point or something
-                    Debug.Log($"{companion.Name} already exists in party!");
+                    Debug.LogError($"{companion.Name} already exists in party!");
                     return;
                 }
             }
@@ -168,8 +168,6 @@ namespace Assets.Scripts
                 };
 
                 eatResult.Add(partyDto);
-
-                Debug.Log("Not enough food! Party morale drops!"); 
             }
             else
             {
@@ -182,11 +180,7 @@ namespace Assets.Scripts
                 };
 
                 eatResult.Add(partyDto);
-
-                Debug.Log($"Party ate {_companions.Count * FoodConsumedPerCompanion} food!"); 
             }
-
-            //todo food amount changed event to update party status bar
 
             return eatResult;
         }
@@ -210,8 +204,6 @@ namespace Assets.Scripts
 
             if (HealthPotions <= 0)
             {
-                Debug.Log("No health potions! Can't heal!");
-
                 var partyDto = new TravelMessenger.EntityMessageDto
                 {
                     Message = "No health potions! Can't heal!",
