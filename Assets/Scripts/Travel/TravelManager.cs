@@ -230,7 +230,7 @@ namespace Assets.Scripts.Travel
                             Party.Gold += partyGain.Value;
                             break;
                         default:
-                            Debug.Log($"Invalid gain type! {gainType}");
+                            Debug.LogError($"Invalid gain type! {gainType}");
                             break;
                     }
 
@@ -289,7 +289,7 @@ namespace Assets.Scripts.Travel
                                     companion.Stats.MaxMorale += statGain.Value;
                                     break;
                                 default:
-                                    Debug.Log($"Invalid gain type! {gainType}");
+                                    Debug.LogError($"Invalid gain type! {gainType}");
                                     break;
                             }
 
@@ -538,7 +538,7 @@ namespace Assets.Scripts.Travel
                             Party.Gold -= partyLoss.Value;
                             break;
                         default:
-                            Debug.Log($"Invalid loss type! {lossType}");
+                            Debug.LogError($"Invalid loss type! {lossType}");
                             break;
                     }
 
@@ -605,7 +605,7 @@ namespace Assets.Scripts.Travel
                                     companion.Stats.MaxMorale -= statLoss.Value;
                                     break;
                                 default:
-                                    Debug.Log($"Invalid loss type! {lossType}");
+                                    Debug.LogError($"Invalid loss type! {lossType}");
                                     break;
                             }
                         }

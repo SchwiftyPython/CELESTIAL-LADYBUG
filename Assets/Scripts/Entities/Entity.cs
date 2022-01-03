@@ -986,7 +986,7 @@ namespace Assets.Scripts.Entities
 
             var damageMult = damage > 0 ? damage / (damage + damageReduction) : 0;
 
-            Debug.Log($"Damage multiplier = {damageMult}");
+            GlobalHelper.DisplayDebugLogMessage($"Damage multiplier = {damageMult}");
 
             damage *= damageMult;
 
@@ -1118,8 +1118,6 @@ namespace Assets.Scripts.Entities
 
             totalDifficulty += target.GetDodgeTotal();
 
-            //Debug.Log($"Base Combat Difficulty: {totalDifficulty}");
-
             return totalDifficulty;
         }
 
@@ -1214,7 +1212,7 @@ namespace Assets.Scripts.Entities
 
         public (int hitChance, List<string> positives, List<string> negatives) CalculateChanceToHitMelee(Entity target)
         {
-            Debug.Log($"Attacker Melee Skill: {Skills.Melee}");
+            GlobalHelper.DisplayDebugLogMessage($"Attacker Melee Skill: {Skills.Melee}");
 
             var totalDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Melee);
 
@@ -1237,7 +1235,7 @@ namespace Assets.Scripts.Entities
 
         public (int hitChance, List<string> positives, List<string> negatives) CalculateChanceToHitRanged(Entity target)
         {
-            Debug.Log($"Attacker Ranged Skill: {Skills.Ranged}");
+            GlobalHelper.DisplayDebugLogMessage($"Attacker Ranged Skill: {Skills.Ranged}");
 
             var totalDifficulty = CalculateCombatDifficulty(target, EntitySkillTypes.Ranged);
 
@@ -1305,8 +1303,8 @@ namespace Assets.Scripts.Entities
 
             var totalRoll = coreRoll + wildRoll + toHitMod;
 
-            Debug.Log($"Total Roll: {totalRoll}");
-            Debug.Log($"Difficulty: {hitDifficulty}");
+            GlobalHelper.DisplayDebugLogMessage($"Total Roll: {totalRoll}");
+            GlobalHelper.DisplayDebugLogMessage($"Difficulty: {hitDifficulty}");
 
             var inputController = Object.FindObjectOfType<CombatInputController>();
 

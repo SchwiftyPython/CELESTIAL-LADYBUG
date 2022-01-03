@@ -75,7 +75,7 @@ namespace Assets.Scripts.Entities.Names
             }
             catch (Exception e)
             {
-                Debug.Log("Error processing name file" + e.Message);
+                Debug.LogError("Error processing name file" + e.Message);
             }
         
         }
