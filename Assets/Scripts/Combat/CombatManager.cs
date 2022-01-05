@@ -66,6 +66,8 @@ namespace Assets.Scripts.Combat
         private const string CombatFinished = GlobalHelper.CombatFinished;
         private const string EntityDead = GlobalHelper.EntityDead;
         private const string RefreshUi = GlobalHelper.RefreshCombatUi;
+        public const int MaxConsecutiveMisses = 3;
+        public const int MaxConsecutiveResistDamage = 3;
 
         [SerializeField] private CombatState _currentCombatState;
         private GameObject _pawnHighlighterInstance;
@@ -90,6 +92,9 @@ namespace Assets.Scripts.Combat
 
         public GameObject PrototypePawnHighlighterPrefab;
         public GameObject DamagePopupPrefab;
+
+        public int NumConsecMisses;
+        public int NumConsecNoDamage;
 
         private CombatResult _result;
 

@@ -990,14 +990,25 @@ namespace Assets.Scripts.Entities
 
             damage *= damageMult;
 
+            var combatManager = Object.FindObjectOfType<CombatManager>();
+
+            if ((int)damage <= 0 && combatManager.NumConsecNoDamage >= CombatManager.MaxConsecutiveResistDamage)
+            {
+                damage = Random.Range(minDamage, maxDamage + 1) + damageMod;
+                combatManager.NumConsecNoDamage = 0;
+            }
+
             string message;
             CombatAnimationHelper animationHelper;
             if ((int)damage <= 0)
             {
+                combatManager.NumConsecNoDamage++;
                 message = $"{target.Name} resisted all damage!"; 
             }
             else
             {
+                combatManager.NumConsecNoDamage = 0;
+
                 target.SubtractHealth((int)damage);
 
                 message = $"{Name} dealt {(int)damage} damage to {target.Name}!";
@@ -1313,9 +1324,9 @@ namespace Assets.Scripts.Entities
             var hitChance = combatManager.IsPlayerTurn() ? inputController.GetHitChance(target) : (-1, null, null);
 
             string message;
-            if (totalRoll >= hitDifficulty || hitChance.hitChance >= 90)
+            if (totalRoll >= hitDifficulty || hitChance.hitChance >= 90 || combatManager.NumConsecMisses >= CombatManager.MaxConsecutiveMisses)
             {
-                if (target.HasAbility("Divine Intervention"))
+                if (target.HasAbility("Divine Intervention") && combatManager.NumConsecMisses < CombatManager.MaxConsecutiveMisses)
                 {
                     if (DivineIntervention.Intervened())
                     {
@@ -1324,6 +1335,7 @@ namespace Assets.Scripts.Entities
                         eventMediator.Broadcast(GlobalHelper.SendMessageToConsole, this, message);
 
                         criticalHit = false;
+                        combatManager.NumConsecMisses++;
                         return false;
                     }
                 }
@@ -1343,6 +1355,7 @@ namespace Assets.Scripts.Entities
 
                 eventMediator.Broadcast(GlobalHelper.TargetHit, this, target);
 
+                combatManager.NumConsecMisses = 0;
                 return true;
             }
 
@@ -1353,6 +1366,7 @@ namespace Assets.Scripts.Entities
             eventMediator.Broadcast(GlobalHelper.TargetMiss, this);
 
             criticalHit = false;
+            combatManager.NumConsecMisses++;
             return false;
         }
 
