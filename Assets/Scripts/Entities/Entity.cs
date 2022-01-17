@@ -1402,6 +1402,11 @@ namespace Assets.Scripts.Entities
             return false;
         }
 
+        public void UpdateStats()
+        {
+
+        }
+
         public int AddHealth(int amount)
         {
             var startingHealth = Stats.CurrentHealth;

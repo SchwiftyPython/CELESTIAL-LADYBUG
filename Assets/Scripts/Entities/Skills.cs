@@ -157,7 +157,24 @@ namespace Assets.Scripts.Entities
         public int Melee { get; set; }
         public int Ranged { get; set; }
         public int Sneak { get; set; }
-        public int Endurance { get; set; }
+
+        private int _endurance;
+        public int Endurance 
+        {
+            get => _endurance;
+            set
+            {
+                if (value > SkillMax)
+                {
+                    _endurance = SkillMax;
+                }
+                else
+                {
+                    _endurance = value;
+                    _parent.Stats.UpdateMaxEnergy(this);
+                }
+            }
+        }
         public int Healing { get; set; }
         public int Survival { get; set; }
 
