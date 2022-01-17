@@ -159,6 +159,7 @@ namespace Assets.Scripts.Entities
                 else
                 {
                     _physique = value;
+                    _parent.Stats.UpdateMaxHealth(this);
                 }
             }
         }
@@ -180,7 +181,24 @@ namespace Assets.Scripts.Entities
             }
         }
 
-        public int Acumen { get; set; }
+        private int _acumen;
+
+        public int Acumen
+        {
+            get => _acumen + GetAllModifiersForStat(EntityAttributeTypes.Acumen);
+            set
+            {
+                if (value > AttributeMax)
+                {
+                    _acumen = AttributeMax;
+                }
+                else
+                {
+                    _acumen = value;
+                    _parent.Stats.UpdateInitiative(this);
+                }
+            }
+        }
 
         private int _charisma;
         public int Charisma
@@ -194,6 +212,7 @@ namespace Assets.Scripts.Entities
                 else
                 {
                     _charisma = value;
+                    _parent.Stats.UpdateMaxMorale(this);
                 }
             }
         }

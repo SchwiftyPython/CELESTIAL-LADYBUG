@@ -241,6 +241,46 @@ namespace Assets.Scripts.Entities
             _parent = parent;
         }
 
+        public void UpdateMaxHealth(Attributes attributes)
+        {
+            var newValue = RollD6(attributes.Physique) + 20;
+
+            if (newValue > MaxHealth)
+            {
+                MaxHealth = newValue;
+            }
+        }
+
+        public void UpdateMaxEnergy(Skills skills)
+        {
+            var newValue = RollD6(skills.Endurance) + 20;
+
+            if (newValue > MaxEnergy)
+            {
+                MaxEnergy = newValue;
+            }
+        }
+
+        public void UpdateMaxMorale(Attributes attributes)
+        {
+            var newValue = RollD6(attributes.Charisma) + 20;
+
+            if (newValue > MaxMorale)
+            {
+                MaxMorale = newValue;
+            }
+        }
+
+        public void UpdateInitiative(Attributes attributes)
+        {
+            var newValue = RollD6(attributes.Acumen) + 20;
+
+            if (newValue > Initiative)
+            {
+                Initiative = newValue;
+            }
+        }
+
         private void GenerateStats(Attributes attributes, Skills skills)
         {
             MaxHealth =  RollD6(attributes.Physique) + 20;
